@@ -1,0 +1,53 @@
+.mainBox {
+  height: 100%;
+  .mainRow {
+    height: 100%;
+    .storeInfo {
+      height: 100%;
+      .storeInfoCard {
+        height: 100%;
+      }
+    }
+  }
+  .storeMiniMap {
+    height: 300px;
+  }
+
+  .findWayButton,
+  .helpButton {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+
+  .storeStatusCard,
+  .supportCartCard {
+    padding: 5%;
+    margin: 1%;
+  }
+}
+
+.storeMenuDetail {
+  height: 87vh;
+}
+
+.storeMenu {
+  height: 100%;
+}
+
+.storeMenuItemList {
+  overflow-y: auto;
+}
+
+.storeMenuItem {
+  border: 1px solid black;
+}
+
+.storeStatus {
+  height: 95%;
+  overflow-y: auto;
+}
+
+.storeStatusItem {
+  border: 1px solid blue;
+  height: 10%;
+}

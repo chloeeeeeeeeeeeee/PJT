@@ -1,0 +1,19 @@
+.memberInfo {
+  .memberInfo-header {
+    .memberInfo-title {
+      color: $eat-key-color;
+      // font-size: $card-header-span-size;
+    }
+    background-color: $card-header-bg-color;
+    padding: 10%;
+    border-bottom: 1px solid $card-border-color;
+    border-top-left-radius: $card-border-radious;
+    border-top-right-radius: $card-border-radious;
+    position: relative;
+    overflow: hidden;
+  }
+  .memberInfo-body {
+    padding: 10%;
+    color: $eat-point-color;
+  }
+}

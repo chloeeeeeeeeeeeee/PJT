@@ -1,0 +1,33 @@
+.aboutus {
+  max-width: 100%;
+  // height: 80vh;
+  height:100%;
+  width: 100vh;
+  .card {
+    margin-bottom: 0;
+  }
+  .card-header {
+    vertical-align: middle;
+  }
+  .card-button {
+    height: 40vh;
+    align-items: center;
+  }
+  .card-body {
+    padding-top:2%;
+    height: 50%;
+    line-height:1.5em;
+    h4{
+        margin-top:10px;
+    }
+  }
+  .mainImage{
+      display:block;
+      width:100%;
+      height:90%;
+  }
+  .aboutUsText{
+      font-size: medium;
+      line-height:1.5em;
+  }
+}

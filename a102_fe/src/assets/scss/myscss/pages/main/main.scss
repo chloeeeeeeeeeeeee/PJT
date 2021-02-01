@@ -1,0 +1,32 @@
+.main {
+  height: 100%;
+  padding-top: 4vh;
+  // margin-top: 1vh;
+  .row {
+    height: 100%;
+  }
+  .billboard {
+    width: 100vh;
+    margin-left: 2%;
+    float: left;    
+  }
+  .aboutus {
+    width: 100vh;
+    float: left;
+    .container-fluid{
+        height:100%;
+        .card{
+            height:100%;
+        }
+    }
+  }
+}
+.billboard>div{
+    height:100%;
+    .carousel{
+        height:100%;
+        .carousel-inner{
+            height:100%;
+        }
+    }
+}

@@ -27,7 +27,7 @@ public class Qna {
 	@JoinColumn(name="user_seq")
 	private User user;
 
-	@OneToOne 
+	@OneToOne(orphanRemoval = true)
 	@JoinColumn(name = "reply_seq", nullable = true)
 	private QnaReply qnaReply;
 	

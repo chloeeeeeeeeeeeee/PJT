@@ -7,8 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +42,7 @@ public class QnaController {
 	@Autowired
 	PasswordEncodingService passwordEncoding;
 	
-	@ApiOperation(value = "QnA 글 쓰기", notes = "글 제목, 내용, 비밀번호(필요시에만, 비밀글이 아닐 경우 qnaPwd = null)", response = List.class)
+	@ApiOperation(value = "QnA 질문 하기", notes = "글 제목, 내용, 비밀번호(필요시에만, 비밀글이 아닐 경우 qnaPwd = null)", response = List.class)
 	@PostMapping("/create")
 	public ResponseEntity<String> qnaCreate(@ApiParam(value = "글 제목, 내용, (비밀번호) ", required = true) @RequestBody Qna qna, HttpServletRequest req) throws Exception {
 		logger.info("qnaCreate_QnaController - 호출");
@@ -82,6 +85,35 @@ public class QnaController {
 			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
 		else
 			return new ResponseEntity<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ApiOperation(value = "QnA 게시판 불러오기", notes = "페이지 번호를 기준으로 글 목록 불러옴", response = List.class)
+	@GetMapping("/{page}")
+	public ResponseEntity<Page<Qna>> qnaList(@ApiParam(value = "page(0부터 시작)", required = true) @PathVariable int page) throws Exception {
+		logger.info("qnaList_QnaController - 호출");
+		return new ResponseEntity<Page<Qna>>(qnaService.getList(page), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "QnA 질문 및 답변 상세내용", notes = "qnaSeq, qnaPwd로 글 상세내용을 불러옴(비밀글이 아닐경우 qnaPwd는 필요없음)", response = List.class)
+	@PostMapping("/read")
+	public ResponseEntity<Qna> qnaDetail(@ApiParam(value = "qnaSeq, qnaPwd", required = true) @RequestBody Qna qna, HttpServletRequest req) throws Exception {
+		logger.info("qnaList_QnaController - 호출");
+		Qna result = qnaService.qnaDetail(qna);
+		return new ResponseEntity<Qna>(result, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "QnA 질문 수정", notes = "qnaSeq, 글제목, 내용을 받아 질문 수정", response = List.class)
+	@PostMapping("/update")
+	public ResponseEntity<String> qnaUpdate(@ApiParam(value = "qnaSeq, qnaPwd", required = true) @RequestBody Qna qna, HttpServletRequest req) throws Exception {
+		logger.info("qnaUpdate_QnaController - 호출");
+		return new ResponseEntity<String>(qnaService.qnaUpdate(qna), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "QnA 질문 삭제", notes = "qnaSeq 받아 질문 삭제", response = List.class)
+	@PostMapping("/delete/{qnaSeq}")
+	public ResponseEntity<String> qnaDelete(@ApiParam(value = "qnaSeq", required = true) @PathVariable int qnaSeq, HttpServletRequest req) throws Exception {
+		logger.info("qnaDelete_QnaController - 호출");
+		return new ResponseEntity<String>(qnaService.qnaDelete(qnaSeq), HttpStatus.OK);
 	}
 	
 }

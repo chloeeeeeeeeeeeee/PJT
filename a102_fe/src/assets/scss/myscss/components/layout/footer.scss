@@ -1,28 +1,21 @@
-// footer
-// container-fluid
-// row
-// footer-copyright
-
-.page-body-wrapper {
-  footer {
-    // background-color: rgb(63, 202, 63);
-    background-color: $eat-key-color;
-    padding: 12px;
-    bottom: 0;
-    left: 0;
-    transition: 0.6s;
-    width: 100%;
-    z-index: 9;
-    position: fixed;
-    box-shadow: 19px 8px 16px 7px rgba(black, 0.05);
-    i {
-      color: #e7474e;
-      text-shadow: 2px 2px 4px rgba(231, 71, 78, 0.5);
-      margin-left: 5px;
-      a {
-        color: black;
-        font-weight: 600;
+// 하단 Footer
+.mainFooter {
+  height: 5%;
+  background-color: $eat-key-color;
+  bottom: 0;
+  left: 0;
+  transition: 0.6s;
+  box-shadow: 19px 8px 16px 7px rgba(black, 0.05);
+  i {
+    color: #e7474e;
+    text-shadow: 2px 2px 4px rgba(231, 71, 78, 0.5);
+    a {
+      color: black;
+      font-weight: 600;
+      &:hover {
+        text-decoration: none;
       }
     }
   }
 }
+// Footer 끝

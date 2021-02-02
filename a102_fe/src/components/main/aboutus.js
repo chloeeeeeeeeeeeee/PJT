@@ -7,12 +7,7 @@ import {
   CardHeader,
   CardBody,
   Button,
-//   Form,
-//   FormGroup,
 } from "reactstrap";
-import { Link } from "react-router-dom";
-// import mainImage from '../../assets/images/mainImage.PNG';
-
 
 
 function Aboutus() {
@@ -49,7 +44,7 @@ function Aboutus() {
                              <br/>
                              <span className="font-weight-bold">대상이 밥을 잘 못 먹는 사람 정확히는 결식아동, 아동급식카드 소지자이면 기부의 의미가 잘 드러나지 않을까. </span>
                              <br/>
-                             생각해보니 다른 가게들은 아동급식카드를 보여주면 결제없이 맛있게 먹고 가면 된다, 그렇게 써놓는 가게들도 많다. 그런 것을 생각해보고 그 아이들이 카드를 내밀 때 부끄러워하는 것 다른 사람의 시선이 문제는 아니고, 내 자신이 신경쓰이지 않도록 들을 부끄러워한다. 그 아이들에게 도움이 되지 않을까. 그냥 다음 사람을 위해 기부하세요! 보다는 결식아동들을 위해 한그릇을 결제하게 만들어서 더 많은 사람들의 참여를 유도하면 좋지 않을까. 
+                             {/* 생각해보니 다른 가게들은 아동급식카드를 보여주면 결제없이 맛있게 먹고 가면 된다, 그렇게 써놓는 가게들도 많다. 그런 것을 생각해보고 그 아이들이 카드를 내밀 때 부끄러워하는 것 다른 사람의 시선이 문제는 아니고, 내 자신이 신경쓰이지 않도록 들을 부끄러워한다. 그 아이들에게 도움이 되지 않을까. 그냥 다음 사람을 위해 기부하세요! 보다는 결식아동들을 위해 한그릇을 결제하게 만들어서 더 많은 사람들의 참여를 유도하면 좋지 않을까.  */}
                             </p>
                             <h4 className="font-weight-bold">결식아동들을 위한 키오스크를 만들어보려고 한다.</h4>
                             <p className="text-right aboutUsText">A102 팀장 <span className="font-weight-bold">천석희</span> 님</p>

@@ -3,7 +3,7 @@ package com.ssafy.bab.dto;
 import lombok.Data;
 
 @Data
-public class SupportItem {
+public class PaymentItem {
 
 	private int storeId;
 	private int itemId;

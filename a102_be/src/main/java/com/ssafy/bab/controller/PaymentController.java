@@ -3,6 +3,7 @@ package com.ssafy.bab.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.ssafy.bab.dto.KakaoPayApproval;
 import com.ssafy.bab.dto.PaymentInfo;
@@ -36,20 +38,23 @@ public class PaymentController {
 	@Autowired
 	private JwtService jwtService;
 	
-	@ApiOperation(value = "카카오페이 결제(후원)", notes = "결제할 품목들을 받아와 카카오페이 결제 모듈로 연결해준다", response = List.class)
-	@PostMapping("/support/kakaopay")
-	public String kakaoPaySupport(@ApiParam(value = "아이템 목록과 총 개수, 총 가격", required = true) @RequestBody PaymentInfo paymentInfo, HttpServletRequest req) throws Exception {
-		logger.info("kakaoPaySupport_payment - 호출");
+	@ApiOperation(value = "카카오페이 결제", notes = "결제할 품목들을 받아와 카카오페이 결제 모듈로 연결해준다", response = List.class)
+	@PostMapping("/kakaopay")
+	public String kakaoPay(@ApiParam(value = "아이템 목록과 총 개수, 총 가격", required = true) @RequestBody PaymentInfo paymentInfo, HttpServletRequest req, HttpServletResponse response) throws Exception {
+		logger.info("kakaoPay_payment - 호출");
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
-        // 비회원 결제
         paymentInfo.setUserSeq(userSeq);
-		
-		return "redirect:" + kakaoPayService.kakaoPayReady(paymentInfo);
+        paymentInfo.setCid("TC0ONETIME");
+        
+        System.out.println(paymentInfo);
+        
+        return kakaoPayService.kakaoPayReady(paymentInfo);
+//        return new RedirectView(kakaoPayService.kakaoPayReady(paymentInfo));
 	}
 	
-	@GetMapping("/support/kakaopaySucess")
+	@GetMapping("/kakaopaySucess")
 	public KakaoPayApproval kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
 		logger.info("kakaoPaySuccess get............................................");
 		logger.info("kakaoPaySuccess pg_token : " + pg_token);
@@ -58,13 +63,13 @@ public class PaymentController {
         
     }
 	
-	@GetMapping("/support/kakaopayFail")
+	@GetMapping("/kakaopayFail")
 	public String kakaoPayFail() {
 		logger.info("kakaoPayFail_payment - 호출");
 		return "fail.html";
 	}
 	
-	@GetMapping("/support/kakaopayCancel")
+	@GetMapping("/kakaopayCancel")
 	public String kakaoPayCancel() {
 		logger.info("kakaoPayCancel_payment - 호출");
 		return "cancel.html";

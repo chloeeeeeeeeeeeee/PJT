@@ -21,7 +21,6 @@ import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
 import Main from "./pages/main/main";
 import Support from "./pages/support/support";
-import StoreDetailSupport from "./pages/support/storeDetailSupport";
 import Authentication from "./pages/account/authentication";
 import Profile from "./pages/account/profile";
 import StoreDetail from "./pages/support/storeDetail";
@@ -37,11 +36,10 @@ function App() {
             <Route exact path="/" component={Main} />
             <Route path="/support" component={Support} />
             <Route path="/map" component={Support} />
-            <Route path="/test" component={StoreDetailSupport} />
             <Route path="/auth" component={Authentication} />
             <Route
               path="/storedetailsupport/:storeId"
-              component={StoreDetailSupport}
+              component={StoreDetail}
             />
             <Route path="/storeDetail/:storeId" component={StoreDetail} />
             {/* Profile 페이지의 경우 리다이렉트 보내주기 */}

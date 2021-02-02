@@ -1,5 +1,6 @@
 import { Container, Row, Col } from "reactstrap";
 
+
 function Footer() {
   return (
     <Row className="mainFooter p-2">

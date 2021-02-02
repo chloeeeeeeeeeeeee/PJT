@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Carousel,
-  CarouselItem,
-  CarouselControl,
-  CarouselIndicators,
-  CarouselCaption,
-} from "reactstrap";
+
 
 function Banner() {
     return (

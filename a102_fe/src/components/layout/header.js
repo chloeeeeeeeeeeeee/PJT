@@ -9,10 +9,11 @@ import {
   NavLink,
 } from "reactstrap";
 
+
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
-
   const toggle = () => setIsOpen(!isOpen);
+  
   return (
     <Navbar color="light" light expand="md" className="mainHeader row">
       <NavbarBrand href="/">
@@ -21,7 +22,7 @@ function Header() {
           className="logoImage d-inline-block align-top"
         />
       </NavbarBrand>
-      <NavbarToggler onClick={toggle} />
+      <NavbarToggler onClick={toggle}/>
       <Collapse isOpen={isOpen} navbar>
         <Nav className="ml-auto" navbar>
           <NavItem>
@@ -40,7 +41,7 @@ function Header() {
             <NavLink href="/map"> 지도 </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="#"> 문의하기 </NavLink>
+            <NavLink href="/servicecenter"> 문의하기 </NavLink>
           </NavItem>
         </Nav>
       </Collapse>

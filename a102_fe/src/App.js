@@ -3,16 +3,9 @@ import {
   Container,
   Row,
   Col,
-  // CardBody,
-  // Form,
-  // FormGroup,
-  // Input,
-  // Label,
-  // Button,
 } from "reactstrap";
 import {
   Route,
-  HashRouter,
   BrowserRouter,
   Switch,
   Redirect,
@@ -25,6 +18,9 @@ import StoreDetailSupport from "./pages/support/storeDetailSupport";
 import Authentication from "./pages/account/authentication";
 import Profile from "./pages/account/profile";
 import StoreDetail from "./pages/support/storeDetail";
+import qnaCreate from "./pages/qna/qnacreate";
+import qnaList from "./pages/qna/qnalist";
+import qnaDetail from "./pages/qna/qnadetail";
 import "./App.css";
 
 function App() {
@@ -35,15 +31,14 @@ function App() {
         <Row className="mainBody">
           <Switch>
             <Route exact path="/" component={Main} />
+            <Route path="/auth" component={Authentication} />
             <Route path="/support" component={Support} />
             <Route path="/map" component={Support} />
-            <Route path="/test" component={StoreDetailSupport} />
-            <Route path="/auth" component={Authentication} />
-            <Route
-              path="/storedetailsupport/:storeId"
-              component={StoreDetailSupport}
-            />
             <Route path="/storeDetail/:storeId" component={StoreDetail} />
+            <Route path="/storedetailsupport/:storeId" component={StoreDetailSupport} />
+            <Route path="/qnacreate" component={qnaCreate} />
+            <Route path="/qna" component={qnaList} />
+            <Route path="/qnadetail" component={qnaDetail} />
             {/* Profile 페이지의 경우 리다이렉트 보내주기 */}
             <PrivateRoute path="/profile">
               <Profile />

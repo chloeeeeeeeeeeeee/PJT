@@ -1,0 +1,26 @@
+.listPost {
+  .card {
+    border-color: $eat-key-color;
+    border-width: 2px;
+
+    .listPostHeader {
+      background-color: $eat-key-color;
+      h5 {
+        display: inline;
+      }
+      .listPostHeaderButton {
+        background-color: $eat-point-color;
+        color: white;
+        border: none;
+        border-radius: 20%;
+        display: inline-block;
+        float: right;
+      }
+    }
+
+    .listPostBody {
+      height: 70vh;
+      overflow-y: auto;
+    }
+  }
+}

@@ -1,0 +1,40 @@
+.detailPost {
+  .card {
+    border-color: $eat-key-color;
+    border-width: 2px;
+
+    .detailPostQHeader {
+      background-color: $eat-key-color;
+      span {
+        float: right;
+      }
+    }
+
+    .detailPostQBody {
+      height: 25vh;
+      overflow-y: auto;
+    }
+
+    .detailPostAHeader {
+      background-color: $eat-key-color;
+    }
+
+    .detailPostABody {
+      height: 25vh;
+      overflow-y: auto;
+    }
+
+    .detailPostButton {
+      background-color: $eat-key-color;
+      .detailPostUpdateButton,
+      .detailPostDeleteButton {
+        background-color: $eat-point-color;
+        color: white;
+        border: none;
+        border-radius: 20%;
+        display: inline-block;
+        float: right;
+      }
+    }
+  }
+}

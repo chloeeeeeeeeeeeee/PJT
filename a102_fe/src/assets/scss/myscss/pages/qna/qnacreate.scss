@@ -1,0 +1,37 @@
+.createPost {
+  margin: 10px;
+  .card {
+    border-color: $eat-key-color;
+    border-width: 2px;
+
+    .createPostHeader {
+      background-color: $eat-key-color;
+    }
+
+    .createPostBody {
+      form {
+        .createTitle {
+          border: 1px solid $light-semi-gray;
+          &::-webkit-input-placeholder {
+            // _variables
+            font-size: $form-placeholder-font-size;
+            letter-spacing: $form-placeholder-letter-spacing;
+            font-weight: $form-placeholder-font-weight;
+          }
+        }
+        .form-check {
+          margin-bottom: 16px;
+        }
+      }
+
+      .createButton {
+        background-color: $eat-key-color;
+        color: white;
+        border: none;
+        border-radius: 43%;
+        display: inline-block;
+        float: right;
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import {
-  // Container,
-  // Row,
+  Container,
+  Row,
   Col,
   // CardBody,
   // Form,
@@ -30,36 +30,28 @@ import "./App.css";
 function App() {
   return (
     <BrowserRouter>
-      <div className="myfont mybg page-wrapper">
-        {/* <div className="page-body-wrapper"> */}
-          <div className="myLayout">
-            <div className="myHeader">
-              <Header />
-            </div>
-            <div className="myDivision">
-              <Switch>
-                <Route exact path="/" component={Main} />
-                <Route path="/support" component={Support} />
-                <Route path="/map" component={Support} />
-                <Route path="/test" component={StoreDetailSupport} />
-                <Route path="/auth" component={Authentication} />
-                <Route
-                  path="/storedetailsupport/:storeId"
-                  component={StoreDetailSupport}
-                />
-                <Route path="/storeDetail/:storeId" component={StoreDetail} />
-                {/* Profile 페이지의 경우 리다이렉트 보내주기 */}
-                <PrivateRoute path="/profile">
-                  <Profile />
-                </PrivateRoute>
-              </Switch>
-            </div>
-            <div className="myFooter">
-              <Footer />
-            </div>
-          </div>
-        {/* </div> */}
-      </div>
+      <Container fluid={true} className="mainContainer">
+        <Header />
+        <Row className="mainBody">
+          <Switch>
+            <Route exact path="/" component={Main} />
+            <Route path="/support" component={Support} />
+            <Route path="/map" component={Support} />
+            <Route path="/test" component={StoreDetailSupport} />
+            <Route path="/auth" component={Authentication} />
+            <Route
+              path="/storedetailsupport/:storeId"
+              component={StoreDetailSupport}
+            />
+            <Route path="/storeDetail/:storeId" component={StoreDetail} />
+            {/* Profile 페이지의 경우 리다이렉트 보내주기 */}
+            <PrivateRoute path="/profile">
+              <Profile />
+            </PrivateRoute>
+          </Switch>
+        </Row>
+        <Footer />
+      </Container>
     </BrowserRouter>
   );
 }
@@ -73,24 +65,24 @@ function PrivateRoute({ children, ...rest }) {
       {...rest}
       render={({ location }) =>
         // localStorage.getItem("access-token") !== 'undefined' ? (
-        localStorage.getItem("access-token") !== 'undefined' ? (
-        // auth.user ? (
+        localStorage.getItem("access-token") !== "undefined" ? (
+          // auth.user ? (
           // 다만 PrivateRoute가 받는 children이 뭔지 모르겠네...
           children
         ) : (
           <Redirect
-            to ={{
-              // /authtest로 접속할 경우 아래 path로 리다이렉트 해줍니다 
+            to={{
+              // /authtest로 접속할 경우 아래 path로 리다이렉트 해줍니다
               // 왜 pathname이지? path로 보내면 안되나? Redirect 가 가진게 이런 형식인가?
               pathname: "/auth",
               // 리다이렉트 하기 전 정보를 저장해두기도 합니다!
-              state: { from: location }
+              state: { from: location },
             }}
           />
         )
       }
     />
-  )
+  );
 }
 
 export default App;

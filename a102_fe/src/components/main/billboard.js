@@ -5,10 +5,11 @@ import {
   CarouselControl,
   CarouselIndicators,
   CarouselCaption,
+  Col,
 } from "reactstrap";
 import Usertotal from "./usertotal";
 import Userrank from "./userrank";
-import Banner from "./banner"
+import Banner from "./banner";
 
 function Billboard(props) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -49,7 +50,7 @@ function Billboard(props) {
   const slides = items.map((item, index) => {
     return (
       <CarouselItem
-        className="custom-tag"
+        className="custom-tag col"
         tag="div"
         key={item.id}
         onExiting={() => setAnimating(true)}
@@ -61,26 +62,29 @@ function Billboard(props) {
   });
 
   return (
-    <div>
-      <Carousel activeIndex={activeIndex} next={next} previous={previous}>
-        <CarouselIndicators
-          items={items}
-          activeIndex={activeIndex}
-          onClickHandler={goToIndex}
-        />
-        {slides}
-        <CarouselControl
-          direction="prev"
-          directionText="Previous"
-          onClickHandler={previous}
-        />
-        <CarouselControl
-          direction="next"
-          directionText="Next"
-          onClickHandler={next}
-        />
-      </Carousel>
-    </div>
+    <Carousel
+      className="billboard col"
+      activeIndex={activeIndex}
+      next={next}
+      previous={previous}
+    >
+      {/* <CarouselIndicators
+        items={items}
+        activeIndex={activeIndex}
+        onClickHandler={goToIndex}
+      /> */}
+      {slides}
+      <CarouselControl
+        direction="prev"
+        directionText="Previous"
+        onClickHandler={previous}
+      />
+      <CarouselControl
+        direction="next"
+        directionText="Next"
+        onClickHandler={next}
+      />
+    </Carousel>
   );
 }
 

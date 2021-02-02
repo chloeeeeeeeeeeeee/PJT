@@ -12,7 +12,7 @@ function Userrank(){
     }, [])
 
     return(
-        <div className="userrank">
+        <div className="userrank carouselItem">
             <img src="https://pbs.twimg.com/profile_images/758509184052637696/i_DLbZ-r.jpg"></img>
             { userRank.map((user, index) => {
                 if (index >= 3) {

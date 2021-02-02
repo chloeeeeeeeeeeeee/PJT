@@ -24,7 +24,7 @@ public class StoreVariables implements Serializable{
 	private int storeItemTotal;
 	private int storeTotalContributionAmount;
 	
-//	단방향 매핑
+	//단방향 매핑
 	@OneToOne
 	@JoinColumn(name = "store_id")
 	private Store store;

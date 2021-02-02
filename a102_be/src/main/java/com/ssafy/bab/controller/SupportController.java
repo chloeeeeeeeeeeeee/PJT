@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bab.dto.Menu;
 import com.ssafy.bab.dto.StoreDetail;
-import com.ssafy.bab.dto.SupportStoreList;
+import com.ssafy.bab.dto.SupportStore;
 import com.ssafy.bab.service.SupportService;
 
 import io.swagger.annotations.Api;
@@ -33,9 +33,9 @@ public class SupportController {
 	
 	@ApiOperation(value = "후원 가게 목록", notes = "주소를 받아 해당 지역(구 기준)의 후원가게리스트를 반환한다", response = List.class)
 	@GetMapping("/supportstorelist/{Juso}")
-	public ResponseEntity<List<SupportStoreList>> listStore(@ApiParam(value = "후원가게 목록을 얻기 위한 기본 주소(ex:서울 종로구 종로54길 17-10, 서울 종로구 창신동 330-49)", required = true) @PathVariable String Juso) throws Exception {
+	public ResponseEntity<List<List<SupportStore>>> listStore(@ApiParam(value = "후원가게 목록을 얻기 위한 기본 주소(ex:서울 종로구 종로54길 17-10, 서울 종로구 창신동 330-49)", required = true) @PathVariable String Juso) throws Exception {
 		logger.info("listStore_Support - 호출");
-		return new ResponseEntity<List<SupportStoreList>>(supportService.getSupportStoreList(Juso), HttpStatus.OK);
+		return new ResponseEntity<List<List<SupportStore>>	>(supportService.getSupportStoreList(Juso), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "가게 상세정보", notes = "storeId를 받아 해당 가게의 상세정보를 반환한다", response = StoreDetail.class)

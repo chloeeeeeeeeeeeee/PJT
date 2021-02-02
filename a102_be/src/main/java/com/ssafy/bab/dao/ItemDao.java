@@ -10,5 +10,5 @@ import com.ssafy.bab.dto.ItemId;
 public interface ItemDao extends JpaRepository<Item, ItemId> {
 
 	ArrayList<Item> findByStore_StoreId(int storeId);
-	
+
 }

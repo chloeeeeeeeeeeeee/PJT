@@ -29,30 +29,15 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@Entity
-public class User implements Serializable{
+public class UserRank implements Serializable{
 	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) //AUTO는 default로, IDENTITY는 Auto-increment
 	private int userSeq;
 	
 	private String userId;	
 	private String userName;
-	private String userPwd;
 	private String userEmail;
 	private String userPhone;
+	private int userTotalContributionAmount;
 	
-	private LocalDateTime userDate = LocalDateTime.now();
-	
-	@PrePersist
-    public void createdAt() {
-		this.userDate = LocalDateTime.now();
-    }
-	
-	private int userTotalContributionAmount = 0;
-
-	@ManyToOne
-	@JoinColumn(name="store_id", nullable = true)
-	private Store store;
-	
-	
+	private int contributionCount;
 }

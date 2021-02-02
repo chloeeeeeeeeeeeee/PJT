@@ -12,8 +12,9 @@ public class Menu {
 	private int storeId;
 	private int itemId;
 	private String itemName;
+	private int itemPrice;
 	private int itemAvailable;
 	private int itemContributionAmount;
-	private String imgUrl;
+	private String ItemImgUrl;
 	
 }

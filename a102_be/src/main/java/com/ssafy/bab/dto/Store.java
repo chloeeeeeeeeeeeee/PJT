@@ -13,6 +13,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -31,6 +33,8 @@ public class Store implements Serializable{
 	private String storeName;
 	private String storeLocation;
 	private String storeCategory;
+	
+	//@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="2021-01-01 00:00:00")
 	private Timestamp storeRegDate;
 	private String storePhone;
 	private int storeKiosk;

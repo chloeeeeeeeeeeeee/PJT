@@ -1,10 +1,18 @@
 package com.ssafy.bab.service;
 
+import java.sql.Date;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ssafy.bab.config.PasswordEncoding;
+import com.ssafy.bab.dao.ContributionDao;
 import com.ssafy.bab.dao.UserDao;
+import com.ssafy.bab.dto.Contribution;
 import com.ssafy.bab.dto.User;
 
 @Service
@@ -13,13 +21,25 @@ public class AccountServiceImpl implements AccountService{
 	@Autowired
 	UserDao userDao;
 	
-	PasswordEncoding passwordEncoding = new PasswordEncoding();
+	@Autowired
+	PasswordEncodingService passwordEncoding;
+	
+	@Autowired
+	ContributionDao contributionDao;
 	
 	public User signUp(User user) {
+		
+		if(userDao.findByUserId(user.getUserId()) != null)
+			return null;
+//		if(userDao.findByUserEmail(user.getUserEmail()) != null)
+//			return null;
+//		if(userDao.findByUserPhone(user.getUserPhone()) != null)
+//			return null;
+			
 		User userResult = user;
 		userResult.setUserPwd(passwordEncoding.encode(user.getUserPwd()));
 		userDao.save(userResult);
-		System.out.println(userResult);
+		userResult.setUserPwd(null);
 		return userResult;
 	}
 
@@ -41,5 +61,26 @@ public class AccountServiceImpl implements AccountService{
 		return loginUser;
 	}
 
-	
+	@Override
+	public int userWithUs(int userSeq) {
+		User userResult = userDao.findByUserSeq(userSeq);
+		LocalDateTime userDate = userResult.getUserDate().toLocalDate().atStartOfDay();
+		LocalDateTime nowDate = LocalDate.now().atStartOfDay();
+
+		return (int)Duration.between(userDate, nowDate).toDays();
+	}
+
+	@Override
+	public ArrayList<Contribution> userContribution(int userSeq) {
+		ArrayList<Contribution> userContribution = contributionDao.findByUser_UserSeqOrderByContributionDateDesc(userSeq);
+		return userContribution;
+	}
+
+	@Override
+	public int userContributionCount(int userSeq) {
+		Integer userContributionCount = contributionDao.findCountByUserSeq(userSeq);
+		if(userContributionCount == null)
+			return 0;
+		return userContributionCount;
+	}
 }

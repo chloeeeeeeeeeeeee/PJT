@@ -23,16 +23,21 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import com.ssafy.bab.dao.ContributionDao;
+import com.ssafy.bab.dao.ItemDao;
 import com.ssafy.bab.dao.LocationDao;
 import com.ssafy.bab.dao.StoreDao;
 import com.ssafy.bab.dao.StoreVariablesDao;
+import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dao.UserRankDao;
+import com.ssafy.bab.dto.AllStore;
 import com.ssafy.bab.dto.Location;
 import com.ssafy.bab.dto.Store;
-import com.ssafy.bab.dto.StoreList;
 import com.ssafy.bab.dto.StoreRank;
 import com.ssafy.bab.dto.StoreVariables;
 import com.ssafy.bab.dto.User;
+import com.ssafy.bab.dto.UserCount;
+import com.ssafy.bab.dto.UserRank;
 
 @Service
 public class MainServiceImpl implements MainService {
@@ -46,36 +51,102 @@ public class MainServiceImpl implements MainService {
 	@Autowired
 	private StoreVariablesDao storeVariablesDao;
 	
+	@Autowired
+	private ItemDao itemDao;
+	
+	@Autowired
+	private ContributionDao contributionDao;
+	
+	@Autowired
+	private UserDao userDao;
+	
 	//유저랭킹
 	@Autowired
 	UserRankDao userRankDao;
 	
 	@Override
-	public List<StoreList> getStoreList(String Juso) throws Exception {
+	public List<List<AllStore>> getStoreList(String Juso) throws Exception {
 		StringTokenizer st = new StringTokenizer(Juso);
 //		Juso = st.nextToken() + " " + st.nextToken() + " " + st.nextToken();
 //		st = new StringTokenizer(getJibun(Juso));
-		String si = st.nextToken();
-		String gu = st.nextToken();
+		String si = null;
+		String gu = null;
+		if(st.hasMoreTokens()) {
+			si = st.nextToken();
+			if(st.hasMoreTokens()) {
+				gu = st.nextToken();
+			}else 
+				return null;
+		}else 
+			return null;
 		
 		
-		// 구를 기준으로 locationId를 받아온뒤 locationId를 기준으로 store를 리스트로 받아와 StoreList에 결과를 추가 후 반환
+		
+		// 구를 기준으로 locationId를 받아온뒤 locationId를 기준으로 store를 리스트로 받아온다
 		
 		Location location = locationDao.findByLocationGu(gu);
+		if(location == null) return null;
+		
 		ArrayList<Store> storeList = storeDao.findByLocation_locationId(location.getLocationId());
-		ArrayList<StoreList> resultList = new ArrayList<StoreList>();
+		if(storeList == null) return null;
+		
+		// 카테고리별로 list에 추가하고 카테고리별 리스트들을 resultList에 넣어 반환 
+		ArrayList<List<AllStore>> resultList = new ArrayList<>();
+		List<AllStore>[] categories = new ArrayList[10];
+
+		for(int i = 0; i < 10; i++) {
+			categories[i] = new ArrayList<AllStore>();
+		}
+		
 		for (Store store : storeList) {
-			StoreList result = new StoreList();
+			AllStore result = new AllStore();
 			result.setStoreId(store.getStoreId());
 			result.setStoreName(store.getStoreName());
 			result.setStoreLocation(store.getStoreLocation());
 			result.setStoreCategory(store.getStoreCategory());
 			result.setStoreKiosk(store.getStoreKiosk());
 			if(store.getStoreKiosk() == 1) {
-//				StoreVariables storeVariables = storeVariablesDao.findByStoreId(store.getStoreId());
-//				result.setStoreItemAvailable(storeVariables.getStoreItemAvailable());
+				StoreVariables storeVariables = storeVariablesDao.findByStoreId(store.getStoreId());
+				result.setStoreItemAvailable(storeVariables.getStoreItemAvailable());
 			}
-			resultList.add(result);
+			
+			switch (store.getStoreCategory()) {
+			case "한식":
+				categories[1].add(result);
+				break;
+			case "양식":
+				categories[2].add(result);
+				break;
+			case "제과점/카페":
+				categories[3].add(result);
+				break;
+			case "기타":
+				categories[4].add(result);
+				break;
+			case "중식":
+				categories[5].add(result);
+				break;
+			case "마트/편의점":
+				categories[6].add(result);
+				break;
+			case "패스트푸드":
+				categories[7].add(result);
+				break;
+			case "일식":
+				categories[8].add(result);
+				break;
+			case "치킨/피자":
+				categories[9].add(result);
+				break;
+			default:
+				break;
+			}
+			categories[0].add(result);
+			
+		}
+		
+		for(int i = 0; i < 10; i++) {
+			resultList.add(categories[i]);
 		}
 
 		return resultList;
@@ -189,5 +260,31 @@ public class MainServiceImpl implements MainService {
 		}
 		return storeRegionalRank;
 	}
+	@Override
+	public Integer userTotal() {
+		int userTotal = userRankDao.selectSumUserTotalContributionAmountFromUser();
+		return userTotal;
+	}
 
+
+	@Override
+	public List<UserRank> userBowlRank() {
+		List<UserRank> userBowlRank = new ArrayList<>();
+		List<UserCount> userCount = userRankDao.selectCountFromContributionGroupByUserSeqOrderByCountDesc();
+		for(int i=0;i<userCount.size();i++) {
+			UserRank userRank = new UserRank();
+			userRank.setUserSeq(userCount.get(i).getUserSeq());
+			userRank.setContributionCount(userCount.get(i).getCount());
+			
+			User user = userDao.findByUserSeq(userRank.getUserSeq());
+			userRank.setUserEmail(user.getUserEmail());
+			userRank.setUserId(user.getUserId());
+			userRank.setUserName(user.getUserName());
+			userRank.setUserPhone(user.getUserPhone());
+			userRank.setUserTotalContributionAmount(user.getUserTotalContributionAmount());	
+			
+			userBowlRank.add(userRank);
+		}
+		return userBowlRank;
+	}
 }

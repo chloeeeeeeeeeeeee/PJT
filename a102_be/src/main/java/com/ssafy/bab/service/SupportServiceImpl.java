@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.bab.dao.ContributionDao;
 import com.ssafy.bab.dao.ItemDao;
 import com.ssafy.bab.dao.LocationDao;
 import com.ssafy.bab.dao.StoreDao;
@@ -17,7 +18,7 @@ import com.ssafy.bab.dto.Menu;
 import com.ssafy.bab.dto.Store;
 import com.ssafy.bab.dto.StoreDetail;
 import com.ssafy.bab.dto.StoreVariables;
-import com.ssafy.bab.dto.SupportStoreList;
+import com.ssafy.bab.dto.SupportStore;
 
 @Service
 public class SupportServiceImpl implements SupportService {
@@ -34,33 +35,91 @@ public class SupportServiceImpl implements SupportService {
 	@Autowired
 	private ItemDao itemDao;
 	
+	@Autowired
+	private ContributionDao contributionDao;
+	
 	@Override
-	public List<SupportStoreList> getSupportStoreList(String Juso) throws Exception {
+	public List<List<SupportStore>> getSupportStoreList(String Juso) throws Exception {
 		StringTokenizer st = new StringTokenizer(Juso);
-		String si = st.nextToken();
-		String gu = st.nextToken();
+		String si = null;
+		String gu = null;
+		if(st.hasMoreTokens()) {
+			si = st.nextToken();
+			if(st.hasMoreTokens()) {
+				gu = st.nextToken();
+			}else 
+				return null;
+		}else 
+			return null;
 		
 		
 		// 구를 기준으로 locationId를 받아온뒤 locationId와 후원유무(StoreKiosk)를 기준으로
 		// store와 storeVariable을 리스트로 받아와서 StoreList에 결과를 추가 후 반환
 		
-		Location locationDto = locationDao.findByLocationGu(gu);
-		ArrayList<Store> storeList = storeDao.findByLocation_locationIdAndStoreKiosk(locationDto.getLocationId(), 1);
-		ArrayList<SupportStoreList> resultList = new ArrayList<SupportStoreList>();
+		Location location = locationDao.findByLocationGu(gu);
+		if(location == null) return null;
+		
+		ArrayList<Store> storeList = storeDao.findByLocation_locationIdAndStoreKiosk(location.getLocationId(), 1);
+		if(storeList == null) return null;
+		
+		// 카테고리별로 list에 추가하고 카테고리별 리스트들을 resultList에 넣어 반환 
+		ArrayList<List<SupportStore>> resultList = new ArrayList<>();
+		List<SupportStore>[] categories = new ArrayList[10];
+
+		for(int i = 0; i < 10; i++) {
+			categories[i] = new ArrayList<SupportStore>();
+		}
+
+		
 		for (Store store : storeList) {
-			SupportStoreList result = new SupportStoreList();
+			SupportStore result = new SupportStore();
 			result.setStoreId(store.getStoreId());
 			result.setStoreName(store.getStoreName());
 			result.setStoreLocation(store.getStoreLocation());
 			result.setStoreCategory(store.getStoreCategory());
 
-			StoreVariables storeVariablesDto = storeVariablesDao.findByStoreId(store.getStoreId());
-			result.setStoreItemAvailable(storeVariablesDto.getStoreItemAvailable());
-			result.setStoreItemTotal(storeVariablesDto.getStoreItemTotal());
-
-			resultList.add(result);
+			StoreVariables storeVariables = storeVariablesDao.findByStoreId(store.getStoreId());
+			result.setStoreItemAvailable(storeVariables.getStoreItemAvailable());
+			result.setStoreItemTotal(storeVariables.getStoreItemTotal());
+			
+			switch (store.getStoreCategory()) {
+			case "한식":
+				categories[1].add(result);
+				break;
+			case "양식":
+				categories[2].add(result);
+				break;
+			case "제과점/카페":
+				categories[3].add(result);
+				break;
+			case "기타":
+				categories[4].add(result);
+				break;
+			case "중식":
+				categories[5].add(result);
+				break;
+			case "마트/편의점":
+				categories[6].add(result);
+				break;
+			case "패스트푸드":
+				categories[7].add(result);
+				break;
+			case "일식":
+				categories[8].add(result);
+				break;
+			case "치킨/피자":
+				categories[9].add(result);
+				break;
+			default:
+				break;
+			}
+			categories[0].add(result);
 		}
 
+		for(int i = 0; i < 10; i++) {
+			resultList.add(categories[i]);
+		}
+		
 		return resultList;
 	}
 
@@ -73,6 +132,7 @@ public class SupportServiceImpl implements SupportService {
 		storeDetail.setStoreCategory(store.getStoreCategory());
 		storeDetail.setStoreLocation(store.getStoreLocation());
 		storeDetail.setStorePhone(store.getStorePhone());
+		storeDetail.setStoreContributionAmount(contributionDao.getTotalStoreContributionCount(storeId));
 		return storeDetail;
 	}
 
@@ -85,10 +145,10 @@ public class SupportServiceImpl implements SupportService {
 			menu.setStoreId(storeId);
 			menu.setItemId(item.getItemId());
 			menu.setItemName(item.getItemName());
+			menu.setItemPrice(item.getItemPrice());
 			menu.setItemAvailable(item.getItemAvailable());
-//			!!!!!!!!!!!!!!수정 필요!!!!!!!!!!!!!!!!!!
-			menu.setItemContributionAmount(0);
-			menu.setImgUrl(item.getItemImgUrl());
+			menu.setItemContributionAmount(contributionDao.getTotalItemContributionCount(storeId, item.getItemId()));
+			menu.setItemImgUrl(item.getItemImgUrl());
 			
 			menuList.add(menu);
 		}

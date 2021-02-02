@@ -14,6 +14,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     	//http.httpBasic().disable();
     	http.cors().and();
 		http.csrf().disable();
-
     }
 }

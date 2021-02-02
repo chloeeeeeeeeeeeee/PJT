@@ -1,15 +1,23 @@
 package com.ssafy.bab.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bab.dto.Contribution;
 import com.ssafy.bab.dto.User;
+import com.ssafy.bab.dto.UserContribution;
 import com.ssafy.bab.service.AccountService;
 import com.ssafy.bab.service.AuthService;
 import com.ssafy.bab.service.JwtService;
@@ -26,42 +34,86 @@ public class AccountController {
 	
 	@Autowired
 	private JwtService jwtService;
+
 	
 	@GetMapping("/")
 	public String mainPage() {	
 		return "index.html";
 	}
 
+	//회원가입
 	@PostMapping("/signup")
-	public User signUp(User user) {
+	public ResponseEntity<User> signUp(@RequestBody User user) {
 		User userResult = userService.signUp(user);
-		return userResult;
+		if(userResult == null)
+			return new ResponseEntity<User>(userResult, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<User>(userResult, HttpStatus.OK);
 	}
+
 	//로그인(임시)
-	@GetMapping("/signin")
-	public User signUp(String userId, String userPwd) {
-		User userResult = userService.signIn(userId, userPwd);
-		return userResult;
+	@PostMapping("/signin")
+	public ResponseEntity<User> signIn(@RequestBody User user) {
+		User userResult = userService.signIn(user.getUserId(), user.getUserPwd());
+		if(userResult == null) {
+			return new ResponseEntity<User>(userResult,HttpStatus.BAD_REQUEST);
+		}
+		userResult.setUserPwd(null);
+		return new ResponseEntity<User>(userResult,HttpStatus.OK);
 	}
+	
 	//로그인jwt
-	@GetMapping("/signinjwt")
-	public ResponseEntity<JwtService.TokenRes> signInJwt(String userId, String userPwd){
-		ResponseEntity<JwtService.TokenRes> signInJwt = authService.signIn(userId, userPwd);
-		return signInJwt;
+	@PostMapping("/signinjwt")
+	public ResponseEntity<JwtService.TokenRes> signInJwt(@RequestBody User user, HttpServletResponse res){
+		JwtService.TokenRes signInJwt = authService.signIn(user.getUserId(), user.getUserPwd());
+		if(signInJwt == null) {
+			return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+		}
+		res.setHeader("token", signInJwt.getToken());
+		return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
 	}
+	
 	//jwt를 받아와서 유저번호를 돌려준다
-	@GetMapping("/signinjwt/{jwt}")
-	public ResponseEntity<Integer> getUserSeq(@PathVariable String jwt){
+	@GetMapping("/userseq")
+	public ResponseEntity<Integer> getUserSeq(HttpServletRequest req){
+		String jwt = req.getHeader("token");
 		int userSeq = jwtService.decode(jwt);
 		if(userSeq == -1) {
 			return new ResponseEntity<Integer>(userSeq, HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<Integer>(userSeq, HttpStatus.OK);
 	}
-	//유저번호를 받아와서 유저정보를 돌려준다
-	@GetMapping("/userInfo/{userSeq}")
-	public ResponseEntity<User> userInfo(@PathVariable int userSeq){
+	
+	//jwt를 받아와서 유저정보를 돌려준다
+	@GetMapping("/userinfo")
+	public ResponseEntity<User> getUserInfo(HttpServletRequest req){
+		String jwt = req.getHeader("token");
+		int userSeq = jwtService.decode(jwt);
 		User userInfo = userService.userInfo(userSeq);
 		return new ResponseEntity<User>(userInfo, HttpStatus.OK);
 	}
+	
+	//jwt를 받아와서 후원금액, 후원횟수, 함께한 일수를 돌려준다
+	@GetMapping("/userwithus")
+	public ResponseEntity<UserContribution> userWithUs(HttpServletRequest req){
+		String jwt = req.getHeader("token");
+		UserContribution userWithUs = new UserContribution();
+		int userSeq = jwtService.decode(jwt);
+		
+		userWithUs.setUserWithUs(userService.userWithUs(userSeq));
+		userWithUs.setContributionTotal(userService.userInfo(userSeq).getUserTotalContributionAmount());
+		userWithUs.setContributionCount(userService.userContributionCount(userSeq));
+		
+		return new ResponseEntity<UserContribution>(userWithUs, HttpStatus.OK);
+	}
+	
+	//jwt를 받아와서 유저의 후원 상세정보를 돌려준다
+	@GetMapping("/usercontribution")
+	public ResponseEntity<List<Contribution>> userContribution(HttpServletRequest req){
+		String jwt = req.getHeader("token");
+		int userSeq = jwtService.decode(jwt);
+		ArrayList<Contribution> userContribution = userService.userContribution(userSeq);
+		return new ResponseEntity<List<Contribution>>(userContribution, HttpStatus.OK);
+	}
+	
+	
 }

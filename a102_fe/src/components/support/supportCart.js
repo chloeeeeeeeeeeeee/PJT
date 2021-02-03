@@ -12,30 +12,19 @@ import SupportMenu from "../../components/support/supportMenu";
 function SupportCart(storeInfo) {
   const storeId = storeInfo.storeInfo;
 
-  let [cartStorage, setCartStorage] = useState(
-    localStorage.getItem("carts")
-      ? JSON.parse(localStorage.getItem("carts"))
-      : []
-  );
-  let [totalPrice, setTotalPrice] = useState(
-    localStorage.getItem("price")
-      ? JSON.parse(localStorage.getItem("price"))
-      : 0
-  );
+  let [cartStorage, setCartStorage] = useState([])
+  let [totalPrice, setTotalPrice] = useState([])
   let [menuList, setMenuList] = useState([]);
   let [temp, setTemp] = useState(0);
   // 후원페이지인지 그냥 상세보기인지 확인용 변수
   let supportCheck = false;
-
-  console.log(
-    "자리자리자리" + window.location.href.indexOf("storedetailsupport")
-  );
   if (window.location.href.indexOf("storedetailsupport") > -1) {
     supportCheck = true;
   } else {
     supportCheck = false;
   }
 
+  // 메뉴 정보 받아오기
   useEffect(() => {
     fetch(`http://i4a102.p.ssafy.io:8080/app/support/menulist/${storeId}`)
       .then((res) => res.json())
@@ -44,13 +33,14 @@ function SupportCart(storeInfo) {
       });
   }, []);
 
+  // 장바구니 업데이트
   useEffect(() => {
+      console.log("CART CHANGE")
     localStorage.setItem("carts", JSON.stringify(cartStorage));
     localStorage.setItem("price", totalPrice);
-    console.log(cartStorage);
-    console.log(localStorage);
-  });
+  }, [cartStorage, totalPrice]);
 
+  // 메뉴 더하기
   function addmenu(menu) {
     let flag = true;
     cartStorage.map((cart, index) => {
@@ -111,14 +101,13 @@ function SupportCart(storeInfo) {
   let itemContributionTotal = 0
   const supportCenterSide = menuList.map((menu, index) => {
     itemContributionTotal += menu.itemContributionAmount;
-    if (supportCheck) {
-      return (
+    return (
         <div
           className="storeMenuItem mb-2 row justify-content-between"
           key={index}
         >
           <SupportMenu supportmenu={menu} />
-          <Button
+          {supportCheck ? <Button
             color="secondary"
             className="helpButton col-2"
             onClick={(e) => {
@@ -126,22 +115,10 @@ function SupportCart(storeInfo) {
             }}
           >
             메뉴 담기
-          </Button>
+          </Button> : ''}          
         </div>
-      );
-    } else {
-      return (
-        <div
-          className="storeMenuItem mb-2 row justify-content-between"
-          key={index}
-        >
-          <SupportMenu supportmenu={menu} />
-        </div>
-      );
-    }
+    )
   });
-
-  console.log(supportCenterSide);
 
   const supportRightSide = !supportCheck ? (
     <Card>
@@ -172,7 +149,41 @@ function SupportCart(storeInfo) {
       </CardHeader>
       <CardBody className="supportCartCard">
         <div className="supportCart">
-          {cartStorage.map((cart, index) => (
+            {cartStorage.forEach((cart, index)=>{
+                 <div className="supportCartItem">
+                 <h5>
+                   {cart.itemName} : {cart.itemCnt}개
+                 </h5>
+                 <Button
+                   color="secondary"
+                   className="helpButton"
+                   onClick={() => {
+                     plus(index);
+                   }}
+                 >
+                   +
+                 </Button>
+                 <Button
+                   color="secondary"
+                   className="helpButton"
+                   onClick={() => {
+                     minus(index);
+                   }}
+                 >
+                   -
+                 </Button>
+                 <Button
+                   color="secondary"
+                   className="helpButton"
+                   onClick={() => {
+                     removemenu(index);
+                   }}
+                 >
+                   X
+                 </Button>
+               </div>
+            })}
+          {/* {cartStorage.map((cart, index) => (
             <div className="supportCartItem">
               <h5>
                 {cart.itemName} : {cart.itemCnt}개
@@ -205,7 +216,7 @@ function SupportCart(storeInfo) {
                 X
               </Button>
             </div>
-          ))}
+          ))} */}
         </div>
       </CardBody>
       <CardFooter className="supportCartFooter">

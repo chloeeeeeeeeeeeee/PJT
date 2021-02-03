@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Store Bot</title>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <link rel="stylesheet" href="css/storeBot.css">
+</head>
+<body>
+    <div class="align-center">
+        <div class="money-box">
+            <div class="money-box-item">
+                <div class="text-opt">주문수량</div>
+                <div class="text-opt">0</div>
+            </div>
+            <div class="money-box-item">
+                <div class="text-opt">주문금액</div>
+                <div class="text-opt">10,000</div>
+            </div>
+        </div>
+        <div class="button-container">
+            <button class="button-reset">초기화</button>
+        </div>
+        <div class="button-container">
+            <button class="button-pay" onclick="clickPay()">결제하기</button>
+        </div>
+    </div>
+    <script language="JavaScript">
+        new QWebChannel(qt.webChannelTransport, function (channel) {
+            window.handler = channel.objects.handler;
+        });
+
+        function clickPay(){
+            console.log("clicked")
+            handler.nextPage(function(retVal) {
+                console.error(JSON.stringify(retVal));
+            })
+        }
+    </script>
+</body>
+</html>

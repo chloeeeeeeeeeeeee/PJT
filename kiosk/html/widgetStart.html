@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>start</title>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <link rel="stylesheet" href="css/growCircle.css">
+</head>
+<body>
+    <input id="modalToggle" class="hide" type="checkbox">
+    <section class="modal">
+        <label class="btn btn-open" for="modalToggle">
+            <div style="font-size: 100px;" onclick="clickStart()">시 작<div>
+        </label>
+    </section>
+
+    <script language="JavaScript">
+        new QWebChannel(qt.webChannelTransport, function (channel) {
+            window.handler = channel.objects.handler;
+        });
+
+        function clickStart(){
+            setTimeout(function(){
+                handler.nextPage(function(retVal) {
+                    console.error(JSON.stringify(retVal));
+                })}
+            , 2000)
+        }
+    </script>
+</body>
+</html>

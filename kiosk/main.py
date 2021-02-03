@@ -68,6 +68,7 @@ class et(QMainWindow, Ui_mainWindow):
         widgetList[7].setMaximumSize(QSize(16777215, 200))
         self.ui.pageStoreLayout.addWidget(widgetList[7], 1, 0, 1, 3)
         self.ui.pageDonationLayout.addWidget(widgetList[3], 0, 0, 1, 1)
+        widgetList[2].setMaximumSize(QSize(16777215, 200))
         self.ui.pageDonationLayout.addWidget(widgetList[2], 1, 0, 1, 1)
         self.ui.pagePaymentLayout.addWidget(widgetList[4], 0, 0, 1, 1)
         self.ui.pageCompleteLayout.addWidget(widgetList[0], 0, 0, 1, 1)

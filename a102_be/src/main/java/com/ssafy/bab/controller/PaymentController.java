@@ -48,8 +48,6 @@ public class PaymentController {
         paymentInfo.setUserSeq(userSeq);
         paymentInfo.setCid("TC0ONETIME");
         
-        System.out.println(paymentInfo);
-        
         return kakaoPayService.kakaoPayReady(paymentInfo);
 //        return new RedirectView(kakaoPayService.kakaoPayReady(paymentInfo));
 	}

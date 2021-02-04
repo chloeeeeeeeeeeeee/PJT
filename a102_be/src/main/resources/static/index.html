@@ -18,30 +18,35 @@
             method: 'post', //통신 방식
             url: 'http://localhost:8081/payment/kakaopay', //통신할 페이지
             data: {
-            	
-            		  "cid": "TC0ONETIME",
-            		  "customerBirth": "string",
-            		  "customerGender": "string",
-            		  "customerName": "string",
-            		  "customerPhone": "string",
-            		  "itemList": [
-            		    {
-            		      "itemCount": 1,
-            		      "itemId": 1,
-            		      "itemName": "gmlgml",
-            		      "storeId": 1
-            		    }
-            		  ],
-            		  "totalAmount": 1,
-            		  "totalCount": 1,
-            		  "userSeq": 1
-            		
-            } //인자로 보낼 데이터
+            	  "cid": "TC0ONETIME",
+            	  "itemList": [
+            	    {
+            	      "itemCount": 1,
+            	      "itemId": 11,
+            	      "itemName": "로제정식",
+            	      "itemPrice": 5000,
+            	      "storeId": 1,
+            	      "support": 1
+            	    },
+            	    {
+            	      "itemCount": 1,
+            	      "itemId": 6,
+            	      "itemName": "상하이진한짬뽕",
+            	      "itemPrice": 1500,
+            	      "storeId": 1,
+            	      "support": 1
+            	    }
+            	  ],
+            	  "totalAmount": 6500,
+            	  "totalCount": 2,
+            	  "userSeq": 4
+            	} //인자로 보낼 데이터
           })
             .then(response=>{
                 document.getElementById('boom').innerText=response.data;
                 console.log(response);
-//                 location.href=response.data;
+                window.open(response.data);
+                
             })
             .catch(error=>{
                 document.getElementById('boom').innerText='error';

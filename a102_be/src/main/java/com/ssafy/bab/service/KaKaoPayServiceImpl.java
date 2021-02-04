@@ -94,7 +94,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 		// 상품명 설정
 		String item_name = paymentInfo.getItemList().get(0).getItemName();
 		if(paymentInfo.getItemList().size() > 1) {
-			item_name += " 외 " + (paymentInfo.getTotalCount() - 1);
+			item_name += " 외 " + (paymentInfo.getTotalCount() - 1) + "건";
 		}
 
 		// 유저번호 설정
@@ -144,6 +144,10 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             kakaoPayApproval = restTemplate.postForObject(new URI(HOST + "/v1/payment/approve"), body, KakaoPayApproval.class);
             log.info("" + kakaoPayApproval);
           
+            /*
+             * ******* DB 테이블 업데이트 *******
+             */
+            
             // payment 테이블 업데이트
             Payment payment = new Payment();
             payment.setPaymentId(kakaoPayInfo.getPartner_order_id());
@@ -184,6 +188,16 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 					orderDao.save(order);
 				}
 			}
+            
+            // 웹 회원 기부 
+            
+            // 웹/키오스크 비회원 기부
+            
+            //
+            
+            
+            
+            
             
             return kakaoPayApproval;
         

@@ -45,6 +45,9 @@ public class PaymentController {
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
+        // 테스트
+//        paymentInfo.setUserSeq(74);
+        // 프론트
         paymentInfo.setUserSeq(userSeq);
         paymentInfo.setCid("TC0ONETIME");
         

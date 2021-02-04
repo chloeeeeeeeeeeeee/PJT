@@ -9,28 +9,33 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
 @Entity
-@IdClass(ItemId.class)
+@Data
+@IdClass(ItemPK.class)
 public class Item implements Serializable{
 	@Id
+	@Column(name = "store_id")
+	private int storeId;
+	
+	
 	@ManyToOne
-	@JoinColumn(name="store_id")
+	@JoinColumn(name="store_id", insertable = false, updatable = false)
 	private Store store;
 	
 	@Id
 	@Column(name = "item_id")
 	private int itemId;
 	
+	
 	private String itemName;
 	private int itemPrice;
+	@Column(nullable = true)
+	private Integer supportPrice;
 	private int itemAvailable;
 	private int itemTotal;
 	private String ItemImgUrl;
+	
+	
 }

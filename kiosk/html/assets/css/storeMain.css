@@ -2,7 +2,9 @@ html, body{
 	position: relative;
 	width: 100%;
 	height: 100%;
-    background-color: #34383c;
+		/* 다크 테마에서 라이트 테마로 바꿔보았습니다! */
+		background-color: rgba(0, 0, 0, 0.013);
+    /* background-color: #34383c; */
 }
 
 .carousel-container{
@@ -29,39 +31,146 @@ html, body{
 .bookmark-container{
 	width: 100%;
 	height: 100%;
-    display: flex;
+	display: flex;
 	flex-wrap: wrap;
-	padding: 50px 50px;
+	/* 북마크 박스의 마진을 없애는 대신 justify-content를 이용해 간격을 줄게요 */
+	justify-content: space-between;
+	/* 상하는 꽉 차게 늘려졸게요! 물론 height 줬긴 하지만 */
+	align-content: stretch;
+	/* 넘기는 버튼이 분리되는 느낌을 주지 않도록 패딩을 살짝 줄여보겠습니다! */
+	padding: 20px 20px;
+	/* padding: 50px 50px; */
 }
 
 .bookmark{
-    /* 세로 가운데 배치, 마진*/
-    width: 20%;
-	height: 40%;
-    display: flex;
-	flex-direction: column;
-	justify-content: center;
-    align-items: center;
-	margin: 2.5% 2.5%;
-	background-color: #eff2f8;
+	width: 49%;
+	height: 33%;
+	/* background-color: #eff2f8; */
+
+	display: grid;
+	grid-template-rows: repeat(12, 1fr);
+	grid-template-columns: repeat(12, 1fr);		
+	
+}
+.bookmark-photo{
+	grid-row: 1 / 11;
+	grid-column: 1 / 5;
+	
+	display: flex;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	/* background-color: #23417c; */
+	/* border: 1px #000000 solid; */
 	border-radius: 20px;
+	padding: 9px;
+	/* margin-bottom: 5px; */
+}
+.bookmark-title{
+	padding-left: 5px;
+	grid-row: 1 / 4;
+	grid-column: 5 / 11;
+	/* background-color: #7c2370; */
+	
+	display: flex;
+	align-items: flex-end;
+	
+	font-size: 25px;
+	font-weight: 700;
+	color: #000000;
+}
+.bookmark-badge{
+	grid-row: 1 / 4;
+	grid-column: 11 / 13;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	color:salmon;
+	font-size: smaller;
+	/* background-color: #7c2323; */
+}
+.bookmark-dividing{
+	grid-row: 4 / 5;
+	grid-column: 5 / 13;
+
+	display: flex;
+	align-self: center;
+	
+	height: 1px;
+
+	margin-left: 5px;
+	margin-right: 5px;
+
+	background-color: slategrey;
+
+	background-clip: content-box;
 }
 
-.bookmark2{
-    /* 세로 가운데 배치, 마진*/
-    width: 40%;
-	height: 40%;
-    display: flex;
-	flex-direction: column;
+.bookmark-detail{
+	grid-row: 5 / 11;
+	grid-column: 5 / 10;
+	padding-left: 5px;
+	padding-bottom: 9px;
+	
+	/* background-color: #7c7623; */
+	
+	font-size: 12px;
+	font-weight: 200;
+	color: #000000;
+}
+
+.bookmark-btn1{
+	grid-row: 5 / 11;
+	grid-column: 10 / 13;
+	
+	margin: 10px;
+	border-radius: 7px;
+	
+	display: flex;
 	justify-content: center;
-    align-items: center;
-	margin: 5% 5%;
-	background-color: #eff2f8;
-	border-radius: 20px;
+	align-items: center;
+	
+	text-align: center;
+
+	background-color: rgba(47, 79, 79, 0.6);
+	vertical-align: middle;
+	/* background-clip: content-box; */
+}
+
+.bookmark-contribution{
+	grid-row: 11 / 13;
+	grid-column: 4 / 13;
+	padding-left: 5px;
+	
+	display: flex;
+	align-items: flex-start;
+	
+	/* background-color: #7c234c; */
+	/* font-size: 20px;
+	font-weight: 700; */
+	color: #000000;
+}
+
+.bookmark-contribution-title{
+	grid-row: 11 / 13;
+	grid-column: 1 / 4;
+	
+	padding-left: 9px;
+
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	
+	/* background-color: #7c7623; */
+	font-size: 15px;
+	font-weight: 500;
+	color: #000000;
 }
 
 .bookmark:hover{
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .bookmark-image-layout{
@@ -69,8 +178,8 @@ html, body{
     /* 세로 가운데 배치 */
     display: flex;
     align-items: center;
-	width: 80%;
-	height: 50%;
+		width: 80%;
+		height: 50%;
     background-color: #eff2f8;
     border: 1px #000000 solid;
     border-radius: 20px;
@@ -85,7 +194,8 @@ html, body{
     background-size: cover;
     background-repeat: no-repeat;
     border: 1px #eff2f8 solid;
-    border-radius: 7px;
+		border-radius: 7px;
+		background-color: rgba(188, 143, 143, 0.568);
 
 }
 
@@ -109,8 +219,9 @@ html, body{
 }
 
 .arrow-border{
-	border: 1px #ffffff solid;
-    border-radius: 20px;
+	/* 꽉 채운 느낌을 주기 위해 보더를 없애볼게요!  */
+	/* border: 1px #ffffff solid;
+  border-radius: 20px; */
 }
 
 .arrow-width{
@@ -121,11 +232,16 @@ html, body{
 .carousel-control-next{
 	height: 95%;
 	position: relative;
+	/* 대신 살짝 투명하게 겹치는 듯한 느낌으로 좌우 버튼을 설정해보겠습니다  */
+	background-color: rgba(0, 0, 0, 0.30);
 }
 
 .carousel-control-prev{
 	height: 95%;
 	position: relative;
+	/* 대신 살짝 투명하게 겹치는 듯한 느낌으로 좌우 버튼을 설정해보겠습니다  */
+	background-color: rgba(0, 0, 0, 0.30);
+
 }
 
 .fade-out{

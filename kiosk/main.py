@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtWebChannel import QWebChannel
 from ui.main_ui import Ui_mainWindow
@@ -7,6 +8,7 @@ from api import *
 
 import sys
 import os
+import time, datetime
 
 storeid = 1
 
@@ -21,7 +23,23 @@ class CallHandler(QObject):
     @pyqtSlot(QVariant, result=QVariant)
     def nextPage(self, opt):
         try:
-            w.movePage("next", opt)
+            w.movePage(opt)
+        except Exception as e:
+            print('예외가 발생했습니다.', e)
+        return "true"
+
+    @pyqtSlot(QVariant, result=QVariant)
+    def addBagItem(self, itemNum):
+        try:
+            w.addBagItem(itemNum)
+        except Exception as e:
+            print('예외가 발생했습니다.', e)
+        return "true"
+
+    @pyqtSlot(result=QVariant)
+    def clearBag(self):
+        try:
+            w.clearBagItem()
         except Exception as e:
             print('예외가 발생했습니다.', e)
         return "true"
@@ -39,10 +57,54 @@ class et(QMainWindow, Ui_mainWindow):
         self.ui = Ui_mainWindow()
         self.ui.setupUi(self) # main_ui 파일 불러옴
         self.connectHtmlPage() # html 파일을 각 widget에 연결
+        self.setKioskTitle(storeid) # 키오스크 네임 설정
+        # 시간 타이머 설정
+        self.displayTimeTimer = self.makeTimer(1000, self.displayTime)
+        self.displayTimeTimer.start()
+        # 홈 버튼 아이콘 설정
+        self.ui.labelHome.setPixmap(QPixmap("./ui/res/home.png").scaledToWidth(60))
+        self.clickable(self.ui.labelHome).connect(lambda: self.movePage("home"))
+
         self.itemCnt = 0
         self.totalCost = 0
         self.itemList = {}
         self.bag = []
+
+    # Click 불가능한 label 등의 위젯을 클릭 가능하게 만들어주는 함수
+    def clickable(self, widget):
+        class Filter(QObject):
+            clicked = pyqtSignal()
+            def eventFilter(self, obj, event):
+                if obj == widget:
+                    if event.type() == QEvent.MouseButtonRelease:
+                        if obj.rect().contains(event.pos()):
+                            self.clicked.emit()
+                            return True
+                return False
+        filter = Filter(widget)
+        widget.installEventFilter(filter)
+        return filter.clicked
+
+    # 상단 바 제어 부분
+    # 타이틀 설정
+    def setKioskTitle(self, id):
+        res = getStoreInfo(id)
+        self.ui.labelTitle.setText(res["storeName"])
+
+    # 시간 표시 타이머 함수
+    def makeTimer(self, interval, connect):
+        timer = QTimer(self)
+        timer.setInterval(interval)
+        timer.timeout.connect(connect)
+
+        return timer
+
+    def displayTime(self):
+        d = datetime.datetime.today()
+        date = d.strftime('%Y-%m-%d')
+        time = d.strftime('%p %I:%M:%S')
+        self.ui.labelDate.setText(date)
+        self.ui.labelTime.setText(time)
 
     def initVals(self):
         self.itemCnt = 0
@@ -90,15 +152,19 @@ class et(QMainWindow, Ui_mainWindow):
         self.ui.pageCompleteLayout.addWidget(self.widgetList[1], 0, 1, 1, 1)
 
     def movePage(self, opt):
-        print("click", opt, self.pageIndex)
+        print("click", opt)
         if opt == "home":
             self.initVals()
             self.ui.stackedWidget.setCurrentWidget(self.ui.pageStart)
-            self.pageIndex = 0
 
         if opt == "store":
             self.ui.stackedWidget.setCurrentWidget(self.ui.pageStore)
             self.makeStoreItem(storeid)
+
+        if opt == "donation":
+            self.ui.stackedWidget.setCurrentWidget(self.ui.pageDonation)
+            self.widgetList[2].page().runJavaScript("fadein()")
+            self.widgetList[3].page().runJavaScript("fadein()")
 
     def makeStoreItem(self, storeId):
         self.itemList = getStoreItem(storeId)
@@ -106,7 +172,6 @@ class et(QMainWindow, Ui_mainWindow):
         for i in self.itemList:
             jscmd = "addStoreItem(\'{itemId}\', \'{imgUrl}\', \'{itemName}\', \'{itemPrice}\')"\
                 .format(itemId=idIter, imgUrl=i["itemImgUrl"], itemName=i["itemName"], itemPrice=i["itemPrice"])
-            print(jscmd)
             self.widgetList[8].page().runJavaScript(jscmd)
             idIter = idIter+1
 
@@ -115,13 +180,15 @@ class et(QMainWindow, Ui_mainWindow):
         self.bag.append(item)
         jscmd = "addBagItem(\'{itemId}\', \'{imgUrl}\', \'{itemName}\', \'{itemPrice}\')"\
                 .format(itemId=itemNum, imgUrl=item["itemImgUrl"], itemName=item["itemName"], itemPrice=item["itemPrice"])
-        print(jscmd)
         self.widgetList[6].page().runJavaScript(jscmd)
+        jscmd = "addCost({cost})".format(cost=item["itemPrice"])
 
     def clearBagItem(self):
         self.initVals()
         jscmd = "clearBag()"
-
+        self.widgetList[6].page().runJavaScript(jscmd)
+        jscmd = "clearCost()"
+        self.widgetList[7].page().runJavaScript(jscmd)
 
 
 app = QApplication(sys.argv)

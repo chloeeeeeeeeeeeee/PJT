@@ -14,18 +14,6 @@
         </label>
     </section>
 
-    <script language="JavaScript">
-        new QWebChannel(qt.webChannelTransport, function (channel) {
-            window.handler = channel.objects.handler;
-        });
-
-        function clickStart(){
-            setTimeout(function(){
-                handler.nextPage(function(retVal) {
-                    console.error(JSON.stringify(retVal));
-                }, "default")
-            }, 2000)
-        }
-    </script>
+    <script type="text/javascript" src="assets/js/widgetStart.js"></script>
 </body>
-</html>
+</html> 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:\et\ui\main.ui'
+# Form implementation generated from reading ui file 'd:\et\ui\main.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.2
 #
@@ -16,7 +16,8 @@ class Ui_mainWindow(object):
         mainWindow.setObjectName("mainWindow")
         mainWindow.setEnabled(True)
         mainWindow.resize(1920, 1080)
-        mainWindow.setStyleSheet("background-color: rgb(52, 56, 60);")
+        mainWindow.setStyleSheet("background-color: rgb(250, 250, 250);\n"
+"")
         self.centralwidget = QtWidgets.QWidget(mainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.centralwidget)
@@ -25,22 +26,22 @@ class Ui_mainWindow(object):
         self.mainLayout.setObjectName("mainLayout")
         self.labelTitle = QtWidgets.QLabel(self.centralwidget)
         self.labelTitle.setMinimumSize(QtCore.QSize(0, 40))
-        self.labelTitle.setStyleSheet("color: rgb(255, 255, 255);\n"
-"font: 25pt \"Noto Sans KR\";")
+        self.labelTitle.setStyleSheet("font: 25pt \"Noto Sans KR\";\n"
+"color: rgb(0, 0, 0);")
         self.labelTitle.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.labelTitle.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.labelTitle.setObjectName("labelTitle")
         self.mainLayout.addWidget(self.labelTitle, 0, 1, 2, 1)
         self.labelTime = QtWidgets.QLabel(self.centralwidget)
         self.labelTime.setMinimumSize(QtCore.QSize(0, 20))
-        self.labelTime.setStyleSheet("color: rgb(255, 255, 255);\n"
+        self.labelTime.setStyleSheet("color: rgb(0, 0, 0);\n"
 "font: 16pt \"Noto Sans KR\";")
         self.labelTime.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.labelTime.setObjectName("labelTime")
         self.mainLayout.addWidget(self.labelTime, 1, 2, 1, 1)
         self.labelDate = QtWidgets.QLabel(self.centralwidget)
         self.labelDate.setMinimumSize(QtCore.QSize(0, 20))
-        self.labelDate.setStyleSheet("color: rgb(255, 255, 255);\n"
+        self.labelDate.setStyleSheet("color: rgb(0, 0, 0);\n"
 "font: 16pt \"Noto Sans KR\";")
         self.labelDate.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
         self.labelDate.setObjectName("labelDate")
@@ -136,8 +137,9 @@ class Ui_mainWindow(object):
         self.labelHome.setSizePolicy(sizePolicy)
         self.labelHome.setMinimumSize(QtCore.QSize(60, 60))
         self.labelHome.setMaximumSize(QtCore.QSize(60, 60))
-        self.labelHome.setStyleSheet("color: rgb(255, 255, 255);")
-        self.labelHome.setAlignment(QtCore.Qt.AlignCenter)
+        self.labelHome.setStyleSheet("color: rgb(0, 0, 0);\n"
+"font: 9pt \"Noto Sans KR\";")
+        self.labelHome.setAlignment(QtCore.Qt.AlignBottom|QtCore.Qt.AlignHCenter)
         self.labelHome.setObjectName("labelHome")
         self.mainLayout.addWidget(self.labelHome, 0, 0, 2, 1)
         self.horizontalLayout.addLayout(self.mainLayout)

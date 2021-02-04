@@ -218,11 +218,11 @@ html, body{
 	justify-content: space-around;
 }
 
-.arrow-border{
-	/* 꽉 채운 느낌을 주기 위해 보더를 없애볼게요!  */
-	/* border: 1px #ffffff solid;
-  border-radius: 20px; */
-}
+/* .arrow-border{
+	꽉 채운 느낌을 주기 위해 보더를 없애볼게요! 
+	border: 1px #ffffff solid;
+  border-radius: 20px;
+} */
 
 .arrow-width{
 	margin: 10px 10px;

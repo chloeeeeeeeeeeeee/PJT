@@ -7,6 +7,7 @@ import {
   CarouselCaption,
 } from "reactstrap";
 
+
 function Usertotal() {
     const [userTotal, setUserTotal] = useState(0);
   
@@ -19,7 +20,7 @@ function Usertotal() {
     }, [])
   
     return(
-      <div className="usertotal">
+      <div className="usertotal carouselItem">
         <br/>
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJk7W7YhTGPi8HzgujlWAnUFGWSJzegRJtHw&usqp=CAU"/>
         <h1>

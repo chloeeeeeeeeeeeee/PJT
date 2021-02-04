@@ -108,8 +108,9 @@ function SupportCart(storeInfo) {
     window.location.href = `/storedetailsupport/${storeId}`;
   }
 
+  let itemContributionTotal = 0
   const supportCenterSide = menuList.map((menu, index) => {
-    console.log("대체 나한테 왜그러냐:" + supportCheck);
+    itemContributionTotal += menu.itemContributionAmount;
     if (supportCheck) {
       return (
         <div
@@ -143,16 +144,16 @@ function SupportCart(storeInfo) {
   console.log(supportCenterSide);
 
   const supportRightSide = !supportCheck ? (
-    <Card className="col-3">
+    <Card>
       <CardHeader>
         <h4>매장 후원현황</h4>
       </CardHeader>
       <CardBody className="storeStatusCard">
         <div className="storeStatus">
-            <br/>
-            <h5>매장 누적 후원현황 : 76그릇</h5>
-            <br/>
-            <h5>이번주 후원현황 : 8그릇</h5>
+          <br />
+          <h5>매장 누적 후원현황 : 76그릇</h5>
+          <br />
+          <h5>이번주 후원현황 : {itemContributionTotal}그릇</h5>
         </div>
         <Button
           color="secondary"
@@ -165,7 +166,7 @@ function SupportCart(storeInfo) {
       </CardBody>
     </Card>
   ) : (
-    <Card className="col-3">
+    <Card>
       <CardHeader>
         <h4>후원 바구니</h4>
       </CardHeader>
@@ -228,13 +229,15 @@ function SupportCart(storeInfo) {
 
   return (
     <Col md="9" sm="12" className="row justify-content-around storeMenuDetail">
-      <Card className="col-8 storeMenu">
-        <CardHeader>
-          <h4>메뉴 목록</h4>
-        </CardHeader>
-        <CardBody className="storeMenuItemList">{supportCenterSide}</CardBody>
-      </Card>
-      {supportRightSide}
+      <Col xs="8" className="storeCenterBox">
+        <Card>
+          <CardHeader>
+            <h4>메뉴 목록</h4>
+          </CardHeader>
+          <CardBody className="storeMenuItemList">{supportCenterSide}</CardBody>
+        </Card>
+      </Col>
+      <Col xs="4" className="storeRightBox">{supportRightSide}</Col>
     </Col>
   );
 }

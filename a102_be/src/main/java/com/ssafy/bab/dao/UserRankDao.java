@@ -20,6 +20,6 @@ public interface UserRankDao extends JpaRepository<User, Integer> {
 	Integer selectSumUserTotalContributionAmountFromUser();
 	
 	//후원횟수
-	@Query(value = "SELECT user_seq as userSeq, count(user_seq) as count from contribution group by user_seq order by count(user_seq) desc;", nativeQuery = true)
+	@Query(value = "SELECT user_seq as userSeq, count(user_seq) as count from contribution group by user_seq having user_seq is not null order by count(user_seq) desc;", nativeQuery = true)
 	List<UserCount> selectCountFromContributionGroupByUserSeqOrderByCountDesc();
 }

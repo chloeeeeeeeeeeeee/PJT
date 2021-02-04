@@ -33,7 +33,7 @@ import lombok.ToString;
 public class User implements Serializable{
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) //AUTO는 default로, IDENTITY는 Auto-increment
-	private int userSeq;
+	private Integer userSeq;
 	
 	private String userId;	
 	private String userName;

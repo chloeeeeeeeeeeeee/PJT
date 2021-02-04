@@ -36,6 +36,6 @@ public class Qna {
 	
 	private String qnaTitle;
 	private String qnaContent;
-	private String qnaPwd;
+	private int qnaSecret;
 	
 }

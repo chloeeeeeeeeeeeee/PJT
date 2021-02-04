@@ -32,5 +32,5 @@ public class QnaReply {
 	
 	private String replyTitle;
 	private String replyContent;
-	private String replyPwd;
+	private int replySecret;
 }

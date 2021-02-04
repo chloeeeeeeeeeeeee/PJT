@@ -16,6 +16,9 @@ public interface QnaService {
 	// QnA 글 목록 가져오기
 	public Page<Qna> getList(int page);
 	
+	// QnA 마이페이지에서 글 목록 가져오기
+	public Page<Qna> getmyPageQnaList(int userSeq, int page);
+	
 	// QnA 질문(+답변) 상세 내용 가져오기
 	public Qna qnaDetail(Qna qna);
 	
@@ -23,5 +26,5 @@ public interface QnaService {
 	public String qnaUpdate(Qna qna);
 	
 	// QnA 질문(+답변) 삭제
-	public String qnaDelete(int qnaSeq);
+	public String qnaDelete(Qna qna);
 }

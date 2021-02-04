@@ -5,7 +5,6 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -13,13 +12,9 @@ import com.ssafy.bab.dao.QnaDao;
 import com.ssafy.bab.dao.QnaReplyDao;
 import com.ssafy.bab.dto.Qna;
 import com.ssafy.bab.dto.QnaReply;
-import com.ssafy.bab.dto.User;
 
 @Service
 public class QnaServiceImpl implements QnaService {
-
-	@Autowired
-	private PasswordEncodingService passwordEncoding;
 	
 	@Autowired
 	private QnaDao qnaDao;
@@ -30,10 +25,7 @@ public class QnaServiceImpl implements QnaService {
 	@Override
 	public String qnaCreate(Qna qna) {
 
-		String pwd = passwordEncoding.encode(qna.getQnaPwd());
-		qna.setQnaPwd(pwd);
 		qna.setQnaDate(new Date());
-		
 		qnaDao.save(qna);
 		
 		return "SUCCESS";
@@ -45,12 +37,12 @@ public class QnaServiceImpl implements QnaService {
 		Qna question = qnaDao.findByQnaSeq(qnaReply.getQnaSeq());
 
 		qnaReply.setReplyDate(new Date());
-		qnaReply.setReplyPwd(question.getQnaPwd());
+		qnaReply.setReplySecret(question.getQnaSecret());
 		qnaReply = qnaReplyDao.save(qnaReply);
 
 		question.setQnaReply(qnaReply);
 		qnaDao.save(question);
-		
+		System.out.println("afdsssssssss");
 		return "SUCCESS";
 	}
 
@@ -61,13 +53,19 @@ public class QnaServiceImpl implements QnaService {
 		Page<Qna> result = qnaDao.findAll(pageRequest);
 		return result;
 	}
+	
+	@Override
+	public Page<Qna> getmyPageQnaList(int userSeq, int page) {
+		PageRequest pageRequest = PageRequest.of(page, 5, Sort.by("qnaSeq").descending());
+		Page<Qna> result = qnaDao.findByUser_UserSeq(userSeq, pageRequest);
+		return result;
+	}
 
 	@Override
 	public Qna qnaDetail(Qna qna) {
-		
-		String pwd = qna.getQnaPwd();
-		qna = qnaDao.findByQnaSeq(qna.getQnaSeq());
-		if(pwd == null || passwordEncoding.matches(pwd, qna.getQnaPwd())) return qna;
+
+		Qna result = qnaDao.findByQnaSeq(qna.getQnaSeq());
+		if(qna.getQnaSecret() == 0 || result.getUser().getUserSeq() == qna.getUser().getUserSeq()) return result;
 		
 		return null;
 	}
@@ -75,10 +73,14 @@ public class QnaServiceImpl implements QnaService {
 	@Override
 	public String qnaUpdate(Qna qna) {
 		
+		
 		Qna newQna = qnaDao.findByQnaSeq(qna.getQnaSeq());
+		if(newQna == null) return "FAIL";
 		if(newQna.getQnaReply() != null) return "FAIL";
+		if(newQna.getUser().getUserSeq() != qna.getUser().getUserSeq()) return "FAIL";
 		newQna.setQnaContent(qna.getQnaContent());
 		newQna.setQnaTitle(qna.getQnaTitle());
+		newQna.setQnaSecret(qna.getQnaSecret());
 		newQna.setQnaDate(new Date());
 		qnaDao.save(newQna);
 		
@@ -86,8 +88,14 @@ public class QnaServiceImpl implements QnaService {
 	}
 
 	@Override
-	public String qnaDelete(int qnaSeq) {
-		qnaDao.deleteById(qnaSeq);
+	public String qnaDelete(Qna qna) {
+		
+		Qna deleteQna = qnaDao.findByQnaSeq(qna.getQnaSeq());
+		if(deleteQna == null) return "FAIL";
+		if(deleteQna.getUser().getUserSeq() != qna.getUser().getUserSeq()) return "FAIL";
+		
+		qnaDao.delete(deleteQna);
+		
 		return "SUCCESS";
 	}
 

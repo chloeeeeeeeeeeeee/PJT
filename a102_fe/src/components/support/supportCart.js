@@ -12,10 +12,10 @@ import SupportMenu from "../../components/support/supportMenu";
 function SupportCart(storeInfo) {
   const storeId = storeInfo.storeInfo;
 
-  let [cartStorage, setCartStorage] = useState([])
-  let [totalPrice, setTotalPrice] = useState([])
+  let [cartStorage, setCartStorage] = useState([]);
+  let [totalPrice, setTotalPrice] = useState(0);
   let [menuList, setMenuList] = useState([]);
-  let [temp, setTemp] = useState(0);
+  let [trigger, setTrigger] = useState(false);
   // 후원페이지인지 그냥 상세보기인지 확인용 변수
   let supportCheck = false;
   if (window.location.href.indexOf("storedetailsupport") > -1) {
@@ -35,79 +35,100 @@ function SupportCart(storeInfo) {
 
   // 장바구니 업데이트
   useEffect(() => {
-      console.log("CART CHANGE")
+    console.log("CART CHANGE");
     localStorage.setItem("carts", JSON.stringify(cartStorage));
     localStorage.setItem("price", totalPrice);
-  }, [cartStorage, totalPrice]);
+  }, [trigger]);
+
+  function calculateTotal(){
+      let total = 0
+      cartStorage.forEach((cartItem) => {
+          total += ((cartItem.itemPrice - 6000) * cartItem.itemCount)
+      })
+      setTotalPrice(total)
+  }
 
   // 메뉴 더하기
   function addmenu(menu) {
-    let flag = true;
-    cartStorage.map((cart, index) => {
-      if (cart["itemId"] === menu["itemId"]) {
-        cart["itemCnt"]++;
-        setCartStorage(cartStorage);
-        flag = false;
-        return;
+    let sameItem = false;
+    totalPrice += (menu.itemPrice - 6000)
+    setTotalPrice(totalPrice)
+    cartStorage.some((cartItem, index) => {
+      if (cartItem.itemId == menu.itemId) {
+        cartItem.itemCount += 1;
+        sameItem = true;
       }
+      return cartItem.itemId == menu.itemId;
     });
-    if (flag) {
-      menu.itemCnt = 1;
-      setCartStorage(cartStorage.concat([menu]));
-    }
-    setTemp(temp + 1);
-    setTotalPrice(totalPrice + menu.itemPrice);
-  }
-
-  function plus(index) {
-    console.log("plus");
-    cartStorage[index]["itemCnt"]++;
-    setCartStorage(cartStorage);
-    setTotalPrice(totalPrice + cartStorage[index]["itemPrice"]);
-    setTemp(temp + 1);
-  }
-
-  function minus(index) {
-    console.log("minus");
-    cartStorage[index]["itemCnt"]--;
-    if (cartStorage[index]["itemCnt"] <= 0) {
-      console.log("lets remove");
-      setCartStorage(cartStorage.filter((element, idx) => idx !== index));
-    } else {
+    if (sameItem) {
       setCartStorage(cartStorage);
+    } else {
+      menu.itemCount = 1;
+      setCartStorage(cartStorage.concat([menu]));      
     }
-    setTotalPrice(totalPrice - cartStorage[index]["itemPrice"]);
-    setTemp(temp + 1);
+    setTrigger(!trigger);
+    
   }
 
-  function removemenu(index) {
-    setCartStorage(cartStorage.filter((element, idx) => idx !== index));
-    setTotalPrice(
-      totalPrice -
-        cartStorage[index]["itemPrice"] * cartStorage[index]["menu_cnt"]
-    );
-    setTemp(temp + 1);
+  function plus(menu) {
+    cartStorage.some((cartItem) => {
+        if (cartItem.itemId == menu.itemId) {
+            cartItem.itemCount += 1;
+          }
+          return cartItem.itemId == menu.itemId;
+    })    
+    setCartStorage(cartStorage);
+    calculateTotal()
+    setTrigger(!trigger);
+  }
+
+  function minus(menu) {
+    cartStorage.some((cartItem) => {
+        if (cartItem.itemId == menu.itemId) {
+            cartItem.itemCount -= 1;
+            if (cartItem.itemCount <= 0){
+                cartStorage = cartStorage.filter((ele) => {
+                    return ele != cartItem
+                })
+            }
+          }
+          return cartItem.itemId == menu.itemId;
+    })  
+    setCartStorage(cartStorage)
+    calculateTotal()
+    setTrigger(!trigger)
+  }
+
+  function removemenu(menu) {
+    cartStorage = cartStorage.filter((ele) => {
+        return ele != menu
+    })
+    setCartStorage(cartStorage)
+    calculateTotal()
+    setTrigger(!trigger)
   }
 
   function clearmenu() {
     setCartStorage([]);
     setTotalPrice(0);
+    setTrigger(!trigger)
   }
 
   function moveToSupportPage() {
     window.location.href = `/storedetailsupport/${storeId}`;
   }
 
-  let itemContributionTotal = 0
+  let itemContributionTotal = 0;
   const supportCenterSide = menuList.map((menu, index) => {
     itemContributionTotal += menu.itemContributionAmount;
     return (
-        <div
-          className="storeMenuItem mb-2 row justify-content-between"
-          key={index}
-        >
-          <SupportMenu supportmenu={menu} />
-          {supportCheck ? <Button
+      <div
+        className="storeMenuItem mb-2 row justify-content-between"
+        key={index}
+      >
+        <SupportMenu supportmenu={menu} />
+        {supportCheck ? (
+          <Button
             color="secondary"
             className="helpButton col-2"
             onClick={(e) => {
@@ -115,10 +136,15 @@ function SupportCart(storeInfo) {
             }}
           >
             메뉴 담기
-          </Button> : ''}          
-        </div>
-    )
+          </Button>
+        ) : (
+          ""
+        )}
+      </div>
+    );
   });
+
+  console.log(cartStorage);
 
   const supportRightSide = !supportCheck ? (
     <Card>
@@ -148,79 +174,47 @@ function SupportCart(storeInfo) {
         <h4>후원 바구니</h4>
       </CardHeader>
       <CardBody className="supportCartCard">
-        <div className="supportCart">
-            {cartStorage.forEach((cart, index)=>{
-                 <div className="supportCartItem">
-                 <h5>
-                   {cart.itemName} : {cart.itemCnt}개
-                 </h5>
-                 <Button
-                   color="secondary"
-                   className="helpButton"
-                   onClick={() => {
-                     plus(index);
-                   }}
-                 >
-                   +
-                 </Button>
-                 <Button
-                   color="secondary"
-                   className="helpButton"
-                   onClick={() => {
-                     minus(index);
-                   }}
-                 >
-                   -
-                 </Button>
-                 <Button
-                   color="secondary"
-                   className="helpButton"
-                   onClick={() => {
-                     removemenu(index);
-                   }}
-                 >
-                   X
-                 </Button>
-               </div>
-            })}
-          {/* {cartStorage.map((cart, index) => (
-            <div className="supportCartItem">
-              <h5>
-                {cart.itemName} : {cart.itemCnt}개
-              </h5>
-              <Button
-                color="secondary"
-                className="helpButton"
-                onClick={() => {
-                  plus(index);
-                }}
-              >
-                +
-              </Button>
-              <Button
-                color="secondary"
-                className="helpButton"
-                onClick={() => {
-                  minus(index);
-                }}
-              >
-                -
-              </Button>
-              <Button
-                color="secondary"
-                className="helpButton"
-                onClick={() => {
-                  removemenu(index);
-                }}
-              >
-                X
-              </Button>
-            </div>
-          ))} */}
-        </div>
+          {cartStorage.map((cart, index) => {
+            return (
+              <div className="supportCartItem" key={index}>
+                <h5>
+                  {cart.itemName} : {cart.itemCount}개
+                </h5>
+                <Col xs="12 row justify-content-end m-0 p-0">
+                  <Button
+                    color="secondary"
+                    className="helpButton"
+                    onClick={() => {
+                      plus(cart);
+                    }}
+                  >
+                    +
+                  </Button>
+                  <Button
+                    color="secondary"
+                    className="helpButton"
+                    onClick={() => {
+                      minus(cart);
+                    }}
+                  >
+                    -
+                  </Button>
+                  <Button
+                    color="secondary"
+                    className="helpButton"
+                    onClick={() => {
+                      removemenu(cart);
+                    }}
+                  >
+                    X
+                  </Button>
+                </Col>
+              </div>
+            );
+          })}
       </CardBody>
       <CardFooter className="supportCartFooter">
-        <h5> 총 금액은 {totalPrice} 입니다. </h5>
+        <h5> 총 후원 금액은 {totalPrice}원 입니다. </h5>
         <Button color="secondary" className="helpButton" block>
           후원하기
         </Button>
@@ -248,7 +242,9 @@ function SupportCart(storeInfo) {
           <CardBody className="storeMenuItemList">{supportCenterSide}</CardBody>
         </Card>
       </Col>
-      <Col xs="4" className="storeRightBox">{supportRightSide}</Col>
+      <Col xs="4" className="storeRightBox">
+        {supportRightSide}
+      </Col>
     </Col>
   );
 }

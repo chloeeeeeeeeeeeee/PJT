@@ -1,8 +1,63 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Container, Row, Col, Card, CardHeader, CardBody, CardFooter, Button } from "reactstrap";
 import FaceIcon from '@material-ui/icons/Face';
+import ReactHtmlParser from 'react-html-parser';
 
-const qnaDetail = () => {
+
+function QnaDetail() {
+    let [qna, setQna] = useState([]);
+    let [qnaDate, setQnaDate] = useState("");
+    let [qnauser, setQnaUser] = useState("");
+    let [user, setUser] = useState([]);
+
+    useEffect(() => {
+        fetch(`http://i4a102.p.ssafy.io:8080/app/account/userinfo`, {
+            headers: {
+                token: localStorage.getItem('access-token')
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            setUser(res);
+        })
+    }, [])
+
+    useEffect(() => {
+        setQna(window.history.state);
+        setQnaDate(window.history.state.qnaDate.slice(0,10));
+        setQnaUser(window.history.state.user);
+    }, [])
+
+    const Back = (event) => {
+        window.location.href = '/qna';
+    }
+
+    const Update = (event) => {
+        event.preventDefault();
+        window.history.pushState(qna, 'please', '/qnaupdate');
+        window.location.href = '/qnaupdate';
+    }
+
+    const Delete = (event) => {
+        event.preventDefault();
+        if(window.confirm("정말로 글을 삭제하시겠습니까? \n삭제된 글은 복구 할 수 없습니다.")) {
+            fetch(`http://i4a102.p.ssafy.io:8080/app/qna/delete/${qna.qnaSeq}`, {
+                method: "POST",
+                headers: {
+                    token: localStorage.getItem('access-token'),
+                },
+            }).then(res => {
+                if (res.status === 200) {
+                    alert("삭제 성공", qna.qnaSeq);
+                    window.location.href = '/qna';
+                }
+                else{
+                    alert("글 삭제에 실패했습니다. 다시 한 번 시도해주세요:)");
+                }
+            })
+        }
+    }
+
     return (
         <Fragment>
             <Container fluid={true} className="detailPost">
@@ -10,21 +65,13 @@ const qnaDetail = () => {
                     <Col sm="12" md={{ size: 8, offset: 2 }}>
                         <Card>
                             <CardHeader className="detailPostQHeader">
-                                <h5>제목</h5>
-                                < FaceIcon /> 믓쨍이후원자
-                                <span>2020. 02. 02</span>
+                                <h5>{qna.qnaTitle}</h5>
+                                < FaceIcon /> {qnauser.userName}
+                                <span>{qnaDate}</span>
                             </CardHeader>
                             <CardBody className="detailPostQBody">
                                 <p>
-                                    제가 후원을 했는데 문제가~~!!제가 후원을 했는데 문제가~~!!
-                                    제가 후원을 했는데 문제가~~!!제가 후원을 했는데 문제가~~!!
-                                    제가 후원을 했는데 문제가~~!!제가 후원을 했는데 문제가~~!!
-                                    제가 후원을 했는데 문제가~~!!제가 후원을 했는데 문제가~~!!
-                                    제가 후원을 했는데 문제가~~!!제가 후원을 했는데 문제가~~!!
-                                    제가 후원을 했는데 문제가~~!!제가 후원을 했는데 문제가~~!!
-                                    제가 후원을 했는데 문제가~~!!제가 후원을 했는데 문제가~~!!
-                                    제가 후원을 했는데 문제가~~!!제가 후원을 했는데 문제가~~!!
-                                    제가 후원을 했는데 문제가~~!!제가 후원을 했는데 문제가~~!!
+                                    {ReactHtmlParser(qna.qnaContent)}
                                 </p>
                             </CardBody>
                             <CardHeader className="detailPostAHeader">
@@ -32,19 +79,24 @@ const qnaDetail = () => {
                             </CardHeader>
                             <CardBody className="detailPostABody">
                                 <p>
-                                    ~방법으로 해결 도와드리겠습니다.~방법으로 해결 도와드리겠습니다.
-                                    ~방법으로 해결 도와드리겠습니다.~방법으로 해결 도와드리겠습니다.
-                                    ~방법으로 해결 도와드리겠습니다.~방법으로 해결 도와드리겠습니다.
-                                    ~방법으로 해결 도와드리겠습니다.~방법으로 해결 도와드리겠습니다.
-                                    ~방법으로 해결 도와드리겠습니다.~방법으로 해결 도와드리겠습니다.
-                                    ~방법으로 해결 도와드리겠습니다.~방법으로 해결 도와드리겠습니다.
-                                    ~방법으로 해결 도와드리겠습니다.~방법으로 해결 도와드리겠습니다.
-                                    ~방법으로 해결 도와드리겠습니다.~방법으로 해결 도와드리겠습니다.
+                                {qna.qnaReply? qna.qnaReply.replyContent : "조금만 기다려주세요, 빠르게 응답드리겠습니다."}
                                 </p>
                             </CardBody>
                             <CardFooter className="detailPostButton">
-                                <Button className="detailPostUpdateButton">수정하기</Button>
-                                <Button className="detailPostDeleteButton">삭제하기</Button>
+                                <Button className="detailPostBackButton" onClick={(e) => Back(e)}>목록으로가기</Button>
+                                {qnauser.userId === user.userId && qna.qnaReply!=null?
+                                <span>
+                                <Button className="detailPostDeleteButton" onClick={(e) => Delete(e)}>삭제하기</Button>
+                                </span>
+                                :
+                                qnauser.userId === user.userId?
+                                <span>
+                                <Button className="detailPostDeleteButton" onClick={(e) => Delete(e)}>삭제하기</Button>
+                                <Button className="detailPostUpdateButton" onClick={(e) => Update(e)}>수정하기</Button>
+                                </span>
+                                :
+                                ""
+                                }
                             </CardFooter>
                         </Card>
                     </Col>
@@ -52,7 +104,6 @@ const qnaDetail = () => {
             </Container>
         </Fragment>
     );
-
 };
 
-export default qnaDetail;
+export default QnaDetail;

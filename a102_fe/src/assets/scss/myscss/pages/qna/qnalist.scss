@@ -16,11 +16,20 @@
         display: inline-block;
         float: right;
       }
+      .listPostHeaderCaution {
+        color: $eat-point-color;
+        border: none;
+        display: inline-block;
+        float: right;
+      }
     }
 
     .listPostBody {
       height: 70vh;
       overflow-y: auto;
+    }
+    .myQna {
+      background-color: rgb(252, 252, 238);
     }
   }
 }

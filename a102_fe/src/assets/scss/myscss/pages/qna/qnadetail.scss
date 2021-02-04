@@ -35,6 +35,13 @@
         display: inline-block;
         float: right;
       }
+      .detailPostBackButton {
+        background-color: $eat-point-color;
+        color: white;
+        border: none;
+        border-radius: 20%;
+        display: inline-block;
+      }
     }
   }
 }

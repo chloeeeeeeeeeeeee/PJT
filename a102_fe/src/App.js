@@ -2,7 +2,6 @@ import React from "react";
 import {
   Container,
   Row,
-  Col,
 } from "reactstrap";
 import {
   Route,
@@ -18,9 +17,10 @@ import StoreDetailSupport from "./pages/support/storeDetailSupport";
 import Authentication from "./pages/account/authentication";
 import Profile from "./pages/account/profile";
 import StoreDetail from "./pages/support/storeDetail";
-import qnaCreate from "./pages/qna/qnacreate";
-import qnaList from "./pages/qna/qnalist";
-import qnaDetail from "./pages/qna/qnadetail";
+import QnaCreate from "./pages/qna/qnaCreate";
+import QnaList from "./pages/qna/qnaList";
+import QnaDetail from "./pages/qna/qnaDetail";
+import QnaUpdate from "./pages/qna/qnaUpdate";
 import "./App.css";
 
 function App() {
@@ -36,9 +36,10 @@ function App() {
             <Route path="/map" component={Support} />
             <Route path="/storeDetail/:storeId" component={StoreDetail} />
             <Route path="/storedetailsupport/:storeId" component={StoreDetailSupport} />
-            <Route path="/qnacreate" component={qnaCreate} />
-            <Route path="/qna" component={qnaList} />
-            <Route path="/qnadetail" component={qnaDetail} />
+            <Route path="/qnacreate" component={QnaCreate} />
+            <Route path="/qna" component={QnaList} />
+            <Route path="/qnadetail" component={QnaDetail} />
+            <Route path="/qnaupdate" component={QnaUpdate} />
             {/* Profile 페이지의 경우 리다이렉트 보내주기 */}
             <PrivateRoute path="/profile">
               <Profile />

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import CKEditor from 'ckeditor4-react';
 import {
   Container,
@@ -15,23 +15,44 @@ import {
 } from "reactstrap";
 
 
-function QnaCreate() {
+function QnaUpdate() {
+  let [qna, setQna] = useState([]);
   let [title, setTitle] = useState("");
   let [content, setContent] = useState("");
   let [secret, setSecret] = useState(0);
+  let [temp, setTemp] = useState(0);
+
+  useEffect(() => {
+    setQna(window.history.state);
+    console.log(qna);
+  }, [])
+
+  useEffect(() => {
+    console.log(qna);
+    setTitle(qna.qnaTitle);
+    setContent(qna.qnaContent);
+    setTemp(temp + 1);
+    console.log(temp);
+  }, [])
+
+  useEffect(() => {
+    console.log(title);
+    console.log("content", content);
+  })
   
-  const Create = (event) => {
+  const Update = (event) => {
     event.preventDefault();
     console.log(title);
     console.log(content);
     console.log(secret);
-    fetch(`http://i4a102.p.ssafy.io:8080/app/qna/create`, {
+    fetch(`http://i4a102.p.ssafy.io:8080/app/qna/update`, {
       method: "POST",
       headers: {
         token: localStorage.getItem('access-token'),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        qnaSeq: qna.qnaSeq,
         qnaTitle: title,
         qnaContent: content,
         qnaSecret: secret,
@@ -50,13 +71,13 @@ function QnaCreate() {
 
   const onTitleChange = event => {
     setTitle(event.target.value);
-    console.log("제목제목");
+    console.log("제목제목", title);
   }
 
   const onContentChange = (event) => {
     const data = event.editor.getData();
     setContent(data);
-    console.log("너 왜 안나오니 등장해죠");
+    console.log("너 왜 안나오니 등장해죠", content);
   }
 
   const onSecretChange = (event) => {
@@ -98,7 +119,9 @@ function QnaCreate() {
                       <CKEditor
                         activeclassName="p10"
                         name="content"
+                        id="content"
                         value={content}
+                        data={qna.qnaContent}
                         required=""
                         onChange={onContentChange}
                       />
@@ -116,8 +139,8 @@ function QnaCreate() {
                     </FormGroup>
                   </Col>
                 </Form>
-                <Button className="createButton" type="submit" onClick={Create}>
-                  등록
+                <Button className="createButton" type="submit" onClick={Update}>
+                  수정하기
                 </Button>
               </CardBody>
             </Card>
@@ -128,4 +151,4 @@ function QnaCreate() {
   );
 }
 
-export default QnaCreate;
+export default QnaUpdate;

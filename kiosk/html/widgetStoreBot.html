@@ -25,23 +25,7 @@
             <button class="button-pay" onclick="clickPay()">결제하기</button>
         </div>
     </div>
-    <script language="JavaScript">
-        new QWebChannel(qt.webChannelTransport, function (channel) {
-            window.handler = channel.objects.handler;
-        });
+    <script type="text/javascript" src="assets/js/widgetStoreBot.js"></script>
 
-        function clickPay(){
-            handler.fadeout()
-            setTimeout(function(){
-                handler.nextPage(function(retVal) {
-                    console.error(JSON.stringify(retVal));
-                }, "default")}
-            , 1500)
-        }
-
-        function fadeout(){
-            document.getElementById("fade").setAttribute("class", "align-center fade-out")
-        }
-    </script>
 </body>
 </html>

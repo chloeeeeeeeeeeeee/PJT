@@ -33,12 +33,12 @@ body {
 .btn {
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 75%;
   transform: translate(-50%,-50%);
   display: inline-block;
-  height:30em;
-  width: 30em;
-  line-height: 550px;
+  height:25em;
+  width: 25em;
+  line-height: 25em;
   border-radius: 50%;
   
   text-align: center;
@@ -52,12 +52,12 @@ body {
 }
 
 
-#modalToggle:checked ~ .modal .btn-open {
-  animation-name: btnExpand;
+.grow {
+  animation: btnExpand 2s linear 1;
 }
 
 @keyframes btnExpand {
-  to {
+  to { 
     line-height: 9200px; 
     width: 9999px;
     height: 9999px;

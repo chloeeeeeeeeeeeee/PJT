@@ -74,8 +74,12 @@ html, body{
     font-size: 300%;
 }
 
+.zero-opacity{
+    opacity: 0;
+}
+
 .fade-in{
-	animation: animate 1.5s linear 1;
+	animation: animate 1s linear 1;
 }
 
 @keyframes animate {

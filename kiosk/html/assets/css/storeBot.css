@@ -86,7 +86,7 @@ body {
 }
 
 .fade-out{
-	animation: animate 1.5s linear infinite;
+	animation: animate 1s linear infinite;
 }
 
 @keyframes animate {

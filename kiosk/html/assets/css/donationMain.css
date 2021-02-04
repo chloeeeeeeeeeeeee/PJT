@@ -73,3 +73,18 @@ html, body{
 .donation-amount{
     font-size: 300%;
 }
+
+.fade-in{
+	animation: animate 1.5s linear 1;
+}
+
+@keyframes animate {
+	0% {
+		opacity: 0;
+	}
+	
+	100% {
+		opacity: 1;
+	}
+}
+  

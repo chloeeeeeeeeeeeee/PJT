@@ -84,3 +84,17 @@ body {
     margin: 4px;
     cursor: pointer;
 }
+
+.fade-out{
+	animation: animate 1.5s linear infinite;
+}
+
+@keyframes animate {
+	0% {
+		opacity: 1;
+	}
+	
+	100% {
+		opacity: 0;
+	}
+}

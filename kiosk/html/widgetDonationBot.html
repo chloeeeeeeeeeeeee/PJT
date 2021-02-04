@@ -3,16 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <link rel="stylesheet" href="assets/css/donationBot.css">
 </head>
 <body>
-    <div class="main-container">
+    <div class="main-container fade-in">
         <div class="button-container">
-            <button class="button-reset">결제하기</button>
+            <button class="button-reset" onclick="clickPay()">결제하기</button>
         </div>
         <div class="button-container">
-            <button class="button-pay">안할래요</button>
+            <button class="button-pay" onclick="clickNoPay()">안할래요</button>
         </div>
     </div>
+
+    <script language="JavaScript">
+        new QWebChannel(qt.webChannelTransport, function (channel) {
+            window.handler = channel.objects.handler;
+        });
+
+        function clickPay(){
+            handler.nextPage(function(retVal) {
+                console.error(JSON.stringify(retVal));
+            })
+        }
+
+        function clickNoPay(){
+            handler.nextPage(function(retVal) {
+                console.error(JSON.stringify(retVal));
+            })
+        }
+        
+    </script>
 </body>
 </html>

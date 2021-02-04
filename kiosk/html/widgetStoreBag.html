@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="assets/css/storeMain.css">
 </head>
 <body>
-    <div class="six-four">
+    <div id="fade" class="six-four">
         <div class="carousel-container">
             <a class="carousel-control-prev arrow-border arrow-width" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -82,6 +82,9 @@
     <script language="JavaScript">
         function addItem(img, name, price){
 
+        }
+        function fadeout(){
+            document.getElementById("fade").setAttribute("class", "six-four fade-out")
         }
     </script>
 

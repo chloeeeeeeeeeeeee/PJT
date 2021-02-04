@@ -55,3 +55,19 @@ html, body{
     margin: 4px;
     cursor: pointer;
 }
+
+.fade-in{
+	animation: animate 1.5s linear 1;
+}
+
+@keyframes animate {
+	0% {
+		opacity: 0;
+		filter: blur(1px);
+	}
+	
+	100% {
+		opacity: 1;
+		filter: blur(20px);
+    }
+}

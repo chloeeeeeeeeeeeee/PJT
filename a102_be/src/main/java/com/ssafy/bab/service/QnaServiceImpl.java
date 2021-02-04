@@ -1,6 +1,8 @@
 package com.ssafy.bab.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,15 +51,14 @@ public class QnaServiceImpl implements QnaService {
 	@Override
 	public Page<Qna> getList(int page) {
 //												 페이지, 사이즈, qnaSeq 기준으로 내림차순 정렬
-		PageRequest pageRequest = PageRequest.of(page, 5, Sort.by("qnaSeq").descending());
+		PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("qnaSeq").descending());
 		Page<Qna> result = qnaDao.findAll(pageRequest);
 		return result;
 	}
 	
 	@Override
-	public Page<Qna> getmyPageQnaList(int userSeq, int page) {
-		PageRequest pageRequest = PageRequest.of(page, 5, Sort.by("qnaSeq").descending());
-		Page<Qna> result = qnaDao.findByUser_UserSeq(userSeq, pageRequest);
+	public List<Qna> getmyPageQnaList(int userSeq) {
+		ArrayList<Qna> result = qnaDao.findByUser_UserSeqOrderByQnaSeqDesc(userSeq);
 		return result;
 	}
 

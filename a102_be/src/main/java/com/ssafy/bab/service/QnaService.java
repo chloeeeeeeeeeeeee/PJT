@@ -1,5 +1,7 @@
 package com.ssafy.bab.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
 import com.ssafy.bab.dto.Qna;
@@ -17,7 +19,7 @@ public interface QnaService {
 	public Page<Qna> getList(int page);
 	
 	// QnA 마이페이지에서 글 목록 가져오기
-	public Page<Qna> getmyPageQnaList(int userSeq, int page);
+	public List<Qna> getmyPageQnaList(int userSeq);
 	
 	// QnA 질문(+답변) 상세 내용 가져오기
 	public Qna qnaDetail(Qna qna);

@@ -1,0 +1,18 @@
+.paymentBox{
+    height:100%;
+    h2{
+        height:5%;
+    }
+    .paymentInfoBox{
+        height:95%;
+        overflow-y:auto;
+    }
+    .paymentDetailBox{
+        height:95%;
+        position:relative;
+        .paymentButton{
+            position:absolute;
+            bottom : 0;
+        }
+    }
+}

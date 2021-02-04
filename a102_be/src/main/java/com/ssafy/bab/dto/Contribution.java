@@ -1,9 +1,11 @@
 package com.ssafy.bab.dto;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,30 +13,37 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+@Data
 @Entity
-@IdClass(ContributionId.class)
+@IdClass(ContributionPK.class)
+@Table(name = "contribution")
 public class Contribution implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JoinColumn(name="contribution_id")
 	private int contributionId;
 	
 	@Id
-	@ManyToOne
-	@JoinColumns({
-		@JoinColumn(name="store_id", referencedColumnName = "store_id"),
-		@JoinColumn(name="item_id", referencedColumnName = "item_id")
-	})
-	private Item item;
+//	@Column(name = "store_id")
+	private int storeId;
+	
+	@Id
+//	@Column(name = "item_id")
+	private int itemId;
+	
+//	@ManyToOne
+//	@JoinColumns({
+//		@JoinColumn(name="store_id", referencedColumnName = "store_id", insertable = false, updatable = false),
+//		@JoinColumn(name="item_id", referencedColumnName = "item_id", insertable = false, updatable = false)
+//	})
+//	private Item item;
 	
 	@ManyToOne
 	@JoinColumn(name="user_seq")
@@ -46,11 +55,17 @@ public class Contribution implements Serializable {
 	@JoinColumn(name="contribution_answer", nullable = true)
 	private String contributionAnswer;
 	
-	private Timestamp contributionDate;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date contributionDate;
 	
 	@JoinColumn(name="contribution_date_used", nullable = true)
-	private Timestamp contributionDateUsed;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date contributionDateUsed;
 	
 	private int contributionUse;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="payment_id")
+	private Payment payment;
 	
 }

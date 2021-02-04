@@ -3,6 +3,7 @@ package com.ssafy.bab.service;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,11 +16,23 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.ssafy.bab.dao.ContributionDao;
+import com.ssafy.bab.dao.ItemDao;
 import com.ssafy.bab.dao.OrderDao;
+import com.ssafy.bab.dao.PaymentDao;
+import com.ssafy.bab.dao.StoreDao;
+import com.ssafy.bab.dao.UserDao;
+import com.ssafy.bab.dto.Contribution;
+import com.ssafy.bab.dto.Item;
+import com.ssafy.bab.dto.ItemPK;
 import com.ssafy.bab.dto.KakaoPayApproval;
 import com.ssafy.bab.dto.KakaoPayInfo;
 import com.ssafy.bab.dto.KakaoPayReady;
+import com.ssafy.bab.dto.Orders;
+import com.ssafy.bab.dto.Payment;
 import com.ssafy.bab.dto.PaymentInfo;
+import com.ssafy.bab.dto.PaymentItem;
+import com.ssafy.bab.dto.User;
 
 import lombok.extern.java.Log;
 
@@ -34,7 +47,22 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 	private String RETURN_URL;
 	
 	@Autowired
+	PaymentDao paymentDao;
+	
+	@Autowired
 	OrderDao orderDao;
+	
+	@Autowired
+	ContributionDao contributionDao;
+	
+	@Autowired
+	ItemDao itemDao;
+	
+	@Autowired
+	StoreDao storeDao;
+	
+	@Autowired
+	UserDao userDao;
 	
 	private final String HOST = "https://kapi.kakao.com";
 	private KakaoPayReady kakaoPayReady = new KakaoPayReady();
@@ -57,11 +85,11 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 		
 		kakaoPayInfo.setPaymentInfo(paymentInfo);
 		
-		// 주문번호 = yyyyMMdd-OrderId
+		// 주문번호
 		java.util.Date now = new java.util.Date();
-		SimpleDateFormat vans = new SimpleDateFormat("yyyyMMdd");
+		SimpleDateFormat vans = new SimpleDateFormat("yyyyMMdd-HHmmss");
 		String wdate = vans.format(now);
-		kakaoPayInfo.setPartner_order_id(wdate + "-" + orderDao.getPartnerOrderId());
+		kakaoPayInfo.setPartner_order_id(wdate);
 		
 		// 상품명 설정
 		String item_name = paymentInfo.getItemList().get(0).getItemName();
@@ -101,9 +129,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 	@Override
 	public KakaoPayApproval kakaoPayInfo(String pg_token) {
 		 // 서버로 요청할 Body
-		System.out.println("=================================");
-		System.out.println(kakaoPayInfo);
-		System.out.println("=================================");
+
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
         params.add("cid", kakaoPayInfo.getPaymentInfo().getCid());
         params.add("tid", kakaoPayReady.getTid());
@@ -118,6 +144,47 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             kakaoPayApproval = restTemplate.postForObject(new URI(HOST + "/v1/payment/approve"), body, KakaoPayApproval.class);
             log.info("" + kakaoPayApproval);
           
+            // payment 테이블 업데이트
+            Payment payment = new Payment();
+            payment.setPaymentId(kakaoPayInfo.getPartner_order_id());
+            payment.setKakaopay_cid(kakaoPayInfo.getPaymentInfo().getCid());
+            payment.setKakaopay_tid(kakaoPayReady.getTid());
+            paymentDao.save(payment);
+            
+            // order, contribution 테이블 업데이트
+
+            for (PaymentItem paymentItem : kakaoPayInfo.getPaymentInfo().getItemList()) {
+            	Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
+            	System.out.println(item);
+				if(paymentItem.getSupport() == 1) {
+					for(int i = 0; i < paymentItem.getItemCount(); i++) {
+						Contribution contribution = new Contribution();
+						contribution.setContributionId(0);
+//						contribution.setItem(item);
+						contribution.setItemId(paymentItem.getItemId());
+						contribution.setStoreId(paymentItem.getStoreId());
+						User user = userDao.findByUserSeq(Integer.parseInt(kakaoPayInfo.getPartner_user_id()));
+						if(user != null)
+							contribution.setUser(user);
+						contribution.setContributionDate(kakaoPayApproval.getApproved_at());
+						contribution.setContributionUse(0);
+						contribution.setPayment(payment);
+						contributionDao.save(contribution);
+					}
+				}else {
+					Orders order = new Orders();
+					order.setItemId(paymentItem.getItemId());
+					order.setStoreId(paymentItem.getStoreId());
+					order.setOrderDate(kakaoPayApproval.getApproved_at());
+					order.setOrderCount(paymentItem.getItemCount());
+					order.setPayment(payment);
+					
+//					!!!!!!!!!!!!orderDone 수정필요!!!!!!!!!!!!!!!!
+					order.setOrderDone(kakaoPayApproval.getApproved_at());
+					orderDao.save(order);
+				}
+			}
+            
             return kakaoPayApproval;
         
             

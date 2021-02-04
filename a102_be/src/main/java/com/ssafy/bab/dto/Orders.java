@@ -3,6 +3,7 @@ package com.ssafy.bab.dto;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,20 +18,27 @@ import lombok.Data;
 
 @Data
 @Entity
-@IdClass(OrderId.class)
-public class Order {
+@IdClass(OrdersPK.class)
+public class Orders {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JoinColumn(name="order_id")
 	private int orderId;
 	
+//	@Id
+//	@ManyToOne
+//	@JoinColumns({
+//		@JoinColumn(name="store_id", referencedColumnName = "store_id"),
+//		@JoinColumn(name="item_id", referencedColumnName = "item_id")
+//	})
+//	private Item item;
+	
 	@Id
-	@ManyToOne
-	@JoinColumns({
-		@JoinColumn(name="store_id", referencedColumnName = "store_id"),
-		@JoinColumn(name="item_id", referencedColumnName = "item_id")
-	})
-	private Item item;
+	private int itemId;
+	
+	@Id
+	private int storeId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date orderDate;
@@ -40,4 +48,7 @@ public class Order {
 	
 	private int orderCount;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="payment_id")
+	private Payment payment;
 }

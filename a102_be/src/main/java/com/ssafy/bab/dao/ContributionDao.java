@@ -8,10 +8,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.bab.dto.Contribution;
-import com.ssafy.bab.dto.ContributionId;
+import com.ssafy.bab.dto.ContributionPK;
 
 @Repository
-public interface ContributionDao extends JpaRepository<Contribution, ContributionId> {
+public interface ContributionDao extends JpaRepository<Contribution, ContributionPK> {
 
 	// 가게의 메뉴별 일정 기간 내 (한달) 후원 횟수
 	@Query(value = "SELECT COUNT(item_id) FROM contribution WHERE DATE_FORMAT(contribution_date, '%Y-%m-%d') >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) AND store_id = :storeId AND item_id = :itemId", nativeQuery = true)

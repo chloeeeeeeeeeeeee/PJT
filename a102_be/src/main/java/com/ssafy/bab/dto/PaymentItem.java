@@ -8,6 +8,8 @@ public class PaymentItem {
 	private int storeId;
 	private int itemId;
 	private String itemName;
+	private int itemPrice;
 	private int itemCount;
+	private int support;
 	
 }

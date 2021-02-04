@@ -12,10 +12,11 @@ public class PaymentInfo {
 	private List<PaymentItem> itemList;
 	private int totalCount;
 	private int totalAmount;
+	private int anonymous;
 	
-	private String customerName;
-	private String customerGender;
-	private String customerBirth;
-	private String customerPhone;
-	
+	private String contributorName;
+	private String contributorGender;
+	private String contributorBirth;
+	private String contributorPhone;
+	private String regNum;
 }

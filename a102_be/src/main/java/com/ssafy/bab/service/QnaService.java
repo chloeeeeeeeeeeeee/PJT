@@ -22,6 +22,9 @@ public interface QnaService {
 	// QnA 질문(+답변) 상세 내용 가져오기
 	public Qna qnaDetail(Qna qna);
 	
+	// QnA 답변 상세 내용 가져오기
+	public QnaReply replyDetail(QnaReply qnaReply, int userSeq);
+	
 	// QnA 질문 수정
 	public String qnaUpdate(Qna qna);
 	

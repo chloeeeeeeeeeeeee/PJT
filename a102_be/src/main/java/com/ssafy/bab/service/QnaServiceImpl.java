@@ -71,8 +71,19 @@ public class QnaServiceImpl implements QnaService {
 	}
 
 	@Override
-	public String qnaUpdate(Qna qna) {
+	public QnaReply replyDetail(QnaReply qnaReply, int userSeq) {
 		
+		Qna qna = qnaDao.findByQnaSeq(qnaReply.getQnaSeq());
+		if(qna == null) return null;
+
+		QnaReply result = qnaReplyDao.findByReplySeq(qnaReply.getReplySeq());
+		if(qnaReply.getReplySecret() == 0 || qna.getUser().getUserSeq() == userSeq) return result;
+		
+		return null;
+	}
+	
+	@Override
+	public String qnaUpdate(Qna qna) {
 		
 		Qna newQna = qnaDao.findByQnaSeq(qna.getQnaSeq());
 		if(newQna == null) return "FAIL";

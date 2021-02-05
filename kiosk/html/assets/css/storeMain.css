@@ -2,9 +2,9 @@ html, body{
 	position: relative;
 	width: 100%;
 	height: 100%;
-		/* 다크 테마에서 라이트 테마로 바꿔보았습니다! */
-		background-color: rgba(0, 0, 0, 0.013);
-    /* background-color: #34383c; */
+			/* 다크 테마에서 라이트 테마로 바꿔보았습니다! */
+			background-color: rgba(0, 0, 0, 0.013);
+	/* background-color: #34383c; */
 }
 
 .carousel-container{
@@ -40,7 +40,7 @@ html, body{
 	/* 북마크 박스의 마진을 없애는 대신 justify-content를 이용해 간격을 줄게요 */
 	justify-content: space-between;
 	/* 상하는 꽉 차게 늘려졸게요! 물론 height 줬긴 하지만 */
-	align-content: stretch;
+	align-content: flex-start;
 	/* 넘기는 버튼이 분리되는 느낌을 주지 않도록 패딩을 살짝 줄여보겠습니다! */
 	padding: 20px 20px;
 	/* padding: 50px 50px; */
@@ -53,21 +53,24 @@ html, body{
 
 	display: grid;
 	grid-template-rows: repeat(12, 1fr);
-	grid-template-columns: repeat(12, 1fr);		
+	grid-template-columns: repeat(12, 1fr);        
 	
 }
 .bookmark-photo{
 	grid-row: 1 / 11;
 	grid-column: 1 / 5;
 	
+	overflow: hidden;
+
 	display: flex;
+	justify-content: center;
 	align-items: center;
 	width: 100%;
 	height: 100%;
 	/* background-color: #23417c; */
 	/* border: 1px #000000 solid; */
 	border-radius: 20px;
-	padding: 9px;
+	padding: 27px 9px 9px;
 	/* margin-bottom: 5px; */
 }
 .bookmark-title{
@@ -138,7 +141,7 @@ html, body{
 	
 	text-align: center;
 
-	background-color: rgba(47, 79, 79, 0.6);
+	background-color: #f5b601;
 	vertical-align: middle;
 	/* background-clip: content-box; */
 }
@@ -178,28 +181,28 @@ html, body{
 }
 
 .bookmark-image-layout{
-    /* radius 20px, color #eff2f8  size 50px*/
-    /* 세로 가운데 배치 */
-    display: flex;
-    align-items: center;
-		width: 80%;
-		height: 50%;
-    background-color: #eff2f8;
-    border: 1px #000000 solid;
-    border-radius: 20px;
-    padding: 9px;
-    margin-bottom: 5px;
+	/* radius 20px, color #eff2f8  size 50px*/
+	/* 세로 가운데 배치 */
+	display: flex;
+	align-items: center;
+			width: 80%;
+			height: 50%;
+	background-color: #eff2f8;
+	border: 1px #000000 solid;
+	border-radius: 20px;
+	padding: 9px;
+	margin-bottom: 5px;
 }
 
 .bookmark-image{
-    /* size 28px */
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-repeat: no-repeat;
-    border: 1px #eff2f8 solid;
-		border-radius: 7px;
-		background-color: rgba(188, 143, 143, 0.568);
+	/* size 28px */
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+	background-repeat: no-repeat;
+	border: 1px #eff2f8 solid;
+			border-radius: 7px;
+			background-color: rgba(188, 143, 143, 0.568);
 
 }
 
@@ -225,7 +228,7 @@ html, body{
 	box-shadow: 10px 10px 30px #0008084f;
 
 	display: grid;
-	grid-template-rows: 2fr 8fr 1fr;
+	grid-template-rows: 2fr 6fr 1fr 2fr 1fr;
 	grid-template-columns: 1fr 4fr 1fr;
 
 }
@@ -250,10 +253,10 @@ html, body{
 	border-top-style: solid;
 	border-top-width: 1px;
 
-	padding: 3% 0%;
+	/* padding: 3% 0%; */
 
 	/* 이 div 내에는 개별 주문내역들이 쌓일 예정입니다.
-	   몇 개의 요소가 들어올지 가변적이므로, grid가 아닌 flex로 처리할게요. */
+		 몇 개의 요소가 들어올지 가변적이므로, grid가 아닌 flex로 처리할게요. */
 	display: flex;
 	/* 장바구니에 들어온 아이템들은 메인축을 수직으로 쌓고요 */
 	flex-direction: column;
@@ -272,7 +275,7 @@ html, body{
 
 	display: grid;
 	grid-template-rows: 1fr 1fr;
-	grid-template-columns: 1fr 5fr 2fr;
+	grid-template-columns: 1fr 4fr 1fr;
 }
 
 .cart-item-available{
@@ -324,7 +327,7 @@ html, body{
 .cart-item-quantity-btn{
 	height: 100%;
 	width: 30%;
-		
+			
 	background-color: white;
 	border-radius: 10%;
 
@@ -333,7 +336,66 @@ html, body{
 	align-items: center;
 }
 
+.money-box{
+	grid-row: 3 / 4;
+	grid-column: 2 / 3;
 
+	border-top: rgba(47, 79, 79, 0.3) solid 1px;
+
+	padding: 0% 10%;
+}
+
+.money-box-item{
+width: 100%;
+height: 50%;
+display: flex;
+justify-content: space-between;
+	align-items: center;
+	
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.button-container{
+	grid-row : 4 / 5;
+	grid-column: 2 / 3;
+
+display: flex;
+justify-content: center;
+width: 100%;
+height: 100%;
+align-items: center;
+}
+
+.button-reset{
+	height: 95%;
+	width: 100%;
+	background-color: #6609cf;
+	border: none;
+	color:#fff;
+	padding: 15px 0;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 40px;
+	margin: 4px;
+	cursor: pointer;
+}
+
+.button-pay{
+	height: 95%;
+	width: 100%;
+	background-color: #fa1c20;
+	border: none;
+	color:#fff;
+	padding: 15px 0;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 40px;
+	margin: 4px;
+	cursor: pointer;
+}
 
 /* 여기까지가 장바구니 관련된 CSS 입니다. */
 
@@ -346,11 +408,11 @@ html, body{
 	justify-content: space-around;
 }
 
-.arrow-border{
-	/* 꽉 채운 느낌을 주기 위해 보더를 없애볼게요!  */
-	/* border: 1px #ffffff solid;
-  border-radius: 20px; */
-}
+/* 꽉 채운 느낌을 주기 위해 보더를 없애볼게요!  */
+/* .arrow-border{
+	border: 1px #ffffff solid;
+border-radius: 20px;
+} */
 
 .arrow-width{
 	margin: 10px 10px;
@@ -378,11 +440,11 @@ html, body{
 
 @keyframes animate {
 	0% {
-		opacity: 1;
+			opacity: 1;
 	}
 	
 	100% {
-		opacity: 0;
-		
+			opacity: 0;
+			
 	}
 }

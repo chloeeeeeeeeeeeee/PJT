@@ -47,9 +47,9 @@ class CallHandler(QObject):
 
     @pyqtSlot()
     def fadeout(self):
-        w.widgetList[6].page().runJavaScript("fadeout()")
-        w.widgetList[7].page().runJavaScript("fadeout()")
-        w.widgetList[8].page().runJavaScript("fadeout()")
+        w.widgetList["widgetStoreBag.html"].page().runJavaScript("fadeout()")
+        w.widgetList["widgetStoreBot.html"].page().runJavaScript("fadeout()")
+        w.widgetList["widgetStoreMain.html"].page().runJavaScript("fadeout()")
 
 
 class et(QMainWindow, Ui_mainWindow):
@@ -125,7 +125,7 @@ class et(QMainWindow, Ui_mainWindow):
     # html 파일을 각 widget에 연결하는 함수
     def connectHtmlPage(self):
         htmlPath = self.getHtmlPathList() # html file path를 받아옴
-        self.widgetList = []
+        self.widgetList = {}
 
         # file path에 맞는 widget을 생성하여 widgetList에 추가
         for path in htmlPath:
@@ -137,31 +137,31 @@ class et(QMainWindow, Ui_mainWindow):
             widget.handler = CallHandler()
             widget.channel.registerObject('handler', widget.handler)
             widget.page().setWebChannel(widget.channel)
-
-            self.widgetList.append(widget)
+            print(path.split('/')[2])
+            self.widgetList[path.split('/')[2]] = widget
 
         # loadFinidhed 설정
-        self.widgetList[8].page().loadFinished.connect(self.makeStoreItem)
+        self.widgetList["widgetStoreMain.html"].page().loadFinished.connect(self.makeStoreItem)
 
         # 레이아웃에 맞게 widgetList의 요소를 연결
-        self.ui.pageStartLayout.addWidget(self.widgetList[5], 0, 0, 1, 1)
-        self.ui.pageStoreLayout.addWidget(self.widgetList[8], 0, 0, 1, 2)
-        self.ui.pageStoreLayout.addWidget(self.widgetList[6], 0, 2, 1, 1)
-        self.widgetList[7].setMaximumSize(QSize(16777215, 200))
-        self.ui.pageStoreLayout.addWidget(self.widgetList[7], 1, 0, 1, 3)
-        self.ui.pageDonationLayout.addWidget(self.widgetList[3], 0, 0, 1, 1)
-        self.widgetList[2].setMaximumSize(QSize(16777215, 200))
-        self.ui.pageDonationLayout.addWidget(self.widgetList[2], 1, 0, 1, 1)
-        self.ui.pagePaymentLayout.addWidget(self.widgetList[4], 0, 0, 1, 1)
-        self.ui.pageCompleteLayout.addWidget(self.widgetList[0], 0, 0, 1, 1)
-        self.ui.pageCompleteLayout.addWidget(self.widgetList[1], 0, 1, 1, 1)
+        self.ui.pageStartLayout.addWidget(self.widgetList["widgetStart.html"], 0, 0, 1, 1)
+        self.ui.pageStoreLayout.addWidget(self.widgetList["widgetStoreMain.html"], 0, 0, 1, 2)
+        self.ui.pageStoreLayout.addWidget(self.widgetList["widgetStoreBag.html"], 0, 2, 1, 1)
+        # self.widgetList["widgetStoreBot.html"].setMaximumSize(QSize(16777215, 200))
+        # self.ui.pageStoreLayout.addWidget(self.widgetList["widgetStoreBot.html"], 1, 0, 1, 3)
+        self.ui.pageDonationLayout.addWidget(self.widgetList["widgetDonationMain.html"], 0, 0, 1, 1)
+        self.widgetList["widgetDonationBot.html"].setMaximumSize(QSize(16777215, 200))
+        self.ui.pageDonationLayout.addWidget(self.widgetList["widgetDonationBot.html"], 1, 0, 1, 1)
+        self.ui.pagePaymentLayout.addWidget(self.widgetList["widgetPaymentMain.html"], 0, 0, 1, 1)
+        self.ui.pageCompleteLayout.addWidget(self.widgetList["widgetCompletePic.html"], 0, 0, 1, 1)
+        self.ui.pageCompleteLayout.addWidget(self.widgetList["widgetCompleteText.html"], 0, 1, 1, 1)
 
 
 
     def movePage(self, opt):
         print("click", opt)
         if opt == "home":
-            self.initVals()
+            self.clearBagItem()
             self.ui.stackedWidget.setCurrentWidget(self.ui.pageStart)
 
         if opt == "store":
@@ -170,8 +170,8 @@ class et(QMainWindow, Ui_mainWindow):
 
         if opt == "donation":
             self.ui.stackedWidget.setCurrentWidget(self.ui.pageDonation)
-            self.widgetList[2].page().runJavaScript("fadein()")
-            self.widgetList[3].page().runJavaScript("fadein()")
+            self.widgetList["widgetDonationBot.html"].page().runJavaScript("fadein()")
+            self.widgetList["widgetDonationMain.html"].page().runJavaScript("fadein()")
 
     def makeStoreItem(self, ok):
         if ok:
@@ -182,7 +182,7 @@ class et(QMainWindow, Ui_mainWindow):
                     .format(itemId=idIter, imgUrl=i["itemImgUrl"], itemName=i["itemName"],
                             itemPrice=i["itemPrice"], badge="Hot!", intro="음식설명음식설명음식설명음식설명")
                 print(jscmd)
-                self.widgetList[8].page().runJavaScript(jscmd)
+                self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
                 idIter = idIter+1
 
     def addBagItem(self, itemNum):
@@ -190,17 +190,17 @@ class et(QMainWindow, Ui_mainWindow):
         self.bag.append(item)
         jscmd = "addItem(\'{itemId}\', \'{itemName}\', \'{itemPrice}\')"\
                 .format(itemId=itemNum, itemName=item["itemName"], itemPrice=item["itemPrice"])
-        self.widgetList[6].page().runJavaScript(jscmd)
+        self.widgetList["widgetStoreBag.html"].page().runJavaScript(jscmd)
         jscmd = "addCost({cost})".format(cost=item["itemPrice"])
         print(jscmd)
-        self.widgetList[7].page().runJavaScript(jscmd)
+        self.widgetList["widgetStoreBag.html"].page().runJavaScript(jscmd)
 
     def clearBagItem(self):
         self.initVals()
         jscmd = "clearBag()"
-        self.widgetList[6].page().runJavaScript(jscmd)
+        self.widgetList["widgetStoreBag.html"].page().runJavaScript(jscmd)
         jscmd = "clearCost()"
-        self.widgetList[7].page().runJavaScript(jscmd)
+        self.widgetList["widgetStoreBag.html"].page().runJavaScript(jscmd)
 
 
 app = QApplication(sys.argv)

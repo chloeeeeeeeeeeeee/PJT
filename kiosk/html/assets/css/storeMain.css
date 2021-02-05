@@ -435,7 +435,7 @@ border-radius: 20px;
 }
 
 .fade-out{
-	animation: animate 1s linear infinite;
+	animation: animate 1s linear 1;
 }
 
 @keyframes animate {

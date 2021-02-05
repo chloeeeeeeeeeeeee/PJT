@@ -5,14 +5,16 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class PaymentInfo {
+public class NPaymentInfo {
+	private String paymentId;
+	private String merchantId;
+	private String tradeConfirmYmdt;
+	private int totalPayAmount;
 	
-	private String cid = "TC0ONETIME";
-	private int userSeq;
 	private List<PaymentItem> itemList;
-	private int totalCount;
-	private int totalAmount;
+	private int userSeq;
 	private int isUser;	
 	
 	private Contributor contributor;
+	
 }

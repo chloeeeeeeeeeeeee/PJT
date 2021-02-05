@@ -11,15 +11,15 @@
         <div class="money-box">
             <div class="money-box-item">
                 <div class="text-opt">주문수량</div>
-                <div class="text-opt">0</div>
+                <div id="totalCnt" class="text-opt">0</div>
             </div>
             <div class="money-box-item">
                 <div class="text-opt">주문금액</div>
-                <div class="text-opt">10,000</div>
+                <div id="totalCost" class="text-opt">0</div>
             </div>
         </div>
         <div class="button-container">
-            <button class="button-reset">초기화</button>
+            <button class="button-reset" onclick="clickReset()">초기화</button>
         </div>
         <div class="button-container">
             <button class="button-pay" onclick="clickPay()">결제하기</button>

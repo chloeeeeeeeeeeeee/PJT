@@ -26,7 +26,7 @@ class Ui_mainWindow(object):
         self.mainLayout.setObjectName("mainLayout")
         self.labelTitle = QtWidgets.QLabel(self.centralwidget)
         self.labelTitle.setMinimumSize(QtCore.QSize(0, 40))
-        self.labelTitle.setStyleSheet("font: 25pt \"Noto Sans KR\";\n"
+        self.labelTitle.setStyleSheet("font: 87 25pt \"Noto Sans KR\";\n"
 "color: rgb(0, 0, 0);")
         self.labelTitle.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.labelTitle.setFrameShadow(QtWidgets.QFrame.Sunken)

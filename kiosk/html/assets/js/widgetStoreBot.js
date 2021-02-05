@@ -1,14 +1,43 @@
+itemCnt = 0;
+itemCost = 0;
+
 //qt->js 함수
 function fadeout(){
     document.getElementById("fade").setAttribute("class", "align-center fade-out")
 }
 
 function addCost(cost){
-    //TODO: 수량, 가격 추가
+    itemCnt = itemCnt+1;
+    itemCost = itemCost + cost;
+    updateCost();
 }
 
 function clearCost(){
-    //TODO: 수량, 가격 0으로 초기화
+    itemCnt = 0;
+    itemCost = 0;
+    updateCost();
+}
+
+function comma(num){
+    var len, point, str; 
+       
+    num = num + ""; 
+    point = num.length % 3 ;
+    len = num.length; 
+   
+    str = num.substring(0, point); 
+    while (point < len) { 
+        if (str != "") str += ","; 
+        str += num.substring(point, point + 3); 
+        point += 3; 
+    } 
+     
+    return str;
+}
+
+function updateCost(){
+    document.getElementById("totalCnt").innerText = String(itemCnt);
+    document.getElementById("totalCost").innerText = comma(itemCost);
 }
 
 //js->qt 함수

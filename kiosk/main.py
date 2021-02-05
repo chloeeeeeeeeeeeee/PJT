@@ -8,9 +8,10 @@ from api import *
 
 import sys
 import os
-import time, datetime
+import datetime
 
 storeid = 1
+
 
 class WebEnginePage(QWebEnginePage):
     # js 디버깅 함수 overriding
@@ -136,7 +137,11 @@ class et(QMainWindow, Ui_mainWindow):
             widget.handler = CallHandler()
             widget.channel.registerObject('handler', widget.handler)
             widget.page().setWebChannel(widget.channel)
+
             self.widgetList.append(widget)
+
+        # loadFinidhed 설정
+        self.widgetList[8].page().loadFinished.connect(self.makeStoreItem)
 
         # 레이아웃에 맞게 widgetList의 요소를 연결
         self.ui.pageStartLayout.addWidget(self.widgetList[5], 0, 0, 1, 1)
@@ -151,6 +156,8 @@ class et(QMainWindow, Ui_mainWindow):
         self.ui.pageCompleteLayout.addWidget(self.widgetList[0], 0, 0, 1, 1)
         self.ui.pageCompleteLayout.addWidget(self.widgetList[1], 0, 1, 1, 1)
 
+
+
     def movePage(self, opt):
         print("click", opt)
         if opt == "home":
@@ -159,29 +166,34 @@ class et(QMainWindow, Ui_mainWindow):
 
         if opt == "store":
             self.ui.stackedWidget.setCurrentWidget(self.ui.pageStore)
-            self.makeStoreItem(storeid)
+            # self.makeStoreItem(storeid)
 
         if opt == "donation":
             self.ui.stackedWidget.setCurrentWidget(self.ui.pageDonation)
             self.widgetList[2].page().runJavaScript("fadein()")
             self.widgetList[3].page().runJavaScript("fadein()")
 
-    def makeStoreItem(self, storeId):
-        self.itemList = getStoreItem(storeId)
-        idIter = 0
-        for i in self.itemList:
-            jscmd = "addStoreItem(\'{itemId}\', \'{imgUrl}\', \'{itemName}\', \'{itemPrice}\')"\
-                .format(itemId=idIter, imgUrl=i["itemImgUrl"], itemName=i["itemName"], itemPrice=i["itemPrice"])
-            self.widgetList[8].page().runJavaScript(jscmd)
-            idIter = idIter+1
+    def makeStoreItem(self, ok):
+        if ok:
+            self.itemList = getStoreItem(storeid)
+            idIter = 0
+            for i in self.itemList:
+                jscmd = "addStoreItem(\'{itemId}\', \'{imgUrl}\', \'{itemName}\', \'{itemPrice}\', \'{badge}\', \'{intro}\')"\
+                    .format(itemId=idIter, imgUrl=i["itemImgUrl"], itemName=i["itemName"],
+                            itemPrice=i["itemPrice"], badge="Hot!", intro="음식설명음식설명음식설명음식설명")
+                print(jscmd)
+                self.widgetList[8].page().runJavaScript(jscmd)
+                idIter = idIter+1
 
     def addBagItem(self, itemNum):
         item = self.itemList[itemNum]
         self.bag.append(item)
-        jscmd = "addBagItem(\'{itemId}\', \'{imgUrl}\', \'{itemName}\', \'{itemPrice}\')"\
-                .format(itemId=itemNum, imgUrl=item["itemImgUrl"], itemName=item["itemName"], itemPrice=item["itemPrice"])
+        jscmd = "addItem(\'{itemId}\', \'{itemName}\', \'{itemPrice}\')"\
+                .format(itemId=itemNum, itemName=item["itemName"], itemPrice=item["itemPrice"])
         self.widgetList[6].page().runJavaScript(jscmd)
         jscmd = "addCost({cost})".format(cost=item["itemPrice"])
+        print(jscmd)
+        self.widgetList[7].page().runJavaScript(jscmd)
 
     def clearBagItem(self):
         self.initVals()

@@ -37,6 +37,14 @@ class CallHandler(QObject):
             print('예외가 발생했습니다.', e)
         return "true"
 
+    @pyqtSlot(QVariant, result=QVariant)
+    def removeBagItem(self, itemNum):
+        try:
+            w.removeBagItem(itemNum)
+        except Exception as e:
+            print('예외가 발생했습니다.', e)
+        return "true"
+
     @pyqtSlot(result=QVariant)
     def clearBag(self):
         try:
@@ -188,11 +196,20 @@ class et(QMainWindow, Ui_mainWindow):
     def addBagItem(self, itemNum):
         item = self.itemList[itemNum]
         self.bag.append(item)
+
         jscmd = "addItem(\'{itemId}\', \'{itemName}\', \'{itemPrice}\')"\
                 .format(itemId=itemNum, itemName=item["itemName"], itemPrice=item["itemPrice"])
         self.widgetList["widgetStoreBag.html"].page().runJavaScript(jscmd)
         jscmd = "addCost({cost})".format(cost=item["itemPrice"])
-        print(jscmd)
+        self.widgetList["widgetStoreBag.html"].page().runJavaScript(jscmd)
+
+    def removeBagItem(self, itemNum):
+        item = self.itemList[itemNum]
+        self.bag.remove(item) # 첫번째 요소만 제거
+
+        jscmd = "removeCnt(\'{itemId}\')".format(itemId=itemNum)
+        self.widgetList["widgetStoreBag.html"].page().runJavaScript(jscmd)
+        jscmd = "removeCost({cost})".format(cost=item["itemPrice"])
         self.widgetList["widgetStoreBag.html"].page().runJavaScript(jscmd)
 
     def clearBagItem(self):

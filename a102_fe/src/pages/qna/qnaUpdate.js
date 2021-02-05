@@ -16,27 +16,13 @@ import {
 
 
 function QnaUpdate() {
-  let [qna, setQna] = useState([]);
-  let [title, setTitle] = useState("");
-  let [content, setContent] = useState("");
+  let [qna, setQna] = useState(window.history.state);
+  let [title, setTitle] = useState(window.history.state.qnaTitle);
+  let [content, setContent] = useState(window.history.state.qnaContent);
   let [secret, setSecret] = useState(0);
-  let [temp, setTemp] = useState(0);
 
   useEffect(() => {
-    setQna(window.history.state);
-    console.log(qna);
-  }, [])
-
-  useEffect(() => {
-    console.log(qna);
-    setTitle(qna.qnaTitle);
-    setContent(qna.qnaContent);
-    setTemp(temp + 1);
-    console.log(temp);
-  }, [])
-
-  useEffect(() => {
-    console.log(title);
+    console.log("title", title);
     console.log("content", content);
   })
   
@@ -121,7 +107,7 @@ function QnaUpdate() {
                         name="content"
                         id="content"
                         value={content}
-                        data={qna.qnaContent}
+                        data={content}
                         required=""
                         onChange={onContentChange}
                       />

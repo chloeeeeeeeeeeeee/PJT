@@ -3,6 +3,7 @@ package com.ssafy.bab.service;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,9 +30,10 @@ import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.KakaoPayApproval;
 import com.ssafy.bab.dto.KakaoPayInfo;
 import com.ssafy.bab.dto.KakaoPayReady;
+import com.ssafy.bab.dto.KakaoPaySuccessData;
 import com.ssafy.bab.dto.Orders;
 import com.ssafy.bab.dto.Payment;
-import com.ssafy.bab.dto.PaymentInfo;
+import com.ssafy.bab.dto.KPaymentInfo;
 import com.ssafy.bab.dto.PaymentItem;
 import com.ssafy.bab.dto.StoreVariables;
 import com.ssafy.bab.dto.User;
@@ -88,8 +90,9 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 		return headers;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public String kakaoPayReady(PaymentInfo paymentInfo) {
+	public String kakaoPayReady(KPaymentInfo paymentInfo) {
 		
 		kakaoPayInfo.setPaymentInfo(paymentInfo);
 		
@@ -141,7 +144,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 	}
 
 	@Override
-	public KakaoPayApproval kakaoPayInfo(String pg_token) {
+	public KakaoPaySuccessData kakaoPayInfo(String pg_token) {
 		 // 서버로 요청할 Body
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
@@ -158,6 +161,14 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             kakaoPayApproval = restTemplate.postForObject(new URI(HOST + "/v1/payment/approve"), body, KakaoPayApproval.class);
             log.info("" + kakaoPayApproval);
           
+            // 현재시간으로 변경
+
+            SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(kakaoPayApproval.getApproved_at());
+            cal.add(Calendar.HOUR, -9);
+            kakaoPayApproval.setApproved_at(cal.getTime());
+            
             /*
              * ******* DB 테이블 업데이트 *******
              */
@@ -165,8 +176,10 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             // payment 테이블 업데이트
             Payment payment = new Payment();
             payment.setPaymentId(kakaoPayInfo.getPartner_order_id());
-            payment.setKakaopay_cid(kakaoPayInfo.getPaymentInfo().getCid());
-            payment.setKakaopay_tid(kakaoPayReady.getTid());
+            payment.setPaymentAmount(kakaoPayInfo.getPaymentInfo().getTotalAmount());
+            payment.setPaymentDate(kakaoPayApproval.getApproved_at());
+            payment.setKakaopayCid(kakaoPayInfo.getPaymentInfo().getCid());
+            payment.setKakaopayTid(kakaoPayReady.getTid());
             paymentDao.save(payment);
             
             // 키오스크/웹 회원 기부일 경우 user에 해당 회원 정보가 들어감 (그 외의 경우는 null)
@@ -242,7 +255,11 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             	}
             }
       
-            return kakaoPayApproval;
+            KakaoPaySuccessData result = new KakaoPaySuccessData();
+            result.setPaymentId(payment.getPaymentId());
+            result.setKakaoPayApproval(kakaoPayApproval);
+            
+            return result;
         
             
         } catch (RestClientException e) {

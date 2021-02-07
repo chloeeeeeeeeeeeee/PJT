@@ -1,7 +1,12 @@
 package com.ssafy.bab.dto;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 
@@ -10,6 +15,25 @@ import lombok.Data;
 public class Payment {
 	@Id
 	private String paymentId;
-	private String kakaopay_tid;
-	private String kakaopay_cid;
+	private int paymentAmount;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date paymentDate; 
+	
+	@JoinColumn(name="kakaopay_tid", nullable = true)
+	private String kakaopayTid;
+	
+	@JoinColumn(name="kakaopay_cid", nullable = true)
+	private String kakaopayCid;
+	
+	@JoinColumn(name="naverpay_payment_id", nullable = true)
+	private String naverpayPaymentId;
+	
+	@JoinColumn(name="naverpay_merchant_id", nullable = true)
+	private String naverpayMerchantId;
+	
+	@JoinColumn(name="imp_uid", nullable = true)
+	private String impUid;
+	
+	@JoinColumn(name="imp_merchant_id", nullable = true)
+	private String impMerchantId;
 }

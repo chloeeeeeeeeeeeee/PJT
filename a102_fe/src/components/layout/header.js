@@ -41,7 +41,7 @@ function Header() {
             <NavLink href="/map"> 지도 </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="/servicecenter"> 문의하기 </NavLink>
+            <NavLink href="/qna"> 문의하기 </NavLink>
           </NavItem>
         </Nav>
       </Collapse>

@@ -32,57 +32,76 @@ function Payment() {
     : "";
 
   function startPayment() {
+    if (jwtToken == "") {
+      alert("호오 로그인을 안하셨군요ㅋ");
+      return;
+    }
     let paymentOption = document.querySelector("input[type='radio']:checked")
       .value;
-    let data = {
-      cid: "TC0ONETIME",
-      itemList: [],
-      totalAmount: totalPrice,
-      totalCount: 0,
-      isUser: 1,
-    };
-    
-    let paymentMessage = document.querySelector("#paymentMsg").value.trim();
-    if(paymentMessage == ''){
-        paymentMessage = '든든하게 먹고다녀요'
+    // 카카오
+    if (paymentOption == "kakaoPay") {
+      let data = {
+        cid: "TC0ONETIME",
+        itemList: [],
+        totalAmount: totalPrice,
+        totalCount: 0,
+        isUser: 1,
+      };
+
+      let paymentMessage = document.querySelector("#paymentMsg").value.trim();
+      if (paymentMessage == "") {
+        paymentMessage = "든든하게 먹고다녀요";
+      }
+
+      let totalCount = 0;
+      cartStorage.forEach((item) => {
+        let oneItem = {
+          itemCount: item.itemCount,
+          itemId: item.itemId,
+          itemName: item.itemName,
+          itemPrice: item.itemPrice,
+          storeId: item.storeId,
+          support: 1,
+          msg: paymentMessage,
+        };
+        console.log(oneItem.msg);
+        totalCount += item.itemCount;
+        data.itemList.push(oneItem);
+      });
+      data.totalCount = totalCount;
+
+      console.log(data)
+
+      axios
+        .post(`http://i4a102.p.ssafy.io:8080/app/payment/kakaopay`, data, {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            token: jwtToken,
+          },
+        })
+        .then((res) => {
+          console.log(JSON.stringify(res.request.response));
+          const popupWidth = window.innerWidth * 0.5;
+          const popupHeight = window.innerHeight * 0.5;
+          const popupLeft = (window.innerWidth - popupWidth) * 0.5;
+          const popupTop = (window.innerHeight - popupHeight) * 0.5;
+          window.open(
+            res.request.response,
+            "PopupWin",
+            `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`
+          );
+        });
+    } 
+    // 네이버 페이
+    else if(paymentOption == "naverPay"){
+        console.log("네이버페이")
+    } 
+    // 신용/체크카드
+    else if(paymentOption == "cardPay"){
+        console.log("아임포트")
     }
 
-    let totalCount = 0;
-    cartStorage.forEach((item) => {
-      let oneItem = {
-        itemCount: item.itemCount,
-        itemId: item.itemId,
-        itemName: item.itemName,
-        itemPrice: item.itemPrice,
-        storeId: item.storeId,
-        support: 1,
-        msg:paymentMessage,
-      };
-      totalCount += item.itemCount;
-      data.itemList.push(oneItem);
-    });
-    data.totalCount = totalCount;
-
-    axios
-      .post(`http://i4a102.p.ssafy.io:8080/app/payment/kakaopay`, data, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          token: jwtToken,
-        },
-      })
-      .then((res) => {
-        console.log(JSON.stringify(res.request.response));
-        const popupWidth = window.innerWidth * 0.5;
-        const popupHeight = window.innerHeight * 0.5;
-        const popupLeft = (window.innerWidth - popupWidth) * 0.5;
-        const popupTop = (window.innerHeight - popupHeight) * 0.5;
-        window.open(
-          res.request.response,
-          "PopupWin",
-          `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`
-        );
-      });
   }
 
   return (

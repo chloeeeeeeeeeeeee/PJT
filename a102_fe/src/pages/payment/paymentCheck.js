@@ -10,7 +10,7 @@ function PaymentCheck(props) {
   const axios = require("axios");
   axios
     .get(
-      `http://i4a102.p.ssafy.io:8080/app/payment/kakaopaySucess?pg_token=${pgToken}`
+      `http://i4a102.p.ssafy.io:8080/app/payment/kakaopaySuccess?pg_token=${pgToken}`
     )
     .then((res) => {
       console.log(res);

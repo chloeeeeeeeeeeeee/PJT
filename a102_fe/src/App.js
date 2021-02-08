@@ -16,10 +16,10 @@ import Support from "./pages/support/support";
 import Authentication from "./pages/account/authentication";
 import Profile from "./pages/account/profile";
 import StoreDetail from "./pages/support/storeDetail";
-import QnaCreate from "./pages/qna/qnaCreate";
-import QnaList from "./pages/qna/qnaList";
-import QnaDetail from "./pages/qna/qnaDetail";
-import QnaUpdate from "./pages/qna/qnaUpdate";
+import QnaCreate from "./pages/qna/qnacreate";
+import QnaList from "./pages/qna/qnalist";
+import QnaDetail from "./pages/qna/qnadetail";
+import QnaUpdate from "./pages/qna/qnaupdate";
 import Payment from "./pages/payment/payment"
 import "./App.css";
 
@@ -34,8 +34,8 @@ function App() {
             <Route path="/auth" component={Authentication} />
             <Route path="/support" component={Support} />
             <Route path="/map" component={Support} />
-            <Route path="/storeDetail/:storeId" component={StoreDetail} />
-            <Route path="/storedetailsupport/:storeId" component={StoreDetailSupport} />
+            <Route path="/storedetail/:storeId" component={StoreDetail} />
+            <Route path="/storedetailsupport/:storeId" component={StoreDetail} />
             <Route path="/qnacreate" component={QnaCreate} />
             <Route path="/qna" component={QnaList} />
             <Route path="/qnadetail" component={QnaDetail} />

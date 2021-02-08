@@ -1,0 +1,25 @@
+.whattoeat {
+  border: none;
+  .childimg {
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .childwte {
+    text-align: center;
+    h2 {
+      color: $oori-green;
+    }
+    .choosemenubutton {
+      background-color: $oori-white;
+      border: none;
+      margin: 5% 0%;
+    }
+    img {
+      width: 50%;
+      height: 50%;
+    }
+  }
+}

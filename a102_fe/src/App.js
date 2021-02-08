@@ -9,8 +9,11 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
+
 import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
+import ChildMain from "./pages/main/childmain";
+import ChildSupport from "./pages/support/childsupport";
 import Main from "./pages/main/main";
 import Support from "./pages/support/support";
 import Authentication from "./pages/account/authentication";
@@ -20,7 +23,7 @@ import QnaCreate from "./pages/qna/qnacreate";
 import QnaList from "./pages/qna/qnalist";
 import QnaDetail from "./pages/qna/qnadetail";
 import QnaUpdate from "./pages/qna/qnaupdate";
-import Payment from "./pages/payment/payment"
+import Payment from "./pages/payment/payment";
 import "./App.css";
 
 function App() {
@@ -30,6 +33,10 @@ function App() {
         <Header />
         <Row className="mainBody">
           <Switch>
+            {/* 아동 View */}
+            <Route path="/childmain" component={ChildMain} />
+            <Route path="/childmap" component={ChildSupport} />
+            {/* 후원자 View */}
             <Route exact path="/" component={Main} />
             <Route path="/auth" component={Authentication} />
             <Route path="/support" component={Support} />

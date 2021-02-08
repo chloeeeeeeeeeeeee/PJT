@@ -24,6 +24,7 @@ import Support from "./pages/support/support";
 import Authentication from "./pages/account/authentication";
 import Profile from "./pages/account/profile";
 import StoreDetail from "./pages/support/storeDetail";
+import Payment from "./pages/payment/payment"
 import "./App.css";
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
               component={StoreDetail}
             />
             <Route path="/storeDetail/:storeId" component={StoreDetail} />
+            <Route path="/payment" component={Payment} />
             {/* Profile 페이지의 경우 리다이렉트 보내주기 */}
             <PrivateRoute path="/profile">
               <Profile />

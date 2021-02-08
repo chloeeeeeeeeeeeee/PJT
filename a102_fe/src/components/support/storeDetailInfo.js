@@ -69,6 +69,7 @@ function StoreDetailInfo(storeInfo) {
           <h5 className="font-weight-normal mt-4">
             {storeInformation.storePhone}
           </h5>
+          <p>아동급식카드의 1회 지원금은 6000원입니다.<br/>아동이 메뉴를 먹을 수 있게 차액을 후원해주세요.<br/>6000원 이하의 메뉴는 보여지지 않습니다.<br/>* 가게의 실 메뉴와 차이가 있을 수 있습니다</p>
           <div className="storeMiniMap mt-4" id="storeMiniMap"></div>
           <Button className="findWayButton" color="primary" block>
             길찾기

@@ -7,6 +7,7 @@ import {
   Button,
   CardFooter,
 } from "reactstrap";
+import { useParams } from "react-router-dom";
 import SupportMenu from "../../components/support/supportMenu";
 
 function SupportCart(storeInfo) {
@@ -23,125 +24,164 @@ function SupportCart(storeInfo) {
       : 0
   );
   let [menuList, setMenuList] = useState([]);
-  let [temp, setTemp] = useState(0);
+  let [trigger, setTrigger] = useState(false);
+  const params = useParams();
   // 후원페이지인지 그냥 상세보기인지 확인용 변수
   let supportCheck = false;
-
-  console.log(
-    "자리자리자리" + window.location.href.indexOf("storedetailsupport")
-  );
   if (window.location.href.indexOf("storedetailsupport") > -1) {
     supportCheck = true;
   } else {
     supportCheck = false;
   }
 
+  // 메뉴 정보 받아오기
   useEffect(() => {
     fetch(`http://i4a102.p.ssafy.io:8080/app/support/menulist/${storeId}`)
       .then((res) => res.json())
       .then((result) => {
         setMenuList(result);
       });
+    // console.log(params.storeId)
   }, []);
 
+  // 장바구니 업데이트
   useEffect(() => {
+    console.log("CART CHANGE");
     localStorage.setItem("carts", JSON.stringify(cartStorage));
     localStorage.setItem("price", totalPrice);
-    console.log(cartStorage);
-    console.log(localStorage);
-  });
+  }, [trigger]);
 
-  function addmenu(menu) {
-    let flag = true;
-    cartStorage.map((cart, index) => {
-      if (cart["itemId"] === menu["itemId"]) {
-        cart["itemCnt"]++;
-        setCartStorage(cartStorage);
-        flag = false;
-        return;
+  function calculateTotal() {
+    let total = 0;
+    cartStorage.forEach((cartItem) => {
+      if (cartItem.itemPrice > 6000) {
+        total += (cartItem.itemPrice - 6000) * cartItem.itemCount;
+      } else {
+        total += cartItem.itemPrice * cartItem.itemCount;
       }
     });
-    if (flag) {
-      menu.itemCnt = 1;
-      setCartStorage(cartStorage.concat([menu]));
-    }
-    setTemp(temp + 1);
-    setTotalPrice(totalPrice + menu.itemPrice);
+    setTotalPrice(total);
   }
 
-  function plus(index) {
-    console.log("plus");
-    cartStorage[index]["itemCnt"]++;
-    setCartStorage(cartStorage);
-    setTotalPrice(totalPrice + cartStorage[index]["itemPrice"]);
-    setTemp(temp + 1);
-  }
-
-  function minus(index) {
-    console.log("minus");
-    cartStorage[index]["itemCnt"]--;
-    if (cartStorage[index]["itemCnt"] <= 0) {
-      console.log("lets remove");
-      setCartStorage(cartStorage.filter((element, idx) => idx !== index));
+  // 메뉴 더하기
+  function addmenu(menu) {
+    if (
+      (cartStorage.length > 0 && cartStorage[0].storeId == storeId) ||
+      cartStorage.length == 0
+    ) {
+      let sameItem = false;
+      if (menu.itemPrice > 6000) {
+        totalPrice += menu.itemPrice - 6000;
+      } else {
+        totalPrice += menu.itemPrice;
+      }
+      setTotalPrice(totalPrice);
+      cartStorage.some((cartItem, index) => {
+        if (cartItem.itemId == menu.itemId) {
+          cartItem.itemCount += 1;
+          sameItem = true;
+        }
+        return cartItem.itemId == menu.itemId;
+      });
+      if (sameItem) {
+        setCartStorage(cartStorage);
+      } else {
+        menu.itemCount = 1;
+        setCartStorage(cartStorage.concat([menu]));
+      }
     } else {
-      setCartStorage(cartStorage);
+      let checkCart = window.confirm(
+        "다른 가게의 메뉴가 들어있습니다\n장바구니를 비우고 추가하겠습니까?"
+      );
+      if (checkCart) {
+        menu.itemCount = 1;
+        setCartStorage([menu]);
+      } // 취소를 누르면 작업 없음
     }
-    setTotalPrice(totalPrice - cartStorage[index]["itemPrice"]);
-    setTemp(temp + 1);
+    setTrigger(!trigger);
   }
 
-  function removemenu(index) {
-    setCartStorage(cartStorage.filter((element, idx) => idx !== index));
-    setTotalPrice(
-      totalPrice -
-        cartStorage[index]["itemPrice"] * cartStorage[index]["menu_cnt"]
-    );
-    setTemp(temp + 1);
+  function plus(menu) {
+    cartStorage.some((cartItem) => {
+      if (cartItem.itemId == menu.itemId) {
+        cartItem.itemCount += 1;
+      }
+      return cartItem.itemId == menu.itemId;
+    });
+    setCartStorage(cartStorage);
+    calculateTotal();
+    setTrigger(!trigger);
+  }
+
+  function minus(menu) {
+    cartStorage.some((cartItem) => {
+      if (cartItem.itemId == menu.itemId) {
+        cartItem.itemCount -= 1;
+        if (cartItem.itemCount <= 0) {
+          cartStorage = cartStorage.filter((ele) => {
+            return ele != cartItem;
+          });
+        }
+      }
+      return cartItem.itemId == menu.itemId;
+    });
+    setCartStorage(cartStorage);
+    calculateTotal();
+    setTrigger(!trigger);
+  }
+
+  function removemenu(menu) {
+    cartStorage = cartStorage.filter((ele) => {
+      return ele != menu;
+    });
+    setCartStorage(cartStorage);
+    calculateTotal();
+    setTrigger(!trigger);
   }
 
   function clearmenu() {
     setCartStorage([]);
     setTotalPrice(0);
+    setTrigger(!trigger);
   }
 
   function moveToSupportPage() {
     window.location.href = `/storedetailsupport/${storeId}`;
   }
 
-  let itemContributionTotal = 0
+  function moveToPayment() {
+    window.location.href = `/payment`;
+  }
+
+  let itemContributionTotal = 0;
   const supportCenterSide = menuList.map((menu, index) => {
     itemContributionTotal += menu.itemContributionAmount;
-    if (supportCheck) {
+    if (menu.itemPrice > 6000) {
       return (
         <div
           className="storeMenuItem mb-2 row justify-content-between"
           key={index}
         >
           <SupportMenu supportmenu={menu} />
-          <Button
-            color="secondary"
-            className="helpButton col-2"
-            onClick={(e) => {
-              addmenu(menu);
-            }}
-          >
-            메뉴 담기
-          </Button>
-        </div>
-      );
-    } else {
-      return (
-        <div
-          className="storeMenuItem mb-2 row justify-content-between"
-          key={index}
-        >
-          <SupportMenu supportmenu={menu} />
+          {supportCheck ? (
+            <Button
+              color="secondary"
+              className="helpButton col-2"
+              onClick={(e) => {
+                addmenu(menu);
+              }}
+            >
+              메뉴 담기
+            </Button>
+          ) : (
+            ""
+          )}
         </div>
       );
     }
   });
 
-  console.log(supportCenterSide);
+  console.log(cartStorage);
 
   const supportRightSide = !supportCheck ? (
     <Card>
@@ -171,46 +211,53 @@ function SupportCart(storeInfo) {
         <h4>후원 바구니</h4>
       </CardHeader>
       <CardBody className="supportCartCard">
-        <div className="supportCart">
-          {cartStorage.map((cart, index) => (
-            <div className="supportCartItem">
+        {cartStorage.map((cart, index) => {
+          return (
+            <div className="supportCartItem" key={index}>
               <h5>
-                {cart.itemName} : {cart.itemCnt}개
+                {cart.itemName} : {cart.itemCount}개
               </h5>
-              <Button
-                color="secondary"
-                className="helpButton"
-                onClick={() => {
-                  plus(index);
-                }}
-              >
-                +
-              </Button>
-              <Button
-                color="secondary"
-                className="helpButton"
-                onClick={() => {
-                  minus(index);
-                }}
-              >
-                -
-              </Button>
-              <Button
-                color="secondary"
-                className="helpButton"
-                onClick={() => {
-                  removemenu(index);
-                }}
-              >
-                X
-              </Button>
+              <Col xs="12 row justify-content-end m-0 p-0">
+                <Button
+                  color="secondary"
+                  className="helpButton"
+                  onClick={() => {
+                    plus(cart);
+                  }}
+                >
+                  +
+                </Button>
+                <Button
+                  color="secondary"
+                  className="helpButton"
+                  onClick={() => {
+                    minus(cart);
+                  }}
+                >
+                  -
+                </Button>
+                <Button
+                  color="secondary"
+                  className="helpButton"
+                  onClick={() => {
+                    removemenu(cart);
+                  }}
+                >
+                  X
+                </Button>
+              </Col>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </CardBody>
       <CardFooter className="supportCartFooter">
-        <h5> 총 금액은 {totalPrice} 입니다. </h5>
-        <Button color="secondary" className="helpButton" block>
+        <h5> 총 후원 금액은 {totalPrice}원 입니다. </h5>
+        <Button
+          color="secondary"
+          className="helpButton"
+          block
+          onClick={moveToPayment}
+        >
           후원하기
         </Button>
         <Button
@@ -237,7 +284,9 @@ function SupportCart(storeInfo) {
           <CardBody className="storeMenuItemList">{supportCenterSide}</CardBody>
         </Card>
       </Col>
-      <Col xs="4" className="storeRightBox">{supportRightSide}</Col>
+      <Col xs="4" className="storeRightBox">
+        {supportRightSide}
+      </Col>
     </Col>
   );
 }

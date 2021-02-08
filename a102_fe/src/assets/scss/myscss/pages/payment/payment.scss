@@ -1,0 +1,29 @@
+.paymentBox {
+  height: 100%;
+  h2 {
+    height: 5%;
+  }
+  .paymentInfoBox {
+    height: 95%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    .paymentInfoItem{
+        border-bottom:1px solid black;
+    }
+  }
+  .paymentDetailBox {
+    height: 95%;
+    position: relative;
+    .paymentButton {
+      position: absolute;
+      bottom: 0;
+    }
+    label {
+      font-size: 20px;
+      & > input {
+        display: block;
+        height: 70%;
+      }
+    }
+  }
+}

@@ -15,8 +15,10 @@
 // 후원 페이지 SCSS
 @import "assets/scss/myscss/pages/support/support.scss";
 @import "assets/scss/myscss/pages/support/storeDetail.scss";
-@import "assets/scss/myscss/pages/support/storeDetailSupport.scss";
 
 // 회원 페이지 SCSS
 @import "assets/scss/myscss/components/account/profile.scss";
 @import "assets/scss/myscss/components/account/timeline.scss";
+
+// 결제 페이지 SCSS
+@import "assets/scss/myscss//pages/payment/payment.scss";

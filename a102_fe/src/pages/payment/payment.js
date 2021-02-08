@@ -7,8 +7,8 @@ function Payment() {
     setTotalPrice(price);
   }
 
-  function paymentSuccess(){
-      console.log("DONE!")
+  function paymentSuccess() {
+    console.log("DONE!");
   }
 
   let [totalPrice, setTotalPrice] = useState(
@@ -27,7 +27,9 @@ function Payment() {
   }, []);
 
   const axios = require("axios");
-  const jwtToken = localStorage.getItem("access-token") ? localStorage.getItem('access-token') : ''
+  const jwtToken = localStorage.getItem("access-token")
+    ? localStorage.getItem("access-token")
+    : "";
 
   function startPayment() {
     let paymentOption = document.querySelector("input[type='radio']:checked")
@@ -39,7 +41,12 @@ function Payment() {
       totalCount: 0,
       isUser: 1,
     };
-    console.log(jwtToken);
+    
+    let paymentMessage = document.querySelector("#paymentMsg").value.trim();
+    if(paymentMessage == ''){
+        paymentMessage = '든든하게 먹고다녀요'
+    }
+
     let totalCount = 0;
     cartStorage.forEach((item) => {
       let oneItem = {
@@ -49,27 +56,32 @@ function Payment() {
         itemPrice: item.itemPrice,
         storeId: item.storeId,
         support: 1,
+        msg:paymentMessage,
       };
       totalCount += item.itemCount;
       data.itemList.push(oneItem);
     });
     data.totalCount = totalCount;
-    console.log(data)
+
     axios
       .post(`http://i4a102.p.ssafy.io:8080/app/payment/kakaopay`, data, {
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          "token":jwtToken
+          token: jwtToken,
         },
       })
-      .then((res) => {         
+      .then((res) => {
         console.log(JSON.stringify(res.request.response));
         const popupWidth = window.innerWidth * 0.5;
         const popupHeight = window.innerHeight * 0.5;
-        const popupLeft =  (window.innerWidth - popupWidth) * 0.5;
+        const popupLeft = (window.innerWidth - popupWidth) * 0.5;
         const popupTop = (window.innerHeight - popupHeight) * 0.5;
-        window.open(res.request.response, "PopupWin", `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`);
+        window.open(
+          res.request.response,
+          "PopupWin",
+          `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`
+        );
       });
   }
 
@@ -82,6 +94,20 @@ function Payment() {
           <h3 className="text-left">총 후원 금액</h3>
           <h2 className="text-right">{totalPrice}원</h2>
           {/* <h2 className="text-right">{localStorage.getItem('price')}원</h2> */}
+        </Col>
+        <hr />
+        <Col className="paymentMessage pt-4 pb-2">
+          <h3>후원 메시지</h3>
+          <FormGroup tag="fieldset" className="col p-0">
+            <FormGroup className="col mt-3 p-0">
+              <Input
+                className="col m-0"
+                placeholder="응원의 메시지를 입력해주세요"
+                name="paymentMsg"
+                id="paymentMsg"
+              />
+            </FormGroup>
+          </FormGroup>
         </Col>
         <hr />
         <Col className="paymentMethod pt-4 pb-2">

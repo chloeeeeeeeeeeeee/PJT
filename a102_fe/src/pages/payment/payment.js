@@ -7,10 +7,19 @@ function Payment() {
     setTotalPrice(price);
   }
 
+  function paymentSuccess(){
+      console.log("DONE!")
+  }
+
   let [totalPrice, setTotalPrice] = useState(
     localStorage.getItem("price")
       ? JSON.parse(localStorage.getItem("price"))
       : 0
+  );
+  let [cartStorage, setCartStorage] = useState(
+    localStorage.getItem("carts")
+      ? JSON.parse(localStorage.getItem("carts"))
+      : []
   );
 
   useEffect(() => {
@@ -18,47 +27,50 @@ function Payment() {
   }, []);
 
   const axios = require("axios");
+  const jwtToken = localStorage.getItem("access-token") ? localStorage.getItem('access-token') : ''
 
-  function startPayment(){
-      let paymentOption = document.querySelector("input[type='radio']:checked").value
-      console.log(paymentOption)
-      axios.post(`http://i4a102.p.ssafy.io:8080/app/payment/kakaopay`, {
-        headers:{
+  function startPayment() {
+    let paymentOption = document.querySelector("input[type='radio']:checked")
+      .value;
+    let data = {
+      cid: "TC0ONETIME",
+      itemList: [],
+      totalAmount: totalPrice,
+      totalCount: 0,
+      isUser: 1,
+    };
+    console.log(jwtToken);
+    let totalCount = 0;
+    cartStorage.forEach((item) => {
+      let oneItem = {
+        itemCount: item.itemCount,
+        itemId: item.itemId,
+        itemName: item.itemName,
+        itemPrice: item.itemPrice,
+        storeId: item.storeId,
+        support: 1,
+      };
+      totalCount += item.itemCount;
+      data.itemList.push(oneItem);
+    });
+    data.totalCount = totalCount;
+    console.log(data)
+    axios
+      .post(`http://i4a102.p.ssafy.io:8080/app/payment/kakaopay`, data, {
+        headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
+          "token":jwtToken
         },
-        data:{
-          "cid": "TC0ONETIME",
-          "itemList": [
-            {
-              "itemCount": 1,
-              "itemId": 11,
-              "itemName": "로제정식",
-              "itemPrice": 5000,
-              "storeId": 1,
-              "support": 1
-            },
-            {
-              "itemCount": 1,
-              "itemId": 6,
-              "itemName": "상하이진한짬뽕",
-              "itemPrice": 1500,
-              "storeId": 1,
-              "support": 1
-            }
-          ],
-          "totalAmount": 6500,
-          "totalCount": 2,
-          "isUser": 0,
-          "contributor": 
-          {
-            "contributorName": "송지은",
-            "contributorGender": "W",
-            "contributorBirth": "20210204",
-            "contributorPhone": "010-0000-0000"
-          }
-        }
-    }).then((res) => console.log(res))
+      })
+      .then((res) => {         
+        console.log(JSON.stringify(res.request.response));
+        const popupWidth = window.innerWidth * 0.5;
+        const popupHeight = window.innerHeight * 0.5;
+        const popupLeft =  (window.innerWidth - popupWidth) * 0.5;
+        const popupTop = (window.innerHeight - popupHeight) * 0.5;
+        window.open(res.request.response, "PopupWin", `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`);
+      });
   }
 
   return (
@@ -111,7 +123,13 @@ function Payment() {
           </FormGroup>
         </Col>
         <hr />
-        <Button className="paymentButton" color="primary" size="lg" block onClick={startPayment}>
+        <Button
+          className="paymentButton"
+          color="primary"
+          size="lg"
+          block
+          onClick={startPayment}
+        >
           후원하기
         </Button>
       </Col>

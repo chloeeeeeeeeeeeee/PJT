@@ -21,6 +21,7 @@ import QnaList from "./pages/qna/qnalist";
 import QnaDetail from "./pages/qna/qnadetail";
 import QnaUpdate from "./pages/qna/qnaupdate";
 import Payment from "./pages/payment/payment"
+import PaymentCheck from "./pages/payment/paymentCheck"
 import "./App.css";
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
             <Route path="/qnadetail" component={QnaDetail} />
             <Route path="/qnaupdate" component={QnaUpdate} />
             <Route path="/payment" component={Payment} />
+            <Route path="/paymentCheck" component={PaymentCheck} />
             {/* Profile 페이지의 경우 리다이렉트 보내주기 */}
             <PrivateRoute path="/profile">
               <Profile />

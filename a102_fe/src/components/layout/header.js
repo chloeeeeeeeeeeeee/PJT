@@ -29,20 +29,20 @@ function Header() {
             <NavLink href="/"> Home </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="/auth"> 회원 </NavLink>
+            <NavLink href="/support"> 후원하기 </NavLink>
           </NavItem>
           <NavItem>
             <NavLink href="/profile"> 마이페이지 </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="/support"> 후원하기 </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href="/map"> 지도 </NavLink>
-          </NavItem>
-          <NavItem>
             <NavLink href="/qna"> 문의하기 </NavLink>
           </NavItem>
+          <NavItem>
+            <NavLink href="/auth"><b>함께하기</b></NavLink>
+          </NavItem>
+          {/* <NavItem>
+            <NavLink href="/map"> 지도 </NavLink>
+          </NavItem> */}
         </Nav>
       </Collapse>
     </Navbar>

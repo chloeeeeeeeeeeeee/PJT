@@ -15,8 +15,5 @@ public class Contributor implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int contributorSeq;
-	private String contributorName;
-	private String contributorGender;
-	private String contributorBirth;
 	private String contributorPhone;
 }

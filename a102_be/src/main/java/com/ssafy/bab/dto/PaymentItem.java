@@ -11,5 +11,5 @@ public class PaymentItem {
 	private int itemPrice;
 	private int itemCount;
 	private int support;
-	
+	private String msg;
 }

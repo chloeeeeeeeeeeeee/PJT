@@ -2,9 +2,9 @@ html, body{
 	position: relative;
 	width: 98%;
 	height: 98%;
-    background-color: #34383c;
+    background-color: rgba(0, 0, 0, 0.013);
     font-family: "Source Sans Pro", sans-serif;
-    color: #fff;
+    color: #000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,15 +13,21 @@ html, body{
 .main-container{
     width: 100%;
     height: 100%;
-    background-color: #34383c;
+    background-color: rgba(0, 0, 0, 0.013);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.text-opt{
-    color: #fff;
+.text-opt1{
+    color: #000;
+    font-size: 5vh;
+}
+
+.text-opt2{
+    color: #000;
+    font-size: 2vh;
 }
 
 .plate{
@@ -40,14 +46,14 @@ html, body{
     width: 33%;
     height: 100%;
     font-size: 20px;
-    border: 1px #fff solid;
+    border: 1px #000 solid;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .counter-btn{
-    color: #fff;
+    color: #000;
     font-size: 6vh;
     width: 33%;
     height: 100%;

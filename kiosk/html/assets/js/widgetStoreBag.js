@@ -1,5 +1,6 @@
 itemCnt = 0;
 itemCost = 0;
+mainState = 0;
 
 //qt->js 함수
 function addItem(itemId, itemName, itemPrice){
@@ -96,7 +97,9 @@ function updateCost(){
     document.getElementById("totalCost").innerText = comma(itemCost);
 }
 
-
+function changeState(state){
+    mainState = state;
+}
 
 //js->qt 함수
 new QWebChannel(qt.webChannelTransport, function (channel) {
@@ -105,11 +108,20 @@ new QWebChannel(qt.webChannelTransport, function (channel) {
 
 function clickPay(){
     handler.fadeout()
-    setTimeout(function(){
-        handler.nextPage(function(retVal) {
-            console.error(JSON.stringify(retVal));
-        }, "donation")}
-    , 1000)
+    if(!mainState){
+        setTimeout(function(){
+            handler.nextPage(function(retVal) {
+                console.error(JSON.stringify(retVal));
+            }, "donation")}
+        , 1000)
+    }
+    else{
+        setTimeout(function(){
+            handler.nextPage(function(retVal) {
+                console.error(JSON.stringify(retVal));
+            }, "pay")}
+        , 1000)
+    }
 }
 
 function clickReset(){
@@ -129,3 +141,4 @@ function qtAddItem(itemId){
         console.error(JSON.stringify(retVal));
     }, itemId)
 }
+

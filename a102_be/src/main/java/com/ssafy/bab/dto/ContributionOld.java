@@ -19,10 +19,9 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Contribution implements Serializable {
+public class ContributionOld implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JoinColumn(name="contribution_id")
 	private int contributionId;
 	
@@ -62,7 +61,7 @@ public class Contribution implements Serializable {
 	
 	private int contributionUse;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="payment_id")
 	private Payment payment;
 	

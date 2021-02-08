@@ -47,8 +47,11 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 	@Value("${Kakao.APP_ADMIN_KEY}")
 	private String APP_ADMIN_KEY;
 	
-	@Value("${Kakao.RETURN_URL}")
-	private String RETURN_URL;
+	@Value("${Kakao.KIOSK_RETURN_URL}")
+	private String KIOSK_RETURN_URL;
+	
+	@Value("${Kakao.WEB_RETURN_URL}")
+	private String WEB_RETURN_URL;
 	
 	@Autowired
 	PaymentDao paymentDao;
@@ -126,9 +129,17 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 		params.add("quantity", Integer.toString(paymentInfo.getTotalCount())); 				// 상품 총 개수
 		params.add("total_amount", Integer.toString(paymentInfo.getTotalAmount())); 		// 상품 총 금액
 		params.add("tax_free_amount", "0"); 												// 상품 비과세 금액
-		params.add("approval_url", RETURN_URL + "/payment/kakaopaySucess"); 		// 성공
-		params.add("cancel_url", RETURN_URL + "/payment//kakaopayCancel"); 			// 취소
-		params.add("fail_url", RETURN_URL + "/payment/kakaopayFail"); 				// 실패
+		
+		if(paymentInfo.getIsKiosk() == 1) {
+			params.add("approval_url", KIOSK_RETURN_URL + "/paymentCheck"); 				// 성공
+			params.add("cancel_url", KIOSK_RETURN_URL + "/payment/kakaopayCancel"); 		// 취소
+			params.add("fail_url", KIOSK_RETURN_URL + "/payment/kakaopayFail"); 			// 실패
+		}else {
+			params.add("approval_url", WEB_RETURN_URL + "/paymentCheck"); 					// 성공
+			params.add("cancel_url", WEB_RETURN_URL + "/payment/kakaopayCancel"); 			// 취소
+			params.add("fail_url", WEB_RETURN_URL + "/payment/kakaopayFail"); 				// 실패
+		}
+		
 		HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(params, headers()); 
 		try { 
 			kakaoPayReady = restTemplate.postForObject(new URI(HOST + "/v1/payment/ready"), body, KakaoPayReady.class);

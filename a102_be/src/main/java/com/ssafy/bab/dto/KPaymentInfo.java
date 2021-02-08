@@ -13,6 +13,7 @@ public class KPaymentInfo {
 	private int totalCount;
 	private int totalAmount;
 	private int isUser;	
+	private int isKiosk;
 	
 	private Contributor contributor;
 }

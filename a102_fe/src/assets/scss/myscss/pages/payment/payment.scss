@@ -7,6 +7,9 @@
     height: 95%;
     overflow-y: auto;
     overflow-x: hidden;
+    .paymentInfoItem{
+        border-bottom:1px solid black;
+    }
   }
   .paymentDetailBox {
     height: 95%;

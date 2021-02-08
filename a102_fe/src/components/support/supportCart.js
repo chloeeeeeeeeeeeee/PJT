@@ -7,6 +7,7 @@ import {
   Button,
   CardFooter,
 } from "reactstrap";
+import { useParams } from "react-router-dom";
 import SupportMenu from "../../components/support/supportMenu";
 
 function SupportCart(storeInfo) {
@@ -24,6 +25,7 @@ function SupportCart(storeInfo) {
   );
   let [menuList, setMenuList] = useState([]);
   let [trigger, setTrigger] = useState(false);
+  const params = useParams();
   // 후원페이지인지 그냥 상세보기인지 확인용 변수
   let supportCheck = false;
   if (window.location.href.indexOf("storedetailsupport") > -1) {
@@ -39,6 +41,7 @@ function SupportCart(storeInfo) {
       .then((result) => {
         setMenuList(result);
       });
+    // console.log(params.storeId)
   }, []);
 
   // 장바구니 업데이트
@@ -51,28 +54,49 @@ function SupportCart(storeInfo) {
   function calculateTotal() {
     let total = 0;
     cartStorage.forEach((cartItem) => {
-      total += (cartItem.itemPrice - 6000) * cartItem.itemCount;
+      if (cartItem.itemPrice > 6000) {
+        total += (cartItem.itemPrice - 6000) * cartItem.itemCount;
+      } else {
+        total += cartItem.itemPrice * cartItem.itemCount;
+      }
     });
     setTotalPrice(total);
   }
 
   // 메뉴 더하기
   function addmenu(menu) {
-    let sameItem = false;
-    totalPrice += menu.itemPrice - 6000;
-    setTotalPrice(totalPrice);
-    cartStorage.some((cartItem, index) => {
-      if (cartItem.itemId == menu.itemId) {
-        cartItem.itemCount += 1;
-        sameItem = true;
+    if (
+      (cartStorage.length > 0 && cartStorage[0].storeId == storeId) ||
+      cartStorage.length == 0
+    ) {
+      let sameItem = false;
+      if (menu.itemPrice > 6000) {
+        totalPrice += menu.itemPrice - 6000;
+      } else {
+        totalPrice += menu.itemPrice;
       }
-      return cartItem.itemId == menu.itemId;
-    });
-    if (sameItem) {
-      setCartStorage(cartStorage);
+      setTotalPrice(totalPrice);
+      cartStorage.some((cartItem, index) => {
+        if (cartItem.itemId == menu.itemId) {
+          cartItem.itemCount += 1;
+          sameItem = true;
+        }
+        return cartItem.itemId == menu.itemId;
+      });
+      if (sameItem) {
+        setCartStorage(cartStorage);
+      } else {
+        menu.itemCount = 1;
+        setCartStorage(cartStorage.concat([menu]));
+      }
     } else {
-      menu.itemCount = 1;
-      setCartStorage(cartStorage.concat([menu]));
+      let checkCart = window.confirm(
+        "다른 가게의 메뉴가 들어있습니다\n장바구니를 비우고 추가하겠습니까?"
+      );
+      if (checkCart) {
+        menu.itemCount = 1;
+        setCartStorage([menu]);
+      } // 취소를 누르면 작업 없음
     }
     setTrigger(!trigger);
   }
@@ -132,27 +156,29 @@ function SupportCart(storeInfo) {
   let itemContributionTotal = 0;
   const supportCenterSide = menuList.map((menu, index) => {
     itemContributionTotal += menu.itemContributionAmount;
-    return (
-      <div
-        className="storeMenuItem mb-2 row justify-content-between"
-        key={index}
-      >
-        <SupportMenu supportmenu={menu} />
-        {supportCheck ? (
-          <Button
-            color="secondary"
-            className="helpButton col-2"
-            onClick={(e) => {
-              addmenu(menu);
-            }}
-          >
-            메뉴 담기
-          </Button>
-        ) : (
-          ""
-        )}
-      </div>
-    );
+    if (menu.itemPrice > 6000) {
+      return (
+        <div
+          className="storeMenuItem mb-2 row justify-content-between"
+          key={index}
+        >
+          <SupportMenu supportmenu={menu} />
+          {supportCheck ? (
+            <Button
+              color="secondary"
+              className="helpButton col-2"
+              onClick={(e) => {
+                addmenu(menu);
+              }}
+            >
+              메뉴 담기
+            </Button>
+          ) : (
+            ""
+          )}
+        </div>
+      );
+    }
   });
 
   console.log(cartStorage);
@@ -226,7 +252,12 @@ function SupportCart(storeInfo) {
       </CardBody>
       <CardFooter className="supportCartFooter">
         <h5> 총 후원 금액은 {totalPrice}원 입니다. </h5>
-        <Button color="secondary" className="helpButton" block onClick={moveToPayment}>
+        <Button
+          color="secondary"
+          className="helpButton"
+          block
+          onClick={moveToPayment}
+        >
           후원하기
         </Button>
         <Button

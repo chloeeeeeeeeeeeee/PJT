@@ -1,53 +1,97 @@
-.mainBox {
-  height: 100%;
-  .mainRow {
-    height: 100%;
-    .storeInfo {
-      height: 100%;
-      .storeInfoCard {
-        height: 100%;
-      }
+// .mainBox {
+//   height: 100%;
+//   .mainRow {
+//     height: 100%;
+//     .storeInfo {
+//       height: 100%;
+//       .storeInfoCard {
+//         height: 100%;
+//       }
+//     }
+//   }
+//   .storeMiniMap {
+//     height: 300px;
+//   }
+
+//   .findWayButton,
+//   .helpButton {
+//     border-top-left-radius: 0px;
+//     border-top-right-radius: 0px;
+//   }
+
+//   .storeStatusCard,
+//   .supportCartCard {
+//     padding: 5%;
+//     margin: 1%;
+//   }
+// }
+
+// .storeMenuDetail {
+//   height: 87vh;
+// }
+
+// .storeMenu {
+//   height: 100%;
+// }
+
+// .storeMenuItemList {
+//   overflow-y: auto;
+// }
+
+// .storeMenuItem {
+//   border: 1px solid black;
+// }
+
+// .storeStatus {
+//   height: 95%;
+//   overflow-y: auto;
+// }
+
+// .storeStatusItem {
+//   border: 1px solid blue;
+//   height: 10%;
+// }
+
+.storeDetailBox{
+    height:100%;
+    // 좌측 매장 상세정보 + 지도
+    .storeInfo{
+        height:100%;
+        .storeInfoCard{
+            height:100%;
+            .card-body{
+                #storeMiniMap{
+                    height:50%;
+                }
+                .findWayButton{
+                    border-top-left-radius: 0px;
+                    border-top-right-radius: 0px;
+                }
+            }
+        }        
     }
-  }
-  .storeMiniMap {
-    height: 300px;
-  }
+    
+    // 우측 메뉴 정보 + 매장 후원현황
+    .storeMenuDetail{
+        height:100%;
+        // 중앙 메뉴 정보
+        .storeCenterBox{
+            height:100%;
+            .card-body{
+                overflow-y: auto;
+            }
+        }
+        // 우측 후원정보
+        .storeRightBox{
+            height:100%;
+            .supportCart{height:100%;}
+            .supportCartCard{
+                overflow-y:auto;
+            }
+        }  
+        .card{
+            height:100%;
+        }      
+    }   
 
-  .findWayButton,
-  .helpButton {
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-  }
-
-  .storeStatusCard,
-  .supportCartCard {
-    padding: 5%;
-    margin: 1%;
-  }
-}
-
-.storeMenuDetail {
-  height: 87vh;
-}
-
-.storeMenu {
-  height: 100%;
-}
-
-.storeMenuItemList {
-  overflow-y: auto;
-}
-
-.storeMenuItem {
-  border: 1px solid black;
-}
-
-.storeStatus {
-  height: 95%;
-  overflow-y: auto;
-}
-
-.storeStatusItem {
-  border: 1px solid blue;
-  height: 10%;
 }

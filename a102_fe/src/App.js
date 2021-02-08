@@ -13,7 +13,6 @@ import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
 import Main from "./pages/main/main";
 import Support from "./pages/support/support";
-import StoreDetailSupport from "./pages/support/storeDetailSupport";
 import Authentication from "./pages/account/authentication";
 import Profile from "./pages/account/profile";
 import StoreDetail from "./pages/support/storeDetail";
@@ -21,6 +20,7 @@ import QnaCreate from "./pages/qna/qnaCreate";
 import QnaList from "./pages/qna/qnaList";
 import QnaDetail from "./pages/qna/qnaDetail";
 import QnaUpdate from "./pages/qna/qnaUpdate";
+import Payment from "./pages/payment/payment"
 import "./App.css";
 
 function App() {
@@ -40,6 +40,7 @@ function App() {
             <Route path="/qna" component={QnaList} />
             <Route path="/qnadetail" component={QnaDetail} />
             <Route path="/qnaupdate" component={QnaUpdate} />
+            <Route path="/payment" component={Payment} />
             {/* Profile 페이지의 경우 리다이렉트 보내주기 */}
             <PrivateRoute path="/profile">
               <Profile />

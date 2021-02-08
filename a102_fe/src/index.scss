@@ -19,3 +19,11 @@
 // 회원 페이지 SCSS
 @import "assets/scss/myscss/components/account/profile.scss";
 @import "assets/scss/myscss/components/account/timeline.scss";
+
+// QnA 페이지 scss
+@import "assets/scss/myscss/pages/qna/qnaCreate.scss";
+@import "assets/scss/myscss/pages/qna/qnaList.scss";
+@import "assets/scss/myscss/pages/qna/qnaDetail.scss";
+
+// 결제 페이지 SCSS
+@import "assets/scss/myscss//pages/payment/payment.scss";

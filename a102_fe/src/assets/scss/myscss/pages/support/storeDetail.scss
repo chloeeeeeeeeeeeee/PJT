@@ -84,7 +84,10 @@
         // 우측 후원정보
         .storeRightBox{
             height:100%;
-            
+            .supportCart{height:100%;}
+            .supportCartCard{
+                overflow-y:auto;
+            }
         }  
         .card{
             height:100%;

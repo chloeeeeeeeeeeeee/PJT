@@ -21,15 +21,10 @@ function Payment() {
       ? JSON.parse(localStorage.getItem("carts"))
       : []
   );
-  let [trigger, setTrigger] =useState(true)
 
   useEffect(() => {
     document.querySelector("#kakaoPaySelect").checked = true;
   }, []);
-
-  useEffect(()=>{
-    console.log("TRIGGER")
-  }, [trigger])
 
   const axios = require("axios");
   const jwtToken = localStorage.getItem("access-token")
@@ -99,111 +94,18 @@ function Payment() {
     // 네이버 페이
     else if (paymentOption == "naverPay") {
       console.log("네이버페이");
-
-      let data = { "modelVersion": "1",
-      "merchantUserKey": "muserkey",
-      "merchantPayKey": "mpaykey",
-      "productName": "상품명",
-      "productCount": 10,
-      "totalPayAmount": 1000,
-      "deliveryFee": 2500,
-      "returnUrl": "{your-returnUrl}",
-      "webhookUrl": "{your-webhookUrl}",
-      "taxScopeAmount": 1000,
-      "taxExScopeAmount": 0,
-      "purchaserName": "구매자이름",
-      "purchaserBirthday": "20000101"}
-
-      axios.post(`https://dev.apis.naver.com/naverpay-partner/naverpay/payments/v2/reserve`, data, {headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "X-Naver-Client-Id":"",
-        "X-Naver-Client-Secret": ""
-    }})
-
-    
-//    "modelVersion": "2",
-//    "merchantUserKey": "muserkey",
-//    "merchantPayKey": "mpaykey",
-//    "productName": "상품명",
-//    "productCount": 10,
-//    "totalPayAmount": 1000,
-//    "deliveryFee": 2500,
-//    "returnUrl": "{your-returnUrl}",
-//    "webhookUrl": "{your-webhookUrl}",
-//    "taxScopeAmount": 1000,
-//    "taxExScopeAmount": 0,
-//    "purchaserName": "구매자이름",
-//    "purchaserBirthday": "20000101",
-//    "productItems": [{
-//        "categoryType": "BOOK",
-//        "categoryId": "GENERAL",
-//        "uid": "107922211",
-//        "name": "한국사",
-//        "payReferrer": "NAVER_BOOK",
-//        "count": 10
-//    }, {
-//        "categoryType": "MUSIC",
-//        "categoryId": "CD",
-//        "uid": "299911002",
-//        "name": "러블리즈",
-//        "payReferrer": "NAVER_BOOK",
-//        "count": 1
-//    }]
-// }
-      
-    //   naverPayScript.src = "https://nsp.pay.naver.com/sdk/js/naverpay.min.js";
-    //   let naverPayScript = document.createElement("script");
-    //   naverPayScript.append(`var oPay = Naver.Pay.create({
-    //         "mode" : "development",
-    //         "clientId": "u86j4ripEt8LRfPGzQ8",
-    //         "payType" : "normal",
-    //         "openType" : "popup"
-    //     })`);
-    //     let totalCount = 0
-    //     let productList = []
-    //     cartStorage.forEach((item) => {
-    //         let oneItem = {
-    //             categoryType:'FOOD',
-    //             categoryId: 'DELIVERY',
-    //             uid: item.itemId,
-    //           count: item.itemCount,
-    //           name: item.itemName,
-    //         //   itemPrice: item.itemPrice,
-    //         //   storeId: item.storeId,
-    //         //   support: 1,
-    //         //   msg: paymentMessage,
-    //         };
-    //         totalCount += item.itemCount;
-    //         productList.push(oneItem);
-    //       });
-
-    //   naverPayScript.append(`oPay.open({
-    //     "merchantUserKey": "0000",
-    //     "productName": "후원 결제",
-    //     "productCount": ${totalCount}
-    //     "totalPayAmount": ${totalPrice},
-    //     "taxScopeAmount": ${totalPrice},
-    //     "taxExScopeAmount": 0,
-    //     "returnUrl": "/naverPayCheck",
-    //     "productItems":${JSON.stringify(productList)}
-    //   });`)
-    //   document.body.appendChild(naverPayScript)
-    //   setTrigger(!trigger)
-
-      //         <script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"
-      //     data-client-id="{#_clientId}"
-      //     data-mode="{#_mode}"
-      //     data-open-type="popup"
-      //     data-on-authorize="onNaverPayAuthorize"
-      //     data-merchant-user-key="{#_merchantUserKey}"
-      //     data-merchant-pay-key="{#_merchantPayKey}"
-      //     data-product-name="{#_productName}"
-      //     data-total-pay-amount="{#_totalPayAmount}"
-      //     data-tax-scope-amount="{#_taxScopeAmount}"
-      //     data-tax-ex-scope-amount="{#_taxExScopeAmount}"
-      //     data-return-url="{#_returnUrl}">
-      // </script>
+      const popupWidth = window.innerWidth * 0.8;
+      const popupHeight = window.innerHeight * 0.8;
+      const popupLeft = (window.innerWidth - popupWidth) * 0.5;
+      const popupTop = (window.innerHeight - popupHeight) * 0.5;
+      const naverPayPopup = window.open(
+        `https://nsp.pay.naver.com/payments/developer?clientId=u86j4ripEt8LRfPGzQ8&productName=${cartStorage[0].itemName} 등 ${cartStorage.length}개&totalPayAmount=${totalPrice}&merchantOriginUrl=https://developer.pay.naver.com&isOnAuthorize=true`,
+        "PopupWin",
+        `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`
+      );
+      setTimeout(() => {
+        naverPayPopup.close();
+      }, 3000);
     }
     // 신용/체크카드
     else if (paymentOption == "cardPay") {
@@ -239,7 +141,7 @@ function Payment() {
         <Col className="paymentMethod pt-4 pb-2">
           <h3>후원 방식 선택</h3>
           <FormGroup tag="fieldset" className="col">
-            <FormGroup className="col mt-3">
+            <FormGroup className="col">
               <Label>
                 <Input
                   type="radio"
@@ -274,7 +176,6 @@ function Payment() {
             </FormGroup>
           </FormGroup>
         </Col>
-        <hr />
         <Button
           className="paymentButton"
           color="primary"

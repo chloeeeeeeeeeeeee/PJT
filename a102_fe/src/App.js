@@ -1,14 +1,6 @@
 import React from "react";
-import {
-  Container,
-  Row,
-} from "reactstrap";
-import {
-  Route,
-  BrowserRouter,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { Container, Row } from "reactstrap";
+import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
 import Main from "./pages/main/main";
@@ -20,8 +12,8 @@ import QnaCreate from "./pages/qna/qnacreate";
 import QnaList from "./pages/qna/qnalist";
 import QnaDetail from "./pages/qna/qnadetail";
 import QnaUpdate from "./pages/qna/qnaupdate";
-import Payment from "./pages/payment/payment"
-import KakaoPaymentCheck from "./pages/payment/kakaoPaymentCheck"
+import Payment from "./pages/payment/payment";
+import KakaoPaymentCheck from "./pages/payment/kakaoPaymentCheck";
 import "./App.css";
 
 function App() {
@@ -36,7 +28,10 @@ function App() {
             <Route path="/support" component={Support} />
             <Route path="/map" component={Support} />
             <Route path="/storedetail/:storeId" component={StoreDetail} />
-            <Route path="/storedetailsupport/:storeId" component={StoreDetail} />
+            <Route
+              path="/storedetailsupport/:storeId"
+              component={StoreDetail}
+            />
             <Route path="/qnacreate" component={QnaCreate} />
             <Route path="/qna" component={QnaList} />
             <Route path="/qnadetail" component={QnaDetail} />

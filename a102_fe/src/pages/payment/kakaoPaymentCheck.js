@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 
 function KakaoPaymentCheck(props) {
-
   const pgToken = new URLSearchParams(props.location.search).get("pg_token");
   console.log(pgToken);
 
@@ -14,12 +13,12 @@ function KakaoPaymentCheck(props) {
     )
     .then((res) => {
       console.log(res);
-      console.log(res.status)
-      if(res.status ==200){
-        localStorage.setItem('carts', [])
-        localStorage.setItem('price', 0)
-        window.opener.location.href = '/'
-        window.close()
+      console.log(res.status);
+      if (res.status == 200) {
+        localStorage.setItem("carts", []);
+        localStorage.setItem("price", 0);
+        window.opener.location.href = "/";
+        window.close();
       }
     });
 

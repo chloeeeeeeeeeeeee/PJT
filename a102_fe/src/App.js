@@ -18,6 +18,7 @@ import QnaUpdate from "./pages/qna/qnaupdate";
 import Payment from "./pages/payment/payment";
 import KakaoPaymentCheck from "./pages/payment/kakaoPaymentCheck";
 import PaymentSuccess from "./pages/payment/paymentSuccess";
+import StoreAdmin from "./pages/store/storeadmin";
 import "./App.css";
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
             <Route path="/payment" component={Payment} />
             <Route path="/paymentCheck" component={KakaoPaymentCheck} />
             <Route path="/paymentSuccess" component={PaymentSuccess} />
+            <Route path="/storeAdmin" component={StoreAdmin} />
             {/* Profile 페이지의 경우 리다이렉트 보내주기 */}
             <PrivateRoute path="/profile">
               <Profile />

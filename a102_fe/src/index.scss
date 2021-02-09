@@ -2,6 +2,10 @@
 @import "assets/scss/theme/_variables.scss";
 @import "assets/scss/theme/_react-plugin.scss";
 
+@import "assets/scss/theme/_login.scss";
+@import "assets/scss/theme/_forms.scss";
+@import "assets/scss/theme/_responsive.scss";
+
 // 기본 레이아웃 SCSS
 // @import "assets/scss/myscss/components/layout/division.scss";
 
@@ -11,10 +15,15 @@
 @import "src/assets/scss/myscss/components/layout/footer.scss";
 @import "src/assets/scss/myscss/components/main/billboard.scss";
 @import "src/assets/scss/myscss/components/main/aboutus.scss";
+@import "src/assets/scss/myscss/components/main/whattoeat.scss";
 
 // 후원 페이지 SCSS
 @import "assets/scss/myscss/pages/support/support.scss";
+@import "assets/scss/myscss/pages/support/childsupport.scss";
 @import "assets/scss/myscss/pages/support/storeDetail.scss";
+
+// 함께하기 페이지
+@import "assets/scss/myscss/pages/account/authentication.scss";
 
 // 회원 페이지 SCSS
 @import "assets/scss/myscss/components/account/profile.scss";
@@ -26,4 +35,4 @@
 @import "assets/scss/myscss/pages/qna/qnaDetail.scss";
 
 // 결제 페이지 SCSS
-@import "assets/scss/myscss//pages/payment/payment.scss";
+@import "assets/scss/myscss/pages/payment/payment.scss";

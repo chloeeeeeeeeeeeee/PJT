@@ -7,9 +7,9 @@ import {
   InputGroup,
   InputGroupAddon,
 } from "reactstrap";
-import SupportMapItem from "../../components/support/supportMapItem";
+import { FcLike } from "react-icons/fc";
 
-function Support() {
+function ChildSupport() {
   // 네이버 API 통신을 위해 필요한 HEADER 세팅
   const axios = require("axios");
   const config = {
@@ -21,7 +21,7 @@ function Support() {
     },
   };
 
-  // 카테고리 리스트 일단 넣어두기
+  // 카테고리
   const categoryList = [
     "한식",
     "양식",
@@ -33,27 +33,28 @@ function Support() {
     "일식",
     "치킨/피자",
   ];
-  // 선택된 카테고리 정보
+  
+  // 선택된 카테고리, 지도, 주소, 가게리스트 변수
   let [selectedCategory, setSelectedCategory] = useState(0);
   let [reloadMap, setReloadMap] = useState(true);
   let [address, setAddress] = useState("");
   let [storeList, setStoreList] = useState([]);
 
-  // 카테고리 리스트 컴포넌트
+  // 카테고리 리스트 : (+색칠)
   const categoryListComponents = categoryList.map((category, index) => {
     if (index === 0) {
       return (
         <Col
-          className="categoryListItem selectedCategoryListItem"
+          className="categoryListItem selectedChildCategoryListItem"
           key={index}
           onClick={(e) => {
             setSelectedCategory(index);
             // selectedCategory = category;
-            if (!e.target.classList.contains("selectedCategoryListItem")) {
+            if (!e.target.classList.contains("selectedChildCategoryListItem")) {
               document
-                .getElementsByClassName("selectedCategoryListItem")[0]
-                .classList.remove("selectedCategoryListItem");
-              e.target.classList.add("selectedCategoryListItem");
+                .getElementsByClassName("selectedChildCategoryListItem")[0]
+                .classList.remove("selectedChildCategoryListItem");
+              e.target.classList.add("selectedChildCategoryListItem");
               //   changeComponents();
             }
           }}
@@ -69,11 +70,11 @@ function Support() {
         onClick={(e) => {
           setSelectedCategory(index);
           // selectedCategory = category;
-          if (!e.target.classList.contains("selectedCategoryListItem")) {
+          if (!e.target.classList.contains("selectedChildCategoryListItem")) {
             document
-              .getElementsByClassName("selectedCategoryListItem")[0]
-              .classList.remove("selectedCategoryListItem");
-            e.target.classList.add("selectedCategoryListItem");
+              .getElementsByClassName("selectedChildCategoryListItem")[0]
+              .classList.remove("selectedChildCategoryListItem");
+            e.target.classList.add("selectedChildCategoryListItem");
             // changeComponents();
           }
         }}
@@ -83,7 +84,7 @@ function Support() {
     );
   });
 
-  // 매장 리스트 가져와서 컴포넌트화
+  // 전체 매장 리스트
   function setStoreListComponent() {
     if (address !== "") {
       fetch(
@@ -91,21 +92,13 @@ function Support() {
           address
         )}`
       )
-        .then((res) => res.json())
-        .then((result) => {
-          storeList = result;
-          setStoreList(storeList);
-        });
+      .then((res) => res.json())
+      .then((result) => {
+        storeList = result;
+        setStoreList(storeList);
+      });
     }
   }
-
-  // // 페이지 별로 다른 타이틀 부여
-  // let supportCheck = false;
-  // if (window.location.href.indexOf("support") > -1) {
-  //   supportCheck = true;
-  // } else if (window.location.href.indexOf("map") > -1) {
-  //   supportCheck = false;
-  // }
 
   let mapScript = document.createElement("script");
   mapScript.type = "text/javascript";
@@ -141,15 +134,14 @@ function Support() {
     );
   }
 
-  // 장소 찾기
+  // 장소찾기
   function searchLocation() {
     address = document.getElementById("addressInput").value;
     setAddress(address);
   }
 
-  //Input 박스 안에서 엔터키 입력
+  // Enter키
   function enterkeyPress(event) {
-    // 엔터키
     if (event.keyCode == 13) {
       searchLocation();
     }
@@ -157,7 +149,7 @@ function Support() {
 
   useEffect(() => {
     if (address !== "") {
-      // 새로 받은 주소로 검색
+      // 입력 받은 주소 검색
       axios
         .get(
           `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${address}`,
@@ -190,39 +182,72 @@ function Support() {
     }
   }, [address]);
 
-  // 카테고리 변경시
+  // 카테고리 변경
   let [storeListComponents, setStoreListComponents] = useState([]);
+  
   useEffect(() => {
-    console.log("categoryChange");
-    console.log(storeList[selectedCategory + 1]);
     if (storeList[selectedCategory + 1] !== undefined) {
-      console.log(storeList[selectedCategory + 1].length);
       if (storeList[selectedCategory + 1].length > 0) {
         storeListComponents = storeList[selectedCategory + 1].map(
           (storeInfo, index) => {
-              // storeInfo.supportCheck = supportCheck
             return <SupportMapItem storeInfo={storeInfo} key={index} />;
-          }          
+          }
         );
       } else{
           storeListComponents = (
-            <Col className="nothingToShow">주변 가게가 없습니다...</Col> )
+            <Col className="nothingToShow">주변에 가게가 없습니다.</Col> );
         }
     }
-    setStoreListComponents(storeListComponents)
-    
+    setStoreListComponents(storeListComponents);
   }, [selectedCategory, storeList]);
+
+  // 후원된 음식 변수
+  let [menuList, setMenuList] = useState([]);
+
+  // 가게의 메뉴 리스트
+  function SupportMapItem(storeInfo) {
+    function getMenu(){
+      fetch(`http://i4a102.p.ssafy.io:8080/app/support/menulist/${storeInfo.storeInfo.storeId}`)
+        .then((res) => res.json())
+        .then((result) => {
+          setMenuList(result);
+        });
+    }
+  
+    return (
+      <Row className="mapListItem m-1 p-1" onClick={getMenu}>
+        <Col xs="7">{storeInfo.storeInfo.storeName}</Col>
+        <Col xs="5">{storeInfo.storeInfo.storeCategory}</Col>
+        <Col xs="12">{storeInfo.storeInfo.storeLocation}</Col>
+      </Row>
+    );
+  }
+
+  // 후원된 음식 반환
+  const supportMenuList = menuList.map((menu, index) => {
+    let lst = []
+    
+    for (let idx=0; idx<menu.itemAvailable; idx++){
+      lst.push(<FcLike/>)
+    }
+
+    if (menu.itemAvailable > 0) {
+      return (
+        <Col xs="12">{menu.itemName} : {lst} </Col>
+      );
+    }
+  });
 
   return (
     <Col className="mainSupport">
-    {/* 지도 영역 타이틀 */}
+      {/* 지도 영역 타이틀 */}
       <Row>
         <Col sm="12" md={{ size: 8, offset: 1 }} className="supportTitle">
-          <h2>후원하기</h2>
+        <h2>가게 검색하기</h2>
         </Col>
       </Row>
       <Row className="supportContent">
-        <Col sm="12" md={{ size: 4, offset: 1 }} className="supportContentLeft">
+        <Col sm="12" md={{ size: 4, offset: 1 }} className="supportChildContentLeft">
           {/* 검색 */}
           <InputGroup>
             <Input
@@ -233,7 +258,6 @@ function Support() {
             />
             <InputGroupAddon addonType="append">
               <Button
-                color="secondary"
                 id="addressButton"
                 onClick={searchLocation}
               >
@@ -251,8 +275,15 @@ function Support() {
         <Col sm="6" md="4" className="supportBox">
           {/* 매장 리스트 */}
           <h5>가게 목록</h5>
-          <Row className="storeListBox">
+          <Row className="storeChildListBox">
             {storeListComponents}
+          </Row>
+          {/* 후원 음식 리스트 */}
+          <h5>음식 목록</h5>
+          <Row className="storeChildSupportBox">
+            <Row className="storeMenuItem mb-2 row justify-content-between">
+              {supportMenuList}
+            </Row>
           </Row>
         </Col>
       </Row>
@@ -260,4 +291,4 @@ function Support() {
   );
 }
 
-export default Support;
+export default ChildSupport;

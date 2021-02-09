@@ -99,13 +99,13 @@ function Support() {
     }
   }
 
-  // 페이지 별로 다른 타이틀 부여
-  let supportCheck = false;
-  if (window.location.href.indexOf("support") > -1) {
-    supportCheck = true;
-  } else if (window.location.href.indexOf("map") > -1) {
-    supportCheck = false;
-  }
+  // // 페이지 별로 다른 타이틀 부여
+  // let supportCheck = false;
+  // if (window.location.href.indexOf("support") > -1) {
+  //   supportCheck = true;
+  // } else if (window.location.href.indexOf("map") > -1) {
+  //   supportCheck = false;
+  // }
 
   let mapScript = document.createElement("script");
   mapScript.type = "text/javascript";
@@ -200,7 +200,7 @@ function Support() {
       if (storeList[selectedCategory + 1].length > 0) {
         storeListComponents = storeList[selectedCategory + 1].map(
           (storeInfo, index) => {
-              storeInfo.supportCheck = supportCheck
+              // storeInfo.supportCheck = supportCheck
             return <SupportMapItem storeInfo={storeInfo} key={index} />;
           }          
         );
@@ -215,13 +215,15 @@ function Support() {
 
   return (
     <Col className="mainSupport">
-      {/* 지도 영역 타이틀 */}
-      <Row className="supportTitle">
-        <h2>{supportCheck ? '후원위치 선택' : '지도로 보기'}</h2>
+    {/* 지도 영역 타이틀 */}
+      <Row>
+        <Col sm="12" md={{ size: 8, offset: 1 }} className="supportTitle">
+          <h2>후원하기</h2>
+        </Col>
       </Row>
       <Row className="supportContent">
-        <Col sm="12" md="6" className="supportContentLeft">
-          {/* 지도영역 + 검색 */}
+        <Col sm="12" md={{ size: 4, offset: 1 }} className="supportContentLeft">
+          {/* 검색 */}
           <InputGroup>
             <Input
               name="addressInput"
@@ -241,15 +243,17 @@ function Support() {
           </InputGroup>
           {/* 지도 영역 */}
           <Col id="naverMap" className="mt-2 col-12"></Col>
-          {/* 지도 영역 끝 */}
-          {/* 지도영역 + 검색 끝 */}
         </Col>
+        {/* 카테고리 리스트 */}
         <Col sm="6" md="2" className="categoryListBox">
           {categoryListComponents}
         </Col>
-        {/* 매장 리스트 */}
-        <Col sm="6" md="4" className="storeListBox">
-          {storeListComponents}
+        <Col sm="6" md="4" className="supportBox">
+          {/* 매장 리스트 */}
+          <h5>가게 목록</h5>
+          <Row className="storeListBox">
+            {storeListComponents}
+          </Row>
         </Col>
       </Row>
     </Col>

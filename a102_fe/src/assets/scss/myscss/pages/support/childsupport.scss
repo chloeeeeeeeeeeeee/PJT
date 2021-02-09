@@ -1,0 +1,48 @@
+.mainSupport {
+  .supportContent {
+    .supportChildContentLeft {
+      Button {
+        color: white;
+        background-color: $oori-yellow;
+        border: none;
+      }
+      #naverMap {
+        height: 90%;
+      }
+    }
+    .categoryListBox {
+      .categoryListItem {
+        &.selectedChildCategoryListItem {
+          background-color: $oori-yellow;
+          color: $white;
+        }
+      }
+    }
+
+    .supportBox {
+      .storeChildListBox {
+        height: 40%;
+        overflow-y: auto;
+        border-color: $oori-yellow;
+        border-width: 2px;
+        border-style: solid;
+        margin-bottom: 5%;
+        .mapListItem {
+          border-bottom: 1px solid black;
+          height: auto;
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+      .storeChildSupportBox {
+        height: 40%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        border-color: $oori-yellow;
+        border-width: 2px;
+        border-style: solid;
+      }
+    }
+  }
+}

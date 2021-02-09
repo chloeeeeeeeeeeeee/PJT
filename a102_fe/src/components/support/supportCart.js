@@ -27,12 +27,12 @@ function SupportCart(storeInfo) {
   let [trigger, setTrigger] = useState(false);
   const params = useParams();
   // 후원페이지인지 그냥 상세보기인지 확인용 변수
-  let supportCheck = false;
-  if (window.location.href.indexOf("storedetailsupport") > -1) {
-    supportCheck = true;
-  } else {
-    supportCheck = false;
-  }
+  // let supportCheck = false;
+  // if (window.location.href.indexOf("storedetailsupport") > -1) {
+  //   supportCheck = true;
+  // } else {
+  //   supportCheck = false;
+  // }
 
   // 메뉴 정보 받아오기
   useEffect(() => {
@@ -163,131 +163,98 @@ function SupportCart(storeInfo) {
           key={index}
         >
           <SupportMenu supportmenu={menu} />
-          {supportCheck ? (
+          {/* {supportCheck ? ( */}
             <Button
-              color="secondary"
-              className="helpButton col-2"
+              className="cartbutton col-2 mt-3 mb-3"
               onClick={(e) => {
                 addmenu(menu);
               }}
             >
-              메뉴 담기
+              담기
             </Button>
-          ) : (
+          {/* ) : (
             ""
-          )}
+          )} */}
         </div>
       );
     }
   });
 
-  console.log(cartStorage);
-
-  const supportRightSide = !supportCheck ? (
-    <Card>
-      <CardHeader>
-        <h4>매장 후원현황</h4>
-      </CardHeader>
-      <CardBody className="storeStatusCard">
-        <div className="storeStatus">
-          <br />
-          <h5>매장 누적 후원현황 : 76그릇</h5>
-          <br />
-          <h5>이번주 후원현황 : {itemContributionTotal}그릇</h5>
-        </div>
-        <Button
-          color="secondary"
-          className="helpButton"
-          onClick={moveToSupportPage}
-          block
-        >
-          후원하기
-        </Button>
-      </CardBody>
-    </Card>
-  ) : (
-    <Card>
-      <CardHeader>
-        <h4>후원 바구니</h4>
-      </CardHeader>
-      <CardBody className="supportCartCard">
-        {cartStorage.map((cart, index) => {
-          return (
-            <div className="supportCartItem" key={index}>
-              <h5>
-                {cart.itemName} : {cart.itemCount}개
-              </h5>
-              <Col xs="12 row justify-content-end m-0 p-0">
-                <Button
-                  color="secondary"
-                  className="helpButton"
-                  onClick={() => {
-                    plus(cart);
-                  }}
-                >
-                  +
-                </Button>
-                <Button
-                  color="secondary"
-                  className="helpButton"
-                  onClick={() => {
-                    minus(cart);
-                  }}
-                >
-                  -
-                </Button>
-                <Button
-                  color="secondary"
-                  className="helpButton"
-                  onClick={() => {
-                    removemenu(cart);
-                  }}
-                >
-                  X
-                </Button>
-              </Col>
-            </div>
-          );
-        })}
-      </CardBody>
-      <CardFooter className="supportCartFooter">
-        <h5> 총 후원 금액은 {totalPrice}원 입니다. </h5>
-        <Button
-          color="secondary"
-          className="helpButton"
-          block
-          onClick={moveToPayment}
-        >
-          후원하기
-        </Button>
-        <Button
-          color="secondary"
-          className="helpButton"
-          block
-          onClick={(e) => {
-            clearmenu();
-          }}
-        >
-          바구니 비우기
-        </Button>
-      </CardFooter>
-    </Card>
-  );
-
   return (
-    <Col md="9" sm="12" className="row justify-content-around storeMenuDetail">
-      <Col xs="8" className="storeCenterBox">
+    <Col md="8" sm="12" className="row justify-content-around storeMenuDetail">
+      <Col md="7" xs="8" className="storeCenterBox">
         <Card>
-          <CardHeader>
-            <h4>메뉴 목록</h4>
+          <CardHeader className="cardHeader">
+            <h5 className="font-weight-bold mt-1">메뉴 목록</h5>
           </CardHeader>
           <CardBody className="storeMenuItemList">{supportCenterSide}</CardBody>
         </Card>
       </Col>
-      <Col xs="4" className="storeRightBox">
-        {supportRightSide}
-      </Col>
+      <Col md="5" xs="4" className="storeRightBox">
+        <Card>
+        <CardHeader className="cardHeader">
+          <h5 className="font-weight-bold mt-1">후원 바구니</h5>
+        </CardHeader>
+        <CardBody className="supportCartCard">
+          {cartStorage.map((cart, index) => {
+            return (
+              <div className="supportCartItem" key={index}>
+                <Col sm="7">
+                  <p>{cart.itemName} : {cart.itemCount}개</p>
+                </Col>
+                <Col sm="5" className="controlbuttons row justify-content-end m-0 p-0">
+                  {/* 왜 나오는거죠 얘네 왜 탈출..? */}
+                  <Button
+                    className="controlbutton"
+                    onClick={() => {
+                      plus(cart);
+                    }}
+                  >
+                    +
+                  </Button>
+                  <Button
+                    className="controlbutton"
+                    onClick={() => {
+                      minus(cart);
+                    }}
+                  >
+                    -
+                  </Button>
+                  <Button
+                    className="controlbutton"
+                    onClick={() => {
+                      removemenu(cart);
+                    }}
+                  >
+                    X
+                  </Button>
+                </Col>
+              </div>
+            );
+          })}
+        </CardBody>
+        <CardFooter className="supportCartFooter">
+          <p> 총 후원 금액은 {totalPrice}원 입니다. </p>
+          <Button
+            className="footerbutton"
+            block
+            onClick={moveToPayment}
+          >
+            후원하기
+          </Button>
+          <Button
+            className="footerbutton"
+            block
+            onClick={(e) => {
+              clearmenu();
+            }}
+          >
+            바구니 비우기
+          </Button>
+        </CardFooter>
+      </Card>
     </Col>
+  </Col>
   );
 }
 

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Col, Card, CardHeader, CardBody, Button } from "reactstrap";
+import { AiFillPhone } from "react-icons/ai";
+import { BiMapAlt } from "react-icons/bi";
 
 function StoreDetailInfo(storeInfo) {
   const axios = require("axios");
@@ -53,25 +55,31 @@ function StoreDetailInfo(storeInfo) {
   }, []);
 
   return (
-    <Col md="3" sm="12" className="storeInfo">
+    <Col md="2" sm="12" className="storeInfo">
       <Card className="storeInfoCard">
-        <CardHeader>
-          <h2 className="font-weight-bold">{storeInformation.storeName}</h2>
-
-          <h5 className="font-weight-normal mt-3">
+        <CardHeader className="cardHeader">
+          <h5 className="font-weight-bold mt-1">{storeInformation.storeName}</h5>
+          <p className="font-weight-normal mb-0">
             #{storeInformation.storeCategory}
-          </h5>
+          </p>
         </CardHeader>
         <CardBody>
-          <h5 className="font-weight-normal mt-4">
-            {storeInformation.storeLocation}
-          </h5>
-          <h5 className="font-weight-normal mt-4">
-            {storeInformation.storePhone}
-          </h5>
-          <p>아동급식카드의 1회 지원금은 6000원입니다.<br/>아동이 메뉴를 먹을 수 있게 차액을 후원해주세요.<br/>6000원 이하의 메뉴는 보여지지 않습니다.<br/>* 가게의 실 메뉴와 차이가 있을 수 있습니다</p>
+          <p className="font-weight-normal">
+            <BiMapAlt /> {storeInformation.storeLocation}
+          </p>
+          <p className="font-weight-normal">
+            <AiFillPhone /> {storeInformation.storePhone}
+          </p>
+          <p className="caution">
+            아동급식카드의 1회 지원금은 6000원입니다.
+            <br/>
+            아동이 메뉴를 먹을 수 있게 차액을 후원해주세요.
+            <br/>
+            6000원 이하의 메뉴는 보여지지 않습니다.<br/>
+            * 가게의 실 메뉴와 차이가 있을 수 있습니다
+          </p>
           <div className="storeMiniMap mt-4" id="storeMiniMap"></div>
-          <Button className="findWayButton" color="primary" block>
+          <Button className="findWayButton" block>
             길찾기
           </Button>
         </CardBody>

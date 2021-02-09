@@ -11,7 +11,7 @@
       height: 100%;
       Button {
         color: white;
-        background-color: $oori-yellow;
+        background-color: $oori-green;
         border: none;
       }
       #naverMap {
@@ -28,7 +28,7 @@
         padding-top: 10px;
         padding-bottom: 10px;
         &.selectedCategoryListItem {
-          background-color: $oori-yellow;
+          background-color: $oori-green;
           color: $white;
         }
         &:hover {
@@ -37,42 +37,20 @@
         }
       }
     }
-
     .supportBox {
-      height: 100%;
-      .mapListItem {
-        border-bottom: 1px solid black;
-        height: auto;
-        &:hover {
-          cursor: pointer;
-        }
-      }
+      height: 90%;
       .storeListBox {
-        height: 40%;
+        height: 100%;
         overflow-y: auto;
-        border-color: $oori-yellow;
+        border-color: $oori-green;
         border-width: 2px;
         border-style: solid;
-        margin-bottom: 5%;
-      }
-      .storeSupportBox {
-        height: 40%;
-        overflow-y: auto;
-        overflow-x: hidden;
-        border-color: $oori-yellow;
-        border-width: 2px;
-        border-style: solid;
-      }
-    }
-
-    .storeListBox {
-      height: 100%;
-      overflow-y: auto;
-      .mapListItem {
-        border-bottom: 1px solid black;
-        height: auto;
-        &:hover {
-          cursor: pointer;
+        .mapListItem {
+          border-bottom: 1px solid black;
+          height: auto;
+          &:hover {
+            cursor: pointer;
+          }
         }
       }
     }

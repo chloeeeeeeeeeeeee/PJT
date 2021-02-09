@@ -110,6 +110,7 @@ public class AccountController {
 		}
 	}
 	
+	//중복확인
 	@PostMapping("/userdupil")
 	public ResponseEntity<User> userDupil(@RequestBody User user, HttpServletRequest req){
 		User userNow = userService.userInfoById(user.getUserId());

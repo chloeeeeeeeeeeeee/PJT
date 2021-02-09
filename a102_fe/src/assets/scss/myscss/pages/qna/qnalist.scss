@@ -1,23 +1,23 @@
 .listPost {
   .card {
-    border-color: $eat-key-color;
+    border-color: $oori-green;
     border-width: 2px;
 
     .listPostHeader {
-      background-color: $eat-key-color;
+      background-color: $oori-green;
       h5 {
         display: inline;
       }
       .listPostHeaderButton {
-        background-color: $eat-point-color;
-        color: white;
+        background-color: $oori-white;
+        color: $oori-green;
         border: none;
         border-radius: 20%;
         display: inline-block;
         float: right;
       }
       .listPostHeaderCaution {
-        color: $eat-point-color;
+        color: $oori-white;
         border: none;
         display: inline-block;
         float: right;

@@ -18,6 +18,20 @@
       type="text/javascript"
       src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=e5vp42977m"
     ></script>
+    <!-- 네이버페이 -->
+    <!-- <script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script> -->
+    <!-- 아임포트 -->
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-1.12.4.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"
+    ></script>
+    <script>
+      IMP.init("imp10005018");
+    </script>
     <script
       src="https://kit.fontawesome.com/317cf45f98.js"
       crossorigin="anonymous"
@@ -29,8 +43,10 @@
       rel="stylesheet"
     />
     <style>
-      html, body, #root{
-        height:100%;
+      html,
+      body,
+      #root {
+        height: 100%;
       }
       body {
         font-family: "Noto Sans KR", sans-serif;
@@ -38,13 +54,11 @@
       body::-webkit-scrollbar {
         display: none;
       }
-
     </style>
     <title>밥은 먹고 다니니?</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-
   </body>
 </html>

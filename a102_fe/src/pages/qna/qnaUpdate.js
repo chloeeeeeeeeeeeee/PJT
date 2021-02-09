@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import CKEditor from 'ckeditor4-react';
+import CKEditor from "ckeditor4-react";
 import {
   Container,
   Row,
@@ -14,7 +14,6 @@ import {
   Button,
 } from "reactstrap";
 
-
 function QnaUpdate() {
   let [qna, setQna] = useState(window.history.state);
   let [title, setTitle] = useState(window.history.state.qnaTitle);
@@ -24,8 +23,8 @@ function QnaUpdate() {
   useEffect(() => {
     console.log("title", title);
     console.log("content", content);
-  })
-  
+  });
+
   const Update = (event) => {
     event.preventDefault();
     console.log(title);
@@ -34,47 +33,44 @@ function QnaUpdate() {
     fetch(`http://i4a102.p.ssafy.io:8080/app/qna/update`, {
       method: "POST",
       headers: {
-        token: localStorage.getItem('access-token'),
-        'Content-Type': 'application/json',
+        token: localStorage.getItem("access-token"),
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         qnaSeq: qna.qnaSeq,
         qnaTitle: title,
         qnaContent: content,
         qnaSecret: secret,
-      })
-    })
-    .then(res => {
-      if (res.status === 200){
+      }),
+    }).then((res) => {
+      if (res.status === 200) {
         alert("200떳당");
-        window.location.href = '/qna';
-      }
-      else{
+        window.location.href = "/qna";
+      } else {
         alert("오류오류오류오류");
       }
-    })
-  }
+    });
+  };
 
-  const onTitleChange = event => {
+  const onTitleChange = (event) => {
     setTitle(event.target.value);
     console.log("제목제목", title);
-  }
+  };
 
   const onContentChange = (event) => {
     const data = event.editor.getData();
     setContent(data);
     console.log("너 왜 안나오니 등장해죠", content);
-  }
+  };
 
   const onSecretChange = (event) => {
-    if(secret === 0){
+    if (secret === 0) {
       setSecret(1);
-    }
-    else{
+    } else {
       setSecret(0);
     }
-    console.log('비밀', secret);
-  }
+    console.log("비밀", secret);
+  };
 
   return (
     <Fragment>

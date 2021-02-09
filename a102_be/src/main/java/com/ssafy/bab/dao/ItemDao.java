@@ -15,8 +15,8 @@ public interface ItemDao extends JpaRepository<Item, ItemPK> {
 //	Item findByItemIdAndStore_StoreId(int itemId, int storeId);
 //	Item findByStore_StoreIdAndItemId(int itemId, int storeId);
 	Item findByItemIdAndStoreId(int itemId, int storeId);
-
+	
 	@Query(value = "SELECT MAX(item_id) + 1 from item WHERE store_id = :storeId", nativeQuery = true)
-	int getMaxItemId(@Param("storeId") int storeId);
+	Integer getMaxItemId(@Param("storeId") int storeId);
 	
 }

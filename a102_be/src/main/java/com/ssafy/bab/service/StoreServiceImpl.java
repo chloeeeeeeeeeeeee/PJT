@@ -1,6 +1,7 @@
 package com.ssafy.bab.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
@@ -58,7 +59,9 @@ public class StoreServiceImpl implements StoreService {
 			}
 			
 			// Table Insert
-			item.setItemId(itemDao.getMaxItemId(item.getStoreId()));
+			Integer itemId = itemDao.getMaxItemId(item.getStoreId());
+			if(itemId == null) item.setItemId(1);
+			else item.setItemId(itemDao.getMaxItemId(item.getStoreId()));
 			item.setItemImgUrl("menus/" + savingFileName);
 			itemDao.save(item);
 			
@@ -71,6 +74,12 @@ public class StoreServiceImpl implements StoreService {
 		return "SUCCESS";
 	}
 
+	
+	@Override
+	public ArrayList<Item> getItemList(int storeId) {
+		return (ArrayList<Item>) itemDao.findByStoreId(storeId);
+	}
+	
 	@Override
 	public String itemUpdate(Item item, MultipartFile uploadFile) {
 		
@@ -153,6 +162,28 @@ public class StoreServiceImpl implements StoreService {
 			return "FAIL";
 		}
 
+		return "SUCCESS";
+	}
+
+	@Override
+	public String itemDelete(int itemId, int storeId) {
+		
+		Item item = itemDao.findByItemIdAndStoreId(itemId, storeId);
+		
+		// 기존 메뉴사진이 기본 이미지가 아닐 경우 기존 사진 제거
+		if(!item.getItemImgUrl().equals("menus/logo.jpg")) {
+			StringTokenizer st = new StringTokenizer(item.getItemImgUrl(), "/");
+			st.nextToken();
+			File deleteFile = new File(uploadPath + st.nextToken());
+			if(deleteFile.exists()) {
+				if(!deleteFile.delete()) {
+					return "FAIL";
+				}
+			}
+		}
+		
+		itemDao.delete(item);
+		
 		return "SUCCESS";
 	}
 }

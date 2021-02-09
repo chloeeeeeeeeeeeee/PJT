@@ -83,4 +83,10 @@ public class AccountServiceImpl implements AccountService{
 			return 0;
 		return userContributionCount;
 	}
+
+	@Override
+	public User userInfoById(String userId) {
+		User userInfoById = userDao.findByUserId(userId);
+		return userInfoById;
+	}
 }

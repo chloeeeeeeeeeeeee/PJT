@@ -1,6 +1,9 @@
 package com.ssafy.bab.service;
 
+import java.text.ParseException;
 import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import com.ssafy.bab.dto.Menu;
 import com.ssafy.bab.dto.StoreDetail;
@@ -16,5 +19,7 @@ public interface SupportService {
 	
 	//가게 메뉴 리스트
 	public List<Menu> getMenuList(int storeId) throws Exception;
+	
+	public void updateContribution() throws ParseException;
 	
 }

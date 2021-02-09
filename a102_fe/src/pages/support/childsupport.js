@@ -221,9 +221,16 @@ function ChildSupport() {
 
   // 후원된 음식 반환
   const supportMenuList = menuList.map((menu, index) => {
+    let lst = []
+    
+    for (let idx=0; idx<menu.itemAvailable; idx++){
+      lst.push(<FcLike/>)
+    }
+
     if (menu.itemAvailable > 0) {
       return (
-        <Col xs="12">{menu.itemName} : {menu.itemAvailable} * <FcLike /></Col>
+        <Col xs="12">{menu.itemName} : {lst} </Col>
+        // <Col xs="12">{menu.itemName} : {menu.itemAvailable} * <FcLike /></Col>
       );
     }
   });

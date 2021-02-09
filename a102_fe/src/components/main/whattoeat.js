@@ -7,10 +7,11 @@ import {
   CardBody,
   Button,
 } from "reactstrap";
-import oori from "../../assets/images/oori.png"
 import que from "../../assets/images/que.png"
 
 function Whattoeat() {
+
+    // 주석 처리 된 부분이 현재 위치 체크하는 부분~!
     
     // const axios = require("axios");
     // const config = {
@@ -95,31 +96,16 @@ function Whattoeat() {
     }
 
     return (
-        <Fragment>
-            <Container fluid={true}>
-                <Row  className="whattoeat">
-                <Col sm="6" md={{ size: 5, offset: 1 }}>
-                <Card>
-                    <CardBody sm="12" className="childimg">
-                        <img src={oori} />  
-                    </CardBody>
-                </Card>
-                </Col>
-                <Col sm="6" md={{ size: 5 }}>
-                <Card>
-                    <CardBody sm="12" className="childwte">
-                        <h1>오늘은 뭐 먹을까?</h1>
-                        {/* <p>현재 위치 사용에 동의해주셔야, 근처에 있는 음식점을 추천드려요! 동의하지 않으실 경우, 랜덤으로 추천 음식들을 보여드립니다.</p> */}
-                        <Button className="choosemenubutton" onClick={ChooseMenu}><img src={que}/></Button>
-                        <h2>같이</h2>
-                        <h2>{store}에서</h2>
-                        <h2>{menu}먹자!</h2>
-                    </CardBody>
-                </Card>
-                </Col>
-                </Row>
-            </Container>
-        </Fragment>
+        <Card>
+            <CardBody sm="12" className="childwte">
+                <h1>오늘은 뭐 먹을까?</h1>
+                {/* <p>현재 위치 사용에 동의해주셔야, 근처에 있는 음식점을 추천드려요! 동의하지 않으실 경우, 랜덤으로 추천 음식들을 보여드립니다.</p> */}
+                <Button className="choosemenubutton" onClick={ChooseMenu}><img src={que}/></Button>
+                <h2>같이</h2>
+                <h2>{store}에서</h2>
+                <h2>{menu}먹자!</h2>
+            </CardBody>
+        </Card>
     );
 }
 

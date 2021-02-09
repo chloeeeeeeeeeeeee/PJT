@@ -21,10 +21,15 @@ function Payment() {
       ? JSON.parse(localStorage.getItem("carts"))
       : []
   );
+  let [trigger, setTrigger] =useState(true)
 
   useEffect(() => {
     document.querySelector("#kakaoPaySelect").checked = true;
   }, []);
+
+  useEffect(()=>{
+    console.log("TRIGGER")
+  }, [trigger])
 
   const axios = require("axios");
   const jwtToken = localStorage.getItem("access-token")
@@ -38,6 +43,10 @@ function Payment() {
     }
     let paymentOption = document.querySelector("input[type='radio']:checked")
       .value;
+    let paymentMessage = document.querySelector("#paymentMsg").value.trim();
+    if (paymentMessage == "") {
+      paymentMessage = "든든하게 먹고다녀요";
+    }
     // 카카오
     if (paymentOption == "kakaoPay") {
       let data = {
@@ -47,11 +56,6 @@ function Payment() {
         totalCount: 0,
         isUser: 1,
       };
-
-      let paymentMessage = document.querySelector("#paymentMsg").value.trim();
-      if (paymentMessage == "") {
-        paymentMessage = "든든하게 먹고다녀요";
-      }
 
       let totalCount = 0;
       cartStorage.forEach((item) => {
@@ -64,13 +68,12 @@ function Payment() {
           support: 1,
           msg: paymentMessage,
         };
-        console.log(oneItem.msg);
         totalCount += item.itemCount;
         data.itemList.push(oneItem);
       });
       data.totalCount = totalCount;
 
-      console.log(data)
+      console.log(data);
 
       axios
         .post(`http://i4a102.p.ssafy.io:8080/app/payment/kakaopay`, data, {
@@ -92,16 +95,89 @@ function Payment() {
             `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`
           );
         });
-    } 
-    // 네이버 페이
-    else if(paymentOption == "naverPay"){
-        console.log("네이버페이")
-    } 
-    // 신용/체크카드
-    else if(paymentOption == "cardPay"){
-        console.log("아임포트")
     }
+    // 네이버 페이
+    else if (paymentOption == "naverPay") {
+      console.log("네이버페이");
 
+      let data = { "modelVersion": "1",
+      "merchantUserKey": "muserkey",
+      "merchantPayKey": "mpaykey",
+      "productName": "상품명",
+      "productCount": 10,
+      "totalPayAmount": 1000,
+      "deliveryFee": 2500,
+      "returnUrl": "{your-returnUrl}",
+      "webhookUrl": "{your-webhookUrl}",
+      "taxScopeAmount": 1000,
+      "taxExScopeAmount": 0,
+      "purchaserName": "구매자이름",
+      "purchaserBirthday": "20000101"}
+
+      axios.post(`https://dev.apis.naver.com/naverpay-partner/naverpay/payments/v2/reserve`, data, {headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "X-Naver-Client-Id":"",
+        "X-Naver-Client-Secret": ""
+    }})
+      
+    //   naverPayScript.src = "https://nsp.pay.naver.com/sdk/js/naverpay.min.js";
+    //   let naverPayScript = document.createElement("script");
+    //   naverPayScript.append(`var oPay = Naver.Pay.create({
+    //         "mode" : "development",
+    //         "clientId": "u86j4ripEt8LRfPGzQ8",
+    //         "payType" : "normal",
+    //         "openType" : "popup"
+    //     })`);
+    //     let totalCount = 0
+    //     let productList = []
+    //     cartStorage.forEach((item) => {
+    //         let oneItem = {
+    //             categoryType:'FOOD',
+    //             categoryId: 'DELIVERY',
+    //             uid: item.itemId,
+    //           count: item.itemCount,
+    //           name: item.itemName,
+    //         //   itemPrice: item.itemPrice,
+    //         //   storeId: item.storeId,
+    //         //   support: 1,
+    //         //   msg: paymentMessage,
+    //         };
+    //         totalCount += item.itemCount;
+    //         productList.push(oneItem);
+    //       });
+
+    //   naverPayScript.append(`oPay.open({
+    //     "merchantUserKey": "0000",
+    //     "productName": "후원 결제",
+    //     "productCount": ${totalCount}
+    //     "totalPayAmount": ${totalPrice},
+    //     "taxScopeAmount": ${totalPrice},
+    //     "taxExScopeAmount": 0,
+    //     "returnUrl": "/naverPayCheck",
+    //     "productItems":${JSON.stringify(productList)}
+    //   });`)
+    //   document.body.appendChild(naverPayScript)
+    //   setTrigger(!trigger)
+
+      //         <script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"
+      //     data-client-id="{#_clientId}"
+      //     data-mode="{#_mode}"
+      //     data-open-type="popup"
+      //     data-on-authorize="onNaverPayAuthorize"
+      //     data-merchant-user-key="{#_merchantUserKey}"
+      //     data-merchant-pay-key="{#_merchantPayKey}"
+      //     data-product-name="{#_productName}"
+      //     data-total-pay-amount="{#_totalPayAmount}"
+      //     data-tax-scope-amount="{#_taxScopeAmount}"
+      //     data-tax-ex-scope-amount="{#_taxExScopeAmount}"
+      //     data-return-url="{#_returnUrl}">
+      // </script>
+    }
+    // 신용/체크카드
+    else if (paymentOption == "cardPay") {
+      console.log("아임포트");
+    }
   }
 
   return (

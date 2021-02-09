@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-function PaymentCheck(props) {
+function KakaoPaymentCheck(props) {
 
   const pgToken = new URLSearchParams(props.location.search).get("pg_token");
   console.log(pgToken);
@@ -26,4 +26,4 @@ function PaymentCheck(props) {
   return <div className="paymentCheckContainer">결제 진행 중...</div>;
 }
 
-export default PaymentCheck;
+export default KakaoPaymentCheck;

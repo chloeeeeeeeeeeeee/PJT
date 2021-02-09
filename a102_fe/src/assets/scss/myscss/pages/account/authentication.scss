@@ -1,4 +1,9 @@
 /*======= Page Header css Start ======= */
+.mainBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .page-wrapper {
   .page-main-header {
     background-color: $main-header-bg-color;
@@ -59,11 +64,11 @@
 
 .authentication-main {
   .auth-innerright {
-    .card-body {
-      .theme-form {
-        width: calc(100% - 290px);
-      }
-    }
+    // .card-body {
+    //   .theme-form {
+    //     width: calc(100% - 290px);
+    //   }
+    // }
     .authentication-box {
       height: 85vh;
       display: flex;

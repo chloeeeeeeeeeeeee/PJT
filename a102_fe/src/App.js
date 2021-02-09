@@ -17,6 +17,7 @@ import ChildSupport from "./pages/support/childsupport";
 import Main from "./pages/main/main";
 import Support from "./pages/support/support";
 import Authentication from "./pages/account/authentication";
+import Signout from "./pages/account/signout";
 import Profile from "./pages/account/profile";
 import StoreDetail from "./pages/support/storeDetail";
 import QnaCreate from "./pages/qna/qnacreate";
@@ -39,6 +40,7 @@ function App() {
             {/* 후원자 View */}
             <Route exact path="/" component={Main} />
             <Route path="/auth" component={Authentication} />
+            <Route path="/signout" component={Signout} />
             <Route path="/support" component={Support} />
             <Route path="/map" component={Support} />
             <Route path="/storedetail/:storeId" component={StoreDetail} />
@@ -69,7 +71,7 @@ function PrivateRoute({ children, ...rest }) {
       {...rest}
       render={({ location }) =>
         // localStorage.getItem("access-token") !== 'undefined' ? (
-        localStorage.getItem("access-token") !== "undefined" ? (
+        Boolean(localStorage.getItem("access-token")) ? (
           // auth.user ? (
           // 다만 PrivateRoute가 받는 children이 뭔지 모르겠네...
           children

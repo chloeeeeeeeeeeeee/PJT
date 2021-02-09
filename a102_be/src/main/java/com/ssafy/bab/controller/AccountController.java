@@ -36,6 +36,7 @@ public class AccountController {
 	@Autowired
 	private JwtService jwtService;
 	
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	
@@ -53,21 +54,40 @@ public class AccountController {
 		return new ResponseEntity<User>(userResult, HttpStatus.OK);
 	}
 	
-	//회원가입
+	//회원가입카카오
 	@PostMapping("/signupkakao")
-	public ResponseEntity<User> signUpKakao(@RequestBody User user) {
-		user.setUserId("Kakao@"+user.getUserId());
+	public ResponseEntity<JwtService.TokenRes> signUpKakao(@RequestBody User user) {
+		String pwd = user.getUserId();
 		user.setUserPwd(user.getUserId());
+		user.setUserId("Kakao@"+user.getUserId());
+		user.setUserName("Guest");
+		user.setUserEmail(user.getUserId());
+		user.setUserPhone(user.getUserId());
 		
 		User userResult = userService.signUp(user);
-		if(userResult == null)
-			return new ResponseEntity<User>(userResult, HttpStatus.BAD_REQUEST);
-		return new ResponseEntity<User>(userResult, HttpStatus.OK);
+		if(userResult != null) {
+			User userKakao = userService.userInfoById(user.getUserId());
+			if (userKakao != null) {
+				JwtService.TokenRes signInJwt = authService.signIn(user.getUserId(), pwd);
+
+				if(signInJwt == null) {
+					return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+				}
+				return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
+			}
+			else {
+				JwtService.TokenRes signInJwt = null;
+				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+			}
+		}
+		JwtService.TokenRes signInJwt = null;
+		return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
 	}
 
 	//로그인(임시)
 	@PostMapping("/signin")
 	public ResponseEntity<User> signIn(@RequestBody User user) {
+		
 		User userResult = userService.signIn(user.getUserId(), user.getUserPwd());
 		if(userResult == null) {
 			return new ResponseEntity<User>(userResult,HttpStatus.BAD_REQUEST);
@@ -96,7 +116,6 @@ public class AccountController {
 		User userKakao = userService.userInfoById(user.getUserId());
 		
 		if (userKakao != null) {
-			System.out.println(user.getUserId()+" "+user.getUserPwd());
 			JwtService.TokenRes signInJwt = authService.signIn(user.getUserId(), user.getUserPwd());
 
 			if(signInJwt == null) {
@@ -108,6 +127,20 @@ public class AccountController {
 		else {
 			JwtService.TokenRes signInJwt = null;
 			return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	//중복확인
+	@PostMapping("/userdupli")
+	public ResponseEntity<User> userDupli(@RequestBody User user, HttpServletRequest req){
+		User userNow = userService.userInfoById(user.getUserId());
+		
+		if(userNow == null) {
+			return new ResponseEntity<User>(userNow, HttpStatus.OK);
+		}
+		else {
+			userNow.setUserPwd(null);
+			return new ResponseEntity<User>(userNow, HttpStatus.BAD_REQUEST);
 		}
 	}
 	

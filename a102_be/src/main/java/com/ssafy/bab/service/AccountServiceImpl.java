@@ -39,7 +39,7 @@ public class AccountServiceImpl implements AccountService{
 		User userResult = user;
 		userResult.setUserPwd(passwordEncoding.encode(user.getUserPwd()));
 		userDao.save(userResult);
-		userResult.setUserPwd(null);
+		//userResult.setUserPwd(null);
 		return userResult;
 	}
 
@@ -89,4 +89,8 @@ public class AccountServiceImpl implements AccountService{
 		User userInfoById = userDao.findByUserId(userId);
 		return userInfoById;
 	}
+
+
+	
+	
 }

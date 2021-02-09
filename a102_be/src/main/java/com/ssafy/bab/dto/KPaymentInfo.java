@@ -12,7 +12,7 @@ public class KPaymentInfo {
 	private List<PaymentItem> itemList;
 	private int totalCount;
 	private int totalAmount;
-	private int isUser;	
+	private int isKiosk;
 	
-	private Contributor contributor;
+	private String contributorPhone;
 }

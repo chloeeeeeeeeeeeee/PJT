@@ -156,7 +156,7 @@ public class SupportServiceImpl implements SupportService {
 	@Override
 	public List<Menu> getMenuList(int storeId) throws Exception {
 		ArrayList<Menu> menuList = new ArrayList<Menu>();
-		ArrayList<Item> itemList = itemDao.findByStore_StoreId(storeId);
+		ArrayList<Item> itemList = itemDao.findByStoreId(storeId);
 		for (Item item : itemList) {
 			Menu menu = new Menu();
 			menu.setStoreId(storeId);

@@ -61,7 +61,7 @@ public class PaymentController {
         return kakaoPayService.kakaoPayReady(paymentInfo);
 	}
 	
-	@GetMapping("/kakaopaySucess")
+	@GetMapping("/kakaopaySuccess")
 	public KakaoPaySuccessData kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
 		logger.info("kakaoPaySuccess get............................................");
 		logger.info("kakaoPaySuccess pg_token : " + pg_token);

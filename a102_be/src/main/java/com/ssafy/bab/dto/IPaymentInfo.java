@@ -13,7 +13,6 @@ public class IPaymentInfo {
 	
 	private List<PaymentItem> itemList;
 	private int userSeq;
-	private int isUser;	
 	
-	private Contributor contributor;
+	private String contributorPhone;
 }

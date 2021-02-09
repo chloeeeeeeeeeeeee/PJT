@@ -9,9 +9,9 @@ import lombok.Data;
 @Data
 public class ItemPK implements Serializable{
 
-//	@Column
+	@Column
 	private int storeId;	// Item.store 매핑
-//	@Column
+	@Column
 	private int itemId;		// Item.itemId 매핑
 	
 	

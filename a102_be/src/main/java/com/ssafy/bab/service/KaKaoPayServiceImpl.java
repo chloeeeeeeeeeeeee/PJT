@@ -27,13 +27,13 @@ import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.Contribution;
 import com.ssafy.bab.dto.Contributor;
 import com.ssafy.bab.dto.Item;
+import com.ssafy.bab.dto.KPaymentInfo;
 import com.ssafy.bab.dto.KakaoPayApproval;
 import com.ssafy.bab.dto.KakaoPayInfo;
 import com.ssafy.bab.dto.KakaoPayReady;
 import com.ssafy.bab.dto.KakaoPaySuccessData;
 import com.ssafy.bab.dto.Orders;
 import com.ssafy.bab.dto.Payment;
-import com.ssafy.bab.dto.KPaymentInfo;
 import com.ssafy.bab.dto.PaymentItem;
 import com.ssafy.bab.dto.StoreVariables;
 import com.ssafy.bab.dto.User;
@@ -47,8 +47,11 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 	@Value("${Kakao.APP_ADMIN_KEY}")
 	private String APP_ADMIN_KEY;
 	
-	@Value("${Kakao.RETURN_URL}")
-	private String RETURN_URL;
+	@Value("${Kakao.KIOSK_RETURN_URL}")
+	private String KIOSK_RETURN_URL;
+	
+	@Value("${Kakao.WEB_RETURN_URL}")
+	private String WEB_RETURN_URL;
 	
 	@Autowired
 	PaymentDao paymentDao;
@@ -108,10 +111,11 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 			item_name += " 외 " + (paymentInfo.getTotalCount() - 1) + "건";
 		}
 
-		// 키오스크 회원 기부일 경우 핸드폰 번호로 userSeq를 구해와서 paymentInfo에 userSeq 설정
-        if(paymentInfo.getIsUser() == 1 && paymentInfo.getContributor() != null) {
-        	User user = userDao.findByUserPhone(paymentInfo.getContributor().getContributorPhone());
-        	paymentInfo.setUserSeq(user.getUserSeq());
+		// 키오스크 기부이고 익명기부가 아니면서 회원일 경우 user 정보 추가
+        if(paymentInfo.getIsKiosk() == 1 && paymentInfo.getContributorPhone() != null) {
+        	User user = userDao.findByUserPhone(paymentInfo.getContributorPhone());
+        	if(user != null)
+        		paymentInfo.setUserSeq(user.getUserSeq());
         }
 		
         // 유저번호 설정
@@ -126,9 +130,22 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 		params.add("quantity", Integer.toString(paymentInfo.getTotalCount())); 				// 상품 총 개수
 		params.add("total_amount", Integer.toString(paymentInfo.getTotalAmount())); 		// 상품 총 금액
 		params.add("tax_free_amount", "0"); 												// 상품 비과세 금액
-		params.add("approval_url", RETURN_URL + "/payment/kakaopaySucess"); 		// 성공
-		params.add("cancel_url", RETURN_URL + "/payment//kakaopayCancel"); 			// 취소
-		params.add("fail_url", RETURN_URL + "/payment/kakaopayFail"); 				// 실패
+		
+		if(paymentInfo.getIsKiosk() == 1) {
+			params.add("approval_url", KIOSK_RETURN_URL + "/paymentCheck"); 				// 성공
+			params.add("cancel_url", KIOSK_RETURN_URL + "/payment/kakaopayCancel"); 		// 취소
+			params.add("fail_url", KIOSK_RETURN_URL + "/payment/kakaopayFail"); 			// 실패
+		}else {
+			params.add("approval_url", WEB_RETURN_URL + "/paymentCheck"); 					// 성공
+			params.add("cancel_url", WEB_RETURN_URL + "/payment/kakaopayCancel"); 			// 취소
+			params.add("fail_url", WEB_RETURN_URL + "/payment/kakaopayFail"); 				// 실패
+		}
+		
+		//test
+//		params.add("approval_url", KIOSK_RETURN_URL + "/payment/kakaopaySuccess");		// 성공
+//		params.add("cancel_url", KIOSK_RETURN_URL + "/payment/kakaopayCancel"); 		// 취소
+//		params.add("fail_url", KIOSK_RETURN_URL + "/payment/kakaopayFail"); 			// 실패
+		
 		HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(params, headers()); 
 		try { 
 			kakaoPayReady = restTemplate.postForObject(new URI(HOST + "/v1/payment/ready"), body, KakaoPayReady.class);
@@ -187,14 +204,13 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 			
             // 키오스크/웹 비회원 기부일 경우 contributor에 해당 기부자 정보가 들어감 (그 외의 경우는 null)
             Contributor contributor = null;
-            if(kakaoPayInfo.getPaymentInfo().getIsUser() == 0 && kakaoPayInfo.getPaymentInfo().getContributor() != null) {
-            	contributor = contributorDao.findByContributorPhone(kakaoPayInfo.getPaymentInfo().getContributor().getContributorPhone());
+            if(user == null && kakaoPayInfo.getPaymentInfo().getContributorPhone() != null) {
+            	contributor = contributorDao.findByContributorPhone(kakaoPayInfo.getPaymentInfo().getContributorPhone());
+            	
+            	// 핸드폰번호로 조회했을 때 일치하는 비회원정보가 없을 경우 새 contributor로 추가 
                 if(contributor == null) {
                 	contributor = new Contributor();
-                	contributor.setContributorBirth(kakaoPayInfo.getPaymentInfo().getContributor().getContributorBirth());
-                	contributor.setContributorGender(kakaoPayInfo.getPaymentInfo().getContributor().getContributorGender());
-                	contributor.setContributorName(kakaoPayInfo.getPaymentInfo().getContributor().getContributorName());
-                	contributor.setContributorPhone(kakaoPayInfo.getPaymentInfo().getContributor().getContributorPhone());
+                	contributor.setContributorPhone(kakaoPayInfo.getPaymentInfo().getContributorPhone());
                 	contributorDao.save(contributor);
                 }
             }
@@ -216,6 +232,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 						contribution.setContributionDate(kakaoPayApproval.getApproved_at());
 						contribution.setContributionUse(0);
 						contribution.setPayment(payment);
+						contribution.setContributionMessage(paymentItem.getMsg());
 						contributionDao.save(contribution);
 					
 					}

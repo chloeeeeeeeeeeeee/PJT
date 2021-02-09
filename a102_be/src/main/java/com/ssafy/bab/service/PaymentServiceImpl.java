@@ -73,14 +73,11 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		// 비회원 기부일 경우 contributor에 해당 기부자 정보가 들어감 (그 외의 경우는 null)
 		Contributor contributor = null;
-		if(paymentInfo.getUserSeq() == -1 && paymentInfo.getContributor() != null) {
-			contributor = contributorDao.findByContributorPhone(paymentInfo.getContributor().getContributorPhone());
+		if(paymentInfo.getUserSeq() == -1 && paymentInfo.getContributorPhone() != null) {
+			contributor = contributorDao.findByContributorPhone(paymentInfo.getContributorPhone());
 			if(contributor == null) {
 				contributor = new Contributor();
-				contributor.setContributorBirth(paymentInfo.getContributor().getContributorBirth());
-            	contributor.setContributorGender(paymentInfo.getContributor().getContributorGender());
-            	contributor.setContributorName(paymentInfo.getContributor().getContributorName());
-            	contributor.setContributorPhone(paymentInfo.getContributor().getContributorPhone());
+            	contributor.setContributorPhone(paymentInfo.getContributorPhone());
             	contributorDao.save(contributor);
 			}
 		}
@@ -100,6 +97,7 @@ public class PaymentServiceImpl implements PaymentService {
 				contribution.setContributionDate(tradeConfirmYmdt);
 				contribution.setContributionUse(0);
 				contribution.setPayment(payment);
+				contribution.setContributionMessage(paymentItem.getMsg());
 				contributionDao.save(contribution);
 			
 			}
@@ -150,15 +148,12 @@ public class PaymentServiceImpl implements PaymentService {
 
 		// 비회원 기부일 경우 contributor에 해당 기부자 정보가 들어감 (그 외의 경우는 null)
 		Contributor contributor = null;
-		if (paymentInfo.getUserSeq() == -1 && paymentInfo.getContributor() != null) {
-			contributor = contributorDao.findByContributorPhone(paymentInfo.getContributor().getContributorPhone());
-			if (contributor == null) {
+		if(paymentInfo.getUserSeq() == -1 && paymentInfo.getContributorPhone() != null) {
+			contributor = contributorDao.findByContributorPhone(paymentInfo.getContributorPhone());
+			if(contributor == null) {
 				contributor = new Contributor();
-				contributor.setContributorBirth(paymentInfo.getContributor().getContributorBirth());
-				contributor.setContributorGender(paymentInfo.getContributor().getContributorGender());
-				contributor.setContributorName(paymentInfo.getContributor().getContributorName());
-				contributor.setContributorPhone(paymentInfo.getContributor().getContributorPhone());
-				contributorDao.save(contributor);
+            	contributor.setContributorPhone(paymentInfo.getContributorPhone());
+            	contributorDao.save(contributor);
 			}
 		}
 
@@ -179,6 +174,7 @@ public class PaymentServiceImpl implements PaymentService {
 				contribution.setContributionDate(date);
 				contribution.setContributionUse(0);
 				contribution.setPayment(payment);
+				contribution.setContributionMessage(paymentItem.getMsg());
 				contributionDao.save(contribution);
 
 			}

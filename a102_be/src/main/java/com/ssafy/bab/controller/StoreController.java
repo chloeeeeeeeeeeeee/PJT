@@ -1,5 +1,6 @@
 package com.ssafy.bab.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,9 +48,9 @@ public class StoreController {
 	
 	
 	@ApiOperation(value = "가게 기본 정보 ", notes = "가게 기본 정보를 반환한다", response = String.class)
-	@GetMapping("basicinfo")
+	@GetMapping("/basicinfo")
 	public ResponseEntity<MyStore> storeBasicInfo(HttpServletRequest req) throws Exception {
-		logger.info("itemCreate_Store - 호출");
+		logger.info("basicinfo_Store - 호출");
 		
 		MyStore result = null;
 		
@@ -65,7 +66,31 @@ public class StoreController {
         result = storeService.getMyStore(user.getStore().getStoreId());
         return new ResponseEntity<MyStore>(result, HttpStatus.OK);
 
+	}
+	
+	@ApiOperation(value = "가게 후원 내역 ", notes = "startDate와 endDate를 받아와 해당 기간의 후원 내역을 반환한다.", response = String.class)
+	@PostMapping("contributionlist")
+	public ResponseEntity<String> storeContribution(@RequestParam(required = true) String startDate, @RequestParam(required = true) String endDate, HttpServletRequest req) throws Exception {
+		logger.info("itemCreate_Store - 호출");
 		
+		
+		
+		return new ResponseEntity<String>(startDate, HttpStatus.OK);
+
+//		MyStore result = null;
+//		
+//		String jwt = req.getHeader("token");
+//        int userSeq = jwtService.decode(jwt);
+//        User user = userDao.findByUserSeq(userSeq);
+//        
+//        // user 정보가 없거나, 후원 가게 사장이 아니라면 잘못된 요청임
+//		if(user == null || user.getStore() == null) {
+//			return new ResponseEntity<MyStore>(result, HttpStatus.BAD_REQUEST);
+//		}
+//     
+//        result = storeService.getMyStore(user.getStore().getStoreId());
+//        return new ResponseEntity<MyStore>(result, HttpStatus.OK);
+
 	}
 	
 	@ApiOperation(value = "가게 메뉴 추가 ", notes = "itemName, itemPrice, (메뉴 사진)을 입력받아 메뉴등록", response = String.class)

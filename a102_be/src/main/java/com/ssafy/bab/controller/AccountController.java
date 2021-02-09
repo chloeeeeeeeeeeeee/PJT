@@ -187,7 +187,19 @@ public class AccountController {
 		return new ResponseEntity<List<Contribution>>(userContribution, HttpStatus.OK);
 	}
 	
-	
+	//중복확인
+    @PostMapping("/userdupli")
+    public ResponseEntity<User> userDupli(@RequestBody User user, HttpServletRequest req){
+        User userNow = userService.userInfoById(user.getUserId());
+        
+        if(userNow == null) {
+            return new ResponseEntity<User>(userNow, HttpStatus.OK);
+        }
+        else {
+            userNow.setUserPwd(null);
+            return new ResponseEntity<User>(userNow, HttpStatus.BAD_REQUEST);
+        }
+    }
 	
 	
 }

@@ -45,15 +45,17 @@ function ChildSupport() {
     if (index === 0) {
       return (
         <Col
-          className="categoryListItem selectedCategoryListItem"
+          className="categoryListItem selectedChildCategoryListItem"
           key={index}
           onClick={(e) => {
             setSelectedCategory(index);
-            if (!e.target.classList.contains("selectedCategoryListItem")) {
+            // selectedCategory = category;
+            if (!e.target.classList.contains("selectedChildCategoryListItem")) {
               document
-                .getElementsByClassName("selectedCategoryListItem")[0]
-                .classList.remove("selectedCategoryListItem");
-              e.target.classList.add("selectedCategoryListItem");
+                .getElementsByClassName("selectedChildCategoryListItem")[0]
+                .classList.remove("selectedChildCategoryListItem");
+              e.target.classList.add("selectedChildCategoryListItem");
+              //   changeComponents();
             }
           }}
         >
@@ -67,11 +69,13 @@ function ChildSupport() {
         key={index}
         onClick={(e) => {
           setSelectedCategory(index);
-          if (!e.target.classList.contains("selectedCategoryListItem")) {
+          // selectedCategory = category;
+          if (!e.target.classList.contains("selectedChildCategoryListItem")) {
             document
-              .getElementsByClassName("selectedCategoryListItem")[0]
-              .classList.remove("selectedCategoryListItem");
-            e.target.classList.add("selectedCategoryListItem");
+              .getElementsByClassName("selectedChildCategoryListItem")[0]
+              .classList.remove("selectedChildCategoryListItem");
+            e.target.classList.add("selectedChildCategoryListItem");
+            // changeComponents();
           }
         }}
       >
@@ -230,7 +234,6 @@ function ChildSupport() {
     if (menu.itemAvailable > 0) {
       return (
         <Col xs="12">{menu.itemName} : {lst} </Col>
-        // <Col xs="12">{menu.itemName} : {menu.itemAvailable} * <FcLike /></Col>
       );
     }
   });
@@ -244,7 +247,7 @@ function ChildSupport() {
         </Col>
       </Row>
       <Row className="supportContent">
-        <Col sm="12" md={{ size: 4, offset: 1 }} className="supportContentLeft">
+        <Col sm="12" md={{ size: 4, offset: 1 }} className="supportChildContentLeft">
           {/* 검색 */}
           <InputGroup>
             <Input
@@ -272,12 +275,12 @@ function ChildSupport() {
         <Col sm="6" md="4" className="supportBox">
           {/* 매장 리스트 */}
           <h5>가게 목록</h5>
-          <Row className="storeListBox">
+          <Row className="storeChildListBox">
             {storeListComponents}
           </Row>
           {/* 후원 음식 리스트 */}
           <h5>음식 목록</h5>
-          <Row className="storeSupportBox">
+          <Row className="storeChildSupportBox">
             <Row className="storeMenuItem mb-2 row justify-content-between">
               {supportMenuList}
             </Row>

@@ -21,10 +21,10 @@ import {
     console.log(props.match.params.storeId);
   
     return (
-        <Col className="mt-3 storeDetailBox row justify-content-center">
-          <StoreDetailInfo storeInfo={storeId}></StoreDetailInfo>
-          <SupportCart storeInfo={storeId} />
-        </Col>
+        <Row className="mt-3 storeDetailBox row justify-content-center">
+            <StoreDetailInfo storeInfo={storeId}/>
+            <SupportCart storeInfo={storeId} />
+        </Row>
     );
   }
   

@@ -47,13 +47,16 @@ function Header() {
               <NavLink href="/support"> 후원하기 </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/profile"> 마이페이지 </NavLink>
-            </NavItem>
-            <NavItem>
               <NavLink href="/qna"> 문의하기 </NavLink>
             </NavItem>
+            {Boolean(localStorage.getItem("access-token")) ?
             <NavItem>
-                {Boolean(localStorage.getItem("access-token")) ? <NavLink href="/signout"><b>로그아웃</b></NavLink> : <NavLink href="/auth"><b>함께하기</b></NavLink> }
+              <NavLink href="/profile"> 마이페이지 </NavLink>
+            </NavItem>
+            : ""
+            }
+            <NavItem>
+                {Boolean(localStorage.getItem("access-token")) ? <NavLink href="/signout">로그아웃</NavLink> : <NavLink href="/auth"><b>함께하기</b></NavLink> }
             </NavItem>
           </Nav>
           )

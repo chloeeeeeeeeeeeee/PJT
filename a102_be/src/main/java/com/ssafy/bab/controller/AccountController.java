@@ -96,7 +96,6 @@ public class AccountController {
 		User userKakao = userService.userInfoById(user.getUserId());
 		
 		if (userKakao != null) {
-			System.out.println(user.getUserId()+" "+user.getUserPwd());
 			JwtService.TokenRes signInJwt = authService.signIn(user.getUserId(), user.getUserPwd());
 
 			if(signInJwt == null) {
@@ -108,6 +107,19 @@ public class AccountController {
 		else {
 			JwtService.TokenRes signInJwt = null;
 			return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/userdupil")
+	public ResponseEntity<User> userDupil(@RequestBody User user, HttpServletRequest req){
+		User userNow = userService.userInfoById(user.getUserId());
+		
+		if(userNow == null) {
+			return new ResponseEntity<User>(userNow, HttpStatus.OK);
+		}
+		else {
+			userNow.setUserPwd(null);
+			return new ResponseEntity<User>(userNow, HttpStatus.BAD_REQUEST);
 		}
 	}
 	

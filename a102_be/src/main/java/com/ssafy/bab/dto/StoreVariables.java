@@ -18,11 +18,14 @@ import lombok.ToString;
 @ToString
 @Entity
 public class StoreVariables implements Serializable{
+	
 	@Id
 	private int storeId;
+	
 	private int storeItemAvailable;
 	private int storeItemTotal;
 	private int storeTotalContributionAmount;
+	private int storeSettlementDay;
 	
 	//단방향 매핑
 //	@OneToOne

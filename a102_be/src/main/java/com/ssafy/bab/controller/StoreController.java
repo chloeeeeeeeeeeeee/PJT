@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.Item;
+import com.ssafy.bab.dto.MyStore;
 import com.ssafy.bab.dto.User;
 import com.ssafy.bab.service.JwtService;
 import com.ssafy.bab.service.StoreService;
@@ -45,7 +46,29 @@ public class StoreController {
 	private StoreService storeService;
 	
 	
-	@ApiOperation(value = "가게 메뉴 추가 ", notes = "itemName, itemPrice, (supportPrice, 메뉴 사진)을 입력받아 메뉴등록", response = String.class)
+	@ApiOperation(value = "가게 기본 정보 ", notes = "가게 기본 정보를 반환한다", response = String.class)
+	@GetMapping("basicinfo")
+	public ResponseEntity<MyStore> storeBasicInfo(HttpServletRequest req) throws Exception {
+		logger.info("itemCreate_Store - 호출");
+		
+		MyStore result = null;
+		
+		String jwt = req.getHeader("token");
+        int userSeq = jwtService.decode(jwt);
+        User user = userDao.findByUserSeq(userSeq);
+        
+        // user 정보가 없거나, 후원 가게 사장이 아니라면 잘못된 요청임
+		if(user == null || user.getStore() == null) {
+			return new ResponseEntity<MyStore>(result, HttpStatus.BAD_REQUEST);
+		}
+     
+        result = storeService.getMyStore(user.getStore().getStoreId());
+        return new ResponseEntity<MyStore>(result, HttpStatus.OK);
+
+		
+	}
+	
+	@ApiOperation(value = "가게 메뉴 추가 ", notes = "itemName, itemPrice, (메뉴 사진)을 입력받아 메뉴등록", response = String.class)
 	@PostMapping("/item/create")
 	public ResponseEntity<String> itemCreate(@ApiParam(value = "storeName, storePrice, (supportPrice)", required = true) Item item, 
 			@ApiParam(value = "메뉴 사진", required = false) @RequestParam(value="file", required = false) MultipartFile file,
@@ -56,7 +79,7 @@ public class StoreController {
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
-        User user = userDao.findByUserSeq(3);
+        User user = userDao.findByUserSeq(userSeq);
         
         // user 정보가 없거나, 후원 가게 사장이 아니거나, 메뉴 이름 또는 가격이 없다면 잘못된 요청임
 		if(user == null || user.getStore() == null || user.getStore().getStoreKiosk() == 0 || item.getItemName() == null || item.getItemPrice() == null) {
@@ -71,7 +94,7 @@ public class StoreController {
 		
 	}
 	
-	@ApiOperation(value = "가게 메뉴 리스트 가져오기", notes = "itemName, itemPrice, (supportPrice, 메뉴 사진)을 입력받아 메뉴등록", response = String.class)
+	@ApiOperation(value = "가게 메뉴 리스트 가져오기", notes = "메뉴 리스트 가져오기", response = String.class)
 	@GetMapping("/itemlist")
 	public ResponseEntity<List<Item>> itemList(HttpServletRequest req) throws Exception {
 		logger.info("itemCreate_Store - 호출");
@@ -80,7 +103,7 @@ public class StoreController {
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
-        User user = userDao.findByUserSeq(3);
+        User user = userDao.findByUserSeq(userSeq);
         
         // user 정보가 없거나, 후원 가게 사장이 아니거나, 메뉴 이름 또는 가격이 없다면 잘못된 요청임
 		if(user == null || user.getStore() == null || user.getStore().getStoreKiosk() == 0) {
@@ -93,7 +116,7 @@ public class StoreController {
 		
 	}
 	
-	@ApiOperation(value = "가게 메뉴 수정", notes = "itemId, itemName, itemPrice, supportPrice, itemImgUrl, (메뉴사진)을 입력받아 메뉴수정 ", response = String.class)
+	@ApiOperation(value = "가게 메뉴 수정", notes = "itemId, itemName, itemPrice, itemImgUrl, (메뉴사진)을 입력받아 메뉴수정 ", response = String.class)
 	@PostMapping("/item/update")
 	public ResponseEntity<String> itemUpdate(@ApiParam(value = "itemId, storeId, 메뉴 이름, 가격, (후원 가격)", required = true) Item item, 
 			@ApiParam(value = "메뉴 사진", required = false) @RequestParam(value="file", required = false) MultipartFile file,
@@ -104,7 +127,7 @@ public class StoreController {
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
-        User user = userDao.findByUserSeq(3);
+        User user = userDao.findByUserSeq(userSeq);
         
         // user 정보가 없거나, 후원 가게 사장이 아니거나 itemName, itemPrice, imgURL중 빈 값이 있다면 잘못된 요청임
 		if(user == null || user.getStore() == null || user.getStore().getStoreKiosk() == 0 || item.getItemId() == 0 || item.getItemName() == null || item.getItemPrice() == null || item.getItemImgUrl() == null) {
@@ -128,7 +151,7 @@ public class StoreController {
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
-        User user = userDao.findByUserSeq(3);
+        User user = userDao.findByUserSeq(userSeq);
         
         // user 정보가 없거나, 후원 가게 사장이 아니거나 itemId가 없다면 잘못된 요청임
 		if(user == null || user.getStore() == null || user.getStore().getStoreKiosk() == 0 || itemId == 0) {

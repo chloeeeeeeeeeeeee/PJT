@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.bab.dto.Item;
+import com.ssafy.bab.dto.MyStore;
 
 public interface StoreService {
 
+	// 가게 기본 정보 반환
+	public MyStore getMyStore(int storeId);
+	
 	// 메뉴 추가
 	public String itemCreate(Item item, MultipartFile uploadFile);
 

@@ -1,11 +1,10 @@
-// 여기에 메뉴 리스트 등등이 들어가겠지? 나는 여기에다가 delete를 만들 생각이야 그래서 푸쉬를 해보았어.
-// 경로 설정은 안했고, 그냥 파일만 만들어봤어...! 본혁과의 충돌 원하지 않아!
-
 import { useState, useEffect } from "react";
 import { Card, CardBody, CardHeader, Button } from "reactstrap";
 import StoreMenuItem from "../store/storeMenuItem";
 
 function StoreMenuList({ sendTriggerToParent }) {
+  console.log("trigger is what?", sendTriggerToParent);
+
   function moveToCreatePage() {
     window.location.href = "/menucreate";
   }
@@ -35,6 +34,7 @@ function StoreMenuList({ sendTriggerToParent }) {
           console.log(res.data);
           setStoreMenuItem(
             res.data.map((item, index) => {
+              if (index > 53){
               return (
                 <StoreMenuItem
                   storeMenu={item}
@@ -42,6 +42,7 @@ function StoreMenuList({ sendTriggerToParent }) {
                   sendTriggerToParent={sendTriggerToParent}
                 ></StoreMenuItem>
               );
+              }
             })
           );
         }

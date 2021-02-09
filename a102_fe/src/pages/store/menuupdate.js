@@ -17,14 +17,8 @@ function MenuUpdate() {
   let [menu, setMenu] = useState(window.history.state);
   let [name, setName] = useState(window.history.state.itemName);
   let [price, setPrice] = useState(window.history.state.itemPrice);
-  let [img, setImage] = useState(null);
+  let [img, setImage] = useState(window.history.state.files);
   let [imgUrl, setImgUrl] = useState(window.history.state.itemImgUrl);
-
-  // 이미지 수정 관련
-  // list생기면 추후 수정할게요! 금방할 것 같아서!
-  // 새로운 메뉴사진 업로드 : itemImgUrl = 원래 itemImgUrl 그대로, 파일첨부 o
-  // 메뉴사진 삭제 : itemImgUrl = "noImage", 파일첨부x
-  // 메뉴사진 수정x : itemImgUrl = 원래 itemImgUrl 그대로, 파일첨부x
 
   const Update = (event) => {
     event.preventDefault();
@@ -43,7 +37,7 @@ function MenuUpdate() {
       console.log(value);
     }
 
-    fetch(`http://i4a102.p.ssafy.io:8080/app/store/item/create`, {
+    fetch(`http://i4a102.p.ssafy.io:8080/app/store/item/update`, {
         method: "POST",
         headers: {
             token: localStorage.getItem('access-token'),
@@ -54,7 +48,7 @@ function MenuUpdate() {
       console.log(res);
       if (res.status === 200){
         alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
-        // window.location.href = '관리자 뷰로 가야겠죠~!';
+        window.location.href = '/storeadmin';
       }
       else{
         alert("오류");
@@ -75,6 +69,10 @@ function MenuUpdate() {
   const onImgChange = (event) => {
     setImage(event.target.files[0]);
     console.log(event.target.files[0]);
+  }
+
+  const DeleteImg = (event) => {
+    setImgUrl("noImage");
   }
 
   return (
@@ -110,7 +108,8 @@ function MenuUpdate() {
                       />
                     </FormGroup>
                     <FormGroup>
-                      <Label for="menuImg">사진</Label>
+                      <Label for="menuImg">사진 {imgUrl}</Label>
+                      <Button onClick={DeleteImg}>삭제</Button>
                       <Input
                         className="createTitle"
                         type="file"

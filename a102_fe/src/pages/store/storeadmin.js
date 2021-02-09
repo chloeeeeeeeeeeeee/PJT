@@ -2,13 +2,10 @@ import { useState, useEffect } from "react";
 import { Col } from "reactstrap";
 import StoreDetailInfo from "../../components/support/storeDetailInfo";
 import StoreMenuList from "../../components/store/storeMenuList";
+import StoreSupportList from "../../components/store/storeSupportList";
 
 function StoreAdmin() {
-  let [trigger, setTrigger] = useState(true);
-
-  function sendTriggerToParent() {
-    setTrigger(!trigger);
-  }
+  
 
   const jwtToken = localStorage.getItem("access-token")
     ? localStorage.getItem("access-token")
@@ -38,12 +35,13 @@ function StoreAdmin() {
           );
         }
       });
-  }, [trigger]);
+  }, []);
 
   return (
     <Col className="storeAdminContainer row">
       {storeDetailComponent}
-      <StoreMenuList sendTriggerToParent={sendTriggerToParent} />
+      <StoreMenuList />
+      <StoreSupportList></StoreSupportList>
     </Col>
   );
 }

@@ -2,8 +2,13 @@ import { useState, useEffect } from "react";
 import { Card, CardBody, CardHeader, Button } from "reactstrap";
 import StoreMenuItem from "../store/storeMenuItem";
 
-function StoreMenuList({ sendTriggerToParent }) {
-  console.log("trigger is what?", sendTriggerToParent);
+function StoreMenuList() {
+  let [trigger, setTrigger] = useState(true);
+
+  function sendTriggerToParent() {
+      console.log("TRIGGER!!!!")
+    setTrigger(!trigger);
+  }
 
   function moveToCreatePage() {
     window.location.href = "/menucreate";
@@ -47,7 +52,7 @@ function StoreMenuList({ sendTriggerToParent }) {
           );
         }
       });
-  }, []);
+  }, [trigger]);
 
   return (
     <Card className="storeMenuList col-7 p-0">

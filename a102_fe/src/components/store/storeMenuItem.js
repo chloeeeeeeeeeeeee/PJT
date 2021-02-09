@@ -1,29 +1,32 @@
 import { AiOutlineReload } from "react-icons/ai";
 import { Row, Button } from "reactstrap";
 
-function StoreMenuItem(storeMenu, { sendTriggerToParent }) {
+function StoreMenuItem(storeMenu) {
   function Update(menuitem) {
     window.history.pushState(menuitem, "menuitem", "/menuupdate");
     window.location.href = "/menuupdate";
   }
 
-  function Delete(menuitem){
+  function Delete(menuitem) {
     console.log(menuitem);
     if (
       window.confirm(
         "정말로 상품을 삭제하시겠습니까? \n삭제된 상품을 복구 할 수 없습니다."
       )
     ) {
-      fetch(`http://i4a102.p.ssafy.io:8080/app/store/item/delete/${menuitem.itemId}`, {
-        method: "POST",
-        headers: {
-          token: localStorage.getItem("access-token"),
-        },
-      }).then((res) => {
+      fetch(
+        `http://i4a102.p.ssafy.io:8080/app/store/item/delete/${menuitem.itemId}`,
+        {
+          method: "POST",
+          headers: {
+            token: localStorage.getItem("access-token"),
+          },
+        }
+      ).then((res) => {
         if (res.status === 200) {
-          // sendTriggerToParent();  # 이 친구 뭐하는 친구인가요?
+          storeMenu.sendTriggerToParent();
           alert("삭제 성공");
-          window.location.href = "/storeadmin";
+          //   window.location.href = "/storeadmin";
         } else {
           alert(menuitem.itemId, "실패! 바보 메롱~!~!");
         }
@@ -42,8 +45,7 @@ function StoreMenuItem(storeMenu, { sendTriggerToParent }) {
           {/* {storeMenu.storeMenu.itemPrice > 6000
             ? storeMenu.storeMenu.itemPrice - 6000
             : storeMenu.storeMenu.itemPrice} */}
-            {storeMenu.storeMenu.itemPrice}
-          원
+          {storeMenu.storeMenu.itemPrice}원
         </p>
         <p className="col information">
           현재 {storeMenu.storeMenu.itemAvailable}그릇 후원되었습니다.

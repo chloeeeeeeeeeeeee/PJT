@@ -41,19 +41,17 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public MyStore getMyStore(int storeId) {
 		
-		MyStore result = null;
+		MyStore result = new MyStore();
 		Store store = storeDao.findByStoreId(storeId);
 		StoreVariables storeVariables = storeVariablesDao.findByStoreId(storeId);
 		
 		if(store == null || storeVariables == null) return null;
-
-		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy MM dd HH mm ss");
 	
 		result.setStoreId(storeId);
 		result.setStoreName(store.getStoreName());
 		result.setStoreCategory(store.getStoreCategory());
 		result.setStoreLocation(store.getStoreLocation());
-		result.setStoreRegDate(transFormat.format(store.getStoreRegDate()));
+		result.setStoreRegDate(store.getStoreRegDate());
 		result.setStorePhone(store.getStorePhone());
 		result.setStoreItemAvailable(storeVariables.getStoreItemAvailable());
 		result.setStoreItemTotal(storeVariables.getStoreItemTotal());

@@ -14,38 +14,42 @@
     <script>
         function onButtonClicked()
         {
+        	let date = new Date();
+        	console.log(date);
           axios({
             method: 'post', //통신 방식
-            url: 'http://localhost:8081/payment/kakaopay', //통신할 페이지
+            url: 'http://localhost:8081/store/contributionlist', //통신할 페이지
             data: {
-            	  "cid": "TC0ONETIME",
-            	  "itemList": [
-            	    {
-            	      "itemCount": 1,
-            	      "itemId": 11,
-            	      "itemName": "로제정식",
-            	      "itemPrice": 5000,
-            	      "storeId": 1,
-            	      "support": 1
-            	    },
-            	    {
-            	      "itemCount": 1,
-            	      "itemId": 6,
-            	      "itemName": "상하이진한짬뽕",
-            	      "itemPrice": 1500,
-            	      "storeId": 1,
-            	      "support": 1
-            	    }
-            	  ],
-            	  "totalAmount": 6500,
-            	  "totalCount": 2,
-            	  "userSeq": 4
+            	"startDate" : "2021-02-09",
+            	"endDate" : "2021-02-10"
+//             	  "cid": "TC0ONETIME",
+//             	  "itemList": [
+//             	    {
+//             	      "itemCount": 1,
+//             	      "itemId": 11,
+//             	      "itemName": "로제정식",
+//             	      "itemPrice": 5000,
+//             	      "storeId": 1,
+//             	      "support": 1
+//             	    },
+//             	    {
+//             	      "itemCount": 1,
+//             	      "itemId": 6,
+//             	      "itemName": "상하이진한짬뽕",
+//             	      "itemPrice": 1500,
+//             	      "storeId": 1,
+//             	      "support": 1
+//             	    }
+//             	  ],
+//             	  "totalAmount": 6500,
+//             	  "totalCount": 2,
+//             	  "userSeq": 4
             	} //인자로 보낼 데이터
           })
             .then(response=>{
                 document.getElementById('boom').innerText=response.data;
-                console.log(response);
-                window.open(response.data);
+//                 console.log(response);
+//                 window.open(response.data);
                 
             })
             .catch(error=>{

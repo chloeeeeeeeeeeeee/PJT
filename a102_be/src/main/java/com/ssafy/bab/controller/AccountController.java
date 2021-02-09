@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,8 @@ public class AccountController {
 	
 	@Autowired
 	private JwtService jwtService;
+	
+	private PasswordEncoder passwordEncoder;
 
 	
 	@GetMapping("/")
@@ -44,6 +47,18 @@ public class AccountController {
 	//회원가입
 	@PostMapping("/signup")
 	public ResponseEntity<User> signUp(@RequestBody User user) {
+		User userResult = userService.signUp(user);
+		if(userResult == null)
+			return new ResponseEntity<User>(userResult, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<User>(userResult, HttpStatus.OK);
+	}
+	
+	//회원가입
+	@PostMapping("/signupkakao")
+	public ResponseEntity<User> signUpKakao(@RequestBody User user) {
+		user.setUserId("Kakao@"+user.getUserId());
+		user.setUserPwd(user.getUserId());
+		
 		User userResult = userService.signUp(user);
 		if(userResult == null)
 			return new ResponseEntity<User>(userResult, HttpStatus.BAD_REQUEST);
@@ -70,6 +85,30 @@ public class AccountController {
 		}
 		res.setHeader("token", signInJwt.getToken());
 		return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
+	}
+	
+	//로그인카카오
+	@PostMapping("/signinkakao")
+	public ResponseEntity<JwtService.TokenRes> signInKakao(@RequestBody User user, HttpServletResponse res){
+		//유저 번호로 찾기 
+		user.setUserPwd(user.getUserId());
+		user.setUserId("Kakao@"+user.getUserId());
+		User userKakao = userService.userInfoById(user.getUserId());
+		
+		if (userKakao != null) {
+			System.out.println(user.getUserId()+" "+user.getUserPwd());
+			JwtService.TokenRes signInJwt = authService.signIn(user.getUserId(), user.getUserPwd());
+
+			if(signInJwt == null) {
+				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+			}
+			res.setHeader("token", signInJwt.getToken());
+			return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
+		}
+		else {
+			JwtService.TokenRes signInJwt = null;
+			return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 	//jwt를 받아와서 유저번호를 돌려준다
@@ -114,6 +153,8 @@ public class AccountController {
 		ArrayList<Contribution> userContribution = userService.userContribution(userSeq);
 		return new ResponseEntity<List<Contribution>>(userContribution, HttpStatus.OK);
 	}
+	
+	
 	
 	
 }

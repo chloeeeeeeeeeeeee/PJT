@@ -16,6 +16,8 @@ public interface AccountService {
 	
 	public int userWithUs(int userSeq);
 	
+	public User userInfoById(String userId);
+	
 	
 	//프로필
 	public ArrayList<Contribution> userContribution(int userSeq);

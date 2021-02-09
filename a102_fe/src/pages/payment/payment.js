@@ -103,6 +103,7 @@ function Payment() {
         "PopupWin",
         `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`
       );
+
       setTimeout(() => {
         naverPayPopup.close();
       }, 3000);
@@ -110,6 +111,66 @@ function Payment() {
     // 신용/체크카드
     else if (paymentOption == "cardPay") {
       console.log("아임포트");
+      const { IMP } = window;
+      IMP.request_pay(
+        {
+          pg: "html5_inicis",
+          pay_method: "card",
+          merchant_uid: "merchant_" + new Date().getTime(),
+          name: "주문명:결제테스트",
+          amount: totalPrice,
+          buyer_email: "iamport@siot.do",
+          buyer_name: "구매자이름",
+          buyer_tel: "010-1234-5678",
+          buyer_addr: "서울특별시 강남구 삼성동",
+          buyer_postcode: "123-456",
+        },
+        function (rsp) {
+          if (rsp.success) {
+            let data = {
+              imp_uid: rsp.imp_uid,
+              itemList: [],
+              merchant_uid: "string",
+              paid_amount: rsp.paid_amount,
+              paid_at: rsp.paid_at,
+            };
+
+            cartStorage.forEach((item) => {
+              let oneItem = {
+                itemCount: item.itemCount,
+                itemId: item.itemId,
+                itemName: item.itemName,
+                itemPrice: item.itemPrice,
+                storeId: item.storeId,
+                support: 1,
+                msg: paymentMessage,
+              };
+              data.itemList.push(oneItem);
+            });
+
+            console.log(data);
+
+            axios
+              .post(`http://i4a102.p.ssafy.io:8080/app/payment/iamport`, data, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                  token: jwtToken,
+                },
+              })
+              .then(() => {
+                localStorage.setItem("carts", []);
+                localStorage.setItem("price", 0);
+                window.location.href = "/paymentSuccess";
+              });
+            console.log(rsp);
+          } else {
+            var msg = "결제에 실패하였습니다.";
+            msg += "에러내용 : " + rsp.error_msg;
+            console.log(msg);
+          }
+        }
+      );
     }
   }
 

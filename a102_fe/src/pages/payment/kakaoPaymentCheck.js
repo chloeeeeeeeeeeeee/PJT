@@ -17,7 +17,7 @@ function KakaoPaymentCheck(props) {
       if (res.status == 200) {
         localStorage.setItem("carts", []);
         localStorage.setItem("price", 0);
-        window.opener.location.href = "/";
+        window.opener.location.href = "/paymentSuccess";
         window.close();
       }
     });

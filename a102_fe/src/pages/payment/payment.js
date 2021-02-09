@@ -120,6 +120,37 @@ function Payment() {
         "X-Naver-Client-Id":"",
         "X-Naver-Client-Secret": ""
     }})
+
+    
+//    "modelVersion": "2",
+//    "merchantUserKey": "muserkey",
+//    "merchantPayKey": "mpaykey",
+//    "productName": "상품명",
+//    "productCount": 10,
+//    "totalPayAmount": 1000,
+//    "deliveryFee": 2500,
+//    "returnUrl": "{your-returnUrl}",
+//    "webhookUrl": "{your-webhookUrl}",
+//    "taxScopeAmount": 1000,
+//    "taxExScopeAmount": 0,
+//    "purchaserName": "구매자이름",
+//    "purchaserBirthday": "20000101",
+//    "productItems": [{
+//        "categoryType": "BOOK",
+//        "categoryId": "GENERAL",
+//        "uid": "107922211",
+//        "name": "한국사",
+//        "payReferrer": "NAVER_BOOK",
+//        "count": 10
+//    }, {
+//        "categoryType": "MUSIC",
+//        "categoryId": "CD",
+//        "uid": "299911002",
+//        "name": "러블리즈",
+//        "payReferrer": "NAVER_BOOK",
+//        "count": 1
+//    }]
+// }
       
     //   naverPayScript.src = "https://nsp.pay.naver.com/sdk/js/naverpay.min.js";
     //   let naverPayScript = document.createElement("script");

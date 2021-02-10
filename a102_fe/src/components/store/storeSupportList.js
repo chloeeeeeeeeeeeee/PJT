@@ -112,13 +112,6 @@ function StoreSupportList() {
       newDate.setMonth(newDate.getMonth() - dateCount);
       newStart = new Date(newDate.getTime());
     }
-    //  else if (dateCount === 3) {
-    //   let newDate = new Date(endDate + " " + currentTime);
-    //   newDate.setMonth(newDate.getMonth() - 1);
-    //   newStart = new Date(newDate.getTime());
-    // } else if (dateCount === 6) {
-    //   newStart = new Date(baseDate.getTime() - 1000 * 60 * 60 * 24 * 30 * 6);
-    // }
 
     let newStartDate =
       newStart.getFullYear() + "-" + monthArray[newStart.getMonth()] + "-";
@@ -162,6 +155,7 @@ function StoreSupportList() {
             <Button onClick={(e) => changeDateRange(3)}>3달</Button>
             <Button onClick={(e) => changeDateRange(6)}>6달</Button>
           </ButtonGroup>
+          <div id="naverIdLogin"></div>
         </Row>
         <Form className="row mt-4 justify-content-around">
           <FormGroup>

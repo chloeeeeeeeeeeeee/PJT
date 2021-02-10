@@ -9,16 +9,17 @@
 // 기본 레이아웃 SCSS
 // @import "assets/scss/myscss/components/layout/division.scss";
 
-
 // 메인 페이지 SCSS
 @import "../src/assets/scss/myscss/pages/main/main.scss";
 @import "src/assets/scss/myscss/components/layout/header.scss";
 @import "src/assets/scss/myscss/components/layout/footer.scss";
 @import "src/assets/scss/myscss/components/main/billboard.scss";
 @import "src/assets/scss/myscss/components/main/aboutus.scss";
+@import "src/assets/scss/myscss/components/main/whattoeat.scss";
 
 // 후원 페이지 SCSS
 @import "assets/scss/myscss/pages/support/support.scss";
+@import "assets/scss/myscss/pages/support/childsupport.scss";
 @import "assets/scss/myscss/pages/support/storeDetail.scss";
 
 // 함께하기 페이지
@@ -35,6 +36,3 @@
 
 // 결제 페이지 SCSS
 @import "assets/scss/myscss/pages/payment/payment.scss";
-
-
-

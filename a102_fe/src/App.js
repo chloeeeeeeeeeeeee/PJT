@@ -1,16 +1,10 @@
 import React from "react";
-import {
-  Container,
-  Row,
-} from "reactstrap";
-import {
-  Route,
-  BrowserRouter,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { Container, Row } from "reactstrap";
+import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
+import ChildMain from "./pages/main/childmain";
+import ChildSupport from "./pages/support/childsupport";
 import Main from "./pages/main/main";
 import Support from "./pages/support/support";
 import Authentication from "./pages/account/authentication";
@@ -21,7 +15,9 @@ import QnaCreate from "./pages/qna/qnacreate";
 import QnaList from "./pages/qna/qnalist";
 import QnaDetail from "./pages/qna/qnadetail";
 import QnaUpdate from "./pages/qna/qnaupdate";
-import Payment from "./pages/payment/payment"
+import Payment from "./pages/payment/payment";
+import KakaoPaymentCheck from "./pages/payment/kakaoPaymentCheck";
+import PaymentSuccess from "./pages/payment/paymentSuccess";
 import "./App.css";
 
 function App() {
@@ -31,18 +27,27 @@ function App() {
         <Header />
         <Row className="mainBody">
           <Switch>
+            {/* 아동 View */}
+            <Route path="/childmain" component={ChildMain} />
+            <Route path="/childmap" component={ChildSupport} />
+            {/* 후원자 View */}
             <Route exact path="/" component={Main} />
             <Route path="/auth" component={Authentication} />
             <Route path="/signout" component={Signout} />
             <Route path="/support" component={Support} />
             <Route path="/map" component={Support} />
             <Route path="/storedetail/:storeId" component={StoreDetail} />
-            <Route path="/storedetailsupport/:storeId" component={StoreDetail} />
+            <Route
+              path="/storedetailsupport/:storeId"
+              component={StoreDetail}
+            />
             <Route path="/qnacreate" component={QnaCreate} />
             <Route path="/qna" component={QnaList} />
             <Route path="/qnadetail" component={QnaDetail} />
             <Route path="/qnaupdate" component={QnaUpdate} />
             <Route path="/payment" component={Payment} />
+            <Route path="/paymentCheck" component={KakaoPaymentCheck} />
+            <Route path="/paymentSuccess" component={PaymentSuccess} />
             {/* Profile 페이지의 경우 리다이렉트 보내주기 */}
             <PrivateRoute path="/profile">
               <Profile />

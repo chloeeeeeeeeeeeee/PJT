@@ -121,33 +121,34 @@ font: 16pt &quot;Noto Sans KR&quot;;</string>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="pageDonation">
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <layout class="QGridLayout" name="pageDonationLayout">
-            <item row="0" column="0">
-             <widget class="QWidget" name="widgetDonationMain" native="true"/>
-            </item>
-            <item row="1" column="0">
-             <widget class="QWidget" name="widgetDonationBot" native="true">
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>200</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
         <widget class="QWidget" name="pagePayment">
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
            <layout class="QGridLayout" name="pagePaymentLayout">
             <item row="0" column="0">
              <widget class="QWidget" name="widgetPaymentMain" native="true"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageKakaoPay">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <layout class="QGridLayout" name="pageKakaoPayLayout">
+            <item row="0" column="0">
+             <widget class="QWidget" name="widgetKakaoPay" native="true"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageRfid">
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <layout class="QGridLayout" name="PageRfidLayout">
+            <item row="0" column="0">
+             <widget class="QWidget" name="widgetRfid" native="true"/>
             </item>
            </layout>
           </item>

@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+    <link rel="stylesheet" href="assets/css/payment.css">
 </head>
 <body>
+    <div class="payment-container">
+        <button onclick="clickKakaoPay()">카카오페이</button>
+        <button onclick="clickCardTagging()">카드 태그</button>
+    </div>
 
+    <script type="text/javascript" src="assets/js/widgetPaymentMain.js"></script>
 </body>
-</html>
+</html> 

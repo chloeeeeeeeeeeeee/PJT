@@ -41,9 +41,23 @@ function addStoreItem(itemId, imgUrl, itemName, itemPrice, badge, intro){
     itemCnt = itemCnt + 1;
 }
 
+function clearStoreItem(){
+    itemCnt = 0;
+    carouselCnt = 0;
+    itemIdContainer = [];
+
+    document.getElementsByClassName("carousel-inner")[0].innerHTML = `<div class="carousel-item active">
+                                                                        <section class="bookmark-container">
+                                                                        </section>
+                                                                      </div>`
+}
+
 function fadeout(){
     //화면전환효과
     document.getElementById("fade").setAttribute("class", "six-four fade-out");
+    setTimeout(function(){
+        document.getElementById("fade").setAttribute("class", "six-four");
+    }, 1000)
 }
 
 //js->qt 함수
@@ -55,5 +69,4 @@ function addBagItem(itemId){
     handler.addBagItem(function(retVal) {
         console.error(JSON.stringify(retVal));
     }, itemId)
-
 }

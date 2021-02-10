@@ -32,6 +32,7 @@
     "google-maps-react": "^2.0.6",
     "jquery": "^3.5.1",
     "jsonwebtoken": "^8.5.1",
+    "kakaojs": "^1.2.0",
     "knob": "^1.1.0",
     "leaflet": "^1.6.0",
     "lodash": "^4.17.15",

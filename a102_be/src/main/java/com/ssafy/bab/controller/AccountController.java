@@ -54,35 +54,36 @@ public class AccountController {
 		return new ResponseEntity<User>(userResult, HttpStatus.OK);
 	}
 	
-	//회원가입카카오
-	@PostMapping("/signupkakao")
-	public ResponseEntity<JwtService.TokenRes> signUpKakao(@RequestBody User user) {
-		String pwd = user.getUserId();
-		user.setUserPwd(user.getUserId());
-		user.setUserId("Kakao@"+user.getUserId());
-		user.setUserName("Guest");
-		user.setUserEmail(user.getUserId());
-		user.setUserPhone(user.getUserId());
-		
-		User userResult = userService.signUp(user);
-		if(userResult != null) {
-			User userKakao = userService.userInfoById(user.getUserId());
-			if (userKakao != null) {
-				JwtService.TokenRes signInJwt = authService.signIn(user.getUserId(), pwd);
-
-				if(signInJwt == null) {
-					return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-				}
-				return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
-			}
-			else {
-				JwtService.TokenRes signInJwt = null;
-				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-			}
-		}
-		JwtService.TokenRes signInJwt = null;
-		return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-	}
+//	//회원가입카카오
+//	@PostMapping("/signupkakao")
+//	public ResponseEntity<JwtService.TokenRes> signUpKakao(@RequestBody User user) {
+//		String pwd = user.getUserId();
+//		user.setUserPwd(user.getUserId());
+//		user.setUserId("Kakao@"+user.getUserId());
+//		user.setUserName("Guest");
+//		user.setUserEmail(user.getUserId());
+//		user.setUserPhone(user.getUserId());
+//		
+//		User userResult = userService.signUp(user);
+//		if(userResult != null) {
+//			User userKakao = userService.userInfoById(user.getUserId());
+//			if (userKakao != null) {
+//				JwtService.TokenRes signInJwt = authService.signIn(user.getUserId(), pwd);
+//
+//				if(signInJwt == null) {
+//					return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+//				}
+//				return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
+//			}
+//			else {
+//				JwtService.TokenRes signInJwt = null;
+//				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+//			}
+//		}
+//		JwtService.TokenRes signInJwt = null;
+//		return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+//	}
+	
 
 	//로그인(임시)
 	@PostMapping("/signin")
@@ -110,21 +111,87 @@ public class AccountController {
 	//로그인카카오
 	@PostMapping("/signinkakao")
 	public ResponseEntity<JwtService.TokenRes> signInKakao(@RequestBody User user, HttpServletResponse res){
-		//유저 번호로 찾기 
+		String userId = user.getUserId();
 		user.setUserPwd(user.getUserId());
-		user.setUserId("Kakao@"+user.getUserId());
-		User userKakao = userService.userInfoById(user.getUserId());
+		User userKakao = userService.userInfoById("Kakao@"+userId);
 		
 		if (userKakao != null) {
-			JwtService.TokenRes signInJwt = authService.signIn(user.getUserId(), user.getUserPwd());
+			JwtService.TokenRes signInJwt = authService.signIn("Kakao@"+userId, user.getUserPwd());
 
 			if(signInJwt == null) {
-				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+				signInJwt = new JwtService.TokenRes();
+				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.OK);
 			}
 			res.setHeader("token", signInJwt.getToken());
 			return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
 		}
 		else {
+			String pwd = userId;
+			user.setUserPwd(userId);
+			user.setUserId("Kakao@"+userId);
+			user.setUserName("Guest");
+			user.setUserEmail("Kakao@"+userId);
+			user.setUserPhone("GuestPhoneNumber");
+			
+			User userResult = userService.signUp(user);
+			if(userResult != null) {
+				userKakao = userService.userInfoById(user.getUserId());
+				if (userKakao != null) {
+					JwtService.TokenRes signInJwt = authService.signIn(user.getUserId(), pwd);
+
+					if(signInJwt == null) {
+						return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+					}
+					return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
+				}
+				else {
+					JwtService.TokenRes signInJwt = null;
+					return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+				}
+			}
+			JwtService.TokenRes signInJwt = null;
+			
+			return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/signinnaver")
+	public ResponseEntity<JwtService.TokenRes> signInNaver(@RequestBody User user, HttpServletResponse res){
+		String userId = user.getUserId();
+		String userPwd = user.getUserPwd();
+		String userName = user.getUserName();
+		String userPhone = user.getUserPhone();
+		String userEmail = user.getUserEmail();
+		
+		User userNaver = userService.userInfoById(userId);
+		
+		if(userNaver != null) {
+			JwtService.TokenRes signInJwt = authService.signIn(userId, userPwd);
+
+			if(signInJwt == null) {
+				signInJwt = new JwtService.TokenRes();
+				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.OK);
+			}
+			res.setHeader("token", signInJwt.getToken());
+			return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
+		}
+		else {
+			User userResult = userService.signUp(user);
+			if(userResult != null) {
+				userNaver = userService.userInfoById(user.getUserId());
+				if (userNaver != null) {
+					JwtService.TokenRes signInJwt = authService.signIn(userId, userPwd);
+
+					if(signInJwt == null) {
+						return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+					}
+					return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
+				}
+				else {
+					JwtService.TokenRes signInJwt = null;
+					return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+				}
+			}
 			JwtService.TokenRes signInJwt = null;
 			return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
 		}
@@ -187,19 +254,7 @@ public class AccountController {
 		return new ResponseEntity<List<Contribution>>(userContribution, HttpStatus.OK);
 	}
 	
-	//중복확인
-    @PostMapping("/userdupli")
-    public ResponseEntity<User> userDupli(@RequestBody User user, HttpServletRequest req){
-        User userNow = userService.userInfoById(user.getUserId());
-        
-        if(userNow == null) {
-            return new ResponseEntity<User>(userNow, HttpStatus.OK);
-        }
-        else {
-            userNow.setUserPwd(null);
-            return new ResponseEntity<User>(userNow, HttpStatus.BAD_REQUEST);
-        }
-    }
+	
 	
 	
 }

@@ -33,7 +33,7 @@ function addStoreItem(itemId, imgUrl, itemName, itemPrice, badge, intro){
                         <div class="bookmark-contribution-title"><span>이주의 후원 현황</span></div>
                     </div>`;
 
-    if(itemCnt%6==0 && itemCnt!=0){
+    if(itemCnt%8==0 && itemCnt!=0){
         carouselCnt = carouselCnt + 1;
         document.getElementsByClassName("carousel-inner")[0].insertAdjacentHTML("beforeend", newCarouselContainer)
     }

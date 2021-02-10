@@ -7,8 +7,8 @@ function addItem(itemId, itemName, itemPrice){
                     <div class="cart-item-available">
                         <i class="fab fa-gratipay" style="font-size: 16px; color: rgba(255, 140, 0, 0.6)"></i>
                     </div>
-                    <div class="cart-item-title">${itemName}</div>
-                    <div class="cart-item-cost">${itemPrice}원</div>
+                    <div class="cart-item-title"><span>${itemName}</span></div>
+                    <div class="cart-item-cost"><span>${itemPrice}원</span></div>
                     <div class="cart-item-quantity">
                         <div class="cart-item-quantity-btn"> - </div>
                         <div> 1 </div>

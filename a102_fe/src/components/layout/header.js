@@ -38,7 +38,7 @@ function Header() {
             <NavLink href="/qna"> 문의하기 </NavLink>
           </NavItem>
           <NavItem>
-            {Boolean(localStorage.getItem("access-token")) ? <NavLink href="/signout"><b>로그아웃</b></NavLink> : <NavLink href="/auth"><b>함께하기</b></NavLink> }
+            {Boolean(localStorage.getItem("access-token")) == true && localStorage.getItem("access-token") != undefined ? <NavLink href="/signout"><b>로그아웃</b></NavLink> : <NavLink href="/auth"><b>함께하기</b></NavLink> }
           </NavItem>
           {/* <NavItem>
             <NavLink href="/map"> 지도 </NavLink>

@@ -23,7 +23,7 @@ import "./App.css";
 function App() {
   return (
     <BrowserRouter>
-      <Container fluid={true} className="mainContainer">
+      <Container fluid={true} className="mainContainer p-0">
         <Header />
         <Row className="mainBody">
           <Switch>

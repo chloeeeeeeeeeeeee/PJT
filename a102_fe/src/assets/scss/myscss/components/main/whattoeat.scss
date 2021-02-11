@@ -1,6 +1,9 @@
 .whattoeat {
   .card {
+    padding: 3%;
+    height: 100%;
     border: none;
+    background-color: $oori-bright-white;
   }
   .childimg {
     img {
@@ -17,7 +20,8 @@
     .choosemenubutton {
       background-color: $oori-white;
       border: none;
-      margin: 5% 0%;
+      margin: 3% 0%;
+      padding: 1%;
     }
     img {
       width: 50%;

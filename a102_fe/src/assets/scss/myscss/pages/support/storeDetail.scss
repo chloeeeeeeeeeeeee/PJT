@@ -52,14 +52,16 @@
 //   height: 10%;
 // }
 
-.storeDetailBox {
+.mainStoreDetail {
   height: 100%;
   // 좌측 매장 상세정보 + 지도
   .storeInfo {
-    height: 100%;
+    height: 60vh;
     .storeInfoCard {
+      border: none;
       .cardHeader {
-        background-color: $oori-green;
+        background-color: white;
+        color: $oori-green;
       }
       height: 100%;
       overflow-y: auto;
@@ -68,7 +70,7 @@
       }
       .card-body {
         #storeMiniMap {
-          height: 30%;
+          height: 15%;
         }
         .findWayButton {
           margin-bottom: 5px;
@@ -84,64 +86,74 @@
 
   // 우측 메뉴 정보 + 매장 후원현황
   .storeMenuDetail {
-    height: 100%;
+    height: 60vh;
     // 중앙 메뉴 정보
     .storeCenterBox {
-      height: 100%;
-      .cardHeader {
-        background-color: $oori-green;
-      }
-      .card-body {
-        overflow-y: auto;
-        .information {
-          font-size: small;
-          margin-bottom: 0;
-        }
-        .cartbutton {
-          background-color: $oori-white;
-          border: none;
+      .card {
+        border: none;
+        height: 60vh;
+        .cardHeader {
+          background-color: white;
           color: $oori-green;
+        }
+        .card-body {
+          overflow-y: auto;
+          .information {
+            font-size: small;
+            margin-bottom: 0;
+          }
+          .cartbutton {
+            background-color: $oori-white;
+            border: none;
+            color: $oori-green;
+          }
+          .storeMenuItem {
+            // background-color: $oori-brilliant-white;
+          }
         }
       }
     }
     // 우측 후원정보
     .storeRightBox {
       height: 100%;
-      .cardHeader {
-        background-color: $oori-green;
-      }
-      .supportCart {
-        height: 100%;
-      }
-      .supportCartCard {
-        overflow-y: auto;
-        .supportCartItem {
-          p {
-            display: inline;
-          }
-          .controlbuttons {
-            float: right;
-            .controlbutton {
-              background-color: $oori-white;
-              border: none;
-              color: $oori-green;
+      .card {
+        height: 60vh;
+        border: none;
+        .cardHeader {
+          background-color: white;
+          color: $oori-green;
+        }
+        .supportCart {
+          height: 100%;
+        }
+        .supportCartCard {
+          overflow-y: auto;
+          .supportCartItem {
+            p {
+              display: inline;
+            }
+            .controlbuttons {
+              float: right;
+              .controlbutton {
+                background-color: $oori-white;
+                border: none;
+                color: $oori-green;
+              }
             }
           }
         }
-      }
-      .supportCartFooter {
-        p {
-          text-align: center;
+        .supportCartFooter {
+          background-color: white;
+          p {
+            text-align: center;
+          }
+          .footerbutton {
+            color: $oori-white;
+            border: none;
+            background-color: $oori-green;
+          }
         }
-        .footerbutton {
-          background-color: $oori-white;
-          border: none;
-          color: $oori-green;
-        }
       }
-    }
-    .card {
-      height: 100%;
     }
   }
 }

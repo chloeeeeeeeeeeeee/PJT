@@ -242,49 +242,58 @@ function ChildSupport() {
     <Col className="mainSupport">
       {/* 지도 영역 타이틀 */}
       <Row>
-        <Col sm="12" md={{ size: 8, offset: 1 }} className="supportTitle">
+        <Col sm="12" md={{ size: 10, offset: 1 }} id="title">
         <h2>가게 검색하기</h2>
         </Col>
       </Row>
+      <Row className="supportCategory">
+        <Col sm="12" md={{ size:  3, offset: 1 }} className="supportChildContentLeft">
+        {/* 검색 */}
+        <InputGroup>
+          <Input
+            name="addressInput"
+            id="addressInput"
+            placeholder="동 단위까지 입력해주세요"
+            onKeyUp={enterkeyPress}
+          />
+          <InputGroupAddon addonType="append">
+            <Button
+              color="secondary"
+              id="addressButton"
+              onClick={searchLocation}
+            >
+              검색
+            </Button>
+          </InputGroupAddon>
+        </InputGroup>
+        </Col>
+        {/* 카테고리 리스트 */}
+        <Col sm="12" md="7" className="categoryListBox">
+          {categoryListComponents}
+        </Col>
+      </Row>
       <Row className="supportContent">
-        <Col sm="12" md={{ size: 4, offset: 1 }} className="supportChildContentLeft">
-          {/* 검색 */}
-          <InputGroup>
-            <Input
-              name="addressInput"
-              id="addressInput"
-              placeholder="동 단위까지 입력해주세요"
-              onKeyUp={enterkeyPress}
-            />
-            <InputGroupAddon addonType="append">
-              <Button
-                id="addressButton"
-                onClick={searchLocation}
-              >
-                검색
-              </Button>
-            </InputGroupAddon>
-          </InputGroup>
+        <Col sm="12" md={{ size: 4, offset: 1 }} className="supportContentLeft">
           {/* 지도 영역 */}
           <Col id="naverMap" className="mt-2 col-12"></Col>
         </Col>
-        {/* 카테고리 리스트 */}
-        <Col sm="6" md="2" className="categoryListBox">
-          {categoryListComponents}
-        </Col>
-        <Col sm="6" md="4" className="supportBox">
+        <Col sm="12" md="6" className="supportBox">
           {/* 매장 리스트 */}
           <h5>가게 목록</h5>
-          <Row className="storeChildListBox">
+          <Row className="storeListBox">
             {storeListComponents}
           </Row>
+          {/* <h5>가게 목록</h5>
+          <Row className="storeChildListBox">
+            {storeListComponents}
+          </Row> */}
           {/* 후원 음식 리스트 */}
-          <h5>음식 목록</h5>
+          {/* <h5>음식 목록</h5>
           <Row className="storeChildSupportBox">
             <Row className="storeMenuItem mb-2 row justify-content-between">
               {supportMenuList}
             </Row>
-          </Row>
+          </Row> */}
         </Col>
       </Row>
     </Col>

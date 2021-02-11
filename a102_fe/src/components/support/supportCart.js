@@ -163,7 +163,6 @@ function SupportCart(storeInfo) {
           key={index}
         >
           <SupportMenu supportmenu={menu} />
-          {/* {supportCheck ? ( */}
             <Button
               className="cartbutton col-2 mt-3 mb-3"
               onClick={(e) => {
@@ -172,9 +171,6 @@ function SupportCart(storeInfo) {
             >
               담기
             </Button>
-          {/* ) : (
-            ""
-          )} */}
         </div>
       );
     }

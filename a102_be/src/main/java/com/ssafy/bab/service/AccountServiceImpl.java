@@ -109,7 +109,6 @@ public class AccountServiceImpl implements AccountService{
 		
 		HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(null, headers); 
 		
-		
 		try {
 			ResponseEntity<NaverProfile> profile = restTemplate.exchange(new URI("https://openapi.naver.com/v1/nid/me"), HttpMethod.GET, body, NaverProfile.class);
 			

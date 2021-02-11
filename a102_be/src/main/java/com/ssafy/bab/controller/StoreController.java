@@ -1,8 +1,9 @@
 package com.ssafy.bab.controller;
 
-import java.time.LocalDateTime;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.MyStore;
+import com.ssafy.bab.dto.StoreContributionItem;
 import com.ssafy.bab.dto.User;
 import com.ssafy.bab.service.JwtService;
 import com.ssafy.bab.service.StoreService;
@@ -70,26 +72,25 @@ public class StoreController {
 	
 	@ApiOperation(value = "가게 후원 내역 ", notes = "startDate와 endDate를 받아와 해당 기간의 후원 내역을 반환한다.", response = String.class)
 	@PostMapping("contributionlist")
-	public ResponseEntity<String> storeContribution(@RequestParam(required = true) String startDate, @RequestParam(required = true) String endDate, HttpServletRequest req) throws Exception {
-		logger.info("itemCreate_Store - 호출");
+	public ResponseEntity<List<StoreContributionItem>> contributionItemList(@RequestParam(required = true) String startDate, @RequestParam(required = true) String endDate, HttpServletRequest req) throws Exception {
+		logger.info("contributionItemList_Store - 호출");
 		
+		ArrayList<StoreContributionItem> result = null;
 		
+		String jwt = req.getHeader("token");
+        int userSeq = jwtService.decode(jwt);
+        User user = userDao.findByUserSeq(userSeq);
+        
+        // user 정보가 없거나, 후원 가게 사장이 아니라면 잘못된 요청임
+		if(user == null || user.getStore() == null) {
+			return new ResponseEntity<List<StoreContributionItem>>(result, HttpStatus.BAD_REQUEST);
+		}
 		
-		return new ResponseEntity<String>(startDate, HttpStatus.OK);
-
-//		MyStore result = null;
-//		
-//		String jwt = req.getHeader("token");
-//        int userSeq = jwtService.decode(jwt);
-//        User user = userDao.findByUserSeq(userSeq);
-//        
-//        // user 정보가 없거나, 후원 가게 사장이 아니라면 잘못된 요청임
-//		if(user == null || user.getStore() == null) {
-//			return new ResponseEntity<MyStore>(result, HttpStatus.BAD_REQUEST);
-//		}
-//     
-//        result = storeService.getMyStore(user.getStore().getStoreId());
-//        return new ResponseEntity<MyStore>(result, HttpStatus.OK);
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		transFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		result = (ArrayList<StoreContributionItem>) storeService.getContributionItemList(user.getStore().getStoreId(), transFormat.parse(startDate), transFormat.parse(endDate));
+		
+		return new ResponseEntity<List<StoreContributionItem>>(result, HttpStatus.OK);
 
 	}
 	
@@ -162,7 +163,7 @@ public class StoreController {
         item.setStoreId(user.getStore().getStoreId());
      
         result = storeService.itemUpdate(item, file);
-        return new ResponseEntity<String>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<String>(result, HttpStatus.OK);
 		
 	}
 	
@@ -184,7 +185,7 @@ public class StoreController {
 		}
      
         result = storeService.itemDelete(itemId, user.getStore().getStoreId());
-        return new ResponseEntity<String>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<String>(result, HttpStatus.OK);
 		
 	}
 	

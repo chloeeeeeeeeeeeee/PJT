@@ -7,13 +7,26 @@
     height: 95%;
     overflow-y: auto;
     overflow-x: hidden;
-    .paymentInfoItem{
-        border-bottom:1px solid black;
+    .paymentInfoItem {
+      border-bottom: 1px solid black;
     }
   }
   .paymentDetailBox {
     height: 95%;
     position: relative;
+    .paymentAmount,
+    .paymentMessage {
+      height: 20%;
+    }
+    .paymentMethod {
+      height: 30%;
+      fieldset {
+        height: 80%;
+        .form-group {
+          height: 33%;
+        }
+      }
+    }
     .paymentButton {
       position: absolute;
       bottom: 0;
@@ -26,4 +39,9 @@
       }
     }
   }
+}
+
+.paymentSuccessContainer {
+  margin-right: auto;
+  margin-left: auto;
 }

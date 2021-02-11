@@ -1,15 +1,6 @@
 import React from "react";
-import {
-  Container,
-  Row,
-} from "reactstrap";
-import {
-  Route,
-  BrowserRouter,
-  Switch,
-  Redirect,
-} from "react-router-dom";
-
+import { Container, Row } from "reactstrap";
+import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 import Header from "./components/layout/header";
 import Footer from "./components/layout/footer";
 import ChildMain from "./pages/main/childmain";
@@ -25,6 +16,8 @@ import QnaList from "./pages/qna/qnalist";
 import QnaDetail from "./pages/qna/qnadetail";
 import QnaUpdate from "./pages/qna/qnaupdate";
 import Payment from "./pages/payment/payment";
+import KakaoPaymentCheck from "./pages/payment/kakaoPaymentCheck";
+import PaymentSuccess from "./pages/payment/paymentSuccess";
 import "./App.css";
 
 function App() {
@@ -44,12 +37,17 @@ function App() {
             <Route path="/support" component={Support} />
             <Route path="/map" component={Support} />
             <Route path="/storedetail/:storeId" component={StoreDetail} />
-            <Route path="/storedetailsupport/:storeId" component={StoreDetail} />
+            <Route
+              path="/storedetailsupport/:storeId"
+              component={StoreDetail}
+            />
             <Route path="/qnacreate" component={QnaCreate} />
             <Route path="/qna" component={QnaList} />
             <Route path="/qnadetail" component={QnaDetail} />
             <Route path="/qnaupdate" component={QnaUpdate} />
             <Route path="/payment" component={Payment} />
+            <Route path="/paymentCheck" component={KakaoPaymentCheck} />
+            <Route path="/paymentSuccess" component={PaymentSuccess} />
             {/* Profile 페이지의 경우 리다이렉트 보내주기 */}
             <PrivateRoute path="/profile">
               <Profile />

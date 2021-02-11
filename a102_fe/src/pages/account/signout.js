@@ -10,9 +10,15 @@ import {
   Redirect,
 } from "react-router-dom";
 
+const { Kakao } = window; 
 
 function Signout() {
   return (
+    // kakao 로그아웃 왜 안될까?
+    Kakao.Auth.logout(function() {
+      console.log(Kakao.Auth.getAccessToken());
+    }),
+
     // Signout 버튼을 클릭하면 우선 로컬스토리지에서 access-token을 해제합니다.
     localStorage.removeItem('access-token'),
 
@@ -23,5 +29,4 @@ function Signout() {
     window.location.href = '/'
   );
 }
-
 export default Signout;

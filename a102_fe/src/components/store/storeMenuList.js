@@ -55,7 +55,7 @@ function StoreMenuList() {
   }, [trigger]);
 
   return (
-    <Card className="storeMenuList col-7 p-0">
+    <Card className="storeMenuList col-6 p-0">
       <CardHeader>
         <h4>메뉴 리스트</h4>
         <Button onClick={moveToCreatePage}>메뉴 추가</Button>

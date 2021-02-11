@@ -196,48 +196,6 @@ public class AccountController {
 
 	}
 	
-//	@PostMapping("/signinnaver")
-//	public ResponseEntity<JwtService.TokenRes> signInNaver(@RequestBody User user, HttpServletResponse res){
-//		String userId = user.getUserId();
-//		String userPwd = user.getUserPwd();
-//		String userName = user.getUserName();
-//		String userPhone = user.getUserPhone();
-//		String userEmail = user.getUserEmail();
-//		
-//		User userNaver = userService.userInfoById(userId);
-//		
-//		if(userNaver != null) {
-//			JwtService.TokenRes signInJwt = authService.signIn(userId, userPwd);
-//
-//			if(signInJwt == null) {
-//				signInJwt = new JwtService.TokenRes();
-//				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.OK);
-//			}
-//			res.setHeader("token", signInJwt.getToken());
-//			return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
-//		}
-//		else {
-//			User userResult = userService.signUp(user);
-//			if(userResult != null) {
-//				userNaver = userService.userInfoById(user.getUserId());
-//				if (userNaver != null) {
-//					JwtService.TokenRes signInJwt = authService.signIn(userId, userPwd);
-//
-//					if(signInJwt == null) {
-//						return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-//					}
-//					return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
-//				}
-//				else {
-//					JwtService.TokenRes signInJwt = null;
-//					return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-//				}
-//			}
-//			JwtService.TokenRes signInJwt = null;
-//			return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-//		}
-//	}
-	
 	//중복확인
 	@PostMapping("/userdupli")
 	public ResponseEntity<User> userDupli(@RequestBody User user, HttpServletRequest req){

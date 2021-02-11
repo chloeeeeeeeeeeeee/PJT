@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.Contribution;
 import com.ssafy.bab.dto.User;
 import com.ssafy.bab.dto.UserContribution;
@@ -32,6 +33,9 @@ public class AccountController {
 	
 	@Autowired
 	private AuthService authService;
+	
+	@Autowired
+	private UserDao userDao;
 	
 	@Autowired
 	private JwtService jwtService;
@@ -129,9 +133,9 @@ public class AccountController {
 			String pwd = userId;
 			user.setUserPwd(userId);
 			user.setUserId("Kakao@"+userId);
-			user.setUserName("Guest");
-			user.setUserEmail("Kakao@"+userId);
-			user.setUserPhone("GuestPhoneNumber");
+			user.setUserName(user.getUserName());
+			user.setUserEmail("temp");
+			user.setUserPhone("temp");
 			
 			User userResult = userService.signUp(user);
 			if(userResult != null) {
@@ -156,46 +160,40 @@ public class AccountController {
 	}
 	
 	@PostMapping("/signinnaver")
-	public ResponseEntity<JwtService.TokenRes> signInNaver(@RequestBody User user, HttpServletResponse res){
-		String userId = user.getUserId();
-		String userPwd = user.getUserPwd();
-		String userName = user.getUserName();
-		String userPhone = user.getUserPhone();
-		String userEmail = user.getUserEmail();
-		
-		User userNaver = userService.userInfoById(userId);
-		
-		if(userNaver != null) {
-			JwtService.TokenRes signInJwt = authService.signIn(userId, userPwd);
+	public ResponseEntity<JwtService.TokenRes> signInNaver(@RequestBody String Authorization, HttpServletResponse res){
 
-			if(signInJwt == null) {
-				signInJwt = new JwtService.TokenRes();
-				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.OK);
-			}
-			res.setHeader("token", signInJwt.getToken());
-			return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
-		}
-		else {
-			User userResult = userService.signUp(user);
-			if(userResult != null) {
-				userNaver = userService.userInfoById(user.getUserId());
-				if (userNaver != null) {
-					JwtService.TokenRes signInJwt = authService.signIn(userId, userPwd);
-
-					if(signInJwt == null) {
-						return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-					}
-					return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
-				}
-				else {
-					JwtService.TokenRes signInJwt = null;
-					return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-				}
-			}
-			JwtService.TokenRes signInJwt = null;
-			
+		System.out.println(Authorization);
+		
+		JwtService.TokenRes signInJwt = null;
+		
+		User user = null;
+		user = userService.signInNaver(Authorization);
+		
+		String pwd = user.getUserPwd();
+		
+		if(user == null) {
 			return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
 		}
+		
+		// 회원가입 처리
+		if(authService.userChk(user.getUserId()) == null) {
+			
+			User userResult = userService.signUp(user);
+			if(userResult == null) {
+				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+			}
+			
+		}
+
+		signInJwt = authService.signIn(user.getUserId(), pwd);
+
+		if (signInJwt == null) {
+			signInJwt = new JwtService.TokenRes();
+			return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
+		}
+		res.setHeader("token", signInJwt.getToken());
+		return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.OK);
+
 	}
 	
 	//중복확인

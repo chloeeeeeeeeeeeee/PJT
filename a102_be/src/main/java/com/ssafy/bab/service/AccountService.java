@@ -18,6 +18,7 @@ public interface AccountService {
 	
 	public User userInfoById(String userId);
 	
+	public User signInNaver(String Authorization);
 	
 	//프로필
 	public ArrayList<Contribution> userContribution(int userSeq);

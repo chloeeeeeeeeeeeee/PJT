@@ -39,6 +39,8 @@ public class User implements Serializable{
 	private String userName;
 	private String userPwd;
 	private String userEmail;
+	
+	@JoinColumn(name="user_phone", nullable = true)
 	private String userPhone;
 	
 	private LocalDateTime userDate = LocalDateTime.now();

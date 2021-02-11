@@ -195,7 +195,7 @@ function ChildSupport() {
         );
       } else{
           storeListComponents = (
-            <Col className="nothingToShow">주변에 가게가 없습니다.</Col> );
+            <Col className="nothingToShow"><br/>주변 가게가 없습니다...</Col> )
         }
     }
     setStoreListComponents(storeListComponents);
@@ -208,42 +208,57 @@ function ChildSupport() {
   function SupportMapItem(storeInfo) {
     function getMenu(){
       fetch(`http://i4a102.p.ssafy.io:8080/app/support/menulist/${storeInfo.storeInfo.storeId}`)
-        .then((res) => res.json())
-        .then((result) => {
-          setMenuList(result);
-        });
+      .then((res) => res.json())
+      .then((result) => {
+        setMenuList(result);
+      });
     }
-  
     return (
-      <Row className="mapListItem m-1 p-1" onClick={getMenu}>
-        <Col xs="7">{storeInfo.storeInfo.storeName}</Col>
-        <Col xs="5">{storeInfo.storeInfo.storeCategory}</Col>
-        <Col xs="12">{storeInfo.storeInfo.storeLocation}</Col>
-      </Row>
+      <Row className="mapListItem m-1 p-0">
+      <Col xs="9" className="pt-1">
+        <Row><b>{storeInfo.storeInfo.storeName}</b></Row>
+        <Row><p>{storeInfo.storeInfo.storeLocation}</p></Row>
+      </Col>
+      <Col xs="3"><Button onClick={getMenu}>음식보기</Button></Col>
+    </Row>
     );
   }
 
+  let flag = false;
   // 후원된 음식 반환
   const supportMenuList = menuList.map((menu, index) => {
     let lst = []
-    
     for (let idx=0; idx<menu.itemAvailable; idx++){
       lst.push(<FcLike/>)
     }
 
     if (menu.itemAvailable > 0) {
+      flag = true;
       return (
-        <Col xs="12">{menu.itemName} : {lst} </Col>
+        <Row className="mapListItem m-1 p-0">
+          <Col xs="6" className="pt-1">
+            <b>{menu.itemName}</b>
+          </Col>
+          <Col xs="6">
+            {lst}
+          </Col>
+        </Row>
       );
     }
+    else{
+      return
+    }
+
   });
+
+  console.log(flag)
 
   return (
     <Col className="mainSupport">
       {/* 지도 영역 타이틀 */}
       <Row>
-        <Col sm="12" md={{ size: 10, offset: 1 }} id="title">
-        <h2>가게 검색하기</h2>
+        <Col sm="12" md={{ size: 10, offset: 1 }} id="childtitle">
+        <h3>가게 검색하기</h3>
         </Col>
       </Row>
       <Row className="supportCategory">
@@ -280,20 +295,19 @@ function ChildSupport() {
         <Col sm="12" md="6" className="supportBox">
           {/* 매장 리스트 */}
           <h5>가게 목록</h5>
-          <Row className="storeListBox">
-            {storeListComponents}
-          </Row>
-          {/* <h5>가게 목록</h5>
           <Row className="storeChildListBox">
             {storeListComponents}
-          </Row> */}
+          </Row>
           {/* 후원 음식 리스트 */}
-          {/* <h5>음식 목록</h5>
-          <Row className="storeChildSupportBox">
-            <Row className="storeMenuItem mb-2 row justify-content-between">
+          <h5>음식 목록</h5>
+            <Row className="storeChildSupportBox mb-2 row justify-content-between">
               {supportMenuList}
+              {/* {flag?
+                {supportMenuList}
+              :
+                <Col className="nothingToShow" xs="12"><br/><p>음식이 없습니다. 다른 가게를 둘러보시는건 어떨까요?</p></Col>
+              } */}
             </Row>
-          </Row> */}
         </Col>
       </Row>
     </Col>

@@ -90,6 +90,14 @@ public class AccountServiceImpl implements AccountService{
 		return userInfoById;
 	}
 
+	@Override
+	public User signInNaver(String Authorization) {
+		
+		
+		
+		return null;
+	}
+
 
 	
 	

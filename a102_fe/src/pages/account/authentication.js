@@ -17,6 +17,7 @@ import {
 // Register 대신 Auth로 rename 하고 Register와 Signin으로 분리해보겠습니다!
 // 분리할 수 없었습니다! 왜인지 이유를 알아볼 것! 
 import KakaoAuth from "../../components/account/kakaoAuth";
+import NaverAuth from "../../components/account/naverAuth";
 
 function Auth(props) {
   const toggleform = () => {
@@ -122,7 +123,7 @@ function Auth(props) {
       })
     }
     // 회원가입 후 바로 로그인을 실행했다면? 
-    if (Boolean(localStorage.getItem('access-token')) == true && localStorage.getItem('access-token') != undefined) {
+    if (Boolean(localStorage.getItem('access-token')) == true && localStorage.getItem('access-token') != "undefined") {
       window.location.href = '/profile'
     }
   };
@@ -220,12 +221,12 @@ function Auth(props) {
                                 </Button> */}
                               </Col>
                               <Col md="6" sm="6">
-                                <Button
+                                {/* <Button
                                   color="social-btn btn-naver"
                                   // onClick={twitterAuth}
                                 >
-                                  네이버로 로그인하기
-                                </Button>
+                                </Button> */}
+                                <NaverAuth />
                               </Col>
                             </Row>
                           </div>

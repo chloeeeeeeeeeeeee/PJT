@@ -20,6 +20,8 @@ import KakaoPaymentCheck from "./pages/payment/kakaoPaymentCheck";
 import PaymentSuccess from "./pages/payment/paymentSuccess";
 import "./App.css";
 
+import NaverAuthCallback from "./components/account/naverAuthCallback";
+
 function App() {
   return (
     <BrowserRouter>
@@ -33,6 +35,7 @@ function App() {
             {/* 후원자 View */}
             <Route exact path="/" component={Main} />
             <Route path="/auth" component={Authentication} />
+            <Route path="/naver" component={NaverAuthCallback} />
             <Route path="/signout" component={Signout} />
             <Route path="/support" component={Support} />
             <Route path="/map" component={Support} />

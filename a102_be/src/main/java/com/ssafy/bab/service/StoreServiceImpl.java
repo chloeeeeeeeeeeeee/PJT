@@ -1,8 +1,10 @@
 package com.ssafy.bab.service;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
@@ -12,12 +14,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ssafy.bab.dao.ContributionDao;
+import com.ssafy.bab.dao.ContributionOldDao;
 import com.ssafy.bab.dao.ItemDao;
 import com.ssafy.bab.dao.StoreDao;
 import com.ssafy.bab.dao.StoreVariablesDao;
 import com.ssafy.bab.dto.Item;
+import com.ssafy.bab.dto.ItemIdCount;
 import com.ssafy.bab.dto.MyStore;
 import com.ssafy.bab.dto.Store;
+import com.ssafy.bab.dto.StoreContributionItem;
 import com.ssafy.bab.dto.StoreVariables;
 
 @Service
@@ -37,6 +43,11 @@ public class StoreServiceImpl implements StoreService {
 	@Autowired
 	ItemDao itemDao;
 	
+	@Autowired
+	ContributionDao contributionDao;
+	
+	@Autowired
+	ContributionOldDao contributionOldDao;
 	
 	@Override
 	public MyStore getMyStore(int storeId) {
@@ -57,6 +68,58 @@ public class StoreServiceImpl implements StoreService {
 		result.setStoreItemTotal(storeVariables.getStoreItemTotal());
 		result.setStoreTotalContributionAmount(storeVariables.getStoreTotalContributionAmount());
 		result.setStoreSettlementDay(storeVariables.getStoreSettlementDay());
+		
+		return result;
+	}
+	
+	@Override
+	public List<StoreContributionItem> getContributionItemList(int storeId, Date startDate, Date endDate) {
+
+		Integer itemCnt = itemDao.getMaxItemId(storeId);
+		if(itemCnt == null) return null;
+		
+		int[] items = new int[itemCnt];
+		
+		Calendar cal = Calendar.getInstance(); 
+		cal.setTime(startDate);
+		cal.add(Calendar.MONTH, -3);
+		
+		
+		// 3개월 이내의 데이터 요청시
+		if(endDate.after(cal.getTime())) {
+			ArrayList<ItemIdCount> list = contributionDao.getItemContributionCount(storeId, startDate, endDate);
+			for (ItemIdCount itemIdCount : list) {
+				items[itemIdCount.getItemId()] += itemIdCount.getCount();
+			}
+		}
+		
+		// 3개월 이전의 데이터 요청시
+		if(startDate.before(cal.getTime())) {
+			ArrayList<ItemIdCount> list = contributionOldDao.getItemContributionCount(storeId, startDate, endDate);
+			for (ItemIdCount itemIdCount : list) {
+				items[itemIdCount.getItemId()] += itemIdCount.getCount();
+			}
+		}
+		
+		ArrayList<StoreContributionItem> result = new ArrayList<StoreContributionItem>();
+		for(int i = 1; i < itemCnt; i++) {
+			if(items[i] < 1) continue;
+			
+			Item item = itemDao.findByItemIdAndStoreId(i, storeId);
+			
+			StoreContributionItem cItem = new StoreContributionItem();
+			
+			cItem.setItemId(i);
+			cItem.setItemName(item.getItemName());
+			cItem.setTotalCount(items[i]);
+			cItem.setSupportPrice(item.getSupportPrice());
+			cItem.setItemAvailable(item.getItemAvailable());
+			cItem.setItemImgUrl(item.getItemImgUrl());
+			
+			result.add(cItem);
+			
+		}
+
 		
 		return result;
 	}

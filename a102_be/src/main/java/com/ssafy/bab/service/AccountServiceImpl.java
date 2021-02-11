@@ -1,18 +1,25 @@
 package com.ssafy.bab.service;
 
-import java.sql.Date;
+import java.net.URI;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import com.ssafy.bab.dao.ContributionDao;
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.Contribution;
+import com.ssafy.bab.dto.NaverProfile;
 import com.ssafy.bab.dto.User;
 
 @Service
@@ -93,9 +100,35 @@ public class AccountServiceImpl implements AccountService{
 	@Override
 	public User signInNaver(String Authorization) {
 		
+		HttpHeaders headers = new HttpHeaders(); 
+		headers.add("Authorization", "Bearer " + Authorization);
+		headers.add("Accept", "application/x-www-form-urlencoded"); 
+		headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";"+ "charset=UTF-8"); 
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+		HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(null, headers); 
 		
 		
-		return null;
+		try {
+			ResponseEntity<NaverProfile> profile = restTemplate.exchange(new URI("https://openapi.naver.com/v1/nid/me"), HttpMethod.GET, body, NaverProfile.class);
+			
+			User user = new User();
+			
+			user.setUserId("naver@"+profile.getBody().getResponse().getId());
+			user.setUserName(profile.getBody().getResponse().getNickname());
+			user.setUserPwd(profile.getBody().getResponse().getId());
+			user.setUserEmail(profile.getBody().getResponse().getEmail());
+			user.setUserPhone("temp");
+			
+			return user;
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 

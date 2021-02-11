@@ -3,12 +3,16 @@ package com.ssafy.bab.dao;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.bab.dto.Contribution;
+import com.ssafy.bab.dto.ItemIdCount;
 
 @Repository
 public interface ContributionDao extends JpaRepository<Contribution, Integer> {
@@ -32,5 +36,9 @@ public interface ContributionDao extends JpaRepository<Contribution, Integer> {
 	ArrayList<Integer> getContributionOlds();
 	
 	ArrayList<Contribution> findByContributionDateLessThan(Date contributionDate);
+	
+	// 메뉴별 후원횟수
+	@Query(value = "SELECT item_id as itemId, COUNT(item_id) as count FROM contribution WHERE store_id = :storeId AND :endDate >= contribution_date AND contribution_date >= :startDate group by item_id; ", nativeQuery = true)
+	ArrayList<ItemIdCount> getItemContributionCount(@Param("storeId") int storeId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 	
 }

@@ -1,7 +1,11 @@
 // 하단 Footer
+#childColor {
+  background-color: $oori-yellow;
+}
+
 .mainFooter {
   height: 5%;
-  background-color: $oori-yellow;
+  background-color: $oori-green;
   bottom: 0;
   left: 0;
   transition: 0.6s;

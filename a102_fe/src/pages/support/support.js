@@ -10,6 +10,7 @@ import {
 import SupportMapItem from "../../components/support/supportMapItem";
 
 function Support() {
+
   // 네이버 API 통신을 위해 필요한 HEADER 세팅
   const axios = require("axios");
   const config = {
@@ -21,19 +22,20 @@ function Support() {
     },
   };
 
-  // 카테고리 리스트 일단 넣어두기
+  // 카테고리 리스트
   const categoryList = [
     "한식",
     "양식",
-    "제과점/카페",
+    "제과점\n카페",
     "기타",
     "중식",
-    "마트/편의점",
+    "마트\n편의점",
     "패스트푸드",
     "일식",
-    "치킨/피자",
+    "치킨\n피자",
   ];
-  // 선택된 카테고리 정보
+
+  // 변수
   let [selectedCategory, setSelectedCategory] = useState(0);
   let [reloadMap, setReloadMap] = useState(true);
   let [address, setAddress] = useState("");
@@ -41,6 +43,7 @@ function Support() {
 
   // 카테고리 리스트 컴포넌트
   const categoryListComponents = categoryList.map((category, index) => {
+    console.log(category)
     if (index === 0) {
       return (
         <Col
@@ -48,13 +51,11 @@ function Support() {
           key={index}
           onClick={(e) => {
             setSelectedCategory(index);
-            // selectedCategory = category;
             if (!e.target.classList.contains("selectedCategoryListItem")) {
               document
                 .getElementsByClassName("selectedCategoryListItem")[0]
                 .classList.remove("selectedCategoryListItem");
               e.target.classList.add("selectedCategoryListItem");
-              //   changeComponents();
             }
           }}
         >
@@ -68,13 +69,11 @@ function Support() {
         key={index}
         onClick={(e) => {
           setSelectedCategory(index);
-          // selectedCategory = category;
           if (!e.target.classList.contains("selectedCategoryListItem")) {
             document
               .getElementsByClassName("selectedCategoryListItem")[0]
               .classList.remove("selectedCategoryListItem");
             e.target.classList.add("selectedCategoryListItem");
-            // changeComponents();
           }
         }}
       >
@@ -98,14 +97,6 @@ function Support() {
         });
     }
   }
-
-  // // 페이지 별로 다른 타이틀 부여
-  // let supportCheck = false;
-  // if (window.location.href.indexOf("support") > -1) {
-  //   supportCheck = true;
-  // } else if (window.location.href.indexOf("map") > -1) {
-  //   supportCheck = false;
-  // }
 
   let mapScript = document.createElement("script");
   mapScript.type = "text/javascript";
@@ -206,7 +197,7 @@ function Support() {
         );
       } else{
           storeListComponents = (
-            <Col className="nothingToShow">주변 가게가 없습니다...</Col> )
+            <Col className="nothingToShow"><br/>주변 가게가 없습니다...</Col> )
         }
     }
     setStoreListComponents(storeListComponents)
@@ -217,38 +208,42 @@ function Support() {
     <Col className="mainSupport">
     {/* 지도 영역 타이틀 */}
       <Row>
-        <Col sm="12" md={{ size: 8, offset: 1 }} className="supportTitle">
-          <h2>후원하기</h2>
+        <Col sm="12" md={{ size: 10, offset: 1 }} id="title">
+          <h3>후원하기</h3>
+        </Col>
+      </Row>
+      <Row className="supportCategory">
+        <Col sm="12" md={{ size:  3, offset: 1 }}>
+        {/* 검색 */}
+        <InputGroup>
+          <Input
+            name="addressInput"
+            id="addressInput"
+            placeholder="동 단위까지 입력해주세요"
+            onKeyUp={enterkeyPress}
+          />
+          <InputGroupAddon addonType="append">
+            <Button
+              color="secondary"
+              id="addressButton"
+              onClick={searchLocation}
+            >
+              검색
+            </Button>
+          </InputGroupAddon>
+        </InputGroup>
+        </Col>
+        {/* 카테고리 리스트 */}
+        <Col sm="12" md="7" className="categoryListBox">
+          {categoryListComponents}
         </Col>
       </Row>
       <Row className="supportContent">
         <Col sm="12" md={{ size: 4, offset: 1 }} className="supportContentLeft">
-          {/* 검색 */}
-          <InputGroup>
-            <Input
-              name="addressInput"
-              id="addressInput"
-              placeholder="동 단위까지 입력해주세요"
-              onKeyUp={enterkeyPress}
-            />
-            <InputGroupAddon addonType="append">
-              <Button
-                color="secondary"
-                id="addressButton"
-                onClick={searchLocation}
-              >
-                검색
-              </Button>
-            </InputGroupAddon>
-          </InputGroup>
           {/* 지도 영역 */}
           <Col id="naverMap" className="mt-2 col-12"></Col>
         </Col>
-        {/* 카테고리 리스트 */}
-        <Col sm="6" md="2" className="categoryListBox">
-          {categoryListComponents}
-        </Col>
-        <Col sm="6" md="4" className="supportBox">
+        <Col sm="12" md="6" className="supportBox">
           {/* 매장 리스트 */}
           <h5>가게 목록</h5>
           <Row className="storeListBox">

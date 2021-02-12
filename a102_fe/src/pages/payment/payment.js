@@ -183,15 +183,15 @@ function Payment() {
       </Row>
       <Row>
         <PaymentInfo sendDataToParent={sendDataToParent}/>
-        <Col className="paymentDetailBox pt-2 pb-2" md="4" xs="12">
+        <Col className="paymentDetailBox" md="4" xs="12">
         <Card className="paymentAmount">
-          <CardHeader className="text-center">총 후원 금액</CardHeader>
-          <CardBody className="text-center">{totalPrice}원</CardBody>
+          <CardHeader className="text-center"><b>총 후원 금액</b></CardHeader>
+          <CardBody className="text-center pt-2 pb-2">{totalPrice}원</CardBody>
         </Card>
-        <Card className="paymentMessage mt-3" md="4" xs="12">
-          <CardHeader className="text-center">후원 메세지</CardHeader>
+        <Card className="paymentMessage mt-2" md="4" xs="12">
+          <CardHeader className="text-center"><b>후원 메세지</b></CardHeader>
           <FormGroup tag="fieldset" className="col p-0 mb-0">
-            <FormGroup className="col mt-3">
+            <FormGroup className="col mt-2 mb-2">
               <Input
                 className="col m-0"
                 placeholder="응원의 메시지를 입력해주세요"
@@ -201,11 +201,11 @@ function Payment() {
             </FormGroup>
           </FormGroup>
         </Card>
-        <Card className="paymentMethod mt-3" md="4" xs="12">
-          <CardHeader className="text-center">결제 수단 선택</CardHeader>
-          <CardBody>
-            <FormGroup tag="fieldset" className="col">
-              <FormGroup className="col">
+        <Card className="paymentMethod mt-2" md="4" xs="12">
+          <CardHeader className="text-center"><b>결제 수단 선택</b></CardHeader>
+          <CardBody className="p-2">
+            <FormGroup tag="fieldset" className="col mb-0">
+              <FormGroup className="col mb-0">
                 <Label>
                   <Input
                     type="radio"
@@ -216,7 +216,7 @@ function Payment() {
                   <span>카카오페이</span>
                 </Label>
               </FormGroup>
-              {/* <FormGroup className="col">
+              <FormGroup className="col mb-0">
                 <Label>
                   <Input
                     type="radio"
@@ -227,7 +227,7 @@ function Payment() {
                   <span>네이버페이</span>
                 </Label>
               </FormGroup>
-              <FormGroup className="col">
+              <FormGroup className="col mb-0">
                 <Label>
                   <Input
                     type="radio"
@@ -237,7 +237,7 @@ function Payment() {
                   />{" "}
                   <span>신용/체크카드</span>
                 </Label>
-              </FormGroup> */}
+              </FormGroup>
             </FormGroup>
           </CardBody>
           <CardFooter>

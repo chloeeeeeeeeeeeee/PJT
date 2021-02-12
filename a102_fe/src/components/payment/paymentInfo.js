@@ -127,7 +127,7 @@ function PaymentInfo({sendDataToParent}) {
   });
 
   return (
-    <Col m="12" md={{ size:6 , offset: 1 }} >
+    <Col xs="12" md={{ size:6 , offset: 1 }} >
       <Card className="paymentInfoBox">
         <CardHeader>
           <h5 className="font-weight-bold mt-1">후원 바구니</h5>

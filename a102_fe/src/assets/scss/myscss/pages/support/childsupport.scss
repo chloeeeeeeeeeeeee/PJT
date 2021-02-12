@@ -1,47 +1,80 @@
 .mainSupport {
-  .supportContent {
+  .supportCategory {
     .supportChildContentLeft {
       Button {
         color: white;
         background-color: $oori-yellow;
         border: none;
       }
-      #naverMap {
-        height: 90%;
-      }
     }
     .categoryListBox {
       .categoryListItem {
         &.selectedChildCategoryListItem {
-          background-color: $oori-yellow;
-          color: $white;
+          color: $oori-yellow;
+          font-weight: bold;
+          background-color: $oori-white;
         }
       }
     }
-
+  }
+  .supportContent {
     .supportBox {
       .storeChildListBox {
-        height: 40%;
+        height: 35%;
         overflow-y: auto;
-        border-color: $oori-yellow;
-        border-width: 2px;
-        border-style: solid;
-        margin-bottom: 5%;
+        // border-color: $oori-yellow;
+        // border-width: 2px;
+        // border-style: solid;
+        background-color: $oori-white;
+        margin-bottom: 3%;
         .mapListItem {
-          border-bottom: 1px solid black;
-          height: auto;
+          align-items: center;
+          background-color: $oori-lucent-white;
+          width: 100%;
+          height: 7.5vh;
           &:hover {
             cursor: pointer;
           }
+          p {
+            font-size: small;
+          }
+          Button {
+            float: right;
+            font-size: small;
+            background-color: $oori-yellow;
+            border: none;
+            opacity: 0.8;
+            color: black;
+          }
+        }
+        .nothingToShow {
+          font-size: small;
         }
       }
       .storeChildSupportBox {
-        height: 40%;
+        height: 35%;
         overflow-y: auto;
         overflow-x: hidden;
-        border-color: $oori-yellow;
-        border-width: 2px;
-        border-style: solid;
+        // border-color: $oori-yellow;
+        // border-width: 2px;
+        // border-style: solid;
+        background-color: $oori-white;
+        margin-bottom: 3%;
+        .mapListItem {
+          align-items: center;
+          background-color: $oori-lucent-white;
+          width: 100%;
+          height: 7.5vh;
+          &:hover {
+            cursor: pointer;
+          }
+          p {
+            font-size: small;
+          }
+        }
+        .nothingToShow {
+          font-size: small;
+        }
       }
     }
   }

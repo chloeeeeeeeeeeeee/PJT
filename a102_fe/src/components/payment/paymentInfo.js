@@ -1,4 +1,4 @@
-import { Col, Row, Button } from "reactstrap";
+import { Col, Row, Button, CardBody, Card, CardHeader } from "reactstrap";
 import { useState, useEffect } from "react";
 
 function PaymentInfo({sendDataToParent}) {
@@ -87,21 +87,20 @@ function PaymentInfo({sendDataToParent}) {
   const cartItemList = cartStorage.map((cartItem, index) => {
     let imgurl = `http://i4a102.p.ssafy.io:8080/app/menus/1/${cartItem.itemName}.jpg`;
     return (
-      <Row className="mt-2 paymentInfoItem justify-content-between" key={index}>
-        <Row className="col-9 paymentMenuInfo">
-          <img src={imgurl} className="d-inline-block col-3" />
-          <div className="col-9 menuItemInfo pt-4 pb-4 pl-0 pr-0 row justify-content-start">
-            <h3 className="col-8">{cartItem.itemName}</h3>
-            <p className="col-4 text-right">{cartItem.itemPrice > 6000 ? cartItem.itemPrice - 6000 : cartItem.itemPrice}원</p>
-            <p className="col">
-              현재 후원된 그릇 수 : {cartItem.itemAvailable}
-            </p>
-          </div>
-        </Row>
-        <Col xs="3" className="paymentMenuButtons d-flex align-items-center">
+      <Row className="paymentInfoItem justify-content-between" key={index}>
+        <Col xs="3" className="paymentMenuInfo">
+          <img src={imgurl} className="d-inline-block col-3 p-0" />
+        </Col>
+        <Col xs="6">
+        <div className="menuItemInfo p-0 row justify-content-start">
+          <h5 className="col-8 mb-0">{cartItem.itemName}</h5>
+          <p className="col-4 text-center mb-0">{cartItem.itemPrice > 6000 ? cartItem.itemPrice - 6000 : cartItem.itemPrice}원</p>
+          <p className="col-12 information mt-1">현재 {cartItem.itemAvailable}그릇 후원되었습니다.</p>
+        </div>
+        </Col>
+        <Col xs="3" className="paymentMenuButtons d-flex align-items-center p-0">
           <Button
             className="paymentCountButton col-2"
-            color="primary"
             onClick={(e) => minusMenu(cartItem)}
           >
             -
@@ -111,26 +110,32 @@ function PaymentInfo({sendDataToParent}) {
           </p>
           <Button
             className="paymentCountButton col-2"
-            color="primary"
             onClick={(e) => plusMenu(cartItem)}
           >
             +
           </Button>
           <Button
-            className="paymentCountButton col-2 offset-4"
-            color="danger"
+            className="paymentCountButton col-2 offset-2"
             onClick={(e) => deleteMenu(cartItem)}
           >
             x
           </Button>
         </Col>
       </Row>
+      
     );
   });
 
   return (
-    <Col className="paymentInfoBox pt-2 pb-2" md="8" xs="12">
-      {cartItemList}
+    <Col xs="12" md={{ size:6 , offset: 1 }} >
+      <Card className="paymentInfoBox">
+        <CardHeader>
+          <h5 className="font-weight-bold mt-1">후원 바구니</h5>
+        </CardHeader>
+        <CardBody>  
+          {cartItemList}
+        </CardBody>
+        </Card>
     </Col>
   );
 }

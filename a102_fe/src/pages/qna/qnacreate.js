@@ -73,16 +73,19 @@ function QnaCreate() {
     <Fragment>
       <Container fluid={true} className="createPost">
         <Row>
-          <Col sm="12" md={{ size: 8, offset: 2 }}>
+          <Col sm="12" md={{ size: 10, offset: 1 }} id="title">
+            <h3 className="col-8 d-inline">문의하기</h3>
+          </Col>
+          <Col sm="12" md={{ size: 10, offset: 1 }}>
             <Card>
-              <CardHeader className="createPostHeader">
+              {/* <CardHeader className="createPostHeader">
                 <h5>문의하기</h5>
-              </CardHeader>
+              </CardHeader> */}
               <CardBody className="createPostBody">
                 <Form className="row">
                   <Col sm="12">
                     <FormGroup>
-                      <Label for="qnaTitle">제목</Label>
+                      <Label for="qnaTitle"><p className="qnaTitle mb-0">제목</p></Label>
                       <Input
                         className="createTitle"
                         type="text"
@@ -103,7 +106,7 @@ function QnaCreate() {
                         onChange={onContentChange}
                       />
                     </FormGroup>
-                    <FormGroup check>
+                    <FormGroup check className="d-inline">
                       <Label check>
                         <Input
                           type="checkbox"
@@ -114,11 +117,11 @@ function QnaCreate() {
                         비밀글
                       </Label>
                     </FormGroup>
+                    <Button className="createButton" type="submit" onClick={Create}>
+                      등록
+                    </Button>
                   </Col>
                 </Form>
-                <Button className="createButton" type="submit" onClick={Create}>
-                  등록
-                </Button>
               </CardBody>
             </Card>
           </Col>

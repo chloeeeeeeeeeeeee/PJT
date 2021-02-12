@@ -38,8 +38,8 @@ function App() {
             <Route path="/naver" component={NaverAuthCallback} />
             <Route path="/signout" component={Signout} />
             <Route path="/support" component={Support} />
-            <Route path="/map" component={Support} />
-            <Route path="/storedetail/:storeId" component={StoreDetail} />
+            {/* <Route path="/map" component={Support} /> */}
+            {/* <Route path="/storedetail/:storeId" component={StoreDetail} /> */}
             <Route
               path="/storedetailsupport/:storeId"
               component={StoreDetail}

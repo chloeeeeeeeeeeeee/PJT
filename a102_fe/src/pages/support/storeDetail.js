@@ -11,8 +11,6 @@ import StoreDetailInfo from "../../components/support/storeDetailInfo";
 import SupportCart from "../../components/support/supportCart";
 
 function StoreDetail(props) {
-  console.log("PROPS");
-  console.log(props);
   // 매장 ID 값
   const { storeId } = props.match.params;
 

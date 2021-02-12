@@ -7,6 +7,7 @@ import {
   InputGroup,
   InputGroupAddon,
 } from "reactstrap";
+import greenPin from "../../assets/images/greenpin.png"
 import SupportMapItem from "../../components/support/supportMapItem";
 
 function Support() {
@@ -35,9 +36,10 @@ function Support() {
   ];
   // 선택된 카테고리 정보
   let [selectedCategory, setSelectedCategory] = useState(0);
-  let [reloadMap, setReloadMap] = useState(true);
   let [address, setAddress] = useState("");
   let [storeList, setStoreList] = useState([]);
+  let [markerList, setMarkerList] = useState([]);
+  let naverMap = null;
 
   // 카테고리 리스트 컴포넌트
   const categoryListComponents = categoryList.map((category, index) => {
@@ -83,18 +85,49 @@ function Support() {
     );
   });
 
-  // 매장 리스트 가져와서 컴포넌트화
+  // 매장 리스트 가져와서 컴포넌트화 + 마커 찍기
   function setStoreListComponent() {
     if (address !== "") {
       fetch(
-        `http://i4a102.p.ssafy.io:8080/app/main/mapview/storelist/${encodeURIComponent(
-          address
-        )}`
+        `${
+          process.env.REACT_APP_API_URL
+        }/main/mapview/storelist/${encodeURIComponent(address)}`
       )
         .then((res) => res.json())
         .then((result) => {
           storeList = result;
           setStoreList(storeList);
+          if (storeList.length > 0 && storeList[0].length > 0) {
+            // 네이버 지도 객체 받아오기
+            const { naver } = window;
+            // 카카오 지도 객체 받아오기
+            const { kakao } = window;
+            // 주소-좌표 변환 객체를 생성합니다
+            const geocoder = new kakao.maps.services.Geocoder();
+
+            storeList[0].forEach((item) => {
+              geocoder.addressSearch(
+                item.storeLocation,
+                function (result, status) {
+                  if (status === kakao.maps.services.Status.OK) {
+                    let newMarker = new naver.maps.Marker({
+                      map: naverMap,
+                      position: new naver.maps.LatLng(result[0].y, result[0].x),
+                      icon: greenPin,
+                      zIndex: 100
+                    });
+                    var infoWindow = new naver.maps.InfoWindow({
+                        content: '<div style="width:150px;text-align:center;padding:10px;"><b>'+ item.storeName +'</b>.</div>'
+                    });
+                    naver.maps.Event.addListener(newMarker, 'mouseover', ()=>{infoWindow.open(naverMap, newMarker)})
+                    naver.maps.Event.addListener(newMarker, 'mouseout', ()=>{infoWindow.close()})
+                    naver.maps.Event.addListener(newMarker, 'click', ()=>{window.location.href=`storedetailsupport/${item.storeId}`})
+                  }
+                 
+                }
+              );
+            });
+          }
         });
     }
   }
@@ -106,40 +139,6 @@ function Support() {
   // } else if (window.location.href.indexOf("map") > -1) {
   //   supportCheck = false;
   // }
-
-  let mapScript = document.createElement("script");
-  mapScript.type = "text/javascript";
-
-  function successPosition(pos) {
-    mapScript.append(
-      `var mapOptions = {center: new naver.maps.LatLng(${pos.coords.latitude}, ${pos.coords.longitude}),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(${pos.coords.latitude}, ${pos.coords.longitude}),map: map,});`
-    );
-    axios
-      .get(
-        `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${pos.coords.longitude},${pos.coords.latitude}&orders=roadaddr&output=json`,
-        config
-      )
-      .then((response) => {
-        if (
-          response.data.results[0] !== undefined &&
-          response.data.results.length > 0
-        ) {
-          let tempData = response.data.results[0].region;
-          address = `${tempData.area1.name} ${tempData.area2.name} ${tempData.area3.name} ${tempData.area4.name}`;
-          setAddress(
-            `${tempData.area1.name} ${tempData.area2.name} ${tempData.area3.name} ${tempData.area4.name}`
-          );
-        }
-      })
-      .catch((error) => console.log(error));
-  }
-
-  function failPosition(err) {
-    setAddress("서울 강남구 역삼동");
-    mapScript.append(
-      `var mapOptions = {center: new naver.maps.LatLng(37.571075, 127.013588),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(37.571075, 127.013588),map: map,});`
-    );
-  }
 
   // 장소 찾기
   function searchLocation() {
@@ -156,66 +155,169 @@ function Support() {
   }
 
   useEffect(() => {
+    // 네이버 지도 객체 받아오기
+    const { naver } = window;
+    // 카카오 지도 객체 받아오기
+    const { kakao } = window;
+
+    // 네이버 지도 초기화
+    function initMap(latitude, longitude) {
+      naverMap = new naver.maps.Map("naverMap", {
+        center: new naver.maps.LatLng(latitude, longitude),
+        zoom: 15,
+      });
+      let centerMarker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(latitude, longitude),
+        map: naverMap,
+      });
+    }
+    // 마커 세팅
+    function setMarkers(markerArr) {
+      markerArr.forEach((location) => {});
+      //   for (let i = 0; i < 5; i++) {
+      //     let newMarker = new naver.maps.Marker({
+      //       map: naverMap,
+      //       position: new naver.maps.LatLng(
+      //         latitude - i / 10000,
+      //         longitude - i / 10000
+      //       ),
+      //     });
+      //   }
+    }
+
+    // 주소 검색으로 새롭게 설정됨
     if (address !== "") {
-      // 새로 받은 주소로 검색
-      axios
-        .get(
-          `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${address}`,
-          config
-        )
-        .then((response) => {
-          if (response.data.addresses[0] !== undefined) {
-            mapScript.append(
-              `var mapOptions = {center: new naver.maps.LatLng(${response.data.addresses[0].y}, ${response.data.addresses[0].x}),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(${response.data.addresses[0].y}, ${response.data.addresses[0].x}),map: map,});`
-            );
-            setReloadMap(!reloadMap);
-          }
-        })
-        .catch((err) => console.log(err));
-
-      document.body.appendChild(mapScript);
       setStoreListComponent();
+      // 주소-좌표 변환 객체를 생성합니다
+      const geocoder = new kakao.maps.services.Geocoder();
+      // 현재 세팅돼있는 주소 -> 좌표 = 지도의 센터
+      geocoder.addressSearch(address, function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          initMap(result[0].y, result[0].x);
+        } else {
+          initMap(37.571075, 127.013588);
+        }
+      });
 
-      return () => {
-        document.body.removeChild(mapScript);
-      };
+      // 마커를 찍기위한 리스트
     } else {
-      // 현재 위치 가져오기
-      navigator.geolocation.getCurrentPosition(successPosition, failPosition);
-      document.body.appendChild(mapScript);
-      setStoreListComponent();
-      return () => {
-        document.body.removeChild(mapScript);
-      };
+      // 주소검색 안해서 현재 위치 기반 검색
+      navigator.geolocation.getCurrentPosition(
+        function (pos) {
+          //   initMap(pos.coords.latitude, pos.coords.longitude);
+          // 주소-좌표 변환 객체를 생성합니다
+          const geocoder = new kakao.maps.services.Geocoder();
+          geocoder.coord2RegionCode(
+            pos.coords.longitude,
+            pos.coords.latitude,
+            function (result, status) {
+              if (status == kakao.maps.services.Status.OK) {
+                setAddress(result[0].address_name);
+              }
+            }
+          );
+          //   setMarkers(pos.coords.latitude, pos.coords.longitude);
+        },
+        function () {
+          // 현재 위치 가져오기 실패시 기본 위치
+          setAddress("서울시 종로구 창신동");
+        }
+      );
     }
   }, [address]);
+
+  //   let mapScript = document.createElement("script");
+  //   mapScript.type = "text/javascript";
+
+  //   function successPosition(pos) {
+  //     mapScript.append(
+  //       `var mapOptions = {center: new naver.maps.LatLng(${pos.coords.latitude}, ${pos.coords.longitude}),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(${pos.coords.latitude}, ${pos.coords.longitude}),map: map,});`
+  //     );
+  //     axios
+  //       .get(
+  //         `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${pos.coords.longitude},${pos.coords.latitude}&orders=roadaddr&output=json`,
+  //         config
+  //       )
+  //       .then((response) => {
+  //         if (
+  //           response.data.results[0] !== undefined &&
+  //           response.data.results.length > 0
+  //         ) {
+  //           let tempData = response.data.results[0].region;
+  //           address = `${tempData.area1.name} ${tempData.area2.name} ${tempData.area3.name} ${tempData.area4.name}`;
+  //           setAddress(
+  //             `${tempData.area1.name} ${tempData.area2.name} ${tempData.area3.name} ${tempData.area4.name}`
+  //           );
+  //         }
+  //       })
+  //       .catch((error) => console.log(error));
+  //   }
+
+  //   function failPosition(err) {
+  //     setAddress("서울 강남구 역삼동");
+  //     mapScript.append(
+  //       `var mapOptions = {center: new naver.maps.LatLng(37.571075, 127.013588),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(37.571075, 127.013588),map: map,});`
+  //     );
+  //   }
+
+  //   useEffect(() => {
+  //     if (address !== "") {
+  //       // 새로 받은 주소로 검색
+  //       axios
+  //         .get(
+  //           `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${address}`,
+  //           config
+  //         )
+  //         .then((response) => {
+  //           if (response.data.addresses[0] !== undefined) {
+  //             mapScript.append(
+  //               `var mapOptions = {center: new naver.maps.LatLng(${response.data.addresses[0].y}, ${response.data.addresses[0].x}),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(${response.data.addresses[0].y}, ${response.data.addresses[0].x}),map: map,});`
+  //             );
+  //             setReloadMap(!reloadMap);
+  //           }
+  //         })
+  //         .catch((err) => console.log(err));
+
+  //       document.body.appendChild(mapScript);
+  //       setStoreListComponent();
+
+  //       return () => {
+  //         document.body.removeChild(mapScript);
+  //       };
+  //     } else {
+  //       // 현재 위치 가져오기
+  //       navigator.geolocation.getCurrentPosition(successPosition, failPosition);
+  //       document.body.appendChild(mapScript);
+  //       setStoreListComponent();
+  //       return () => {
+  //         document.body.removeChild(mapScript);
+  //       };
+  //     }
+  //   }, [address]);
 
   // 카테고리 변경시
   let [storeListComponents, setStoreListComponents] = useState([]);
   useEffect(() => {
-    console.log("categoryChange");
-    console.log(storeList[selectedCategory + 1]);
     if (storeList[selectedCategory + 1] !== undefined) {
-      console.log(storeList[selectedCategory + 1].length);
       if (storeList[selectedCategory + 1].length > 0) {
         storeListComponents = storeList[selectedCategory + 1].map(
           (storeInfo, index) => {
-              // storeInfo.supportCheck = supportCheck
+            // storeInfo.supportCheck = supportCheck
             return <SupportMapItem storeInfo={storeInfo} key={index} />;
-          }          
+          }
         );
-      } else{
-          storeListComponents = (
-            <Col className="nothingToShow">주변 가게가 없습니다...</Col> )
-        }
+      } else {
+        storeListComponents = (
+          <Col className="nothingToShow">주변 가게가 없습니다...</Col>
+        );
+      }
     }
-    setStoreListComponents(storeListComponents)
-    
+    setStoreListComponents(storeListComponents);
   }, [selectedCategory, storeList]);
 
   return (
     <Col className="mainSupport">
-    {/* 지도 영역 타이틀 */}
+      {/* 지도 영역 타이틀 */}
       <Row>
         <Col sm="12" md={{ size: 8, offset: 1 }} className="supportTitle">
           <h2>후원하기</h2>
@@ -228,7 +330,7 @@ function Support() {
             <Input
               name="addressInput"
               id="addressInput"
-              placeholder="동 단위까지 입력해주세요"
+              placeholder="'서울시 OO구 OO동'으로 입력해주세요"
               onKeyUp={enterkeyPress}
             />
             <InputGroupAddon addonType="append">
@@ -251,9 +353,7 @@ function Support() {
         <Col sm="6" md="4" className="supportBox">
           {/* 매장 리스트 */}
           <h5>가게 목록</h5>
-          <Row className="storeListBox">
-            {storeListComponents}
-          </Row>
+          <Row className="storeListBox">{storeListComponents}</Row>
         </Col>
       </Row>
     </Col>

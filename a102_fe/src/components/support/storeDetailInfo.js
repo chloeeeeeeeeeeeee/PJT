@@ -16,6 +16,8 @@ function StoreDetailInfo(storeInfo) {
 
   // 앞에서 더 잘 보내게끔 수정 필요
   const storeId = storeInfo.storeInfo;
+  // 네이버 지도
+  const {naver} = window
 
   // 일단 현재 위치로 세팅하지만 매장 위치로 변경 필요
   const mapScript = document.createElement("script");
@@ -25,7 +27,7 @@ function StoreDetailInfo(storeInfo) {
   let [storeInformation, setStoreInformation] = useState({});
 
   useEffect(() => {
-    fetch(`http://i4a102.p.ssafy.io:8080/app/support/storedetail/${storeId}`)
+    fetch(`${process.env.REACT_APP_API_URL}/support/storedetail/${storeId}`)
       .then((res) => res.json())
       .then((result) => {
         setStoreInformation(result);
@@ -79,9 +81,6 @@ function StoreDetailInfo(storeInfo) {
             * 가게의 실 메뉴와 차이가 있을 수 있습니다
           </p>
           <div className="storeMiniMap mt-4" id="storeMiniMap"></div>
-          <Button className="findWayButton" block>
-            길찾기
-          </Button>
         </CardBody>
       </Card>
     </Col>

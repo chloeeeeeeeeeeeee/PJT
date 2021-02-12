@@ -6,6 +6,7 @@
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/storeMain.css">
+    <link rel="stylesheet" href="assets/css/animation.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
         rel="stylesheet"
@@ -19,16 +20,29 @@
 
 </head>
 <body>
-    <div id="fade" class="six-four">
-        <div class="carousel-container">
+    <div id="myModal" class="modal">
+        <div class="modal-content">                                                             
+            <p>결식아동에게 행복을 전하는 우리끼니 입니다</p>
+            <p>음식의 차액만 후원 해 주신다면</p>
+            <p>아이들에게 더 나은 음식을 지원 할 수 있습니다</p>
+            <p>후원하시겠습니까?</p>
+            <div style="display: flex;">
+                <button onclick="clickDonation()">후원 하기</button>
+                <button onclick="clickPay()">결제만 하기</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="fade" class="six-four opazero">
+        <div class="carousel-container" style="display: flex;">
             <a class="carousel-control-prev arrow-border arrow-width" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
-                </a>
+            </a>
+
             <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
                 <ol class="carousel-indicators">
-                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
-                <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
+                    <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
                 </ol>
                 <div class="carousel-inner arrow-border">
                     <div class="carousel-item active">
@@ -36,12 +50,38 @@
                         </section>
                     </div>
                 </div>
-                
             </div>
+
             <a class="carousel-control-next arrow-border arrow-width" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </a>
+        </div>
+
+        <div class="donation-container" style="display:none">
+            <p>donation</p>
+        </div>
+
+        <div class="cart-container">
+            <div class="cart-inner">
+                <div class="cart-title">장바구니</div>
+                <div class="cart-body">
+                </div>
+                <div class="money-box">
+                    <div class="money-box-item">
+                        <div class="text-opt">주문수량</div>
+                        <div class="text-opt" id="totalCnt">0</div>
+                    </div>
+                    <div class="money-box-item">
+                        <div class="text-opt">주문금액</div>
+                        <div class="text-opt" id="totalCost">0</div>
+                    </div>
+                </div>
+                <div class="button-container">
+                    <button class="button-reset" onclick="clickReset()">초기화</button>
+                    <button class="button-pay" onclick="clickPay()">결제하기</button>
+                </div>
+            </div>
         </div>
     </div>
 

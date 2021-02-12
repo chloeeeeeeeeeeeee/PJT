@@ -10,11 +10,15 @@ html, body{
     align-items: center;
 }
 
-.payment-main{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.iframe-container{
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-
+.iframe-option{
+	width: 50%;
+	height: 50%;
+}

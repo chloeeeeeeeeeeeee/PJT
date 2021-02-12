@@ -4,13 +4,9 @@ new QWebChannel(qt.webChannelTransport, function (channel) {
 });
 
 function clickKakaoPay(){
-    handler.nextPage(function(retVal) {
-        console.error(JSON.stringify(retVal));
-    }, "kakao")
+    handler.nextPage("kakao")
 }
 
 function clickCardTagging(){
-    handler.nextPage(function(retVal) {
-        console.error(JSON.stringify(retVal));
-    }, "rfid")
+    handler.nextPage("rfid")
 }

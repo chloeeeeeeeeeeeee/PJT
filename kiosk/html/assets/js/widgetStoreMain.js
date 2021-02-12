@@ -72,13 +72,14 @@ function clearStoreItem() {
     document.getElementsByClassName("carousel-inner")[0].innerHTML = `<div class="carousel-item active">
                                                                         <section class="bookmark-container">
                                                                         </section>
-                                                                      </div>`
+                                                                      </div>`;
 
-    newCarouselIndicators = `<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${carouselCnt}"></li>`
-    document.getElementsByClassName("carousel-indicators")[0].innerHTML = `<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>`
+    newCarouselIndicators = `<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="${carouselCnt}"></li>`;
+    document.getElementsByClassName("carousel-indicators")[0].innerHTML = `<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>`;
 
-    document.getElementsByClassName("carousel-container")[0].style.display == 'flex'
-    document.getElementsByClassName("donation-container")[0].style.display == 'none'
+    document.getElementsByClassName("carousel-container")[0].style.display = 'flex';
+    document.getElementsByClassName("donation-container")[0].style.display = 'none';
+    mainState = 0;
 }
 
 function addItem(itemId, itemName, itemPrice) {

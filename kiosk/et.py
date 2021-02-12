@@ -178,7 +178,6 @@ class et(QMainWindow, Ui_mainWindow):
     def loadCompletePage(self):
         self.widgetList["widgetComplete.html"].raise_()
         jscmd = "completeTimeout(\"10\")"
-
         self.widgetList["widgetComplete.html"].page().runJavaScript(jscmd)
 
     # html controll functions

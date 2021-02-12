@@ -7,48 +7,35 @@ const { naver } = window;
 function NaverAuthCallback() {
   useEffect(() => {
     myFunction();
-    getNaverToken();
-    UserProfile();
   });
-  // const myToken = window.location.href
-  // alert("여기서는?", myToken)
-
-  // const myLocation = useLocation();
-  // alert("리액트를 믿어보자:", myLocation)
   
   function myFunction() {
-    const myToken = window.location.href
     const location = window.location.href.split('=')[1];
     const token = location.split('&')[0];    
-    alert("제발 돼라:", myToken)
-    alert("이거라도:", window.location.href)
-    alert("제발 제발 보여주세요:", token)
-  }
-  
+    console.log("예린의 예언:", token)
+    fetch(`${process.env.REACT_APP_API_URL}/account/signinnaver`, {
+      method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(token)
+    })
+    .then(res => res.json())
+    .then(res => {
+      console.info("loginWithNaver 함수 성공한 경우 자동 로그인:", res)
+      console.info("loginWithNaver 함수 성공한 경우 자동 로그인:", res.token)
+      localStorage.setItem('access-token', res.token)
+      window.location.href = '/profile'
+    })
 
-  const location = useLocation();  
 
-  const getNaverToken = () => { 
-    alert("겟네이버토큰 실행")
-    if (!location.hash) return;
-    const Navertoken = location.hash.split('=')[1].split('&')[0];
-    alert("네이버 로그인 접근 토큰:", Navertoken);
-  };
-
-  const UserProfile = () => {
-    console.info("유저프로파일 받아오기")
-    window.location.href.includes('access_token') && GetUser();
-    function GetUser() {
-      const location = window.location.href.split('=')[1];
-      const token = location.split('&')[0];
-      alert("네이버token: ", token);
-    }
-  };
+  }  
 
   return (
-    <div id="naverIdLogin"
-    ></div>
-  );
+  <div id="naverIdLogin"
+  >
+  </div>
+  )
 }
 
 export default NaverAuthCallback;

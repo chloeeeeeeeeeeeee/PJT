@@ -72,7 +72,7 @@ function PrivateRoute({ children, ...rest }) {
       {...rest}
       render={({ location }) =>
         // localStorage.getItem("access-token") !== 'undefined' ? (
-        Boolean(localStorage.getItem("access-token")) ? (
+        (Boolean(localStorage.getItem("access-token")) && (localStorage.getItem("access-token") != "undefined") ) ? (
           // auth.user ? (
           // 다만 PrivateRoute가 받는 children이 뭔지 모르겠네...
           children

@@ -12,7 +12,8 @@ import {
   // Button,
 } from "reactstrap";
 import Timeline from "../../components/account/timeline";
-import MemberInfo from "../../components/account/memberInfo";
+import MemberWithUs from "../../components/account/memberWithUs";
+// import MemberInfo from "../../components/account/memberInfo";
 import MemberQnA from "../../components/account/memberQnA";
 
 function Profile() {
@@ -24,7 +25,7 @@ function Profile() {
           <Row className="division-wrapper">
             <Col sm="3" className="left-division">
               <Row className="left-upper-division">
-                <MemberInfo/> 
+                <MemberWithUs/> 
               </Row>
               <Row className="left-lower-division">
                 <MemberQnA/>

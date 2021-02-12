@@ -13,13 +13,16 @@ function KakaoAuth() {
           url: '/v2/user/me',
           success: function (response) {
             console.log(response.id);
-            fetch(`http://i4a102.p.ssafy.io:8080/app/account/signinkakao`, {
+            console.log(response.kakao_account.profile.nickname);
+            console.log(process.env.REACT_APP_API_URL)
+            fetch(`${process.env.REACT_APP_API_URL}/account/signinkakao`, {
               method: "POST",
                 headers: {
                   'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                   userId: response.id,
+                  userName: response.kakao_account.profile.nickname,
                 })
               })
             .then(res => res.json())

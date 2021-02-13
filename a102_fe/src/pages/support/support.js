@@ -13,14 +13,6 @@ import SupportMapItem from "../../components/support/supportMapItem";
 function Support() {
   // 네이버 API 통신을 위해 필요한 HEADER 세팅
   const axios = require("axios");
-  const config = {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "X-NCP-APIGW-API-KEY-ID": "e5vp42977m",
-      "X-NCP-APIGW-API-KEY": "PpdYPMVeyXPnhSW33x2XKzw9tYGpsGhjKvdhIlMy",
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
 
   // 카테고리 리스트 일단 넣어두기
   const categoryList = [
@@ -38,7 +30,6 @@ function Support() {
   let [selectedCategory, setSelectedCategory] = useState(0);
   let [address, setAddress] = useState("");
   let [storeList, setStoreList] = useState([]);
-  let [markerList, setMarkerList] = useState([]);
   let naverMap = null;
 
   // 카테고리 리스트 컴포넌트
@@ -171,19 +162,6 @@ function Support() {
         map: naverMap,
       });
     }
-    // 마커 세팅
-    function setMarkers(markerArr) {
-      markerArr.forEach((location) => {});
-      //   for (let i = 0; i < 5; i++) {
-      //     let newMarker = new naver.maps.Marker({
-      //       map: naverMap,
-      //       position: new naver.maps.LatLng(
-      //         latitude - i / 10000,
-      //         longitude - i / 10000
-      //       ),
-      //     });
-      //   }
-    }
 
     // 주소 검색으로 새롭게 설정됨
     if (address !== "") {
@@ -198,8 +176,6 @@ function Support() {
           initMap(37.571075, 127.013588);
         }
       });
-
-      // 마커를 찍기위한 리스트
     } else {
       // 주소검색 안해서 현재 위치 기반 검색
       navigator.geolocation.getCurrentPosition(
@@ -225,75 +201,6 @@ function Support() {
       );
     }
   }, [address]);
-
-  //   let mapScript = document.createElement("script");
-  //   mapScript.type = "text/javascript";
-
-  //   function successPosition(pos) {
-  //     mapScript.append(
-  //       `var mapOptions = {center: new naver.maps.LatLng(${pos.coords.latitude}, ${pos.coords.longitude}),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(${pos.coords.latitude}, ${pos.coords.longitude}),map: map,});`
-  //     );
-  //     axios
-  //       .get(
-  //         `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${pos.coords.longitude},${pos.coords.latitude}&orders=roadaddr&output=json`,
-  //         config
-  //       )
-  //       .then((response) => {
-  //         if (
-  //           response.data.results[0] !== undefined &&
-  //           response.data.results.length > 0
-  //         ) {
-  //           let tempData = response.data.results[0].region;
-  //           address = `${tempData.area1.name} ${tempData.area2.name} ${tempData.area3.name} ${tempData.area4.name}`;
-  //           setAddress(
-  //             `${tempData.area1.name} ${tempData.area2.name} ${tempData.area3.name} ${tempData.area4.name}`
-  //           );
-  //         }
-  //       })
-  //       .catch((error) => console.log(error));
-  //   }
-
-  //   function failPosition(err) {
-  //     setAddress("서울 강남구 역삼동");
-  //     mapScript.append(
-  //       `var mapOptions = {center: new naver.maps.LatLng(37.571075, 127.013588),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(37.571075, 127.013588),map: map,});`
-  //     );
-  //   }
-
-  //   useEffect(() => {
-  //     if (address !== "") {
-  //       // 새로 받은 주소로 검색
-  //       axios
-  //         .get(
-  //           `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${address}`,
-  //           config
-  //         )
-  //         .then((response) => {
-  //           if (response.data.addresses[0] !== undefined) {
-  //             mapScript.append(
-  //               `var mapOptions = {center: new naver.maps.LatLng(${response.data.addresses[0].y}, ${response.data.addresses[0].x}),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(${response.data.addresses[0].y}, ${response.data.addresses[0].x}),map: map,});`
-  //             );
-  //             setReloadMap(!reloadMap);
-  //           }
-  //         })
-  //         .catch((err) => console.log(err));
-
-  //       document.body.appendChild(mapScript);
-  //       setStoreListComponent();
-
-  //       return () => {
-  //         document.body.removeChild(mapScript);
-  //       };
-  //     } else {
-  //       // 현재 위치 가져오기
-  //       navigator.geolocation.getCurrentPosition(successPosition, failPosition);
-  //       document.body.appendChild(mapScript);
-  //       setStoreListComponent();
-  //       return () => {
-  //         document.body.removeChild(mapScript);
-  //       };
-  //     }
-  //   }, [address]);
 
   // 카테고리 변경시
   let [storeListComponents, setStoreListComponents] = useState([]);

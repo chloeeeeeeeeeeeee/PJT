@@ -16,14 +16,14 @@
     <!-- 네이버 지도 -->
     <script
       type="text/javascript"
-      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=e5vp42977m"
+      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=%REACT_APP_NAVER_MAP_CLIENT_ID%"
     ></script>
     <!-- 카카오 지도 -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2ca4097a516541d3eaf8445ffc542cbc&libraries=services"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAO_MAP_APP_KEY%&libraries=services"></script>
 
     <!-- 카카오 로그인 -->
     <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
-    <script>Kakao.init('dc6a2c589be6aae4a0e060ff22247ebf');</script>
+    <script>Kakao.init('%REACT_APP_KAKAO_LOGIN_APP_KEY%');</script>
 
     <!-- 네이버페이 -->
     <!-- <script src="https://nsp.pay.naver.com/sdk/js/naverpay.min.js"></script> -->
@@ -37,7 +37,7 @@
       src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"
     ></script>
     <script>
-      IMP.init("imp10005018");
+      IMP.init("%REACT_APP_IMPORT_INIT_KEY%");
     </script>
 
     <!-- 폰트 -->

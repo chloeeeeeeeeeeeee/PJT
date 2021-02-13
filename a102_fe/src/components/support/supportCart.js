@@ -158,10 +158,7 @@ function SupportCart(storeInfo) {
     window.location.href = `/payment`;
   }
 
-  let itemContributionTotal = 0;
-  console.log(menuList)
   const supportCenterSide = menuList.map((menu, index) => {
-    itemContributionTotal += menu.itemContributionAmount;
     if (menu.itemPrice > 6000) {
       return (
         <div

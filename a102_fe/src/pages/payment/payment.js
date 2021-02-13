@@ -33,7 +33,7 @@ function Payment() {
 
   function startPayment() {
     if (jwtToken == "") {
-      alert("호오 로그인을 안하셨군요ㅋ");
+      alert("로그인 후 이용해주세요.");
       return;
     }
     let paymentOption = document.querySelector("input[type='radio']:checked")
@@ -71,7 +71,7 @@ function Payment() {
       console.log(data);
 
       axios
-        .post(`http://i4a102.p.ssafy.io:8080/app/payment/kakaopay`, data, {
+        .post(`${process.env.REACT_APP_API_URL}/payment/kakaopay`, data, {
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
@@ -151,7 +151,7 @@ function Payment() {
             console.log(data);
 
             axios
-              .post(`http://i4a102.p.ssafy.io:8080/app/payment/iamport`, data, {
+              .post(`${process.env.REACT_APP_API_URL}/payment/iamport`, data, {
                 headers: {
                   "Content-Type": "application/json",
                   "Access-Control-Allow-Origin": "*",

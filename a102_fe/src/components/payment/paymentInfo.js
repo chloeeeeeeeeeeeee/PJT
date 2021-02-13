@@ -83,7 +83,7 @@ function PaymentInfo({ sendDataToParent }) {
   }
 
   const cartItemList = cartStorage.map((cartItem, index) => {
-    let imgurl = `http://i4a102.p.ssafy.io:8080/app/menus/1/${cartItem.itemName}.jpg`;
+    let imgurl = `${process.env.REACT_APP_API_URL}/menus/1/${cartItem.itemName}.jpg`;
     return (
       <Row className="mt-2 paymentInfoItem justify-content-between" key={index}>
         <Row className="col-9 paymentMenuInfo">

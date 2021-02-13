@@ -130,6 +130,16 @@ public class AccountServiceImpl implements AccountService{
 
 	}
 
+	@Override
+	public String userPwdChk(User user, String pwd) {
+		
+		if(passwordEncoding.matches(pwd,user.getUserPwd())) {
+			return "SUCCESS";
+		}
+		
+		return "FAIL";
+	}
+
 
 	
 	

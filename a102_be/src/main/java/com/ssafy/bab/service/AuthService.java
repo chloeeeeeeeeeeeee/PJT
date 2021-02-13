@@ -41,4 +41,7 @@ public class AuthService {
     	return userDao.findByUserId(userId);
     }
     
+    public User userSeqChk(int userSeq) {
+    	return userDao.findByUserSeq(userSeq);
+    }
 }

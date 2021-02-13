@@ -20,6 +20,8 @@ public interface AccountService {
 	
 	public User signInNaver(String Authorization);
 	
+	public String userPwdChk(User user, String pwd);
+	
 	//프로필
 	public ArrayList<Contribution> userContribution(int userSeq);
 	

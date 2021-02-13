@@ -20,13 +20,14 @@
     .detailPostQHeader {
       background-color: $oori-white;
       color: $oori-green;
+      font-weight: bold;
       span {
         float: right;
       }
     }
 
     .detailPostQBody {
-      height: 20vh;
+      height: 21vh;
       overflow-y: auto;
       // border-bottom: solid;
       // border-color: $oori-green;
@@ -38,7 +39,7 @@
     }
 
     .detailPostABody {
-      height: 20vh;
+      height: 21vh;
       overflow-y: auto;
     }
   }

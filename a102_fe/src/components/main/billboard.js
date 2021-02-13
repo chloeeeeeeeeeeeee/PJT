@@ -9,7 +9,7 @@ import {
 } from "reactstrap";
 import Usertotal from "./usertotal";
 import Userrank from "./userrank";
-import Banner from "./banner";
+// import Banner from "./banner";
 
 
 function Billboard(props) {
@@ -25,10 +25,10 @@ function Billboard(props) {
       id: 2,
       component: <Userrank />,
     },
-    {
-      id: 3,
-      component: <Banner />,
-    },
+    // {
+    //   id: 3,
+    //   component: <Banner />,
+    // },
   ];
 
   const next = () => {
@@ -43,15 +43,15 @@ function Billboard(props) {
     setActiveIndex(nextIndex);
   };
 
-  const goToIndex = (newIndex) => {
-    if (animating) return;
-    setActiveIndex(newIndex);
-  };
+  // const goToIndex = (newIndex) => {
+  //   if (animating) return;
+  //   setActiveIndex(newIndex);
+  // };
 
   const slides = items.map((item, index) => {
     return (
       <CarouselItem
-        className="custom-tag col"
+        className="custom-tag col p-0"
         tag="div"
         key={item.id}
         onExiting={() => setAnimating(true)}
@@ -64,7 +64,7 @@ function Billboard(props) {
 
   return (
     <Carousel
-      className="billboard col"
+      className="billboard col p-0"
       activeIndex={activeIndex}
       next={next}
       previous={previous}

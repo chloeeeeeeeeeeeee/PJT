@@ -18,16 +18,64 @@
 //     }
 //   }
 // }
+.billboard {
+  height: 60vh;
+  //   background-color: red;
+  .carousel-inner {
+    height: 100%;
+    .custom-tag {
+      height: 100%;
+      .carouselItem {
+        height: 100%;
+      }
+      //   .banner > a {
+      //     display: block;
+      //     width: 100%;
+      //     height: 100%;
+      //     img {
+      //       width: 100%;
+      //       height: 100%;
+      //     }
+      //   }
+    }
+  }
+}
+.userrank {
+  //   display: inline;
+  background-image: url("../../../../images/awards.png");
+  height: 100%;
+  width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+  .userrankrank {
+    color: $oori-gray-pinstripe;
+    text-align: center;
+    line-height: 50px;
+  }
+  .userrankgood {
+    color: $oori-gray-pinstripe;
+    text-align: center;
+    line-height: 10px;
+    font-size: small;
+  }
+}
 
-// .userrank {
-//     height:100%;
-//   text-align: center;
-//   vertical-align: middle;
-// }
-
-// .usertotal {
-//     height:100%;
-//   text-align: center;
-//   vertical-align: middle;
-//   padding-top: 11vh;
-// }
+.usertotal {
+  background-image: url("../../../../images/happpynew.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+  //   vertical-align: middle;
+  padding-top: 11vh;
+  .usertotaltotal {
+    color: $oori-gray-pinstripe;
+    text-align: center;
+  }
+}

@@ -97,7 +97,7 @@ function Whattoeat() {
 
     return (
         <Card>
-            <CardBody sm="12" className="childwte">
+            <CardBody sm="12" className="childwte p-0">
                 <h1>오늘은 뭐 먹을까?</h1>
                 {/* <p>현재 위치 사용에 동의해주셔야, 근처에 있는 음식점을 추천드려요! 동의하지 않으실 경우, 랜덤으로 추천 음식들을 보여드립니다.</p> */}
                 <Button className="choosemenubutton" onClick={ChooseMenu}><img src={que}/></Button>

@@ -1,15 +1,24 @@
-import Billboard from "../../components/main/billboard.js";
+import React, { Fragment } from "react";import Billboard from "../../components/main/billboard.js";
 import Aboutus from "../../components/main/aboutus.js";
-import { Container, Row, Col } from "reactstrap";
+import { 
+  Container,
+  Row,
+  Col,} from "reactstrap";
 
 function Main() {
   return (
-    <Row className="main">
-        <Billboard />
-      <Col className="aboutus">
-        <Aboutus />
-      </Col>
-    </Row>
+    <Fragment>
+      <Container fluid={true}>
+        <Row className="main">
+          <Col sm="6" md={{ size: 5, offset: 1 }}>
+            <Billboard />
+          </Col>
+          <Col sm="6" md={{ size: 5 }} className="aboutus">
+            <Aboutus />
+          </Col>
+        </Row>
+      </Container>
+  </Fragment>  
   );
 }
 

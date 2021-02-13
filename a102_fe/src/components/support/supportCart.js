@@ -177,7 +177,7 @@ function SupportCart(storeInfo) {
   });
 
   return (
-    <Col md="8" sm="12" className="row justify-content-around storeMenuDetail">
+    <Col md="8" sm="12" className="row justify-content-around storeMenuDetail p-0 m-0">
       <Col md="7" xs="8" className="storeCenterBox">
         <Card>
           <CardHeader className="cardHeader">

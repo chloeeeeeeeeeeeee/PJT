@@ -1,10 +1,10 @@
 .detailPost {
   .card {
-    border-color: $eat-key-color;
+    border-color: $oori-green;
     border-width: 2px;
 
     .detailPostQHeader {
-      background-color: $eat-key-color;
+      background-color: $oori-green;
       span {
         float: right;
       }
@@ -16,7 +16,7 @@
     }
 
     .detailPostAHeader {
-      background-color: $eat-key-color;
+      background-color: $oori-green;
     }
 
     .detailPostABody {
@@ -25,19 +25,19 @@
     }
 
     .detailPostButton {
-      background-color: $eat-key-color;
+      background-color: $oori-green;
       .detailPostUpdateButton,
       .detailPostDeleteButton {
-        background-color: $eat-point-color;
-        color: white;
+        background-color: $oori-white;
+        color: $oori-green;
         border: none;
         border-radius: 20%;
         display: inline-block;
         float: right;
       }
       .detailPostBackButton {
-        background-color: $eat-point-color;
-        color: white;
+        background-color: $oori-white;
+        color: $oori-green;
         border: none;
         border-radius: 20%;
         display: inline-block;

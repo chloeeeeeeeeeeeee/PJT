@@ -113,7 +113,11 @@ function ChildSupport() {
                       });
                       naver.maps.Event.addListener(newMarker, 'mouseover', ()=>{infoWindow.open(naverMap, newMarker)})
                       naver.maps.Event.addListener(newMarker, 'mouseout', ()=>{infoWindow.close()})
-                      naver.maps.Event.addListener(newMarker, 'click', ()=>{window.location.href=`storedetailsupport/${item.storeId}`})
+                      naver.maps.Event.addListener(newMarker, 'click', ()=>{fetch(`${process.env.REACT_APP_API_URL}/support/menulist/${item.storeId}`)
+                      .then((res) => res.json())
+                      .then((result) => {
+                        setMenuList(result);
+                      });})
                     }
                    
                   }
@@ -239,12 +243,12 @@ function ChildSupport() {
     let lst = []
     
     for (let idx=0; idx<menu.itemAvailable; idx++){
-      lst.push(<FcLike/>)
+      lst.push(<FcLike key={idx}/>)
     }
 
     if (menu.itemAvailable > 0) {
       return (
-        <Col xs="12">{menu.itemName} : {lst} </Col>
+        <Col xs="12" key={index}>{menu.itemName} : {lst} </Col>
       );
     }
   });

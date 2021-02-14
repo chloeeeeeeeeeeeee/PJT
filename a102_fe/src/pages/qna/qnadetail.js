@@ -62,7 +62,27 @@ function QnaDetail() {
         <Fragment>
             <Container fluid={true} className="detailPost">
                 <Row>
-                    <Col sm="12" md={{ size: 8, offset: 2 }}>
+                    <Col sm="12" md={{ size: 10, offset: 1 }} id="title">
+                        <h3 className="col-8 d-inline">문의 내역</h3>
+                        <div className="col-4 d-inline detailPostButton">
+                        <Button className="detailPostUpdateButton ml-1" onClick={(e) => Update(e)}>수정하기</Button>
+                               {qnauser.userId === user.userId && qna.qnaReply!=null?
+                                <span>
+                                <Button className="detailPostDeleteButton ml-1" onClick={(e) => Delete(e)}>삭제하기</Button>
+                                </span>
+                                :
+                                qnauser.userId === user.userId?
+                                <span>
+                                <Button className="detailPostDeleteButton ml-1" onClick={(e) => Delete(e)}>삭제하기</Button>
+                                <Button className="detailPostUpdateButton ml-1" onClick={(e) => Update(e)}>수정하기</Button>
+                                </span>
+                                :
+                                ""
+                            }
+                            <Button className="detailPostBackButton ml-1" onClick={(e) => Back(e)}>목록으로가기</Button>
+                        </div>
+                    </Col>
+                    <Col sm="12" md={{ size: 10, offset: 1 }}>
                         <Card>
                             <CardHeader className="detailPostQHeader">
                                 <h5>{qna.qnaTitle}</h5>
@@ -75,14 +95,14 @@ function QnaDetail() {
                                 </p>
                             </CardBody>
                             <CardHeader className="detailPostAHeader">
-                                <h5>답변</h5>
+                                <h5 className="mb-0">답변</h5>
                             </CardHeader>
                             <CardBody className="detailPostABody">
                                 <p>
                                 {qna.qnaReply? qna.qnaReply.replyContent : "조금만 기다려주세요, 빠르게 응답드리겠습니다."}
                                 </p>
                             </CardBody>
-                            <CardFooter className="detailPostButton">
+                            {/* <CardFooter className="detailPostButton">
                                 <Button className="detailPostBackButton" onClick={(e) => Back(e)}>목록으로가기</Button>
                                 {qnauser.userId === user.userId && qna.qnaReply!=null?
                                 <span>
@@ -97,7 +117,7 @@ function QnaDetail() {
                                 :
                                 ""
                                 }
-                            </CardFooter>
+                            </CardFooter> */}
                         </Card>
                     </Col>
                 </Row>

@@ -23,12 +23,10 @@ import MenuCreate from "./pages/store/menucreate";
 import MenuUpdate from "./pages/store/menuupdate";
 import "./App.css";
 
-import NaverAuthCallback from "./components/account/naverAuthCallback";
-
 function App() {
   return (
     <BrowserRouter>
-      <Container fluid={true} className="mainContainer p-0">
+      <Container fluid={true} className="mainContainer">
         <Header />
         <Row className="mainBody">
           <Switch>
@@ -38,11 +36,10 @@ function App() {
             {/* 후원자 View */}
             <Route exact path="/" component={Main} />
             <Route path="/auth" component={Authentication} />
-            <Route path="/naver" component={NaverAuthCallback} />
             <Route path="/signout" component={Signout} />
             <Route path="/support" component={Support} />
-            {/* <Route path="/map" component={Support} /> */}
-            {/* <Route path="/storedetail/:storeId" component={StoreDetail} /> */}
+            <Route path="/map" component={Support} />
+            <Route path="/storedetail/:storeId" component={StoreDetail} />
             <Route
               path="/storedetailsupport/:storeId"
               component={StoreDetail}
@@ -79,7 +76,7 @@ function PrivateRoute({ children, ...rest }) {
       {...rest}
       render={({ location }) =>
         // localStorage.getItem("access-token") !== 'undefined' ? (
-        (Boolean(localStorage.getItem("access-token")) && (localStorage.getItem("access-token") != "undefined") ) ? (
+        Boolean(localStorage.getItem("access-token")) ? (
           // auth.user ? (
           // 다만 PrivateRoute가 받는 children이 뭔지 모르겠네...
           children

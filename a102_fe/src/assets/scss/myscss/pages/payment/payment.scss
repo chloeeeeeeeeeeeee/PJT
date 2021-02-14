@@ -1,37 +1,18 @@
 .paymentBox {
   height: 100%;
-
+  h2 {
+    height: 5%;
+  }
   .paymentInfoBox {
-    border: none;
-    height: 60vh;
+    height: 95%;
     overflow-y: auto;
     overflow-x: hidden;
-    .card-header {
-      background-color: white;
-      color: $oori-green;
-    }
     .paymentInfoItem {
-      background-color: white;
-      p {
-        font-size: small;
-      }
-      .information {
-        color: $oori-green;
-        font-size: x-small;
-      }
+      border-bottom: 1px solid black;
     }
   }
   .paymentDetailBox {
-    // height: 60vh;
     height: 95%;
-    // background-color: red;
-    .card {
-      border: none;
-      .card-header {
-        background-color: white;
-        color: $oori-green;
-      }
-    }
     position: relative;
     .paymentAmount,
     .paymentMessage {
@@ -43,21 +24,12 @@
         height: 80%;
         .form-group {
           height: 33%;
-          span {
-            font-size: small;
-          }
         }
       }
     }
-    .card-footer {
-      background-color: white;
-      .paymentButton {
-        // position: absolute;
-        // bottom: 0;
-        color: $oori-white;
-        border: none;
-        background-color: $oori-green;
-      }
+    .paymentButton {
+      position: absolute;
+      bottom: 0;
     }
     label {
       font-size: 20px;

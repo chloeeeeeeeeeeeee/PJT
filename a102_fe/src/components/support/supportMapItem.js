@@ -13,12 +13,11 @@ function SupportMapItem(storeInfo) {
   }
 
   return (
-    <Row className="mapListItem m-1 p-0">
-      <Col xs="9" className="pt-1">
-        <Row><b>{storeInfo.storeInfo.storeName}</b></Row>
-        <Row><p>{storeInfo.storeInfo.storeLocation}</p></Row>
-      </Col>
-      <Col xs="3"><Button onClick={moveToStoreDetail}>후원하러가기</Button></Col>
+    <Row className="mapListItem m-1 p-1">
+      <Col xs="7">{storeInfo.storeInfo.storeName}</Col>
+      <Col xs="5">{storeInfo.storeInfo.storeCategory}</Col>
+      <Col xs="9">{storeInfo.storeInfo.storeLocation}</Col>
+      <Col xs="3"><HiCursorClick onClick={moveToStoreDetail}/></Col>
     </Row>
   );
 }

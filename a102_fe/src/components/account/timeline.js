@@ -13,7 +13,7 @@ function Timeline() {
 
   // 유즈이펙트를 카와이이이 하게 써볼게요! ^0^
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/account/usercontribution`, {
+    fetch(`http://i4a102.p.ssafy.io:8080/app/account/usercontribution`, {
       // fetch의 기본 요청은 GET이므로 따로 method를 정의하지 않습니다.
       // header: localStorage.getItem('access-token')
       headers: {

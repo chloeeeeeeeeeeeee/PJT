@@ -1,27 +1,15 @@
 // 상단 Navbar
 .mainHeader {
-  height: 22%;
-  background-color: $oori-brilliant-white;
-
-  // 회원 영역
-  .mainHeaderAuth {
-    font-size: small;
-  }
+  height: 5%;
 
   // 로고 영역
-  .mainHeaderLogo {
-    // height: 3%;
+  .navbar-brand {
+    height: 100%;
     margin: 0;
-    padding: 0.5% 0%;
-    text-align: center;
+    padding: 0;
     img {
-      height: 8vh;
+      height: 100%;
     }
-  }
-
-  // Nav 영역
-  .mainHeaderNav {
-    text-align: center;
   }
 
   // 햄버거 영역

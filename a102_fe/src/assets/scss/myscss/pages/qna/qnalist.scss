@@ -1,97 +1,35 @@
 .listPost {
-  height: 100%;
-  .listPostHeaderButton {
-    background-color: $oori-green;
-    color: white;
-    border: none;
-    font-size: small;
-    // border-radius: 20%;
-    display: inline-block;
-    float: right;
-  }
-  .listPostHeaderCaution {
-    color: $eat-point-color;
-    border: none;
-    display: inline-block;
-    float: right;
-  }
-  .listPostContent {
-    margin-top: 1%;
-    // margin-left: 2%;
-    // margin-right: 2%;
-    // border-color: $eat-key-color;
-    // border-width: 2px;
-    border: none;
-    // background-color: $oori-bright-white;
+  .card {
+    border-color: $oori-green;
+    border-width: 2px;
 
-    // .listPostHeader {
-    //   background-color: $eat-key-color;
-    //   h5 {
-    //     display: inline;
-    //   }
-    //   .listPostHeaderButton {
-    //     background-color: $eat-point-color;
-    //     color: white;
-    //     border: none;
-    //     border-radius: 20%;
-    //     display: inline-block;
-    //     float: right;
-    //   }
-    //   .listPostHeaderCaution {
-    //     color: $eat-point-color;
-    //     border: none;
-    //     display: inline-block;
-    //     float: right;
-    //   }
-    // }
+    .listPostHeader {
+      background-color: $oori-green;
+      h5 {
+        display: inline;
+      }
+      .listPostHeaderButton {
+        background-color: $oori-white;
+        color: $oori-green;
+        border: none;
+        border-radius: 20%;
+        display: inline-block;
+        float: right;
+      }
+      .listPostHeaderCaution {
+        color: $oori-white;
+        border: none;
+        display: inline-block;
+        float: right;
+      }
+    }
 
     .listPostBody {
-      height: 50vh;
+      height: 70vh;
       overflow-y: auto;
-      table {
-        text-align: center;
-        border: none;
-        // height: 40vh;
-        .listPostBodyThead {
-          // height: 10%;
-          background-color: $oori-white;
-          color: $oori-green;
-          // position: sticky;
-          // top: 0;
-        }
-        .listPostBodyTbody {
-          // height: 40vh;
-          // overflow-y: auto;
-          background-color: white;
-        }
-      }
     }
     .myQna {
       background-color: rgb(252, 252, 238);
-    }
-    .listPostFooter {
-      background-color: $oori-white;
-      // width: 100%;
-      margin: 0;
-      border: none;
-      // height: 3vh;
-      padding: 0.5rem;
-      .pagination {
-        margin-bottom: 0;
-        justify-content: center;
-        .page-link {
-          background-color: $oori-lucent-white;
-          color: black;
-          // &:active {
-          //   background-color: $eat-point-color;
-          // }
-        }
-        .active {
-          color: $oori-green;
-          font-weight: bold;
-          background-color: white;
-        }
-      }
     }
   }
 }

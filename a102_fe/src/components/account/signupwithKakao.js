@@ -75,7 +75,6 @@ import {
 
 // import Kakao from "kakaojs";
 const { Kakao } = window; 
-// const obj = {};
 
 function KakaoAuth() {
   function loginWithKakao() {
@@ -93,43 +92,22 @@ function KakaoAuth() {
                 },
                 body: JSON.stringify({
                   userId: response.id,
+                  // userName: "kakao@"+response.id,
+                  // userPhone: "kakao@"+response.id,
+                  // userEmail: "kakao@"+response.id
                 })
               })
             .then(res => res.json())
             .then(res => {
-              // console.info("현재 우리가 받는 res의 형태는:", res)
-              // if (Boolean(res) == true) {
               console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res)
-              console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res.token)
               localStorage.setItem('access-token', res.token)
-              window.location.href = '/profile'
-              // } else {
-              //   console.info("값이 없는 아이디를 보낼 경우:", res);
-              //   fetch(`http://i4a102.p.ssafy.io:8080/app/account/signupkakao`, {
-              //     method: "POST",
-              //     headers: {
-              //       'Content-Type': 'application/json'
-              //     },
-              //     body: JSON.stringify({
-              //       userId: response.id,
-              //       userName: "kakao@"+response.id,
-              //       userPhone: "kakao@"+response.id,
-              //       userEmail: "kakao@"+response.id
-              //     })
-              //   })
-              //   // .then(res => res.json())
-              //   .then(res => {
-              //     console.info("카카오로 회원가입한 경우 자동 로그인:", res)
-              //     localStorage.setItem('access-token', res.token)
-              //   })
-              // }              
             })
           },
         })
       },
       fail: function(err) {
         alert(JSON.stringify(err))
-      }
+      },
     })
   }
   return (

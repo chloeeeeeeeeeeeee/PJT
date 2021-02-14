@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Col, Card, CardHeader, CardBody, Button } from "reactstrap";
+import { Col, Row, Card, CardHeader, CardBody, Button } from "reactstrap";
 import { AiFillPhone } from "react-icons/ai";
 import { BiMapAlt } from "react-icons/bi";
 
@@ -65,7 +65,7 @@ function StoreDetailInfo(storeInfo) {
   }, []);
 
   return (
-    <Col md="2" sm="12" className="storeInfo">
+    <Col md={{ size: 2, offset: 1 }} sm="12" className="storeInfo">
       <Card className="storeInfoCard">
         <CardHeader className="cardHeader">
           <h5 className="font-weight-bold mt-1">

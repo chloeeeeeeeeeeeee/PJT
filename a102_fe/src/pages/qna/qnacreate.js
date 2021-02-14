@@ -25,7 +25,7 @@ function QnaCreate() {
     console.log(title);
     console.log(content);
     console.log(secret);
-    fetch(`http://i4a102.p.ssafy.io:8080/app/qna/create`, {
+    fetch(`${process.env.REACT_APP_API_URL}/qna/create`, {
       method: "POST",
       headers: {
         token: localStorage.getItem('access-token'),

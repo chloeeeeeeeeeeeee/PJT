@@ -11,7 +11,7 @@ function QnaDetail() {
     let [user, setUser] = useState([]);
 
     useEffect(() => {
-        fetch(`http://i4a102.p.ssafy.io:8080/app/account/userinfo`, {
+        fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
             headers: {
                 token: localStorage.getItem('access-token')
             }
@@ -41,7 +41,7 @@ function QnaDetail() {
     const Delete = (event) => {
         event.preventDefault();
         if(window.confirm("정말로 글을 삭제하시겠습니까? \n삭제된 글은 복구 할 수 없습니다.")) {
-            fetch(`http://i4a102.p.ssafy.io:8080/app/qna/delete/${qna.qnaSeq}`, {
+            fetch(`${process.env.REACT_APP_API_URL}/qna/delete/${qna.qnaSeq}`, {
                 method: "POST",
                 headers: {
                     token: localStorage.getItem('access-token'),

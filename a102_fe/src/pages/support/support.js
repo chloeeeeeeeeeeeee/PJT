@@ -122,40 +122,6 @@ function Support() {
     }
   }
 
-  let mapScript = document.createElement("script");
-  mapScript.type = "text/javascript";
-
-  function successPosition(pos) {
-    mapScript.append(
-      `var mapOptions = {center: new naver.maps.LatLng(${pos.coords.latitude}, ${pos.coords.longitude}),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(${pos.coords.latitude}, ${pos.coords.longitude}),map: map,});`
-    );
-    axios
-      .get(
-        `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${pos.coords.longitude},${pos.coords.latitude}&orders=roadaddr&output=json`,
-        config
-      )
-      .then((response) => {
-        if (
-          response.data.results[0] !== undefined &&
-          response.data.results.length > 0
-        ) {
-          let tempData = response.data.results[0].region;
-          address = `${tempData.area1.name} ${tempData.area2.name} ${tempData.area3.name} ${tempData.area4.name}`;
-          setAddress(
-            `${tempData.area1.name} ${tempData.area2.name} ${tempData.area3.name} ${tempData.area4.name}`
-          );
-        }
-      })
-      .catch((error) => console.log(error));
-  }
-
-  function failPosition(err) {
-    setAddress("서울 강남구 역삼동");
-    mapScript.append(
-      `var mapOptions = {center: new naver.maps.LatLng(37.571075, 127.013588),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(37.571075, 127.013588),map: map,});`
-    );
-  }
-
   // 장소 찾기
   function searchLocation() {
     address = document.getElementById("addressInput").value;
@@ -261,7 +227,7 @@ function Support() {
           <Input
             name="addressInput"
             id="addressInput"
-            placeholder="동 단위까지 입력해주세요"
+            placeholder="'서울시 OO구 OO동'으로 입력해주세요"
             onKeyUp={enterkeyPress}
           />
           <InputGroupAddon addonType="append">

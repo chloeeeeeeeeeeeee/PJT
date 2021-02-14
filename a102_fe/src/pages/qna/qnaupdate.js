@@ -30,7 +30,7 @@ function QnaUpdate() {
     console.log(title);
     console.log(content);
     console.log(secret);
-    fetch(`http://i4a102.p.ssafy.io:8080/app/qna/update`, {
+    fetch(`${process.env.REACT_APP_API_URL}/qna/update`, {
       method: "POST",
       headers: {
         token: localStorage.getItem("access-token"),

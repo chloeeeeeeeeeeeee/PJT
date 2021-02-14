@@ -159,6 +159,7 @@ public class AccountController {
 		}
 	}
 	
+	//로그인 네이버
 	@PostMapping("/signinnaver")
 	public ResponseEntity<JwtService.TokenRes> signInNaver(@RequestBody String Authorization, HttpServletResponse res){
 
@@ -169,11 +170,11 @@ public class AccountController {
 		User user = null;
 		user = userService.signInNaver(Authorization);
 		
-		String pwd = user.getUserPwd();
-		
 		if(user == null) {
 			return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
 		}
+		
+		String pwd = user.getUserPwd();
 		
 		// 회원가입 처리
 		if(authService.userChk(user.getUserId()) == null) {
@@ -253,7 +254,20 @@ public class AccountController {
 		return new ResponseEntity<List<Contribution>>(userContribution, HttpStatus.OK);
 	}
 	
-	
-	
+	// 
+	@PostMapping("/pwdcheck")
+	public ResponseEntity<String> pwdCheck(@RequestBody String pwd, HttpServletRequest req){
+		
+		String jwt = req.getHeader("token");
+        int userSeq = jwtService.decode(jwt);
+        User user = authService.userSeqChk(userSeq);
+		
+		if(user == null) {
+			return new ResponseEntity<String>("FAIL", HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<String>(userService.userPwdChk(user, pwd), HttpStatus.OK);
+			
+	}
 	
 }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bab.dao.UserDao;
-import com.ssafy.bab.dto.Contribution;
+import com.ssafy.bab.dto.ContributionResult;
 import com.ssafy.bab.dto.User;
 import com.ssafy.bab.dto.UserContribution;
 import com.ssafy.bab.service.AccountService;
@@ -247,11 +247,11 @@ public class AccountController {
 	
 	//jwt를 받아와서 유저의 후원 상세정보를 돌려준다
 	@GetMapping("/usercontribution")
-	public ResponseEntity<List<Contribution>> userContribution(HttpServletRequest req){
+	public ResponseEntity<List<ContributionResult>> userContribution(HttpServletRequest req){
 		String jwt = req.getHeader("token");
 		int userSeq = jwtService.decode(jwt);
-		ArrayList<Contribution> userContribution = userService.userContribution(userSeq);
-		return new ResponseEntity<List<Contribution>>(userContribution, HttpStatus.OK);
+		ArrayList<ContributionResult> userContribution = userService.userContribution(userSeq);
+		return new ResponseEntity<List<ContributionResult>>(userContribution, HttpStatus.OK);
 	}
 	
 	// 

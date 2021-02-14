@@ -17,8 +17,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.ssafy.bab.dao.ContributionDao;
+import com.ssafy.bab.dao.ItemDao;
+import com.ssafy.bab.dao.StoreDao;
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.Contribution;
+import com.ssafy.bab.dto.ContributionResult;
 import com.ssafy.bab.dto.NaverProfile;
 import com.ssafy.bab.dto.User;
 
@@ -27,6 +30,12 @@ public class AccountServiceImpl implements AccountService{
 
 	@Autowired
 	UserDao userDao;
+	
+	@Autowired
+	ItemDao itemDao;
+	
+	@Autowired
+	StoreDao storeDao;
 	
 	@Autowired
 	PasswordEncodingService passwordEncoding;
@@ -78,9 +87,33 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 	@Override
-	public ArrayList<Contribution> userContribution(int userSeq) {
+	public ArrayList<ContributionResult> userContribution(int userSeq) {
 		ArrayList<Contribution> userContribution = contributionDao.findByUser_UserSeqOrderByContributionDateDesc(userSeq);
-		return userContribution;
+		ArrayList<ContributionResult> result = new ArrayList<ContributionResult>();
+		for (Contribution contribution : userContribution) {
+			ContributionResult contributionResult = new ContributionResult();
+			contributionResult.setContributionId(contribution.getContributionId());
+			contributionResult.setStoreId(contribution.getStoreId());
+			contributionResult.setItemId(contribution.getItemId());
+			if(contribution.getUser() != null)
+				contributionResult.setUser(contribution.getUser());
+			if(contribution.getContributor() != null)
+				contributionResult.setContributor(contribution.getContributor());
+			contributionResult.setContributionMessage(contribution.getContributionMessage());
+			if(contribution.getContributionAnswer() != null)
+				contributionResult.setContributionAnswer(contribution.getContributionAnswer());
+			contributionResult.setContributionDate(contribution.getContributionDate());
+			if(contribution.getContributionDateUsed() != null)
+				contributionResult.setContributionDateUsed(contribution.getContributionDateUsed());
+			contributionResult.setContributionUse(contribution.getContributionUse());
+			contributionResult.setPayment(contribution.getPayment());
+			contributionResult.setItemName(itemDao.findByItemIdAndStoreId(contributionResult.getItemId(), contributionResult.getStoreId()).getItemName());
+			contributionResult.setStoreName(storeDao.findByStoreId(contributionResult.getStoreId()).getStoreName());
+			
+			result.add(contributionResult);
+			
+		}
+		return result;
 	}
 
 	@Override

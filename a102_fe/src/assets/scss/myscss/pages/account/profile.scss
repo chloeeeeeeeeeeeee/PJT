@@ -1,0 +1,54 @@
+.mainProfile {
+  height: 100%;
+
+  .profileHeader {
+    height: 100%;
+  }
+
+  .profileContent {
+    height: 100%;
+    padding: 1% 0%;
+    // 좌측 지도
+    .profileContentLeft {
+      height: 80%;
+      #naverMap {
+        height: 90%;
+      }
+    }
+    // 우측 가게목록
+    .supportBox {
+      color: $oori-gray-pinstripe;
+      .storeListBox {
+        height: 85%;
+        overflow-y: auto;
+        // border-color: $oori-green;
+        // border-width: 0.5px;
+        // border-style: solid;
+        background-color: $oori-white;
+        .mapListItem {
+          align-items: center;
+          background-color: $oori-lucent-white;
+          width: 100%;
+          height: 7.5vh;
+          &:hover {
+            cursor: pointer;
+          }
+          p {
+            font-size: small;
+          }
+          Button {
+            float: right;
+            font-size: small;
+            background-color: $oori-green;
+            border: none;
+            opacity: 0.7;
+          }
+        }
+        .nothingToShow {
+          font-size: small;
+        }
+      }
+    }
+  }
+
+}

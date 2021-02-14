@@ -38,12 +38,6 @@ function Profile() {
                <Timeline/>
               </div>
             </Col>
-            {/* <Col sm="3" className="right-division">
-              오른쪽 영역
-              <Row>
-                
-              </Row>
-            </Col> */}
           </Row>
       </Container>
   );

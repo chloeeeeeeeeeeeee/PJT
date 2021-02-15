@@ -7,19 +7,12 @@ import {
   InputGroup,
   InputGroupAddon,
 } from "reactstrap";
+import greenPin from "../../assets/images/greenpin.png"
 import { FcLike } from "react-icons/fc";
 
 function ChildSupport() {
   // 네이버 API 통신을 위해 필요한 HEADER 세팅
   const axios = require("axios");
-  const config = {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "X-NCP-APIGW-API-KEY-ID": "e5vp42977m",
-      "X-NCP-APIGW-API-KEY": "PpdYPMVeyXPnhSW33x2XKzw9tYGpsGhjKvdhIlMy",
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
 
   // 카테고리
   const categoryList = [
@@ -34,11 +27,11 @@ function ChildSupport() {
     "치킨\n피자",
   ];
   
-  // 선택된 카테고리, 지도, 주소, 가게리스트 변수
+  // 선택된 카테고리 정보
   let [selectedCategory, setSelectedCategory] = useState(0);
-  let [reloadMap, setReloadMap] = useState(true);
   let [address, setAddress] = useState("");
   let [storeList, setStoreList] = useState([]);
+  let naverMap = null;
 
   // 카테고리 리스트 : (+색칠)
   const categoryListComponents = categoryList.map((category, index) => {
@@ -87,51 +80,52 @@ function ChildSupport() {
   // 전체 매장 리스트
   function setStoreListComponent() {
     if (address !== "") {
-      fetch(
-        `http://i4a102.p.ssafy.io:8080/app/main/mapview/storelist/${encodeURIComponent(
-          address
-        )}`
-      )
-      .then((res) => res.json())
-      .then((result) => {
-        storeList = result;
-        setStoreList(storeList);
-      });
-    }
-  }
-
-  let mapScript = document.createElement("script");
-  mapScript.type = "text/javascript";
-
-  function successPosition(pos) {
-    mapScript.append(
-      `var mapOptions = {center: new naver.maps.LatLng(${pos.coords.latitude}, ${pos.coords.longitude}),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(${pos.coords.latitude}, ${pos.coords.longitude}),map: map,});`
-    );
-    axios
-      .get(
-        `https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?coords=${pos.coords.longitude},${pos.coords.latitude}&orders=roadaddr&output=json`,
-        config
-      )
-      .then((response) => {
-        if (
-          response.data.results[0] !== undefined &&
-          response.data.results.length > 0
-        ) {
-          let tempData = response.data.results[0].region;
-          address = `${tempData.area1.name} ${tempData.area2.name} ${tempData.area3.name} ${tempData.area4.name}`;
-          setAddress(
-            `${tempData.area1.name} ${tempData.area2.name} ${tempData.area3.name} ${tempData.area4.name}`
-          );
-        }
-      })
-      .catch((error) => console.log(error));
-  }
-
-  function failPosition(err) {
-    setAddress("서울 강남구 역삼동");
-    mapScript.append(
-      `var mapOptions = {center: new naver.maps.LatLng(37.571075, 127.013588),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(37.571075, 127.013588),map: map,});`
-    );
+        fetch(
+          `${
+            process.env.REACT_APP_API_URL
+          }/main/mapview/storelist/${encodeURIComponent(address)}`
+        )
+          .then((res) => res.json())
+          .then((result) => {
+            storeList = result;
+            setStoreList(storeList);
+            if (storeList.length > 0 && storeList[0].length > 0) {
+              // 네이버 지도 객체 받아오기
+              const { naver } = window;
+              // 카카오 지도 객체 받아오기
+              const { kakao } = window;
+              // 주소-좌표 변환 객체를 생성합니다
+              const geocoder = new kakao.maps.services.Geocoder();
+  
+              storeList[0].forEach((item) => {
+                geocoder.addressSearch(
+                  item.storeLocation,
+                  function (result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                      let newMarker = new naver.maps.Marker({
+                        map: naverMap,
+                        position: new naver.maps.LatLng(result[0].y, result[0].x),
+                        icon: greenPin,
+                        zIndex: 100
+                      });
+                      var infoWindow = new naver.maps.InfoWindow({
+                          content: '<div style="width:150px;text-align:center;padding:10px;"><b>'+ item.storeName +'</b>.</div>'
+                      });
+                      naver.maps.Event.addListener(newMarker, 'mouseover', ()=>{infoWindow.open(naverMap, newMarker)})
+                      naver.maps.Event.addListener(newMarker, 'mouseout', ()=>{infoWindow.close()})
+                      naver.maps.Event.addListener(newMarker, 'click', ()=>{fetch(`${process.env.REACT_APP_API_URL}/support/menulist/${item.storeId}`)
+                      .then((res) => res.json())
+                      .then((result) => {
+                        setMenuList(result);
+                      });})
+                    }
+                   
+                  }
+                );
+              });
+            }
+          });
+      }
   }
 
   // 장소찾기
@@ -148,37 +142,58 @@ function ChildSupport() {
   }
 
   useEffect(() => {
+      // 네이버 지도 객체 받아오기
+    const { naver } = window;
+    // 카카오 지도 객체 받아오기
+    const { kakao } = window;
+
+    // 네이버 지도 초기화
+    function initMap(latitude, longitude) {
+      naverMap = new naver.maps.Map("naverMap", {
+        center: new naver.maps.LatLng(latitude, longitude),
+        zoom: 15,
+      });
+      let centerMarker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(latitude, longitude),
+        map: naverMap,
+      });
+    }
+
     if (address !== "") {
-      // 입력 받은 주소 검색
-      axios
-        .get(
-          `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${address}`,
-          config
-        )
-        .then((response) => {
-          if (response.data.addresses[0] !== undefined) {
-            mapScript.append(
-              `var mapOptions = {center: new naver.maps.LatLng(${response.data.addresses[0].y}, ${response.data.addresses[0].x}),zoom: 15,};var map = new naver.maps.Map('naverMap', mapOptions);var markers = new naver.maps.Marker({position: new naver.maps.LatLng(${response.data.addresses[0].y}, ${response.data.addresses[0].x}),map: map,});`
-            );
-            setReloadMap(!reloadMap);
-          }
-        })
-        .catch((err) => console.log(err));
-
-      document.body.appendChild(mapScript);
       setStoreListComponent();
-
-      return () => {
-        document.body.removeChild(mapScript);
-      };
+      // 주소-좌표 변환 객체를 생성합니다
+      const geocoder = new kakao.maps.services.Geocoder();
+      // 현재 세팅돼있는 주소 -> 좌표 = 지도의 센터
+      geocoder.addressSearch(address, function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          initMap(result[0].y, result[0].x);
+        } else {
+          initMap(37.571075, 127.013588);
+        }
+      });
     } else {
-      // 현재 위치 가져오기
-      navigator.geolocation.getCurrentPosition(successPosition, failPosition);
-      document.body.appendChild(mapScript);
-      setStoreListComponent();
-      return () => {
-        document.body.removeChild(mapScript);
-      };
+      // 주소검색 안해서 현재 위치 기반 검색
+      navigator.geolocation.getCurrentPosition(
+        function (pos) {
+          //   initMap(pos.coords.latitude, pos.coords.longitude);
+          // 주소-좌표 변환 객체를 생성합니다
+          const geocoder = new kakao.maps.services.Geocoder();
+          geocoder.coord2RegionCode(
+            pos.coords.longitude,
+            pos.coords.latitude,
+            function (result, status) {
+              if (status == kakao.maps.services.Status.OK) {
+                setAddress(result[0].address_name);
+              }
+            }
+          );
+          //   setMarkers(pos.coords.latitude, pos.coords.longitude);
+        },
+        function () {
+          // 현재 위치 가져오기 실패시 기본 위치
+          setAddress("서울시 종로구 창신동");
+        }
+      );
     }
   }, [address]);
 
@@ -229,7 +244,7 @@ function ChildSupport() {
   const supportMenuList = menuList.map((menu, index) => {
     let lst = []
     for (let idx=0; idx<menu.itemAvailable; idx++){
-      lst.push(<FcLike/>)
+      lst.push(<FcLike key={idx}/>)
     }
 
     if (menu.itemAvailable > 0) {

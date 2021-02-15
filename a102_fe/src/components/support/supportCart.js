@@ -36,12 +36,17 @@ function SupportCart(storeInfo) {
 
   // 메뉴 정보 받아오기
   useEffect(() => {
-    fetch(`http://i4a102.p.ssafy.io:8080/app/support/menulist/${storeId}`)
+    fetch(`${process.env.REACT_APP_API_URL}/support/menulist/${storeId}`)
       .then((res) => res.json())
       .then((result) => {
-        setMenuList(result);
+        if(result === undefined || result.length < 1){
+            setMenuList([])
+        }else{
+            setMenuList(result);
+        }
+        
       });
-    // console.log(params.storeId)
+    
   }, []);
 
   // 장바구니 업데이트
@@ -153,9 +158,7 @@ function SupportCart(storeInfo) {
     window.location.href = `/payment`;
   }
 
-  let itemContributionTotal = 0;
   const supportCenterSide = menuList.map((menu, index) => {
-    itemContributionTotal += menu.itemContributionAmount;
     if (menu.itemPrice > 6000) {
       return (
         <div

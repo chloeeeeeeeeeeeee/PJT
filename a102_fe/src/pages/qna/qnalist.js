@@ -11,7 +11,7 @@ function QnaList() {
     let [nowPage, setNowPage] = useState(0);
 
     useEffect(() => {
-        fetch(`http://i4a102.p.ssafy.io:8080/app/account/userinfo`, {
+        fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
             headers: {
                 token: localStorage.getItem('access-token')
             }
@@ -24,7 +24,7 @@ function QnaList() {
     }, [])
 
     useEffect(() => {
-        fetch(`http://i4a102.p.ssafy.io:8080/app/account/userinfo`, {
+        fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
             headers: {
                 token: localStorage.getItem('access-token')
             }
@@ -38,7 +38,7 @@ function QnaList() {
 
     useEffect(() => {
         // fetch(`http://i4a102.p.ssafy.io:8080/app/qna/0`)
-        fetch(`http://i4a102.p.ssafy.io/app/qna/0`)
+        fetch(`${process.env.REACT_APP_API_URL}/qna/0`)
         .then((res) => res.json())
         .then((res) => {
             setQnaList(res.content);
@@ -49,7 +49,7 @@ function QnaList() {
     const Detail = (qna) => {
         // console.log(qna);
         // fetch(`http://i4a102.p.ssafy.io:8080/app/qna/read`, {
-        fetch(`https://i4a102.p.ssafy.io/app/qna/read`, {
+        fetch(`${process.env.REACT_APP_API_URL}/qna/read`, {
             method: "POST",
             headers: {
                 token: localStorage.getItem('access-token'),
@@ -87,7 +87,7 @@ function QnaList() {
 
     const Page = (idx) => {
         // fetch(`http://i4a102.p.ssafy.io:8080/app/qna/${idx}`)
-        fetch(`http://i4a102.p.ssafy.io/app/qna/${idx}`)
+        fetch(`${process.env.REACT_APP_API_URL}/qna/${idx}`)
         .then((res) => res.json())
         .then((res) => {
         setQnaList(res.content);

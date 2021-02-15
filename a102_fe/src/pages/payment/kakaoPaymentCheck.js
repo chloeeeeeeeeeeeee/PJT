@@ -9,7 +9,7 @@ function KakaoPaymentCheck(props) {
   const axios = require("axios");
   axios
     .get(
-      `http://i4a102.p.ssafy.io:8080/app/payment/kakaopaySuccess?pg_token=${pgToken}`
+      `${process.env.REACT_APP_API_URL}/payment/kakaopaySuccess?pg_token=${pgToken}`
     )
     .then((res) => {
       console.log(res);
@@ -22,7 +22,7 @@ function KakaoPaymentCheck(props) {
       }
     });
 
-  return <div className="paymentCheckContainer">결제 진행 중...</div>;
+  return <div className="paymentCheckContainer">해당 창이 닫히지 않으면 강제로 닫은 후 다시 시도해주세요.</div>;
 }
 
 export default KakaoPaymentCheck;

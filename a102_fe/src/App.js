@@ -18,7 +18,12 @@ import QnaUpdate from "./pages/qna/qnaupdate";
 import Payment from "./pages/payment/payment";
 import KakaoPaymentCheck from "./pages/payment/kakaoPaymentCheck";
 import PaymentSuccess from "./pages/payment/paymentSuccess";
+import StoreAdmin from "./pages/store/storeadmin";
+import MenuCreate from "./pages/store/menucreate";
+import MenuUpdate from "./pages/store/menuupdate";
 import "./App.css";
+
+import NaverAuthCallback from "./components/account/naverAuthCallback";
 
 function App() {
   return (
@@ -33,6 +38,7 @@ function App() {
             {/* 후원자 View */}
             <Route exact path="/" component={Main} />
             <Route path="/auth" component={Authentication} />
+            <Route path="/naver" component={NaverAuthCallback} />
             <Route path="/signout" component={Signout} />
             <Route path="/support" component={Support} />
             {/* <Route path="/map" component={Support} /> */}
@@ -48,6 +54,10 @@ function App() {
             <Route path="/payment" component={Payment} />
             <Route path="/paymentCheck" component={KakaoPaymentCheck} />
             <Route path="/paymentSuccess" component={PaymentSuccess} />
+            <Route path="/storeAdmin" component={StoreAdmin} />
+            {/* 가게주인 View */}
+            <Route path="/menucreate" component={MenuCreate} />
+            <Route path="/menuupdate" component={MenuUpdate} />
             {/* Profile 페이지의 경우 리다이렉트 보내주기 */}
             <PrivateRoute path="/profile">
               <Profile />
@@ -69,7 +79,7 @@ function PrivateRoute({ children, ...rest }) {
       {...rest}
       render={({ location }) =>
         // localStorage.getItem("access-token") !== 'undefined' ? (
-        Boolean(localStorage.getItem("access-token")) ? (
+        (Boolean(localStorage.getItem("access-token")) && (localStorage.getItem("access-token") != "undefined") ) ? (
           // auth.user ? (
           // 다만 PrivateRoute가 받는 children이 뭔지 모르겠네...
           children

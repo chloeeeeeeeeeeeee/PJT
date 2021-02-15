@@ -17,6 +17,7 @@ import {
 // Register 대신 Auth로 rename 하고 Register와 Signin으로 분리해보겠습니다!
 // 분리할 수 없었습니다! 왜인지 이유를 알아볼 것! 
 import KakaoAuth from "../../components/account/kakaoAuth";
+import NaverAuth from "../../components/account/naverAuth";
 
 function Auth(props) {
   const toggleform = () => {
@@ -33,7 +34,7 @@ function Auth(props) {
     console.log("로그인 아이디:", loginId);
     console.log("로그인 비밀번호:", loginPassword);
     // fetch(`${process.env.PUBLIC_URL}/account/signinjwt`, {
-    fetch(`http://i4a102.p.ssafy.io:8080/app/account/signinjwt`, {
+    fetch(`${process.env.REACT_APP_API_URL}/account/signinjwt`, {
       method: 'POST',
       headers:{
         'Content-Type': 'application/json'
@@ -77,7 +78,7 @@ function Auth(props) {
       alert("정보를 빠짐없이 채워주세요!")
     } else { 
       // fetch(`${process.env.PUBLIC_URL}/account/signup`, {
-      fetch(`http://i4a102.p.ssafy.io:8080/app/account/signup`, {
+      fetch(`${process.env.REACT_APP_API_URL}/account/signup`, {
         method: "POST",
         headers:{
           'Content-Type': 'application/json'
@@ -100,7 +101,7 @@ function Auth(props) {
         // 정상적으로 OK 받는다면 : 방금 입력받은 유저 정보를 다시 보내서 JWT를 받아오자! 자동 로그인 파트
         if (res.status === 200 || res.status === 201) {
           // fetch(`${process.env.PUBLIC_URL}/account/signinjwt`), {
-          fetch(`http://i4a102.p.ssafy.io:8080/app/account/signinjwt`, {
+          fetch(`${process.env.REACT_APP_API_URL}/account/signinjwt`, {
             method: "POST",
             headers:{
               'Content-Type': 'application/json'
@@ -122,14 +123,14 @@ function Auth(props) {
       })
     }
     // 회원가입 후 바로 로그인을 실행했다면? 
-    if (Boolean(localStorage.getItem('access-token')) == true && localStorage.getItem('access-token') != undefined) {
+    if (Boolean(localStorage.getItem('access-token')) == true && localStorage.getItem('access-token') != "undefined") {
       window.location.href = '/profile'
     }
   };
 
   const Checkid = () => {
     // (id == "") ? alert("아이디를 입력해주세요") : Checkid()}
-    fetch(`http://i4a102.p.ssafy.io:8080/app/account/userdupli`, {
+    fetch(`${process.env.REACT_APP_API_URL}/account/userdupli`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -220,12 +221,12 @@ function Auth(props) {
                                 </Button> */}
                               </Col>
                               <Col md="6" sm="6">
-                                <Button
+                                {/* <Button
                                   color="social-btn btn-naver"
                                   // onClick={twitterAuth}
                                 >
-                                  네이버로 로그인하기
-                                </Button>
+                                </Button> */}
+                                <NaverAuth />
                               </Col>
                             </Row>
                           </div>

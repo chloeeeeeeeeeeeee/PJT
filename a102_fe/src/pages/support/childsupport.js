@@ -241,7 +241,7 @@ function ChildSupport() {
 
   let flag = false;
   // 후원된 음식 반환
-  const supportMenuList = menuList.map((menu, index) => {
+  const supportMenuList = menuList.length > 0 ? menuList.map((menu, index) => {
     let lst = []
     for (let idx=0; idx<menu.itemAvailable; idx++){
       lst.push(<FcLike key={idx}/>)
@@ -264,7 +264,7 @@ function ChildSupport() {
       return
     }
 
-  });
+  }):(<Col className="nothingToShow" xs="12"><br/><p>음식이 없습니다. 다른 가게를 둘러보시는건 어떨까요?</p></Col>);
 
   console.log(flag)
 

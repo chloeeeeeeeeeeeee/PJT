@@ -79,11 +79,14 @@ function MenuUpdate() {
     <Fragment>
       <Container fluid={true} className="createPost">
         <Row>
-          <Col sm="12" md={{ size: 8, offset: 2 }}>
+        <Col sm="12" md={{ size: 10, offset: 1 }} id="storetitle">
+            <h3 className="col-8 d-inline">메뉴 수정하기</h3>
+          </Col>
+          <Col sm="12" md={{ size: 10, offset: 1 }}>
             <Card>
-              <CardHeader className="createPostHeader">
+              {/* <CardHeader className="createPostHeader">
                 <h5>메뉴 수정하기</h5>
-              </CardHeader>
+              </CardHeader> */}
               <CardBody className="createPostBody">
                 <Form className="row">
                   <Col sm="12">
@@ -109,7 +112,7 @@ function MenuUpdate() {
                     </FormGroup>
                     <FormGroup>
                       <Label for="menuImg">사진 {imgUrl}</Label>
-                      <Button onClick={DeleteImg}>삭제</Button>
+                      <Button className="deletePhotoButton" onClick={DeleteImg}>삭제</Button>
                       <Input
                         className="createTitle"
                         type="file"
@@ -119,7 +122,7 @@ function MenuUpdate() {
                     </FormGroup>
                   </Col>
                 </Form>
-                <Button className="createButton" type="submit" onClick={Update}>
+                <Button className="createMenuButton" type="submit" onClick={Update}>
                   수정
                 </Button>
               </CardBody>

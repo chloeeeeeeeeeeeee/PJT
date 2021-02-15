@@ -34,6 +34,8 @@ function StoreAdmin() {
             <StoreDetailInfo storeInfo={res.data.storeId}></StoreDetailInfo>
           );
         }
+      }).then(()=>{
+          
       });
   }, []);
 

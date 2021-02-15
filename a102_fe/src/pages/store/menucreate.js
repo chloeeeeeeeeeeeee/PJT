@@ -71,11 +71,14 @@ function MenuCreate() {
     <Fragment>
       <Container fluid={true} className="createPost">
         <Row>
-          <Col sm="12" md={{ size: 8, offset: 2 }}>
+          <Col sm="12" md={{ size: 10, offset: 1 }} id="storetitle">
+            <h3 className="col-8 d-inline">메뉴 추가하기</h3>
+          </Col>
+          <Col sm="12" md={{ size: 10, offset: 1 }}>
             <Card>
-              <CardHeader className="createPostHeader">
+              {/* <CardHeader className="createPostHeader">
                 <h5>메뉴 추가하기</h5>
-              </CardHeader>
+              </CardHeader> */}
               <CardBody className="createPostBody">
                 <Form className="row">
                   <Col sm="12">
@@ -110,7 +113,7 @@ function MenuCreate() {
                     </FormGroup>
                   </Col>
                 </Form>
-                <Button className="createButton" type="submit" onClick={Create}>
+                <Button className="createMenuButton" type="submit" onClick={Create}>
                   추가
                 </Button>
               </CardBody>

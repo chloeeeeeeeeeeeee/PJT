@@ -36,17 +36,17 @@ function Header() {
         <NavbarToggler onClick={toggle}/>
         <Collapse isOpen={isOpen} navbar className="mainHeaderAuth">
           <Nav className="ml-auto" navbar>
-            {Boolean(localStorage.getItem("access-token")) && (localStorage.getItem("access-token") != "undefined") ?
+            {/* {Boolean(localStorage.getItem("access-token")) && (localStorage.getItem("access-token") != "undefined") ?
               <NavItem>
                 <NavLink href="/profile"><b>마이페이지</b></NavLink>
               </NavItem>
               : ""
-            }
+            } */}
             <NavItem>
               {Boolean(localStorage.getItem("access-token")) == true && (localStorage.getItem("access-token") != "undefined") ?
-                <NavLink href="/signout">아쉽지만 로그아웃</NavLink>
+                <NavLink href="/signout">다음에 또 만나요 <b>로그아웃</b></NavLink>
                 :
-                <NavLink href="/auth"><b>따뜻한 마음으로 함께하기</b></NavLink>
+                <NavLink href="/auth">따뜻한 마음으로 우리와 <b>함께하기</b></NavLink>
               }
             </NavItem>
           </Nav>
@@ -59,7 +59,7 @@ function Header() {
             <Nav className="mx-auto" navbar>
               {Boolean(localStorage.getItem("access-token")) ?
                 <NavItem>
-                  <NavLink href="/profile"><b>내 따뜻한 마음</b></NavLink>
+                  <NavLink href="/profile"><b>내 후원 정보</b></NavLink>
                 </NavItem>
                 : ""
               }

@@ -32,14 +32,13 @@ function StoreMenuList() {
   };
   useEffect(() => {
     axios
-      .get(`http://i4a102.p.ssafy.io:8080/app/store/itemlist`, config)
+      .get(`${process.env.REACT_APP_API_URL}/store/itemlist`, config)
       .then((res) => {
         console.log(res);
         if (res.data !== undefined) {
           console.log(res.data);
           setStoreMenuItem(
             res.data.map((item, index) => {
-              if (index > 53){
               return (
                 <StoreMenuItem
                   storeMenu={item}
@@ -47,7 +46,6 @@ function StoreMenuList() {
                   sendTriggerToParent={sendTriggerToParent}
                 ></StoreMenuItem>
               );
-              }
             })
           );
         }

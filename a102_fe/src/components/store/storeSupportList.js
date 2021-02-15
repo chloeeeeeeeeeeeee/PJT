@@ -128,7 +128,7 @@ function StoreSupportList() {
   useEffect(() => {
     axios({
       method: "POST",
-      url: `http://i4a102.p.ssafy.io:8080/app/store/contributionlist?endDate=${endDate} ${currentTime}&startDate=${startDate} ${currentTime}`,
+      url: `${process.env.REACT_APP_API_URL}/store/contributionlist?endDate=${endDate} ${currentTime}&startDate=${startDate} ${currentTime}`,
       headers: {
         "Content-Type": "application/json; charset=UTF-8",
         "Access-Control-Allow-Origin": "*",

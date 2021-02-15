@@ -27,7 +27,7 @@ function StoreAdmin() {
 
   useEffect(() => {
     axios
-      .get(`http://i4a102.p.ssafy.io:8080/app/store/basicinfo`, config)
+      .get(`${process.env.REACT_APP_API_URL}/store/basicinfo`, config)
       .then((res) => {
         if (res.data !== undefined) {
           setStoreDetailComponent(

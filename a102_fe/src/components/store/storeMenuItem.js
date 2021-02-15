@@ -15,7 +15,7 @@ function StoreMenuItem(storeMenu) {
       )
     ) {
       fetch(
-        `http://i4a102.p.ssafy.io:8080/app/store/item/delete/${menuitem.itemId}`,
+        `${process.env.REACT_APP_API_URL}/store/item/delete/${menuitem.itemId}`,
         {
           method: "POST",
           headers: {
@@ -35,7 +35,7 @@ function StoreMenuItem(storeMenu) {
   }
 
   console.log(storeMenu.storeMenu);
-  let imgurl = `http://i4a102.p.ssafy.io:8080/app/${storeMenu.storeMenu.itemImgUrl}`;
+  let imgurl = `${process.env.REACT_APP_API_URL}/${storeMenu.storeMenu.itemImgUrl}`;
   return (
     <Row className="col-12">
       <img src={imgurl} className="d-inline-block col-3" />

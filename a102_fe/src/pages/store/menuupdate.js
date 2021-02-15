@@ -37,7 +37,7 @@ function MenuUpdate() {
       console.log(value);
     }
 
-    fetch(`http://i4a102.p.ssafy.io:8080/app/store/item/update`, {
+    fetch(`${process.env.REACT_APP_API_URL}/store/item/update`, {
         method: "POST",
         headers: {
             token: localStorage.getItem('access-token'),

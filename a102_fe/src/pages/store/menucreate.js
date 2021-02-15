@@ -33,7 +33,7 @@ function MenuCreate() {
       console.log(value);
     }
 
-    fetch(`http://i4a102.p.ssafy.io:8080/app/store/item/create`, {
+    fetch(`${process.env.REACT_APP_API_URL}/store/item/create`, {
         method: "POST",
         headers: {
             token: localStorage.getItem('access-token'),

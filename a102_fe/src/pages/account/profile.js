@@ -37,7 +37,7 @@ function Profile() {
     {/* 프로필 영역 타이틀 */}
       <Row>
         <Col sm="12" md={{ size: 10, offset: 1 }} id="title">
-          <h3 className="col-8 d-inline"> { userInfo.userName }님의 후원 정보</h3>
+          <h3 className="col-8 d-inline"> { userInfo.userName }님의 따뜻한 마음</h3>
           <div className="col-4 d-inline">
             <Button className="profileHeaderButton">기부영수증 발급</Button>
           </div>

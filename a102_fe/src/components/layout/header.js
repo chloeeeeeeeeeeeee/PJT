@@ -57,18 +57,18 @@ function Header() {
         <NavbarToggler onClick={toggle}/>
         <Collapse isOpen={isOpen} navbar className="mainHeaderNav">
             <Nav className="mx-auto" navbar>
-              {Boolean(localStorage.getItem("access-token")) ?
-                <NavItem>
-                  <NavLink href="/profile"><b>내 후원 정보</b></NavLink>
-                </NavItem>
-                : ""
-              }
               <NavItem>
                 <NavLink href="/support"> 후원하기 </NavLink>
               </NavItem>
               <NavItem>
                 <NavLink href="/qna"> 문의하기 </NavLink>
               </NavItem>
+              {Boolean(localStorage.getItem("access-token")) ?
+                <NavItem>
+                  <NavLink href="/profile"><b>마이페이지</b></NavLink>
+                </NavItem>
+                : ""
+              }
             </Nav>
         </Collapse>
       </div>

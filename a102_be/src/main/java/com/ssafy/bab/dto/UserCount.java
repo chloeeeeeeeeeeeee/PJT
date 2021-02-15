@@ -3,6 +3,6 @@ package com.ssafy.bab.dto;
 
 public interface UserCount {
 
-	int getUserSeq();
+	Integer getUserSeq();
 	int getCount();
 }

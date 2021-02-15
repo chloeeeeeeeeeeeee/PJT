@@ -1,17 +1,29 @@
 package com.ssafy.bab.service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.bab.controller.MainController;
 import com.ssafy.bab.dao.ContributionDao;
+import com.ssafy.bab.dao.ContributionOldDao;
 import com.ssafy.bab.dao.ItemDao;
 import com.ssafy.bab.dao.LocationDao;
 import com.ssafy.bab.dao.StoreDao;
 import com.ssafy.bab.dao.StoreVariablesDao;
+import com.ssafy.bab.dto.Contribution;
+import com.ssafy.bab.dto.ContributionOld;
 import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.Location;
 import com.ssafy.bab.dto.Menu;
@@ -23,6 +35,8 @@ import com.ssafy.bab.dto.SupportStore;
 @Service
 public class SupportServiceImpl implements SupportService {
 
+	private static final Logger logger = LoggerFactory.getLogger(SupportServiceImpl.class);
+	
 	@Autowired
 	private StoreDao storeDao;
 	
@@ -37,6 +51,9 @@ public class SupportServiceImpl implements SupportService {
 	
 	@Autowired
 	private ContributionDao contributionDao;
+	
+	@Autowired
+	private ContributionOldDao contributionOldDao;
 	
 	@Override
 	public List<List<SupportStore>> getSupportStoreList(String Juso) throws Exception {
@@ -139,7 +156,7 @@ public class SupportServiceImpl implements SupportService {
 	@Override
 	public List<Menu> getMenuList(int storeId) throws Exception {
 		ArrayList<Menu> menuList = new ArrayList<Menu>();
-		ArrayList<Item> itemList = itemDao.findByStore_StoreId(storeId);
+		ArrayList<Item> itemList = itemDao.findByStoreId(storeId);
 		for (Item item : itemList) {
 			Menu menu = new Menu();
 			menu.setStoreId(storeId);
@@ -153,6 +170,46 @@ public class SupportServiceImpl implements SupportService {
 			menuList.add(menu);
 		}
 		return menuList;
+	}
+	
+	// 매일 새벽 4시에 3개월이 지난 후원내역들을 contribution -> contribution_old로 옮긴다
+	@Override
+	@Scheduled(cron = "0 0 4 * * ?", zone = "Asia/Seoul")
+	public void updateContribution() throws ParseException {
+
+		logger.info("updateContribution - 호출");
+		
+		DateFormat format = new SimpleDateFormat("yyyyMMdd");
+		String date = format.format(new Date());
+		Date ContributionDate = format.parse(date);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(ContributionDate);
+		cal.add(Calendar.MONTH, -3);
+
+		
+		ArrayList<Contribution> list = contributionDao.findByContributionDateLessThan(cal.getTime());
+		
+		for (Contribution contribution : list) {
+			
+			ContributionOld contributionOld = new ContributionOld();
+
+			contributionOld.setContributionId(contribution.getContributionId());
+			contributionOld.setStoreId(contribution.getStoreId());
+			contributionOld.setItemId(contribution.getItemId());
+			contributionOld.setUser(contribution.getUser());
+			contributionOld.setContributor(contribution.getContributor());
+			contributionOld.setContributionMessage(contribution.getContributionMessage());
+			contributionOld.setContributionAnswer(contribution.getContributionAnswer());
+			contributionOld.setContributionDate(contribution.getContributionDate());
+			contributionOld.setContributionDateUsed(contribution.getContributionDateUsed());
+			contributionOld.setContributionUse(contribution.getContributionUse());
+			contributionOld.setPayment(contribution.getPayment());
+			
+			contributionOldDao.save(contributionOld);
+			contributionDao.delete(contribution);
+			
+		}
+		
 	}
 
 }

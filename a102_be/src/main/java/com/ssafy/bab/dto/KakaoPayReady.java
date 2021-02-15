@@ -14,9 +14,4 @@ public class KakaoPayReady {
 	//결제 준비 요청시간
 	private Date created_at;
 	
-	private PaymentInfo paymentInfo;
-	private String partner_order_id;
-	private String partner_user_id;
-	
-
 }

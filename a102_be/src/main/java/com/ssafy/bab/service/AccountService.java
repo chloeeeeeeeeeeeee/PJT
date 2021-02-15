@@ -2,7 +2,7 @@ package com.ssafy.bab.service;
 
 import java.util.ArrayList;
 
-import com.ssafy.bab.dto.Contribution;
+import com.ssafy.bab.dto.ContributionResult;
 import com.ssafy.bab.dto.User;
 
 
@@ -16,9 +16,14 @@ public interface AccountService {
 	
 	public int userWithUs(int userSeq);
 	
+	public User userInfoById(String userId);
+	
+	public User signInNaver(String Authorization);
+	
+	public String userPwdChk(User user, String pwd);
 	
 	//프로필
-	public ArrayList<Contribution> userContribution(int userSeq);
+	public ArrayList<ContributionResult> userContribution(int userSeq);
 	
 	public int userContributionCount(int userSeq);
 	

@@ -22,9 +22,9 @@ function Payment() {
       : []
   );
 
-  // useEffect(() => {
-  //   document.querySelector("#kakaoPaySelect").checked = true;
-  // }, []);
+  useEffect(() => {
+    document.querySelector("#kakaoPaySelect").checked = true;
+  }, []);
 
   const axios = require("axios");
   const jwtToken = localStorage.getItem("access-token")

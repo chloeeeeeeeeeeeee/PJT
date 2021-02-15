@@ -36,7 +36,7 @@ function Support() {
 
   // 카테고리 리스트 컴포넌트
   const categoryListComponents = categoryList.map((category, index) => {
-    console.log(category)
+    // console.log(category)
     if (index === 0) {
       return (
         <Col

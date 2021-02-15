@@ -12,9 +12,9 @@ function KakaoAuth() {
         Kakao.API.request({
           url: '/v2/user/me',
           success: function (response) {
-            console.log(response.id);
-            console.log(response.kakao_account.profile.nickname);
-            console.log(process.env.REACT_APP_API_URL)
+            // console.log(response.id);
+            // console.log(response.kakao_account.profile.nickname);
+            // console.log(process.env.REACT_APP_API_URL)
             fetch(`${process.env.REACT_APP_API_URL}/account/signinkakao`, {
               method: "POST",
                 headers: {
@@ -29,8 +29,8 @@ function KakaoAuth() {
             .then(res => {
               // console.info("현재 우리가 받는 res의 형태는:", res)
               // if (Boolean(res) == true) {
-              console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res)
-              console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res.token)
+            //   console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res)
+            //   console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res.token)
               localStorage.setItem('access-token', res.token)
               fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
                 headers: {

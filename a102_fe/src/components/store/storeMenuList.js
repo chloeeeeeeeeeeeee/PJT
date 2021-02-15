@@ -6,7 +6,7 @@ function StoreMenuList() {
   let [trigger, setTrigger] = useState(true);
 
   function sendTriggerToParent() {
-      console.log("TRIGGER!!!!")
+    //   console.log("TRIGGER!!!!")
     setTrigger(!trigger);
   }
 
@@ -34,9 +34,9 @@ function StoreMenuList() {
     axios
       .get(`${process.env.REACT_APP_API_URL}/store/itemlist`, config)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data !== undefined) {
-          console.log(res.data);
+        //   console.log(res.data);
           setStoreMenuItem(
             res.data.map((item, index) => {
               return (

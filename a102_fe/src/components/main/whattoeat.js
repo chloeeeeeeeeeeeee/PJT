@@ -88,7 +88,7 @@ function Whattoeat() {
         .then((res) => res.json())
         .then((result) => {
             menuidx = (Math.floor(Math.random() * result.length));
-            console.log(result[menuidx])
+            // console.log(result[menuidx])
             while (result[menuidx].itemAvailable === 0){
                 menuidx = (Math.floor(Math.random() * result.length));
             }

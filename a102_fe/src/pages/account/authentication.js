@@ -31,8 +31,8 @@ function Auth(props) {
 
   const Signin = (event) => {
     event.preventDefault();
-    console.log("로그인 아이디:", loginId);
-    console.log("로그인 비밀번호:", loginPassword);
+    // console.log("로그인 아이디:", loginId);
+    // console.log("로그인 비밀번호:", loginPassword);
     // fetch(`${process.env.PUBLIC_URL}/account/signinjwt`, {
     fetch(`${process.env.REACT_APP_API_URL}/account/signinjwt`, {
       method: 'POST',
@@ -46,12 +46,12 @@ function Auth(props) {
     })
     .then(res => res.json())
     .then(res => {
-      console.info("Signin 함수에서 받아온 JWT 응답:", res)
-      console.info("Signin 함수에서 받아온 JWT 응답:", res.token)
+    //   console.info("Signin 함수에서 받아온 JWT 응답:", res)
+    //   console.info("Signin 함수에서 받아온 JWT 응답:", res.token)
       // 여기도 분기 걸어서 로그인 에러 처리 
       localStorage.setItem('access-token', res["token"])
       // <Redirect to="http://localhost:3000/#/"/>
-      console.log("결과적으로는: ", localStorage.getItem('access-token'))
+    //   console.log("결과적으로는: ", localStorage.getItem('access-token'))
       fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
         headers: {
           token: localStorage.getItem('access-token')
@@ -104,7 +104,7 @@ function Auth(props) {
       // .then(res => res.json())
       .then(res => {
         // 받아진 응답을 확인합시다! 이 응답은 httpOK이거나 아닐 예정입니다. 이 안에서 if로 분기를 나눠볼게요! 
-        console.log("Signup의 응답은:", res)
+        // console.log("Signup의 응답은:", res)
         // res가 NULL이거나 badrequest 인 경우 에러메시지 출력 대비
         // 정상적으로 OK 받는다면 : 방금 입력받은 유저 정보를 다시 보내서 JWT를 받아오자! 자동 로그인 파트
         if (res.status === 200 || res.status === 201) {
@@ -121,12 +121,12 @@ function Auth(props) {
           })
           .then(res => res.json())
           .then(res => {
-            console.info("Signup 함수 성공한 경우 자동 로그인:", res)
+            // console.info("Signup 함수 성공한 경우 자동 로그인:", res)
             localStorage.setItem('access-token', res.token)
           })
         } else {
           // 회원가입이 실패한 경우인데, 어떤 경우가 있을까요? 같이 에러처리 합시다
-          console.error("회원가입이 실패한 경우:", res)
+        //   console.error("회원가입이 실패한 경우:", res)
         }
       })
     }

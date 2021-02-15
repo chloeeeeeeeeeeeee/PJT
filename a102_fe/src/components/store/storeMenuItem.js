@@ -8,7 +8,7 @@ function StoreMenuItem(storeMenu) {
   }
 
   function Delete(menuitem) {
-    console.log(menuitem);
+    // console.log(menuitem);
     if (
       window.confirm(
         "정말로 상품을 삭제하시겠습니까? \n삭제된 상품을 복구 할 수 없습니다."
@@ -34,7 +34,7 @@ function StoreMenuItem(storeMenu) {
     }
   }
 
-  console.log(storeMenu.storeMenu);
+//   console.log(storeMenu.storeMenu);
   let imgurl = `${process.env.REACT_APP_API_URL}/${storeMenu.storeMenu.itemImgUrl}`;
   return (
     <Row className="col-12">

@@ -20,16 +20,16 @@ function QnaUpdate() {
   let [content, setContent] = useState(window.history.state.qnaContent);
   let [secret, setSecret] = useState(0);
 
-  useEffect(() => {
-    console.log("title", title);
-    console.log("content", content);
-  });
+//   useEffect(() => {
+//     console.log("title", title);
+//     console.log("content", content);
+//   });
 
   const Update = (event) => {
     event.preventDefault();
-    console.log(title);
-    console.log(content);
-    console.log(secret);
+    // console.log(title);
+    // console.log(content);
+    // console.log(secret);
     fetch(`${process.env.REACT_APP_API_URL}/qna/update`, {
       method: "POST",
       headers: {
@@ -54,13 +54,13 @@ function QnaUpdate() {
 
   const onTitleChange = (event) => {
     setTitle(event.target.value);
-    console.log("제목제목", title);
+    // console.log("제목제목", title);
   };
 
   const onContentChange = (event) => {
     const data = event.editor.getData();
     setContent(data);
-    console.log("너 왜 안나오니 등장해죠", content);
+    // console.log("너 왜 안나오니 등장해죠", content);
   };
 
   const onSecretChange = (event) => {
@@ -69,7 +69,7 @@ function QnaUpdate() {
     } else {
       setSecret(0);
     }
-    console.log("비밀", secret);
+    // console.log("비밀", secret);
   };
 
   return (

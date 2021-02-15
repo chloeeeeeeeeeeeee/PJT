@@ -26,12 +26,12 @@ function MenuCreate() {
     formData.append('itemPrice', price);
     formData.append('file', img);
 
-    for (let key of formData.keys()) {
-      console.log(key);
-    }
-    for (let value of formData.values()) {
-      console.log(value);
-    }
+    // for (let key of formData.keys()) {
+    //   console.log(key);
+    // }
+    // for (let value of formData.values()) {
+    //   console.log(value);
+    // }
 
     fetch(`${process.env.REACT_APP_API_URL}/store/item/create`, {
         method: "POST",
@@ -41,7 +41,7 @@ function MenuCreate() {
         body: formData,
     })
     .then(res => {
-      console.log(res);
+    //   console.log(res);
       if (res.status === 200){
         alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
         window.location.href = '/storeadmin';
@@ -54,17 +54,17 @@ function MenuCreate() {
 
   const onNameChange = event => {
     setName(event.target.value);
-    console.log(event.target.value);
+    // console.log(event.target.value);
   }
 
   const onPriceChange = (event) => {
     setPrice(event.target.value);
-    console.log(event.target.value);
+    // console.log(event.target.value);
   }
 
   const onImgChange = (event) => {
     setImage(event.target.files[0]);
-    console.log(event.target.files[0]);
+    // console.log(event.target.files[0]);
   }
 
   return (

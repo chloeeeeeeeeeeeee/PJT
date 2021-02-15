@@ -27,9 +27,9 @@ function Timeline() {
     .then(res => res.json())
     .then(res => {
       setContributions(res);
-      console.log("지금 받아올 내용은:", res)
-      console.log("실제로 받은 내용은:", contributions)
-      console.log("어떻게 파싱할까요?:", contributions[0])
+    //   console.log("지금 받아올 내용은:", res)
+    //   console.log("실제로 받은 내용은:", contributions)
+    //   console.log("어떻게 파싱할까요?:", contributions[0])
     });
   }, []);
   

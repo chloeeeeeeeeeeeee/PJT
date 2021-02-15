@@ -121,7 +121,7 @@ function StoreSupportList() {
       newStartDate += newStart.getDate();
     }
     setStartDate(newStartDate);
-    console.log(newStartDate);
+    // console.log(newStartDate);
   }
 
   const axios = require("axios");
@@ -136,11 +136,8 @@ function StoreSupportList() {
       },
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setContributions(res.data);
-      })
-      .catch((err) => {
-        console.log(err.response);
       });
   }, [startDate, endDate]);
 

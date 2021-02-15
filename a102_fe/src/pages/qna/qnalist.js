@@ -19,7 +19,7 @@ function QnaList() {
         .then(res => res.json())
         .then(res => {
             setUser(res);
-            console.log(user);
+            // console.log(user);
         })
     }, [])
 

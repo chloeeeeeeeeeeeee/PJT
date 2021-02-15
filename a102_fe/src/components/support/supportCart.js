@@ -52,7 +52,7 @@ function SupportCart(storeInfo) {
 
   // 장바구니 업데이트
   useEffect(() => {
-    console.log("CART CHANGE");
+    // console.log("CART CHANGE");
     localStorage.setItem("carts", JSON.stringify(cartStorage));
     localStorage.setItem("price", totalPrice);
   }, [trigger]);

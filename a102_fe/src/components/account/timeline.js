@@ -3,6 +3,7 @@ import {
   VerticalTimeline,
   // VerticalTimelineElement,
 } from "react-vertical-timeline-component";
+import 'react-vertical-timeline-component/style.min.css';
 // import { Edit, Video, Image, Activity } from "react-feather";
 import TimelineItem from "./timelineItem";
 // import Contribution from "../support/contribution";
@@ -26,57 +27,15 @@ function Timeline() {
     .then(res => res.json())
     .then(res => {
       setContributions(res);
-      // console.log("지금 받아올 내용은:", res)
-      // console.log("실제로 받은 내용은:", contributions)
-      // console.log("어떻게 파싱할까요?:", contributions.contributions.item.itemName)
-    })
-  }, [])
-
-  // // 임시로 받아온 데이터가 아주 멋지군요
-  // const contributions = [
-  //   {
-  //     "contributionId": 9,
-  //     "item": {
-  //       "store": {
-  //         "storeId": 1,
-  //         "storeName": "국수나무창신점",
-  //         "storeLocation": "서울특별시 종로구 창신동 23-76 104호",
-  //         "storeCategory": "한식",
-  //         "storeRegDate": "2021-01-20T23:35:30.000+00:00",
-  //         "storePhone": "027479340",
-  //         "storeKiosk": 1,
-  //         "location": {
-  //           "locationId": 1,
-  //           "locationSi": "서울특별시",
-  //           "locationGu": "종로구"
-  //         }
-  //       },
-  //       "itemId": 18,
-  //       "itemName": "로제돈까스",
-  //       "itemPrice": 9400,
-  //       "itemAvailable": 3,
-  //       "itemTotal": 0,
-  //       "itemImgUrl": "menus/1/로제돈까스.jpg"
-  //     },
-  //     "user": {
-  //       "userSeq": 1,
-  //       "userId": "1",
-  //       "userName": "qwe",
-  //       "userPwd": "$2a$10$hCgXpJetAx4nf3S.kugEm.MRAtbxk5nEDKyaYfLGkRBNMuO4yEa3e",
-  //       "userEmail": "test@test.com",
-  //       "userPhone": "010-0000-0000",
-  //       "userDate": "2021-01-26T13:17:27",
-  //       "userTotalContributionAmount": 20,
-  //       "store": null
-  //     },
-  //     "contributionMessage": "로!제!짱!",
-  //     "contributionAnswer": null,
-  //     "contributionDate": "2021-01-26T06:58:59.000+00:00",
-  //     "contributionDateUsed": null,
-  //     "contributionUse": 0
-  //   },
-  // ];
+      console.log("지금 받아올 내용은:", res)
+      console.log("실제로 받은 내용은:", contributions)
+      console.log("어떻게 파싱할까요?:", contributions[0])
+    });
+  }, []);
   
+  // return (
+  //   <div></div>
+  // );
   if (contributions.length !== 0) {
     // console.log("이게 0일 경우인데요:", contributions)
     return (
@@ -94,8 +53,13 @@ function Timeline() {
     );
   } else {
     return (
-      <div>
-        당신의 후원을 기다리고 있어요 (하트)
+      <div pt-20 >
+       <p>테스트 결제를 하시고 후원 랭킹에 참여해보세요!</p>
+       <p>1. 서울시 종로구 창신동 검색</p>
+       <p>2. 국수나무 창신점 선택</p>
+       <p>3. 원하시는 메뉴를 마음껏 담은 뒤</p>
+       <p>4. 카카오페이로 테스트 결제를 실행해보세요!</p>
+       <p>5. 실제 결제는 진행되지 않지만, 후원 내역은 기록됩니다.</p>
       </div>
     );
   }

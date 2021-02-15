@@ -13,7 +13,7 @@ function Usertotal() {
     const [userTotal, setUserTotal] = useState(0);
   
     useEffect(()=>{
-        fetch("http://i4a102.p.ssafy.io:8080/app/main/usertotal")
+        fetch(`${process.env.REACT_APP_API_URL}/main/usertotal`)
         .then((res) => res.json())
         .then((total) => {
           setUserTotal(total);

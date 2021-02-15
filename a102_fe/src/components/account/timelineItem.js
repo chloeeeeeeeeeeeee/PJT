@@ -36,10 +36,12 @@ function TimelineItem (contribution) {
     >
       <div className="timelinItem-grid">
         <div className="timelineItem-title">
-          { contribution.contribution.item.itemName }을 후원했어요!
+          {/* { contribution.contribution.item.itemName }을 후원했어요! */}
+          { contribution.contribution.itemName }을 후원했어요!
         </div>
         <div className="timelineItem-subtitle">
-          { contribution.contribution.item.store.storeName }에 방문했어요!
+          {/* { contribution.contribution.item.store.storeName }에 방문했어요! */}
+          { contribution.contribution.storeName }에 방문했어요!
         </div>
         <div className="timelineItem-time">
           { contribDate }월 { contribDay }일

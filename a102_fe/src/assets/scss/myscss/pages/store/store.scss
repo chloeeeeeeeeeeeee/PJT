@@ -22,3 +22,34 @@
     }
   }
 }
+.storeAdminContainer {
+  height: 100%;
+  .storeInfo {
+    height: 60vh;
+    .storeInfoCard {
+      border: none;
+      .cardHeader {
+        background-color: white;
+        color: $oori-green;
+      }
+      height: 100%;
+      overflow-y: auto;
+      .caution {
+        font-size: x-small;
+      }
+      .card-body {
+        #storeMiniMap {
+          height: 50%;
+        }
+        .findWayButton {
+          margin-bottom: 5px;
+          color: white;
+          background-color: $oori-green;
+          border: none;
+          border-top-left-radius: 0px;
+          border-top-right-radius: 0px;
+        }
+      }
+    }
+  }
+}

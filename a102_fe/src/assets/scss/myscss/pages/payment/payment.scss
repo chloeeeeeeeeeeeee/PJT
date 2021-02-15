@@ -11,13 +11,45 @@
       color: $oori-green;
     }
     .paymentInfoItem {
+      align-items: center;
       background-color: white;
+      vertical-align: middle;
       p {
         font-size: small;
       }
       .information {
         color: $oori-green;
         font-size: x-small;
+      }
+      .paymentMenuInfo {
+        display: inline;
+        vertical-align: middle;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .menuItemInfo {
+        display: inline;
+        vertical-align: middle;
+      }
+      .paymentCountButton {
+        font-size: small;
+        background-color: $oori-white;
+        border: none;
+        color: $oori-green;
+      }
+      .paymentDeleteButton {
+        font-size: small;
+        background-color: $oori-white;
+        border: none;
+        color: red;
+      }
+      .paymentCount {
+        font-size: small;
+        background-color: white;
+        border: none;
+        color: $oori-green;
       }
     }
   }

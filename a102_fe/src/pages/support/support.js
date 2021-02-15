@@ -254,7 +254,7 @@ function Support() {
         <Col sm="12" md="6" className="supportBox">
           {/* 매장 리스트 */}
           <h5>가게 목록</h5>
-          <Row className="storeListBox">{storeListComponents}</Row>
+          <Col className="storeListBox d-flex flex-column">{storeListComponents}</Col>
         </Col>
       </Row>
     </Col>

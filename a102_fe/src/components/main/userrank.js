@@ -23,7 +23,7 @@ function Userrank(){
                 return (
                     <div>
                         <h5 className="userrankrank">{index + 1}등 {user.userName}</h5>
-                        <h5 className="userrankgood">총 {user.contributionCount}그릇 후원해준 {user.userName}님 멋쟁이~!~!</h5>
+                        <h5 className="userrankgood">총 {user.userTotalContributionCount}그릇 후원해준 {user.userName}님 멋쟁이~!~!</h5>
                         <br/>
                     </div>
                 );

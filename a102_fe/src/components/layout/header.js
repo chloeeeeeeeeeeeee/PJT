@@ -36,16 +36,16 @@ function Header() {
 
       <div className="d-flex flex-column col-10 offset-1">
       <NavbarBrand className="mainHeaderLogo">
-        <img src={oori} className="logoImage d-inline-block align-top" onClick={moveToMain}/>
+        <a href="/childmain"><img src={oori} className="logoImage d-inline-block align-top"/></a>
       </NavbarBrand>
-      <NavbarToggler onClick={toggle}/>
-        <Collapse isOpen={isOpen} navbar className="mainHeaderNav">
+      {/* <NavbarToggler onClick={toggle}/>
+        <Collapse isOpen={isOpen} navbar className="mainHeaderNav"> */}
             <Nav className="mx-auto" navbar>
               <NavItem>
                 <NavLink href="/childmap"><b>지도보기</b></NavLink>
               </NavItem>
             </Nav>
-        </Collapse>
+        {/* </Collapse> */}
       </div>
 
     :
@@ -53,8 +53,8 @@ function Header() {
     ( storecheck?
 
       <div className="d-flex flex-column col-10 offset-1">
-        <NavbarToggler onClick={toggle}/>
-        <Collapse isOpen={isOpen} navbar className="mainHeaderAuth">
+        {/* <NavbarToggler onClick={toggle}/> */}
+        {/* <Collapse isOpen={isOpen} navbar className="mainHeaderAuth"> */}
           <Nav className="ml-auto" navbar>
             <NavItem>
               {Boolean(localStorage.getItem("access-token")) == true && (localStorage.getItem("access-token") != "undefined") ?
@@ -64,12 +64,12 @@ function Header() {
               }
             </NavItem>
           </Nav>
-        </Collapse>
+        {/* </Collapse> */}
         <NavbarBrand className="mainHeaderLogo">
-          <img src={oori} className="logoImage d-inline-block align-top"/>
+          <a href="/storeadmin"><img src={oori} className="logoImage d-inline-block align-top"/></a>
         </NavbarBrand>
-        <NavbarToggler onClick={toggle}/>
-        <Collapse isOpen={isOpen} navbar className="mainHeaderNav">
+        {/* <NavbarToggler onClick={toggle}/> */}
+        {/* <Collapse isOpen={isOpen} navbar className="mainHeaderNav"> */}
             <Nav className="mx-auto" navbar>
               {Boolean(localStorage.getItem("access-token")) ?
                 <NavItem>
@@ -78,14 +78,14 @@ function Header() {
                 : ""
               }
             </Nav>
-        </Collapse>
+        {/* </Collapse> */}
       </div>
     
     :
 
       <div className="d-flex flex-column col-10 offset-1">
-        <NavbarToggler onClick={toggle}/>
-        <Collapse isOpen={isOpen} navbar className="mainHeaderAuth">
+        {/* <NavbarToggler onClick={toggle}/>
+        <Collapse isOpen={isOpen} navbar className="mainHeaderAuth"> */}
           <Nav className="ml-auto" navbar>
             {/* {Boolean(localStorage.getItem("access-token")) && (localStorage.getItem("access-token") != "undefined") ?
               <NavItem>
@@ -101,12 +101,12 @@ function Header() {
               }
             </NavItem>
           </Nav>
-        </Collapse>
+        {/* </Collapse> */}
         <NavbarBrand className="mainHeaderLogo">
-          <img src={oori} className="logoImage d-inline-block align-top" onClick={moveToMain}/>
+        <a href="/"><img src={oori} className="logoImage d-inline-block align-top"/></a>
         </NavbarBrand>
-        <NavbarToggler onClick={toggle}/>
-        <Collapse isOpen={isOpen} navbar className="mainHeaderNav">
+        {/* <NavbarToggler onClick={toggle} className="mr-2"/> */}
+        {/* <Collapse isOpen={isOpen} navbar className="mainHeaderNav"> */}
             <Nav className="mx-auto" navbar>
               <NavItem>
                 <NavLink href="/support"> 후원하기 </NavLink>
@@ -121,7 +121,7 @@ function Header() {
                 <NavLink href="/qna"> 문의하기 </NavLink>
               </NavItem>
             </Nav>
-        </Collapse>
+        {/* </Collapse> */}
       </div>
     
     )

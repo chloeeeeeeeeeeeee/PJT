@@ -12,12 +12,14 @@
   //   padding: 0.5% 2%;
   // }
   .supportCategory {
+    align-items: center;
     Button {
       color: white;
       background-color: $oori-green;
       border: none;
     }
     .categoryListBox {
+      align-items: center;
       height: 100%;
       display: flex;
       // 카테고리 리스트 아이템 1개
@@ -62,6 +64,18 @@
       .storeListBox {
         height: 85%;
         overflow-y: auto;
+        display: flex;
+        align-items: start;
+        justify-content: flex-start;
+        // 이거하면 된다며 왜 안돼~~
+        // scrollbar-width: none;
+        // -ms-overflow-style: none;
+        // ::-webkit-scrollbar {
+        //   display: none;
+        // }
+        &::-webkit-scrollbar {
+          display: none;
+        }
         // border-color: $oori-green;
         // border-width: 0.5px;
         // border-style: solid;
@@ -78,7 +92,7 @@
             font-size: small;
           }
           Button {
-            float: right;
+            // float: right;
             font-size: small;
             background-color: $oori-green;
             border: none;

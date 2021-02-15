@@ -29,7 +29,7 @@ function Aboutus() {
             </Button></a>
         </CardHeader> */}
             <CardBody sm="12" className="aboutUsBody">
-                <br/>
+                <div>
                 <p className='mb-0 aboutUsText'>
                 안녕하세요, 팀 '우리끼리'입니다.
                 </p>
@@ -65,6 +65,7 @@ function Aboutus() {
                 </p>
                 <h4 className="font-weight-bold">결식아동들을 위한 키오스크를 만들어보려고 한다.</h4>
                 <p className="text-right aboutUsText">A102 팀장 <span className="font-weight-bold">천석희</span> 님</p> */}
+                </div>
             </CardBody>
         </Card>
     );

@@ -86,26 +86,28 @@ function PaymentInfo({ sendDataToParent }) {
     let imgurl = `${process.env.REACT_APP_API_URL}/menus/1/${cartItem.itemName}.jpg`;
     return (
       <Row className="paymentInfoItem justify-content-between" key={index}>
-        <Col xs="3" className="paymentMenuInfo">
-          <img src={imgurl} className="d-inline-block col-3 p-0" />
+        <Col xs="2" className="paymentMenuInfo">
+          <img src={imgurl} className="d-inline-block p-0" />
         </Col>
-        <Col xs="6">
-        <div className="menuItemInfo p-0 row justify-content-start">
+        <Col xs="6" className="menuItemInfo">
+        <div className="p-0 row">
           <h5 className="col-8 mb-0">{cartItem.itemName}</h5>
           <p className="col-4 text-center mb-0">{cartItem.itemPrice > 6000 ? cartItem.itemPrice - 6000 : cartItem.itemPrice}원</p>
-          <p className="col-12 information mt-1">현재 {cartItem.itemAvailable}그릇 후원되었습니다.</p>
+          <p className="col-12 information mt-1 mb-0">현재 {cartItem.itemAvailable}그릇 후원되었습니다.</p>
         </div>
         </Col>
-        <Col xs="3" className="paymentMenuButtons d-flex align-items-center p-0">
+        <Col xs="4" className="paymentMenuButtons d-flex align-items-center p-0">
           <Button
             className="paymentCountButton col-2"
             onClick={(e) => minusMenu(cartItem)}
           >
             -
           </Button>
-          <p className="paymentMenuCount col-2 m-0 text-center">
+          <Button className="paymentCount col-2 m-0 text-center">
+          {/* <p className="paymentMenuCount col-2 m-0 text-center"> */}
             {cartItem.itemCount}
-          </p>
+          {/* </p> */}
+          </Button>
           <Button
             className="paymentCountButton col-2"
             onClick={(e) => plusMenu(cartItem)}
@@ -113,7 +115,7 @@ function PaymentInfo({ sendDataToParent }) {
             +
           </Button>
           <Button
-            className="paymentCountButton col-2 offset-2"
+            className="paymentDeleteButton col-2 offset-1"
             onClick={(e) => deleteMenu(cartItem)}
           >
             x

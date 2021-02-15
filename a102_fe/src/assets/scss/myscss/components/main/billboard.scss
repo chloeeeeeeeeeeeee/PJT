@@ -50,6 +50,7 @@
   background-position: center;
   text-align: center;
   vertical-align: middle;
+  align-items: center;
   overflow: hidden;
   .userrankrank {
     color: $oori-gray-pinstripe;
@@ -73,6 +74,7 @@
   width: 100%;
   border-radius: 15px;
   //   vertical-align: middle;
+  overflow: hidden;
   padding-top: 11vh;
   .usertotaltotal {
     color: $oori-gray-pinstripe;

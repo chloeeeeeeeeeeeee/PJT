@@ -58,7 +58,8 @@ function Whattoeat() {
     function setStoreListComponent() {
         if (address !== "") {
         fetch(
-            `http://i4a102.p.ssafy.io:8080/app/main/mapview/storelist/${encodeURIComponent(
+            `${process.env.REACT_APP_API_URL}/main/mapview/storelist/${encodeURIComponent(
+            // `http://i4a102.p.ssafy.io:8080/app/main/mapview/storelist/${encodeURIComponent(
             address
             )}`
         )
@@ -83,7 +84,7 @@ function Whattoeat() {
         // 메뉴가 지금 국수나무에만 있어서 fetch 무조건 1번으로 해줬습니다!
         // 하지만 훼이크로 가게 이름은 바뀐다는거 슝슝~!
         // fetch(`http://i4a102.p.ssafy.io:8080/app/support/menulist/${storeList[idx].storeId}`)
-        fetch(`http://i4a102.p.ssafy.io:8080/app/support/menulist/1`)
+        fetch(`${process.env.REACT_APP_API_URL}/support/menulist/1`)
         .then((res) => res.json())
         .then((result) => {
             menuidx = (Math.floor(Math.random() * result.length));

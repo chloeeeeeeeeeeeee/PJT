@@ -8,21 +8,28 @@
     height: 60vh;
     border-radius: 15px;
     background-color: $oori-white;
-    // overflow-y: scroll;
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
     margin-bottom: 0;
     .aboutUsBody {
-      // overflow-y: scroll;
-      padding-top: 2%;
-      height: 50%;
-      line-height: 1.5em;
-      .aboutUsText {
-        text-align: center;
-        vertical-align: center;
+      div {
         // overflow-y: scroll;
-        color: $oori-gray-pinstripe;
-        font-size: medium;
-        font-weight: 500;
+        padding-top: 2%;
+        height: 50%;
         line-height: 1.5em;
+        align-items: center;
+        vertical-align: center;
+        .aboutUsText {
+          text-align: center;
+          vertical-align: center;
+          // overflow-y: scroll;
+          color: $oori-gray-pinstripe;
+          font-size: medium;
+          font-weight: 500;
+          line-height: 1.5em;
+        }
       }
     }
   }

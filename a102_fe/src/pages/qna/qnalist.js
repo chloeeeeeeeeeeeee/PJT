@@ -105,7 +105,7 @@ function QnaList() {
                             {userStatus?
                                 <a href="/qnacreate"><Button className="listPostHeaderButton">문의하기</Button></a>
                                 :
-                                <div className="listPostHeaderCaution">회원만 문의가 가능합니다</div>
+                                <div className="listPostHeaderCaution"><b>회원만 문의가 가능합니다</b></div>
                             }
                         </div>
                     </Col>

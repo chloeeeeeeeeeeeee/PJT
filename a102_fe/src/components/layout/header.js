@@ -20,13 +20,17 @@ function Header() {
     childcheck = true;
   }
 
+  function moveToMain(){
+      window.location.href = '/'
+  }
+
   return (
     <Navbar light expand="md" className="mainHeader">
     { childcheck?
 
       <div className="d-flex flex-column col-10 offset-1">
       <NavbarBrand className="mainHeaderLogo">
-        <img src={oori} className="logoImage d-inline-block align-top"/>
+        <img src={oori} className="logoImage d-inline-block align-top" onClick={moveToMain}/>
       </NavbarBrand>
       </div>
 
@@ -52,7 +56,7 @@ function Header() {
           </Nav>
         </Collapse>
         <NavbarBrand className="mainHeaderLogo">
-          <img src={oori} className="logoImage d-inline-block align-top"/>
+          <img src={oori} className="logoImage d-inline-block align-top" onClick={moveToMain}/>
         </NavbarBrand>
         <NavbarToggler onClick={toggle}/>
         <Collapse isOpen={isOpen} navbar className="mainHeaderNav">

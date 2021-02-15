@@ -61,8 +61,12 @@ public class ContributionOld implements Serializable {
 	
 	private int contributionUse;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="payment_id")
 	private Payment payment;
+	
+	@ManyToOne
+	@JoinColumn(name="payment_gdream_id", nullable = true)
+	private PaymentGdream paymentGdream;
 	
 }

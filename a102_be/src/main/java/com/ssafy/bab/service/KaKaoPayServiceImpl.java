@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -93,7 +95,6 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 		return headers;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public String kakaoPayReady(KPaymentInfo paymentInfo) {
 		
@@ -109,6 +110,11 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 		String item_name = paymentInfo.getItemList().get(0).getItemName();
 		if(paymentInfo.getItemList().size() > 1) {
 			item_name += " 외 " + (paymentInfo.getTotalCount() - 1) + "건";
+		}
+		
+		// itemCount = 0 일 경우 에러처리
+		for(int i = 0; i < paymentInfo.getItemList().size(); i++) {
+			if(paymentInfo.getItemList().get(i).getItemCount() <= 0) return null;
 		}
 
 		// 키오스크 기부이고 익명기부가 아니면서 회원일 경우 user 정보 추가
@@ -221,6 +227,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             // order, contribution 테이블 업데이트
             for (PaymentItem paymentItem : kakaoPayInfo.getPaymentInfo().getItemList()) {
             	Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
+            	if(item == null) throw new RuntimeException();
 				if(paymentItem.getSupport() == 1) {
 					for(int i = 0; i < paymentItem.getItemCount(); i++) {
 						// Contribution 테이블 업데이트

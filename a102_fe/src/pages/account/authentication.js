@@ -365,12 +365,7 @@ function Auth(props) {
                                 </Button> */}
                               </Col>
                               <Col md="6" sm="6">
-                                <Button
-                                  color="social-btn btn-naver"
-                                  // onClick={twitterAuth}
-                                >
-                                  네이버로 가입하기
-                                </Button>
+                                <NaverAuth />
                               </Col>
                             </Row>
                           </div>

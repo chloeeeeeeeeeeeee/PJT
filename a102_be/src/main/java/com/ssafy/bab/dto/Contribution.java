@@ -4,14 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -40,11 +37,11 @@ public class Contribution implements Serializable {
 //	private Item item;
 	
 	@ManyToOne
-	@JoinColumn(name="user_seq")
+	@JoinColumn(name="user_seq", nullable = true)
 	private User user;
 	
 	@ManyToOne
-	@JoinColumn(name="contributor_seq")
+	@JoinColumn(name="contributor_seq", nullable = true)
 	private Contributor contributor;
 	
 	@JoinColumn(name="contribution_message", nullable = true)
@@ -67,7 +64,7 @@ public class Contribution implements Serializable {
 	private Payment payment;
 	
 	@ManyToOne
-	@JoinColumn(name="payment_id", nullable = true)
-	private Payment usedPayment;
+	@JoinColumn(name="payment_gdream_id", nullable = true)
+	private PaymentGdream paymentGdream;
 	
 }

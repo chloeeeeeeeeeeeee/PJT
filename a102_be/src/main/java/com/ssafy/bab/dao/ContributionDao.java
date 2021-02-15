@@ -40,5 +40,7 @@ public interface ContributionDao extends JpaRepository<Contribution, Integer> {
 	// 메뉴별 후원횟수
 	@Query(value = "SELECT item_id as itemId, COUNT(item_id) as count FROM contribution WHERE store_id = :storeId AND :endDate >= contribution_date AND contribution_date >= :startDate group by item_id; ", nativeQuery = true)
 	ArrayList<ItemIdCount> getItemContributionCount(@Param("storeId") int storeId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+	ArrayList<Contribution> findByStoreIdAndItemIdAndContributionUseOrderByContributionDate(int storeId, int itemId, int contributionUse);
 	
 }

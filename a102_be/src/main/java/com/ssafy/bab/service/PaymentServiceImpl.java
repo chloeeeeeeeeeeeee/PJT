@@ -2,7 +2,10 @@ package com.ssafy.bab.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import com.ssafy.bab.dao.PaymentGdreamDao;
 import com.ssafy.bab.dao.StoreDao;
 import com.ssafy.bab.dao.StoreVariablesDao;
 import com.ssafy.bab.dao.UserDao;
+import com.ssafy.bab.dto.CPaymentInfo;
 import com.ssafy.bab.dto.Contribution;
 import com.ssafy.bab.dto.Contributor;
 import com.ssafy.bab.dto.GPaymentInfo;
@@ -28,7 +32,6 @@ import com.ssafy.bab.dto.PaymentGdream;
 import com.ssafy.bab.dto.PaymentItem;
 import com.ssafy.bab.dto.StoreVariables;
 import com.ssafy.bab.dto.User;
-import com.ssafy.bab.dto.CPaymentInfo;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -59,9 +62,14 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	@Autowired
 	OrderDao orderDao;
-	
+
 	@Override
 	public String checkNaverPayTransaction(NPaymentInfo paymentInfo) throws ParseException {
+		
+		// itemCount = 0 일 경우 에러처리
+		for (int i = 0; i < paymentInfo.getItemList().size(); i++) {
+			if (paymentInfo.getItemList().get(i).getItemCount() <= 0) return "Check ItemCount";
+		}
 		
 		// String -> Date
 		SimpleDateFormat transFormat = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -99,6 +107,7 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		for(PaymentItem paymentItem : paymentInfo.getItemList()) {
 			Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
+			if(item == null) throw new RuntimeException();
 			for(int i = 0; i < paymentItem.getItemCount(); i++) {
 				// Contribution 테이블 업데이트
 				Contribution contribution = new Contribution();
@@ -139,6 +148,11 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public String checkIamPortTransaction(IPaymentInfo paymentInfo) {
 		
+		// itemCount = 0 일 경우 에러처리
+		for (int i = 0; i < paymentInfo.getItemList().size(); i++) {
+			if (paymentInfo.getItemList().get(i).getItemCount() <= 0) return "Check ItemCount";
+		}
+		
 		// UNIX timestamp -> Date
 		Date date = new java.util.Date(paymentInfo.getPaid_at()*1000L); 
 
@@ -174,6 +188,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 		for (PaymentItem paymentItem : paymentInfo.getItemList()) {
 			Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
+			if(item == null) throw new RuntimeException();
 			for (int i = 0; i < paymentItem.getItemCount(); i++) {
 				// Contribution 테이블 업데이트
 				Contribution contribution = new Contribution();
@@ -217,6 +232,11 @@ public class PaymentServiceImpl implements PaymentService {
 
 	@Override
 	public String checkCreditCardTransaction(CPaymentInfo paymentInfo) throws ParseException {
+		
+		// itemCount = 0 일 경우 에러처리
+		for (int i = 0; i < paymentInfo.getItemList().size(); i++) {
+			if (paymentInfo.getItemList().get(i).getItemCount() <= 0) return "Check ItemCount";
+		}
 		
 		if(storeDao.findByStoreId(paymentInfo.getItemList().get(0).getStoreId()) == null) {
 			return "Invalid Store";
@@ -262,6 +282,7 @@ public class PaymentServiceImpl implements PaymentService {
      // order, contribution 테이블 업데이트
         for (PaymentItem paymentItem : paymentInfo.getItemList()) {
         	Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
+        	if(item == null) throw new RuntimeException();
 			if(paymentItem.getSupport() == 1) {
 				for(int i = 0; i < paymentItem.getItemCount(); i++) {
 					// Contribution 테이블 업데이트
@@ -321,17 +342,28 @@ public class PaymentServiceImpl implements PaymentService {
 	@Override
 	public String checkGDreamTransaction(GPaymentInfo paymentInfo) throws ParseException {
 		
+		// itemCount = 0 일 경우 에러처리
+		for (int i = 0; i < paymentInfo.getItemList().size(); i++) {
+			if (paymentInfo.getItemList().get(i).getItemCount() <= 0) return "Check ItemCount";
+		}
+		
 		if(storeDao.findByStoreId(paymentInfo.getItemList().get(0).getStoreId()) == null) {
 			return "Invalid Store";
 		}
-		
+
 		// 주문번호
 		SimpleDateFormat vans = new SimpleDateFormat("yyyyMMdd-HHmmss");
 		String wdate = vans.format(new Date());
-		
+
 		// 주문시각
 		Date tradeConfirmYmdt = vans.parse(paymentInfo.getPaidAt());
 		
+		
+		/*
+         * ******* DB 테이블 업데이트 *******
+         */
+		
+		// PaymentGdream 테이블 업데이트
 		PaymentGdream paymentG = new PaymentGdream();
 		paymentG.setPaymentGdreamId(wdate);
 		paymentG.setPaymentGdreamDate(tradeConfirmYmdt);
@@ -340,9 +372,58 @@ public class PaymentServiceImpl implements PaymentService {
 		paymentG.setPaymentGdreamStoreId(paymentInfo.getItemList().get(0).getStoreId());
 		paymentGDao.save(paymentG);
 		
+		// 후원내역 처리
+		ArrayList<Contribution> contributionList = null;
+		for (PaymentItem paymentItem : paymentInfo.getItemList()) {
+        	Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
+        	if(item == null) throw new RuntimeException();
+        	contributionList = null;
+        	contributionList = contributionDao.findByStoreIdAndItemIdAndContributionUseOrderByContributionDate(item.getStoreId(), item.getItemId(), 0);
+        	if(contributionList != null) {
+        		int size = contributionList.size();
+        		int i = 0;
+	        	for (i = 0; i < paymentItem.getItemCount() && i < size ; i++) {
+	
+					// Contribution 테이블 업데이트
+					Contribution contribution = contributionList.get(i);
+					contribution.setContributionDateUsed(tradeConfirmYmdt);
+					contribution.setContributionUse(1);
+					contribution.setPaymentGdream(paymentG);
+					contribution.setContributionAnswer(paymentItem.getMsg());
+					contributionDao.save(contribution);
+					
+					// 회원 후원일 경우 문자 전송
+					
+	
+				}
+	        	
+	        	int count = Math.min(paymentItem.getItemCount(), size);
+	        	
+	        	// item 테이블 업데이트
+				item.setItemAvailable(item.getItemAvailable() - count);
+				item.setItemTotal(item.getItemTotal() - count);
+				itemDao.save(item);
+				
+				// storeVariables 테이블 업데이트
+				StoreVariables storeVariables = storeVariablesDao.findByStoreId(paymentItem.getStoreId());
+				storeVariables.setStoreItemAvailable(storeVariables.getStoreItemAvailable() - count);
+				storeVariablesDao.save(storeVariables);
+        	}
+
+			Orders order = new Orders();
+			order.setItemId(paymentItem.getItemId());
+			order.setStoreId(paymentItem.getStoreId());
+			order.setOrderDate(tradeConfirmYmdt);
+			order.setOrderCount(paymentItem.getItemCount());
+			order.setPaymentGdream(paymentG);
+
+//				!!!!!!!!!!!!orderDone 수정필요!!!!!!!!!!!!!!!!
+			order.setOrderDone(tradeConfirmYmdt);
+			orderDao.save(order);
+			
+		}
 		
-		
-		return null;
+		return "SUCCESS";
 	}
 
 }

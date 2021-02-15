@@ -48,7 +48,11 @@ public class Orders {
 	
 	private int orderCount;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="payment_id")
 	private Payment payment;
+	
+	@ManyToOne
+	@JoinColumn(name="payment_gdream_id", nullable = true)
+	private PaymentGdream paymentGdream;
 }

@@ -43,4 +43,6 @@ public interface ContributionDao extends JpaRepository<Contribution, Integer> {
 
 	ArrayList<Contribution> findByStoreIdAndItemIdAndContributionUseOrderByContributionDate(int storeId, int itemId, int contributionUse);
 	
+	// 비회원 후원 가져오기
+	ArrayList<Contribution> findByContributor_ContributorSeq(int contributorSeq);
 }

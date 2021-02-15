@@ -17,11 +17,15 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.ssafy.bab.dao.ContributionDao;
+import com.ssafy.bab.dao.ContributionOldDao;
+import com.ssafy.bab.dao.ContributorDao;
 import com.ssafy.bab.dao.ItemDao;
 import com.ssafy.bab.dao.StoreDao;
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.Contribution;
+import com.ssafy.bab.dto.ContributionOld;
 import com.ssafy.bab.dto.ContributionResult;
+import com.ssafy.bab.dto.Contributor;
 import com.ssafy.bab.dto.NaverProfile;
 import com.ssafy.bab.dto.User;
 
@@ -38,10 +42,17 @@ public class AccountServiceImpl implements AccountService{
 	StoreDao storeDao;
 	
 	@Autowired
-	PasswordEncodingService passwordEncoding;
+	ContributorDao contributorDao;
 	
 	@Autowired
 	ContributionDao contributionDao;
+	
+	@Autowired
+	ContributionOldDao contributionOldDao;
+	
+	@Autowired
+	PasswordEncodingService passwordEncoding;
+	
 	
 	public User signUp(User user) {
 		
@@ -55,6 +66,9 @@ public class AccountServiceImpl implements AccountService{
 		User userResult = user;
 		userResult.setUserPwd(passwordEncoding.encode(user.getUserPwd()));
 		userDao.save(userResult);
+		
+		getContributorHistory(userResult);
+		
 		//userResult.setUserPwd(null);
 		return userResult;
 	}
@@ -171,6 +185,58 @@ public class AccountServiceImpl implements AccountService{
 		}
 		
 		return "FAIL";
+	}
+
+	@Override
+	public String userUpdate(User user, User newUser) {
+		
+		if(newUser.getUserEmail() != null) {
+			user.setUserEmail(newUser.getUserEmail());
+		}
+		
+		if(newUser.getUserPhone() != null) {
+			user.setUserPhone(newUser.getUserPhone());
+			getContributorHistory(user);
+		}
+		
+		if(newUser.getUserName() != null) {
+			user.setUserName(newUser.getUserName());
+		}
+		
+		userDao.save(user);
+		
+		return "SUCCESS";
+	}
+
+	@Override
+	public void getContributorHistory(User user) {
+		
+		Contributor contributor = contributorDao.findByContributorPhone(user.getUserPhone());
+		if(contributor == null) return;
+		
+		ArrayList<Contribution> list = contributionDao.findByContributor_ContributorSeq(contributor.getContributorSeq());
+		for (Contribution contribution : list) {
+			contribution.setContributor(null);
+			contribution.setUser(user);
+			contributionDao.save(contribution);
+			
+			user.setUserTotalContributionCount(user.getUserTotalContributionCount() + 1);
+			user.setUserTotalContributionAmount(user.getUserTotalContributionAmount() + itemDao.findByItemIdAndStoreId(contribution.getItemId(), contribution.getStoreId()).getSupportPrice());
+		}
+		
+		ArrayList<ContributionOld> listOld = contributionOldDao.findByContributor_ContributorSeq(contributor.getContributorSeq());
+		for (ContributionOld contributionOld : listOld) {
+			contributionOld.setContributor(null);
+			contributionOld.setUser(user);
+			contributionOldDao.save(contributionOld);
+			
+			user.setUserTotalContributionCount(user.getUserTotalContributionCount() + 1);
+			user.setUserTotalContributionAmount(user.getUserTotalContributionAmount() + itemDao.findByItemIdAndStoreId(contributionOld.getItemId(), contributionOld.getStoreId()).getSupportPrice());
+		}
+		
+		contributorDao.delete(contributor);
+		userDao.save(user);
+		
 	}
 
 

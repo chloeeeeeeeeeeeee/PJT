@@ -6,6 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,8 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping("/account")
 public class AccountController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 	
 	@Autowired
 	private AccountService userService;
@@ -274,26 +278,26 @@ public class AccountController {
 			
 	}
 	
-//	@ApiOperation(value = "회원정보 변경", notes = "글 제목, 내용, 비밀글여부와 헤더에 jwtToken", response = List.class)
-//	@PostMapping("/create")
-//	public ResponseEntity<String> qnaCreate(@ApiParam(value = "글 제목, 내용, 비밀글 여부 ", required = true) @RequestBody Qna qna, HttpServletRequest req) throws Exception {
-//		logger.info("qnaCreate_QnaController - 호출");
-//		
-//		String jwt = req.getHeader("token");
-//        int userSeq = jwtService.decode(jwt);
-//		
-//        //테스트
-////		User user = userDao.findByUserSeq(1);
-//		//프론트
-//		User user = userDao.findByUserSeq(userSeq);
-//        if(user == null || qna.getQnaContent() == null || qna.getQnaTitle() == null) return new ResponseEntity<String>("FAIL", HttpStatus.BAD_REQUEST);
-//		
-//        qna.setUser(user);
-//        
-//		if("SUCCESS" == qnaService.qnaCreate(qna))
-//			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
-//		else
-//			return new ResponseEntity<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
-//	}
+	@ApiOperation(value = "회원정보 변경", notes = "회원 이름, 핸드폰 번호, 이메일 주소 변경 가능", response = List.class)
+	@PostMapping("/update")
+	public ResponseEntity<String> userUpdate(@ApiParam(value = "변경 원하는 값 ", required = true) @RequestBody User newUser, HttpServletRequest req) throws Exception {
+		logger.info("userUpdate_AccountController - 호출");
+		
+		String jwt = req.getHeader("token");
+        int userSeq = jwtService.decode(jwt);
+		
+        //테스트
+//		User user = userDao.findByUserSeq(1);
+		//프론트
+		User user = userDao.findByUserSeq(userSeq);
+        if(user == null || (newUser.getUserEmail() == null && newUser.getUserPhone() == null && newUser.getUserName() == null)) return new ResponseEntity<String>("FAIL", HttpStatus.BAD_REQUEST);
+		
+        
+        
+		if("SUCCESS" == userService.userUpdate(user, newUser))
+			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+		else
+			return new ResponseEntity<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
 }

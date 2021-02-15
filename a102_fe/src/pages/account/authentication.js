@@ -52,7 +52,15 @@ function Auth(props) {
       localStorage.setItem('access-token', res["token"])
       // <Redirect to="http://localhost:3000/#/"/>
       console.log("결과적으로는: ", localStorage.getItem('access-token'))
-      window.location.href = '/profile'
+      fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
+        headers: {
+          token: localStorage.getItem('access-token')
+        }
+      })
+      .then(res => res.json())
+      .then(res =>
+        ( res.storeId !== null ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
+      )  
     })
     .catch(error =>
       alert("아이디와 비밀번호를 확인해주세요!")
@@ -124,7 +132,17 @@ function Auth(props) {
     }
     // 회원가입 후 바로 로그인을 실행했다면? 
     if (Boolean(localStorage.getItem('access-token')) == true && localStorage.getItem('access-token') != "undefined") {
-      window.location.href = '/profile'
+
+      //storeId일 경우에는?
+      fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
+        headers: {
+          token: localStorage.getItem('access-token')
+        }
+      })
+      .then(res => res.json())
+      .then(res =>
+        ( res.storeId !== null ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
+      )  
     }
   };
 

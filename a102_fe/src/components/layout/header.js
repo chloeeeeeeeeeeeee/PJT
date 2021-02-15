@@ -60,15 +60,15 @@ function Header() {
               <NavItem>
                 <NavLink href="/support"> 후원하기 </NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink href="/qna"> 문의하기 </NavLink>
-              </NavItem>
               {Boolean(localStorage.getItem("access-token")) ?
                 <NavItem>
-                  <NavLink href="/profile"><b>마이페이지</b></NavLink>
+                  <NavLink href="/profile">마이페이지</NavLink>
                 </NavItem>
                 : ""
               }
+              <NavItem>
+                <NavLink href="/qna"> 문의하기 </NavLink>
+              </NavItem>
             </Nav>
         </Collapse>
       </div>

@@ -27,6 +27,7 @@ function Profile() {
     .then(res => res.json())
     .then(res => {
       setuserInfo(res);
+      // console.log(res.store)
       // console.log("지금 받아올 내용은:", res)
       // console.log("실제로 받은 내용은:", userInfo) 
     })
@@ -39,7 +40,12 @@ function Profile() {
         <Col sm="12" md={{ size: 10, offset: 1 }} id="title">
           <h3 className="col-8 d-inline"> { userInfo.userName }님의 따뜻한 마음</h3>
           <div className="col-4 d-inline">
-            <Button className="profileHeaderButton">기부영수증 발급</Button>
+            <Button 
+              className="profileHeaderButton"
+              onClick={() => (alert("실명 인증을 준비중입니다"))}
+            >
+              기부영수증 발급
+            </Button>
           </div>
         </Col>
       </Row>

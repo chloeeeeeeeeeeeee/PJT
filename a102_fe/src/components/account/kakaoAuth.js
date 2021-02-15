@@ -32,7 +32,15 @@ function KakaoAuth() {
               console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res)
               console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res.token)
               localStorage.setItem('access-token', res.token)
-              window.location.href = '/profile'
+              fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
+                headers: {
+                  token: localStorage.getItem('access-token')
+                }
+              })
+              .then(res => res.json())
+              .then(res =>
+                ( res.storeId !== null ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
+              )  
               // } else {
               //   console.info("값이 없는 아이디를 보낼 경우:", res);
               //   fetch(`http://i4a102.p.ssafy.io:8080/app/account/signupkakao`, {

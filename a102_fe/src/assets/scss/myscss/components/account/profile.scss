@@ -1,19 +1,58 @@
+.mainProfile {
+  .profileHeaderButton {
+    background-color: $oori-green;
+    color: white;
+    border: none;
+    font-size: small;
+    // border-radius: 20%;
+    display: inline-block;
+    float: right;
+  }
+}
+
 .memberInfo {
-  .memberInfo-header {
-    .memberInfo-title {
-      color: $eat-key-color;
-      // font-size: $card-header-span-size;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .memberInfoHeaderCard {
+    background-color: white;
+
+    width: 33%;
+    height: 100%;
+
+    padding: 3%;
+    
+    color: $oori-green;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .withUsContainer {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+
+      .withUsTitle {
+        font-size: xx-large;
+      }
+      .withUsSubTitle {
+        font-size: large;
+      }
     }
-    background-color: $card-header-bg-color;
-    padding: 10%;
-    border-bottom: 1px solid $card-border-color;
-    border-top-left-radius: $card-border-radious;
-    border-top-right-radius: $card-border-radious;
-    position: relative;
-    overflow: hidden;
   }
-  .memberInfo-body {
-    padding: 10%;
-    color: $eat-point-color;
-  }
+  // .memberInfo-header {
+  //   background-color: $card-header-bg-color;
+  //   padding: 10%;
+  //   border-bottom: 1px solid $card-border-color;
+  //   border-top-left-radius: $card-border-radious;
+  //   border-top-right-radius: $card-border-radious;
+  //   position: relative;
+  //   overflow: hidden;
+  // }
+  // .memberInfo-body {
+  //   padding: 10%;
+  //   color: $eat-point-color;
+  // }
 }

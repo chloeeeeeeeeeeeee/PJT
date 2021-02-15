@@ -82,3 +82,10 @@
       }
     }
   }
+
+.profileTimeline {
+  height: 40vh;
+
+  overflow-y: auto;
+  overflow-x: auto;
+}

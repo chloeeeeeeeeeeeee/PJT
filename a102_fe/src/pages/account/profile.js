@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import {
   Container,
   Row,
@@ -16,53 +16,43 @@ import MemberQnA from "../../components/account/memberQnA";
 function Profile() {
   // if JWT가 존재하지 않을 경우 auth로 리다이렉트 하면서 return을 띄우지 않음
   // 존재 할 경우에만 return으로 넘겨주는 방식
+  const [userInfo, setuserInfo] = useState({});
 
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
+      headers: {
+        token: localStorage.getItem('access-token')
+      }
+    })
+    .then(res => res.json())
+    .then(res => {
+      setuserInfo(res);
+      // console.log("지금 받아올 내용은:", res)
+      // console.log("실제로 받은 내용은:", userInfo) 
+    })
+  }, [])
 
   return (
     <Col className="mainProfile">
     {/* 프로필 영역 타이틀 */}
       <Row>
         <Col sm="12" md={{ size: 10, offset: 1 }} id="title">
-          <h3>내 후원 정보</h3>
+          <h3 className="col-8 d-inline"> { userInfo.userName }님의 후원 정보</h3>
+          <div className="col-4 d-inline">
+            <Button className="profileHeaderButton">기부영수증 발급</Button>
+          </div>
         </Col>
       </Row>
-      {/* <Row className="supportCategory"> */}
       <Row className="profileHeader">
-        <Col sm="12" md={{ size:  3, offset: 1 }}>
-        {/* 검색 */}
-        <InputGroup>
-          <Input
-            // name="addressInput"
-            // id="addressInput"
-            // placeholder="동 단위까지 입력해주세요"
-            // onKeyUp={enterkeyPress}
-          />
-          <InputGroupAddon addonType="append">
-            <Button
-              color="secondary"
-              id="addressButton"
-              // onClick={searchLocation}
-            >
-              검색
-            </Button>
-          </InputGroupAddon>
-        </InputGroup>
-        </Col>
-        {/* 카테고리 리스트 */}
-        <Col sm="12" md="7" className="categoryListBox">
-          {/* {categoryListComponents} */}
+        <Col sm="12" md={{ size:  10, offset: 1 }}>
+          <MemberWithUs />
         </Col>
       </Row>
-      <Row className="profileContent">
-        <Col sm="12" md={{ size: 4, offset: 1 }} className="profileContentLeft">
-          {/* 지도 영역 */}
-          <Col id="naverMap" className="mt-2 col-12"></Col>
+      <Row sm="12" md={{ size: 10, offset: 1 }} className="profileContent">
+        <Col sm="12" md={{ size: 3, offset: 1 }} className="profileInfo">
         </Col>
-        <Col sm="12" md="6" className="supportBox">
-          {/* 매장 리스트 */}
-          <h5>가게 목록</h5>
-          <Row className="storeListBox">
-          </Row>
+        <Col sm="12" md={{ size: 7 }} className="profileTimeline">
+          <Timeline />
         </Col>
       </Row>
     </Col>

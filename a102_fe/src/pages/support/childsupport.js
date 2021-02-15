@@ -283,7 +283,7 @@ function ChildSupport() {
           <Input
             name="addressInput"
             id="addressInput"
-            placeholder="동 단위까지 입력해주세요"
+            placeholder="'서울시 OO구 OO동'으로 입력해주세요"
             onKeyUp={enterkeyPress}
           />
           <InputGroupAddon addonType="append">

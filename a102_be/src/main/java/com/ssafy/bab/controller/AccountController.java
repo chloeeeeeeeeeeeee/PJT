@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bab.dao.UserDao;
-import com.ssafy.bab.dto.Contribution;
+import com.ssafy.bab.dto.ContributionResult;
 import com.ssafy.bab.dto.User;
 import com.ssafy.bab.dto.UserContribution;
 import com.ssafy.bab.service.AccountService;
@@ -159,6 +159,7 @@ public class AccountController {
 		}
 	}
 	
+	//로그인 네이버
 	@PostMapping("/signinnaver")
 	public ResponseEntity<JwtService.TokenRes> signInNaver(@RequestBody String Authorization, HttpServletResponse res){
 
@@ -169,11 +170,11 @@ public class AccountController {
 		User user = null;
 		user = userService.signInNaver(Authorization);
 		
-		String pwd = user.getUserPwd();
-		
 		if(user == null) {
 			return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
 		}
+		
+		String pwd = user.getUserPwd();
 		
 		// 회원가입 처리
 		if(authService.userChk(user.getUserId()) == null) {
@@ -246,14 +247,27 @@ public class AccountController {
 	
 	//jwt를 받아와서 유저의 후원 상세정보를 돌려준다
 	@GetMapping("/usercontribution")
-	public ResponseEntity<List<Contribution>> userContribution(HttpServletRequest req){
+	public ResponseEntity<List<ContributionResult>> userContribution(HttpServletRequest req){
 		String jwt = req.getHeader("token");
 		int userSeq = jwtService.decode(jwt);
-		ArrayList<Contribution> userContribution = userService.userContribution(userSeq);
-		return new ResponseEntity<List<Contribution>>(userContribution, HttpStatus.OK);
+		ArrayList<ContributionResult> userContribution = userService.userContribution(userSeq);
+		return new ResponseEntity<List<ContributionResult>>(userContribution, HttpStatus.OK);
 	}
 	
-	
-	
+	// 
+	@PostMapping("/pwdcheck")
+	public ResponseEntity<String> pwdCheck(@RequestBody String pwd, HttpServletRequest req){
+		
+		String jwt = req.getHeader("token");
+        int userSeq = jwtService.decode(jwt);
+        User user = authService.userSeqChk(userSeq);
+		
+		if(user == null) {
+			return new ResponseEntity<String>("FAIL", HttpStatus.OK);
+		}
+		
+		return new ResponseEntity<String>(userService.userPwdChk(user, pwd), HttpStatus.OK);
+			
+	}
 	
 }

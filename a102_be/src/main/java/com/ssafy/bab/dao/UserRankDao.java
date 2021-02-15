@@ -1,10 +1,10 @@
 package com.ssafy.bab.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.ssafy.bab.dto.User;
@@ -12,8 +12,11 @@ import com.ssafy.bab.dto.UserCount;
 
 @Repository
 public interface UserRankDao extends JpaRepository<User, Integer> {
-	//유저 개인 순위
+	//유저 개인 순위(금액)
 	List<User> findByUserTotalContributionAmountGreaterThanOrderByUserTotalContributionAmountDesc(int userTotalContributionAmount);
+	
+	//유저 개인 순위(그릇수)
+	ArrayList<User> findByUserTotalContributionCountGreaterThanOrderByUserTotalContributionCountDesc(int userTotalContributionCount);
 	
 	//총 후원금액
 	@Query(value = "SELECT sum(user_total_contribution_amount) from user;", nativeQuery = true)

@@ -50,7 +50,8 @@ public class User implements Serializable{
 		this.userDate = LocalDateTime.now();
     }
 	
-	private int userTotalContributionAmount = 0;
+	private int userTotalContributionAmount;
+	private int userTotalContributionCount;
 
 	@ManyToOne
 	@JoinColumn(name="store_id", nullable = true)

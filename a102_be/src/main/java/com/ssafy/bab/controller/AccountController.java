@@ -18,11 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.ContributionResult;
+import com.ssafy.bab.dto.Qna;
 import com.ssafy.bab.dto.User;
 import com.ssafy.bab.dto.UserContribution;
 import com.ssafy.bab.service.AccountService;
 import com.ssafy.bab.service.AuthService;
 import com.ssafy.bab.service.JwtService;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/account")
@@ -254,7 +258,7 @@ public class AccountController {
 		return new ResponseEntity<List<ContributionResult>>(userContribution, HttpStatus.OK);
 	}
 	
-	// 
+	// 비밀번호 확인
 	@PostMapping("/pwdcheck")
 	public ResponseEntity<String> pwdCheck(@RequestBody String pwd, HttpServletRequest req){
 		
@@ -269,5 +273,27 @@ public class AccountController {
 		return new ResponseEntity<String>(userService.userPwdChk(user, pwd), HttpStatus.OK);
 			
 	}
+	
+//	@ApiOperation(value = "회원정보 변경", notes = "글 제목, 내용, 비밀글여부와 헤더에 jwtToken", response = List.class)
+//	@PostMapping("/create")
+//	public ResponseEntity<String> qnaCreate(@ApiParam(value = "글 제목, 내용, 비밀글 여부 ", required = true) @RequestBody Qna qna, HttpServletRequest req) throws Exception {
+//		logger.info("qnaCreate_QnaController - 호출");
+//		
+//		String jwt = req.getHeader("token");
+//        int userSeq = jwtService.decode(jwt);
+//		
+//        //테스트
+////		User user = userDao.findByUserSeq(1);
+//		//프론트
+//		User user = userDao.findByUserSeq(userSeq);
+//        if(user == null || qna.getQnaContent() == null || qna.getQnaTitle() == null) return new ResponseEntity<String>("FAIL", HttpStatus.BAD_REQUEST);
+//		
+//        qna.setUser(user);
+//        
+//		if("SUCCESS" == qnaService.qnaCreate(qna))
+//			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+//		else
+//			return new ResponseEntity<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+//	}
 	
 }

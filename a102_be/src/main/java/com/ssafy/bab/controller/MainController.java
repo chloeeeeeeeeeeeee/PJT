@@ -86,7 +86,10 @@ public class MainController {
 		System.out.println("In controller"+userTotalRankList);
 		return new ResponseEntity<List<User>>(userTotalRankList, HttpStatus.OK);
 	}
-//유저 후원 총 금액
+	
+	
+	
+	//유저 후원 총 금액
 	@GetMapping("/usertotal")
 	public ResponseEntity<Integer> userTotal(){
 		int userTotal = userRankService.userTotal();
@@ -94,6 +97,7 @@ public class MainController {
 	}
 	
 	//유저 그릇 랭킹
+	@ApiOperation(value = "유저 그릇 랭킹", notes = "유저별 후원 그릇 수 랭킹 확인", response = List.class)
 	@GetMapping("/userrankbowl")
 	public ResponseEntity<List<UserRank>> userRankBowl(){
 		List<UserRank> userRankBowl = mainService.userBowlRank();

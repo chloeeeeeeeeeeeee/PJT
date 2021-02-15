@@ -138,6 +138,7 @@ public class PaymentServiceImpl implements PaymentService {
         	
         	if(user != null) {
         		user.setUserTotalContributionAmount(user.getUserTotalContributionAmount() + totalSupportPrice);
+        		user.setUserTotalContributionCount(user.getUserTotalContributionCount() + totalSupportItem);
         		userDao.save(user);
         	}
         }
@@ -223,6 +224,7 @@ public class PaymentServiceImpl implements PaymentService {
 
 			if (user != null) {
 				user.setUserTotalContributionAmount(user.getUserTotalContributionAmount() + totalSupportPrice);
+				user.setUserTotalContributionCount(user.getUserTotalContributionCount() + totalSupportItem);
 				userDao.save(user);
 			}
 		}
@@ -331,6 +333,7 @@ public class PaymentServiceImpl implements PaymentService {
         	
         	if(user != null) {
         		user.setUserTotalContributionAmount(user.getUserTotalContributionAmount() + totalSupportPrice);
+        		user.setUserTotalContributionCount(user.getUserTotalContributionCount() + totalSupportItem);
         		userDao.save(user);
         	}
         }

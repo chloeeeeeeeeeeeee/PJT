@@ -275,6 +275,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             	
             	if(user != null) {
             		user.setUserTotalContributionAmount(user.getUserTotalContributionAmount() + totalSupportPrice);
+            		user.setUserTotalContributionCount(user.getUserTotalContributionCount() + totalSupportItem);
             		userDao.save(user);
             	}
             }

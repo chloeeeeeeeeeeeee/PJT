@@ -36,7 +36,6 @@ import com.ssafy.bab.dto.Store;
 import com.ssafy.bab.dto.StoreRank;
 import com.ssafy.bab.dto.StoreVariables;
 import com.ssafy.bab.dto.User;
-import com.ssafy.bab.dto.UserCount;
 import com.ssafy.bab.dto.UserRank;
 
 @Service
@@ -269,22 +268,14 @@ public class MainServiceImpl implements MainService {
 
 	@Override
 	public List<UserRank> userBowlRank() {
-		List<UserRank> userBowlRank = new ArrayList<>();
-		List<UserCount> userCount = userRankDao.selectCountFromContributionGroupByUserSeqOrderByCountDesc();
-		for(int i=0;i<userCount.size();i++) {
+		List<UserRank> result = new ArrayList<UserRank>(); 
+		List<User> userList = userRankDao.findByUserTotalContributionCountGreaterThanOrderByUserTotalContributionCountDesc(0);
+		for(int i = 0; i < 10 && i < userList.size(); i++) {
 			UserRank userRank = new UserRank();
-			userRank.setUserSeq(userCount.get(i).getUserSeq());
-			userRank.setContributionCount(userCount.get(i).getCount());
-			
-			User user = userDao.findByUserSeq(userRank.getUserSeq());
-			userRank.setUserEmail(user.getUserEmail());
-			userRank.setUserId(user.getUserId());
-			userRank.setUserName(user.getUserName());
-			userRank.setUserPhone(user.getUserPhone());
-			userRank.setUserTotalContributionAmount(user.getUserTotalContributionAmount());	
-			
-			userBowlRank.add(userRank);
+			userRank.setUserTotalContributionCount(userList.get(i).getUserTotalContributionCount());
+			userRank.setUserName(userList.get(i).getUserName());
+			result.add(userRank);
 		}
-		return userBowlRank;
+		return result;
 	}
 }

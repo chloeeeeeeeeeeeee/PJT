@@ -4,10 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
-import javax.transaction.Transactional;
-
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.bab.dao.ContributionDao;
@@ -33,8 +34,17 @@ import com.ssafy.bab.dto.PaymentItem;
 import com.ssafy.bab.dto.StoreVariables;
 import com.ssafy.bab.dto.User;
 
+import net.nurigo.java_sdk.api.Message;
+import net.nurigo.java_sdk.exceptions.CoolsmsException;
+
 @Service
 public class PaymentServiceImpl implements PaymentService {
+	
+	@Value("${coolsms.API_KEY}")
+	private String API_KEY;
+	
+	@Value("${coolsms.API_SECRET}")
+	private String API_SECRET;
 	
 	@Autowired
 	PaymentDao paymentDao;
@@ -376,6 +386,7 @@ public class PaymentServiceImpl implements PaymentService {
 		paymentGDao.save(paymentG);
 		
 		// 후원내역 처리
+		String storeName = storeDao.findByStoreId(paymentInfo.getItemList().get(0).getStoreId()).getStoreName();
 		ArrayList<Contribution> contributionList = null;
 		for (PaymentItem paymentItem : paymentInfo.getItemList()) {
         	Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
@@ -396,7 +407,9 @@ public class PaymentServiceImpl implements PaymentService {
 					contributionDao.save(contribution);
 					
 					// 회원 후원일 경우 문자 전송
-					
+					if(contribution.getUser() != null && contribution.getUser().getUserPhone() != "temp") {
+						sendMsg(contribution, item.getItemName(), storeName);
+					}
 	
 				}
 	        	
@@ -427,6 +440,30 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 		
 		return "SUCCESS";
+	}
+
+	@Override
+	public void sendMsg(Contribution contribution, String itemName, String storeName) {
+		String api_key = API_KEY;
+        String api_secret = API_SECRET;
+        Message coolsms = new Message(api_key, api_secret);
+
+        // 4 params(to, from, type, text) are mandatory. must be filled
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("to", contribution.getUser().getUserPhone());    // 수신전화번호
+        params.put("from", "01011111111");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+        params.put("type", "SMS");
+        params.put("text", storeName + "에서 후원한 메뉴 '" + itemName + "'이 방금 사용되었습니다.\n 자세한 내용은 우리끼니 홈페이지에서 확인해주세요.");
+//        params.put("app_version", "test app 1.2"); // application name and version
+
+        try {
+            JSONObject obj = (JSONObject) coolsms.send(params);
+            System.out.println(obj.toString());
+        } catch (CoolsmsException e) {
+            System.out.println(e.getMessage());
+            System.out.println(e.getCode());
+        }
+		
 	}
 
 }

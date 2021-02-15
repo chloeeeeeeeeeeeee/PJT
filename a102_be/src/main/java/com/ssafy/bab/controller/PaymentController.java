@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bab.dto.CPaymentInfo;
+import com.ssafy.bab.dto.GPaymentInfo;
 import com.ssafy.bab.dto.IPaymentInfo;
 import com.ssafy.bab.dto.KPaymentInfo;
 import com.ssafy.bab.dto.KakaoPaySuccessData;
@@ -100,6 +102,28 @@ public class PaymentController {
         
         return new ResponseEntity<String>(paymentService.checkIamPortTransaction(paymentInfo), HttpStatus.OK);
     	
+	}
+	
+	@ApiOperation(value = "키오스크 일반 신용카드 결제 처리결과 저장", notes = "결제 내역을 받아와 DB에 저장", response = List.class)
+	@PostMapping("/creditcard")
+	public ResponseEntity<String> creditCard(@ApiParam(value = "아이템 목록과 총 개수, 처리 결과", required = true) @RequestBody CPaymentInfo paymentInfo) throws Exception {
+		logger.info("creditCard_payment - 호출");
+		String result = paymentService.checkCreditCardTransaction(paymentInfo);
+		if(result == "SUCCESS")
+			return new ResponseEntity<String>(result, HttpStatus.OK);
+		else
+			return new ResponseEntity<String>(result, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ApiOperation(value = "지드림카드 사용", notes = "지드림카드 사용 내역을 받아와 DB에 저장, 후원처리", response = List.class)
+	@PostMapping("/gdream")
+	public ResponseEntity<String> gDream(@ApiParam(value = "아이템 목록과 총 개수, 처리 결과", required = true) @RequestBody GPaymentInfo paymentInfo) throws Exception {
+		logger.info("gDream_payment - 호출");
+		String result = paymentService.checkGDreamTransaction(paymentInfo);
+		if(result == "SUCCESS")
+			return new ResponseEntity<String>(result, HttpStatus.OK);
+		else
+			return new ResponseEntity<String>(result, HttpStatus.BAD_REQUEST);
 	}
 	
 	

@@ -66,4 +66,8 @@ public class Contribution implements Serializable {
 	@JoinColumn(name="payment_id")
 	private Payment payment;
 	
+	@ManyToOne
+	@JoinColumn(name="payment_id", nullable = true)
+	private Payment usedPayment;
+	
 }

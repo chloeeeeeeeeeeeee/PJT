@@ -3,6 +3,7 @@ import {
   VerticalTimeline,
   // VerticalTimelineElement,
 } from "react-vertical-timeline-component";
+import 'react-vertical-timeline-component/style.min.css';
 // import { Edit, Video, Image, Activity } from "react-feather";
 import TimelineItem from "./timelineItem";
 // import Contribution from "../support/contribution";
@@ -26,57 +27,15 @@ function Timeline() {
     .then(res => res.json())
     .then(res => {
       setContributions(res);
-      // console.log("지금 받아올 내용은:", res)
-      // console.log("실제로 받은 내용은:", contributions)
-      // console.log("어떻게 파싱할까요?:", contributions.contributions.item.itemName)
-    })
-  }, [])
-
-  // // 임시로 받아온 데이터가 아주 멋지군요
-  // const contributions = [
-  //   {
-  //     "contributionId": 9,
-  //     "item": {
-  //       "store": {
-  //         "storeId": 1,
-  //         "storeName": "국수나무창신점",
-  //         "storeLocation": "서울특별시 종로구 창신동 23-76 104호",
-  //         "storeCategory": "한식",
-  //         "storeRegDate": "2021-01-20T23:35:30.000+00:00",
-  //         "storePhone": "027479340",
-  //         "storeKiosk": 1,
-  //         "location": {
-  //           "locationId": 1,
-  //           "locationSi": "서울특별시",
-  //           "locationGu": "종로구"
-  //         }
-  //       },
-  //       "itemId": 18,
-  //       "itemName": "로제돈까스",
-  //       "itemPrice": 9400,
-  //       "itemAvailable": 3,
-  //       "itemTotal": 0,
-  //       "itemImgUrl": "menus/1/로제돈까스.jpg"
-  //     },
-  //     "user": {
-  //       "userSeq": 1,
-  //       "userId": "1",
-  //       "userName": "qwe",
-  //       "userPwd": "$2a$10$hCgXpJetAx4nf3S.kugEm.MRAtbxk5nEDKyaYfLGkRBNMuO4yEa3e",
-  //       "userEmail": "test@test.com",
-  //       "userPhone": "010-0000-0000",
-  //       "userDate": "2021-01-26T13:17:27",
-  //       "userTotalContributionAmount": 20,
-  //       "store": null
-  //     },
-  //     "contributionMessage": "로!제!짱!",
-  //     "contributionAnswer": null,
-  //     "contributionDate": "2021-01-26T06:58:59.000+00:00",
-  //     "contributionDateUsed": null,
-  //     "contributionUse": 0
-  //   },
-  // ];
+      console.log("지금 받아올 내용은:", res)
+      console.log("실제로 받은 내용은:", contributions)
+      console.log("어떻게 파싱할까요?:", contributions[0])
+    });
+  }, []);
   
+  // return (
+  //   <div></div>
+  // );
   if (contributions.length !== 0) {
     // console.log("이게 0일 경우인데요:", contributions)
     return (

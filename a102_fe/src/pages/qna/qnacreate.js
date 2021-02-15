@@ -39,11 +39,11 @@ function QnaCreate() {
     })
     .then(res => {
       if (res.status === 200){
-        alert("200떳당");
+        // alert("200떳당");
         window.location.href = '/qna';
       }
       else{
-        alert("오류오류오류오류");
+        alert("글 작성에 실패하셨습니다. 다시 시도해주세요.");
       }
     })
   }

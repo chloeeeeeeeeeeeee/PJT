@@ -48,7 +48,7 @@ function QnaDetail() {
                 },
             }).then(res => {
                 if (res.status === 200) {
-                    alert("삭제 성공", qna.qnaSeq);
+                    // alert("삭제 성공", qna.qnaSeq);
                     window.location.href = '/qna';
                 }
                 else{

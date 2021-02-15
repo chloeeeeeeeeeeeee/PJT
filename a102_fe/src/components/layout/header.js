@@ -58,9 +58,9 @@ function Header() {
           <Nav className="ml-auto" navbar>
             <NavItem>
               {Boolean(localStorage.getItem("access-token")) == true && (localStorage.getItem("access-token") != "undefined") ?
-                <NavLink href="/signout">아쉽지만 로그아웃</NavLink>
+                <NavLink href="/signout">다음에 또 만나요 <b>로그아웃</b></NavLink>
                 :
-                <NavLink href="/auth"><b>따뜻한 마음으로 함께하기</b></NavLink>
+                <NavLink href="/auth">따뜻한 마음으로 우리와 <b>함께하기</b></NavLink>
               }
             </NavItem>
           </Nav>

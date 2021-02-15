@@ -62,12 +62,12 @@ function QnaList() {
         })
         .then((res) => {
             if(res.headers.get('content-type') === null){
-                alert("타인이 작성한 비밀글은 볼 수 없어요ㅜ.ㅜ");
+                alert("타인이 작성한 비밀글은 볼 수 없어요.");
             }
             else{
                 res.json()
                 .then((res) => {
-                    alert("공개글이니까 혹은 내가 쓴 거니까 볼 수 있지");
+                    // alert("공개글이니까 혹은 내가 쓴 거니까 볼 수 있지");
                     window.history.pushState(res, 'please', '/qnadetail');
                     window.location.href = '/qnadetail';
                 })

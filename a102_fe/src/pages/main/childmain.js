@@ -1,11 +1,10 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { Fragment } from "react";
 import { 
     Container,
     Row,
     Col, 
     Card,
-    CardBody,
-    Button, } from "reactstrap";
+    CardBody,} from "reactstrap";
 import Whattoeat from "../../components/main/whattoeat.js";
 import oori from "../../assets/images/oori.png"
 
@@ -14,16 +13,16 @@ function ChildMain() {
         <Fragment>
             <Container fluid={true}>
                 <Row  className="whattoeat">
-                <Col sm="6" md={{ size: 5, offset: 1 }}>
-                <Card>
-                    <CardBody sm="12" className="childimg">
-                        <img src={oori} />  
-                    </CardBody>
-                </Card>
-                </Col>
-                <Col sm="6" md={{ size: 5 }}>
-                    <Whattoeat />
-                </Col>
+                    <Col sm="6" md={{ size: 5, offset: 1 }}>
+                        <Card>
+                            <CardBody sm="12" className="childimg">
+                                <img src={oori} />
+                            </CardBody>
+                        </Card>
+                    </Col>
+                    <Col sm="6" md={{ size: 5 }}>
+                        <Whattoeat />
+                    </Col>
                 </Row>
             </Container>
         </Fragment>

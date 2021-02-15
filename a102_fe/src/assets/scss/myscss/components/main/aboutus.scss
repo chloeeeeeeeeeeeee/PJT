@@ -1,33 +1,41 @@
 .aboutus {
   max-width: 100%;
   // height: 80vh;
-  height:100%;
+  height: 60vh;
   width: 100vh;
   .card {
+    // border: none;
+    height: 60vh;
+    border-radius: 15px;
+    background-color: $oori-white;
+    // overflow-y: scroll;
     margin-bottom: 0;
-  }
-  .card-header {
-    vertical-align: middle;
-  }
-  .card-button {
-    height: 40vh;
-    align-items: center;
-  }
-  .card-body {
-    padding-top:2%;
-    height: 50%;
-    line-height:1.5em;
-    h4{
-        margin-top:10px;
+    .aboutUsBody {
+      // overflow-y: scroll;
+      padding-top: 2%;
+      height: 50%;
+      line-height: 1.5em;
+      .aboutUsText {
+        text-align: center;
+        vertical-align: center;
+        // overflow-y: scroll;
+        color: $oori-gray-pinstripe;
+        font-size: medium;
+        font-weight: 500;
+        line-height: 1.5em;
+      }
     }
   }
-  .mainImage{
-      display:block;
-      width:100%;
-      height:90%;
-  }
-  .aboutUsText{
-      font-size: medium;
-      line-height:1.5em;
-  }
+  // .card-header {
+  //   vertical-align: middle;
+  // }
+  // .card-button {
+  //   height: 40vh;
+  //   align-items: center;
+  // }
+  // .mainImage{
+  //     display:block;
+  //     width:100%;
+  //     height:90%;
+  // }
 }

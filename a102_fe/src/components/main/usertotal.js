@@ -6,6 +6,7 @@ import {
   CarouselIndicators,
   CarouselCaption,
 } from "reactstrap";
+// import happynew from "../../assets/images/happynew.png"
 
 
 function Usertotal() {
@@ -22,16 +23,9 @@ function Usertotal() {
     return(
       <div className="usertotal carouselItem">
         <br/>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJk7W7YhTGPi8HzgujlWAnUFGWSJzegRJtHw&usqp=CAU"/>
-        <h1>
-        <i className="icofont icofont-chef"></i>
-        <i className="icofont icofont-chicken"></i>
-        <i className="icofont icofont-noodles"></i>
-        <i className="icofont icofont-pizza-slice"></i>
-        <i className="icofont icofont-egg-poached"></i>
-        </h1>
-        <h2>지금까지 총 후원금은 { userTotal } 입니다!</h2>
-        <h4>서비스를 이용해준 멋쟁이들 감사합니다~!</h4>
+        <h3 className="usertotaltotal">지금까지 총 후원된 음식은 { userTotal } 그릇입니다.</h3>
+        <br/>
+        <h4 className="usertotaltotal">따뜻한 마음의 멋쟁이 여러분 감사합니다!</h4>
       </div>
     );
 }

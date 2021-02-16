@@ -97,17 +97,15 @@ function MemberInfo() {
               </div>
             </h5>
           </CardHeader>
-          <Collapse isOpen={withus}>
-            <CardBody className="memberInfo-body">
-              <p>{ userWithus.userWithUs }일째 함께하고 있어요</p>
-              <p>{ userWithus.contributionCount }그릇을 함께 했어요</p>
-              ----
-              <p>{ userWithus.contributionTotal }원</p>
-              <span>
-                <button type="button">기부 영수증 발급</button>
-              </span>
-            </CardBody>
-          </Collapse>
+          <CardBody className="memberInfo-body">
+            <p>{ userWithus.userWithUs }일째 함께하고 있어요 </p>
+            <p>{ userWithus.contributionCount }그릇을 함께 했어요</p>
+            ----
+            <p>{ userWithus.contributionTotal }원</p>
+            <span>
+              <button type="button">기부 영수증 발급</button>
+            </span>
+          </CardBody>
         </div>
       </Col>
     </Fragment>

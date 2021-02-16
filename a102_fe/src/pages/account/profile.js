@@ -10,7 +10,7 @@ import {
 } from "reactstrap";
 import Timeline from "../../components/account/timeline";
 import MemberWithUs from "../../components/account/memberWithUs";
-// import MemberInfo from "../../components/account/memberInfo";
+import UserInfo from "../../components/account/userInfo";
 import MemberQnA from "../../components/account/memberQnA";
 
 function Profile() {
@@ -27,9 +27,6 @@ function Profile() {
     .then(res => res.json())
     .then(res => {
       setuserInfo(res);
-      // console.log(res.store)
-      // console.log("지금 받아올 내용은:", res)
-      // console.log("실제로 받은 내용은:", userInfo) 
     })
   }, [])
 
@@ -38,7 +35,7 @@ function Profile() {
     {/* 프로필 영역 타이틀 */}
       <Row>
         <Col sm="12" md={{ size: 10, offset: 1 }} id="title">
-          <h3 className="col-8 d-inline"> { userInfo.userName }님의 따뜻한 마음</h3>
+          <h3 className="col-8 d-inline p-0"> { userInfo.userName }님의 따뜻한 마음</h3>
           <div className="col-4 d-inline">
             <Button 
               className="profileHeaderButton"
@@ -56,42 +53,15 @@ function Profile() {
       </Row>
       <Row sm="12" md={{ size: 10, offset: 1 }} className="profileContent">
         <Col sm="12" md={{ size: 3, offset: 1 }} className="profileInfo">
+          <UserInfo />
+          <MemberQnA />
         </Col>
-        <Col sm="12" md={{ size: 7 }} className="profileTimeline">
+        <Col sm="12" md={{ size: 7 }} className="profileTimeline mt-2">
           <Timeline />
         </Col>
       </Row>
     </Col>
   );
-
-  // return (
-  //     <Container fluid={true} className="division">
-  //         <Row className="division-wrapper">
-  //           <Col sm="3" className="left-division">
-  //             <Row className="left-upper-division">
-  //               <MemberWithUs/> 
-  //             </Row>
-  //             <Row className="left-lower-division">
-  //               <MemberQnA/>
-  //             </Row>
-  //           </Col>
-  //           <Col sm="9" className="central-division">
-  //             <div className="card central-division-title">
-  //               나의 따뜻한 마음
-  //             </div>
-  //             <div className="central-division-content">  
-  //              <Timeline/>
-  //             </div>
-  //           </Col>
-  //           {/* <Col sm="3" className="right-division">
-  //             오른쪽 영역
-  //             <Row>
-                
-  //             </Row>
-  //           </Col> */}
-  //         </Row>
-  //     </Container>
-  // );
 }
 
 export default Profile;

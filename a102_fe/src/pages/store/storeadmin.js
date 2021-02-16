@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Col } from "reactstrap";
+import { Col, Row } from "reactstrap";
 import StoreDetailInfo from "../../components/support/storeDetailInfo";
 import StoreMenuList from "../../components/store/storeMenuList";
 import StoreSupportList from "../../components/store/storeSupportList";
@@ -40,10 +40,15 @@ function StoreAdmin() {
   }, []);
 
   return (
-    <Col className="storeAdminContainer row">
-      {storeDetailComponent}
-      <StoreMenuList />
-      <StoreSupportList></StoreSupportList>
+    <Col className="storeAdminContainer">
+      <Row className="row">
+        <Col sm="12" md={{ size: 10, offset: 1 }} id="storetitle">
+          <h3>가게 페이지</h3>
+        </Col>
+        {storeDetailComponent}
+        <StoreMenuList />
+        <StoreSupportList />
+      </Row>
     </Col>
   );
 }

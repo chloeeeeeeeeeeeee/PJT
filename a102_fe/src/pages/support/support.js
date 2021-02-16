@@ -239,7 +239,7 @@ function Support() {
         </InputGroup>
         </Col>
         {/* 카테고리 리스트 */}
-        <Col sm="12" md="7" className="categoryListBox">
+        <Col sm="12" md="7" className="categoryListBox d-sm-none d-md-flex">
           {categoryListComponents}
         </Col>
       </Row>

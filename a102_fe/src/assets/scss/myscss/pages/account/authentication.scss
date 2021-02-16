@@ -64,15 +64,27 @@
 
 .authentication-main {
   .auth-innerright {
-    // .card-body {
-    //   .theme-form {
-    //     width: calc(100% - 290px);
-    //   }
-    // }
+    .card-body {
+      &:before {
+        height: 100%;
+      }
+      &:after {
+        height: 120vh;
+      }
+      // .theme-form {
+      //   width: calc(100% - 290px);
+      // }
+    }
     .authentication-box {
-      height: 100%;
       display: flex;
       align-items: center;
+
+      &:before {
+        height: 100%;
+      }
+      &:after {
+        height: 120vh;
+      }
     }
   }
 }
@@ -136,7 +148,9 @@
   }
 }
 
+
 .naverAuthBtn {
   height: 36px;
+  cursor: pointer;
 }
 

@@ -21,30 +21,34 @@
 
 </head>
 <body>
-    <!-- <div id="myModal" class="modal">
-        <div class="modal-content">                                                             
-            <p>결식아동에게 행복을 전하는 우리끼니 입니다</p>
-            <p>음식의 차액만 후원 해 주신다면</p>
-            <p>아이들에게 더 나은 음식을 지원 할 수 있습니다</p>
-            <p>후원하시겠습니까?</p>
-            <div style="display: flex;">
-                <button onclick="clickDonation()">후원 하기</button>
-                <button onclick="clickPay()">결제만 하기</button>
-            </div>
-        </div>
-    </div> -->
-
     <div id="modal-container">
         <div class="modal-background">
             <div class="modal">
-                <p>결식아동에게 행복을 전하는 우리끼니 입니다</p>
-                <p>음식의 차액만 후원 해 주신다면</p>
-                <p>아이들에게 더 나은 음식을 지원 할 수 있습니다</p>
-                <p>후원하시겠습니까?</p>
-                <div style="display: flex;">
-                    <button onclick="clickDonation()">후원 하기</button>
-                    <button onclick="clickPay()">결제만 하기</button>
-                </div>    
+                <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="height: 100%; display: flex; justify-content: space-around; align-item: stretch;">
+                        <div style="display: flex; flex-direction: column; justify-content: center;">
+                            <p><b>아동급식카드</b>와 함께하는 <b>우리끼니</b>입니다.</p>
+                            <p><b style="background-color: #84BD00">{{ 1,500 }}원</b>으로 아동에게</p>
+                            <p><b style="background-color: #84BD00">{{ 로제돈까스 }}</b>를</p>
+                            <p>후원할 수 있습니다.</p>
+                            <p></p>
+                            <p>함께하시겠습니까?</p>
+                        </div>
+                        <div class="modal-QR">
+                            <div class="QR-border">
+                                <a href="http://m.site.naver.com/0KLr2"><img src="https://qrcodethumb-phinf.pstatic.net/20210216_85/1613442477430eGSYV_PNG/0KLr2.png"/></a>
+                                <div style="display: flex; flex-direction: column; justify-content: flex-start;">
+                                    <p>우리끼니 홈페이지에서</p>
+                                    <P>내 후원 내역을 확인하세요!</P>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-button" style="display: flex; align-content: stretch;">
+                        <button class="button-reset" onclick="clickPay()">주문 내역만 결제하기</button>
+                        <button class="button-pay" onclick="clickDonation()">후원하고 함께 결제하기</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

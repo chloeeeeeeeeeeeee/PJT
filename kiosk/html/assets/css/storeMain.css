@@ -275,8 +275,10 @@ li{
 	justify-content: flex-start;
 	/* 수직축-여기에서는 수평축 좌우로 stretch 처리 */
 	align-items: center;
+
 	/* 아이템이 목록 갯수를 넘어가면 스크롤로 처리하겠습니다! */
 	overflow: auto;
+
 }
 .cart-item{
 	width: 100%;
@@ -389,14 +391,14 @@ justify-content: space-between;
 .button-reset{
 	height: 95%;
 	width: 100%;
-	background-color: #6609cf;
+	background-color: rgb(202, 202, 202);
 	border: none;
 	color:#fff;
 	padding: 15px 0;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
-	font-size: 40px;
+	font-size: 35px;
 	margin: 4px;
 	cursor: pointer;
 }
@@ -404,14 +406,14 @@ justify-content: space-between;
 .button-pay{
 	height: 95%;
 	width: 100%;
-	background-color: #fa1c20;
+	background-color: #f5b601;
 	border: none;
 	color:#fff;
 	padding: 15px 0;
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
-	font-size: 40px;
+	font-size: 35px;
 	margin: 4px;
 	cursor: pointer;
 }

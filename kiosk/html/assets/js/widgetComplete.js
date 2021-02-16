@@ -4,9 +4,11 @@ new QWebChannel(qt.webChannelTransport, function (channel) {
 });
 
 let stopFlag = 0;
+let cnt = document.getElementById("count");
+let orderNumElement = document.getElementById("order=num");
 
 function completeTimeout(sec){
-    let cnt = document.getElementById("count");
+    
     cnt.innerText = String(sec)
     if(sec == 10) stopFlag = 0;
     if(sec == 0){
@@ -26,4 +28,8 @@ function completeTimeout(sec){
 
 function stopCnt(){
     stopFlag = 1;
+}
+
+function setOrderNum(orderNum){
+    orderNumElement.innerText = String(orderNum);
 }

@@ -14,6 +14,14 @@
 	animation: animate-fadeout 1s linear 1;
 }
 
+.opazero{
+	opacity: 0;
+}
+
+.opaone{
+	opacity: 1;
+}
+
 @keyframes btnExpand {
     100% {
       line-height: 9200px; 

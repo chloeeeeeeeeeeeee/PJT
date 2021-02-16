@@ -10,7 +10,6 @@ from kakaoSocket import *
 import sys
 
 import datetime
-import threading
 
 # Global variables
 pageConnector = {}
@@ -42,10 +41,10 @@ class CallHandler(QObject):
         # 장바구니를 비워주는 함수에 연결
         w.clearBagItem()
 
-    @pyqtSlot(QVariant)
-    def verifyPay(self, data):
+    @pyqtSlot(QVariant, QVariant)
+    def verifyPay(self, data, opt):
         # rfid 결제 검증
-        w.rfidPaymentVerification(data)
+        w.rfidPaymentVerification(data, opt)
 
 
 # QT 제어하는 메인 class
@@ -160,6 +159,7 @@ class et(QMainWindow, Ui_mainWindow):
         self.widgetList["widgetStoreMain.html"].raise_()
 
     def loadPaymentMethodPage(self):
+        self.widgetList["widgetPaymentMain.html"].page().runJavaScript("fadein()")
         self.widgetList["widgetPaymentMain.html"].raise_()
 
     def loadKakaoPayPage(self):
@@ -212,6 +212,21 @@ class et(QMainWindow, Ui_mainWindow):
         jscmd = "addCost({cost})".format(cost=item["itemPrice"])
         self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
 
+    def addBagSupport(self, itemNum):
+        item = self.itemList[itemNum]
+        item["isSupport"] = 1
+        item['itemPrice'] = item['itemPrice'] - 6000
+        self.bag.append(item)
+
+        self.totalCost = self.totalCost + item["itemPrice"]
+        self.itemCnt = self.itemCnt + 1
+
+        jscmd = "addItem(\'{itemId}\', \'{itemName}\', \'{itemPrice}\')" \
+            .format(itemId=itemNum, itemName=item["itemName"], itemPrice=item["itemPrice"])
+        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
+        jscmd = "addCost({cost})".format(cost=item["itemPrice"])
+        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
+
     def removeBagItem(self, itemNum):
         item = self.itemList[itemNum]
         self.bag.remove(item)  # 첫번째 요소만 제거
@@ -241,10 +256,20 @@ class et(QMainWindow, Ui_mainWindow):
         sendPgToken(pgToken)
         self.loadCompletePage()
 
-    def rfidPaymentVerification(self, data):
+    def rfidPaymentVerification(self, data, opt):
         # TODO: 서버로부터 결제 검증
-        self.loadCompletePage()
+        if opt == "credit":
+            print("credit")
+            sendCreditCard(data, self.bag, self.totalCost, self.itemCnt, self.phoneNum)
+            self.loadCompletePage()
 
+        if opt == "gdream":
+            print("gdream")
+            sendGdreamCard(data, self.bag, self.itemCnt)
+            self.loadCompletePage()
+
+        jscmd = "initPage()"
+        self.widgetList["widgetRfid.html"].page().runJavaScript(jscmd)
 
 app = QApplication(sys.argv)
 w = et()

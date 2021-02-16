@@ -34,7 +34,7 @@ function addStoreItem(itemId, imgUrl, itemName, itemPrice, badge, intro, availab
         }
     }
 
-    let serverImgUrl = "https://i4a102.p.ssafy.io:8080/app/" + imgUrl;
+    let serverImgUrl = "https://ooriggini.me:8080/app/" + imgUrl;
     let listElement = `<div class="bookmark" onclick="addBagItem(${itemId})">
                         <div class="bookmark-photo">
                             <div class="bookmark-image" style="background-image: url(${serverImgUrl});"></div>
@@ -224,18 +224,23 @@ function addBagItem(itemId) {
 }
 
 function clickPay() {
-    if (!mainState) {
-        //modal.style.display = "block";
-        clickModal()
-        mainState=1;
+    if(totalCnt == 0){
+        alert("메뉴를 선택해주세요.");
     }
-    else {
-        //modal.style.display = "none";
-        clickContainer()
-        fadeout()
-        setTimeout(function(){
-            handler.nextPage("payment")
-        }, 1000)
+    else{
+        if (!mainState) {
+            //modal.style.display = "block";
+            clickModal()
+            mainState=1;
+        }
+        else {
+            //modal.style.display = "none";
+            clickContainer()
+            fadeout()
+            setTimeout(function(){
+                handler.nextPage("payment")
+            }, 1000)
+        }
     }
 }
 

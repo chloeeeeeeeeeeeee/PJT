@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/storeMain.css">
     <link rel="stylesheet" href="assets/css/animation.css">
+    <link rel="stylesheet" href="assets/css/modalAnimation.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
         rel="stylesheet"
@@ -20,7 +21,7 @@
 
 </head>
 <body>
-    <div id="myModal" class="modal">
+    <!-- <div id="myModal" class="modal">
         <div class="modal-content">                                                             
             <p>결식아동에게 행복을 전하는 우리끼니 입니다</p>
             <p>음식의 차액만 후원 해 주신다면</p>
@@ -31,7 +32,23 @@
                 <button onclick="clickPay()">결제만 하기</button>
             </div>
         </div>
+    </div> -->
+
+    <div id="modal-container">
+        <div class="modal-background">
+            <div class="modal">
+                <p>결식아동에게 행복을 전하는 우리끼니 입니다</p>
+                <p>음식의 차액만 후원 해 주신다면</p>
+                <p>아이들에게 더 나은 음식을 지원 할 수 있습니다</p>
+                <p>후원하시겠습니까?</p>
+                <div style="display: flex;">
+                    <button onclick="clickDonation()">후원 하기</button>
+                    <button onclick="clickPay()">결제만 하기</button>
+                </div>    
+            </div>
+        </div>
     </div>
+
 
     <div id="fade" class="six-four opazero">
         <div class="carousel-container" style="display: flex;">

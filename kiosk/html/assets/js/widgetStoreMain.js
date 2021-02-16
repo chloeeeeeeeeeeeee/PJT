@@ -7,6 +7,9 @@ let itemIdContainer = [];
 
 let maxContriNum = 15
 
+let modalContainer = document.getElementById("modal-container");
+let content = document.getElementsByClassName('content')[0];
+
 //qt->js 함수
 let newCarouselContainer = `<div class="carousel-item">
                                 <section class="bookmark-container">
@@ -31,7 +34,7 @@ function addStoreItem(itemId, imgUrl, itemName, itemPrice, badge, intro, availab
         }
     }
 
-    let serverImgUrl = "http://i4a102.p.ssafy.io:8080/app/" + imgUrl;
+    let serverImgUrl = "https://i4a102.p.ssafy.io:8080/app/" + imgUrl;
     let listElement = `<div class="bookmark" onclick="addBagItem(${itemId})">
                         <div class="bookmark-photo">
                             <div class="bookmark-image" style="background-image: url(${serverImgUrl});"></div>
@@ -222,11 +225,13 @@ function addBagItem(itemId) {
 
 function clickPay() {
     if (!mainState) {
-        modal.style.display = "block";
+        //modal.style.display = "block";
+        clickModal()
         mainState=1;
     }
     else {
-        modal.style.display = "none";
+        //modal.style.display = "none";
+        clickContainer()
         fadeout()
         setTimeout(function(){
             handler.nextPage("payment")
@@ -235,7 +240,8 @@ function clickPay() {
 }
 
 function clickDonation(){
-    modal.style.display = "none";
+    //modal.style.display = "none";
+    modalContainer.setAttribute('class', 'out')
     toggleDisplay()
 }
 
@@ -255,4 +261,12 @@ function qtAddItem(itemId) {
     handler.addBagItem(function (retVal) {
         console.error(JSON.stringify(retVal));
     }, itemId)
+}
+
+function clickModal(){
+    modalContainer.setAttribute('class', 'one')
+}
+
+function clickContainer(){
+    modalContainer.setAttribute('class', 'out')
 }

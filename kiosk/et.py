@@ -1,18 +1,14 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
-from PyQt5.QtWebChannel import QWebChannel
 from ui.main_ui2 import Ui_mainWindow
 
 from api import *
 from utils import *
 from WebEnginePage import *
 
-import kakaoSocket
+from kakaoSocket import *
 import sys
-import os
-import time
+
 import datetime
 import threading
 
@@ -48,7 +44,6 @@ class CallHandler(QObject):
 
     @pyqtSlot(QVariant)
     def verifyPay(self, data):
-        print("hi")
         # rfid 결제 검증
         w.rfidPaymentVerification(data)
 
@@ -172,12 +167,16 @@ class et(QMainWindow, Ui_mainWindow):
         self.widgetList["widgetKakaoPay.html"].page().runJavaScript(jscmd)
         self.widgetList["widgetKakaoPay.html"].raise_()
 
+        th = getPg(self)
+        th.notifyProgress.connect(self.getPgToken)
+        th.start()
+
     def loadRfidPage(self):
         self.widgetList["widgetRfid.html"].raise_()
 
     def loadCompletePage(self):
         self.widgetList["widgetComplete.html"].raise_()
-        jscmd = "completeTimeout(\"10\")"
+        jscmd = "completeTimeout(10)"
         self.widgetList["widgetComplete.html"].page().runJavaScript(jscmd)
 
     # html controll functions
@@ -248,9 +247,5 @@ class et(QMainWindow, Ui_mainWindow):
 app = QApplication(sys.argv)
 w = et()
 pageConnector = w.makePageConnector()
-# kakao api pg token을 받기 위한 socket thread 함수
-t = threading.Thread(target=kakaoSocket.th_socket, args=(w,))
-t.start()
-print("th_socket thread start")
 w.show()
 app.exec_()

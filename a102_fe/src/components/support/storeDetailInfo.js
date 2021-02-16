@@ -4,15 +4,15 @@ import { AiFillPhone } from "react-icons/ai";
 import { BiMapAlt } from "react-icons/bi";
 
 function StoreDetailInfo(storeInfo) {
-  const axios = require("axios");
-  const config = {
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "X-NCP-APIGW-API-KEY-ID": "e5vp42977m",
-      "X-NCP-APIGW-API-KEY": "PpdYPMVeyXPnhSW33x2XKzw9tYGpsGhjKvdhIlMy",
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
+  // const axios = require("axios");
+  // const config = {
+  //   headers: {
+  //     "Content-Type": "application/x-www-form-urlencoded",
+  //     "X-NCP-APIGW-API-KEY-ID": "e5vp42977m",
+  //     "X-NCP-APIGW-API-KEY": "PpdYPMVeyXPnhSW33x2XKzw9tYGpsGhjKvdhIlMy",
+  //     "Access-Control-Allow-Origin": "*",
+  //   },
+  // };
 
   let storeMiniMap = null;
 
@@ -24,11 +24,14 @@ function StoreDetailInfo(storeInfo) {
   const { kakao } = window;
 
   let [storeInformation, setStoreInformation] = useState({});
-  let [latitude, setLatitude] = useState(0)
-  let [longitude, setLongitude] = useState(0)
+  let [latitude, setLatitude] = useState(0);
+  let [longitude, setLongitude] = useState(0);
 
-  function moveToGodkao(){
-    window.open(`https://map.kakao.com/link/to/${storeInformation.storeName},${latitude},${longitude}`, '_blank');
+  function moveToGodkao() {
+    window.open(
+      `https://map.kakao.com/link/to/${storeInformation.storeName},${latitude},${longitude}`,
+      "_blank"
+    );
   }
 
   useEffect(() => {
@@ -54,11 +57,11 @@ function StoreDetailInfo(storeInfo) {
         geocoder.addressSearch(result.storeLocation, function (result, status) {
           if (status === kakao.maps.services.Status.OK) {
             initMap(result[0].y, result[0].x);
-            setLongitude(result[0].x)
-            setLatitude(result[0].y)
+            setLongitude(result[0].x);
+            setLatitude(result[0].y);
           } else {
             alert("잘못된 접근입니다.");
-            window.history.back()
+            window.history.back();
           }
         });
       });
@@ -68,9 +71,7 @@ function StoreDetailInfo(storeInfo) {
     <Col md={{ size: 2, offset: 1 }} sm="12" className="storeInfo">
       <Card className="storeInfoCard">
         <CardHeader className="cardHeader">
-          <p className="font-weight-bold mt-1">
-            {storeInformation.storeName}
-          </p>
+          <p className="font-weight-bold mt-1">{storeInformation.storeName}</p>
           <p className="font-weight-normal mb-0">
             #{storeInformation.storeCategory}
           </p>

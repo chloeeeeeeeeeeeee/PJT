@@ -168,6 +168,7 @@ class et(QMainWindow, Ui_mainWindow):
         self.widgetList["widgetStoreMain.html"].raise_()
 
     def loadPaymentMethodPage(self):
+        self.setPaymentBag()
         self.widgetList["widgetPaymentMain.html"].page().runJavaScript("fadein()")
         self.widgetList["widgetPaymentMain.html"].raise_()
 
@@ -214,9 +215,10 @@ class et(QMainWindow, Ui_mainWindow):
 
     def addBagItem(self, itemNum, isSupport):
         try:
-            print(itemNum)
             item = self.makeItem(itemNum, isSupport)
             self.bag.append(item)
+
+
             self.totalCost = self.totalCost + item["itemPrice"]
             self.itemCnt = self.itemCnt + 1
             jscmd = "addItem(\'{itemId}\', \'{itemName}\', \'{itemPrice}\', {isSupport})" \
@@ -298,6 +300,26 @@ class et(QMainWindow, Ui_mainWindow):
 
         jscmd = "initPage()"
         self.widgetList["widgetRfid.html"].page().runJavaScript(jscmd)
+
+    def setPaymentBag(self):
+        try:
+            jscmd = "clear()"
+            self.widgetList["widgetPaymentMain.html"].page().runJavaScript(jscmd)
+            for b in self.bag:
+                id = b["itemId"]
+                name = b["itemName"]
+                if b["support"] == 1:
+                    id = "donation-" + str(id)
+                    name = "(후원)" + name
+                jscmd = "addItem(\"{itemId}\", \"{itemName}\", \"{itemPrice}\", \"{itemCnt}\",)"\
+                    .format(itemId=id, itemName=name,
+                            itemPrice=b["itemPrice"], itemCnt=b["itemCount"])
+                self.widgetList["widgetPaymentMain.html"].page().runJavaScript(jscmd)
+
+            jscmd = "addResult({totalCnt}, {totalPrice})".format(totalCnt=self.itemCnt, totalPrice=self.totalCost)
+            self.widgetList["widgetPaymentMain.html"].page().runJavaScript(jscmd)
+        except Exception as e:
+            print(e)
 
 app = QApplication(sys.argv)
 w = et()

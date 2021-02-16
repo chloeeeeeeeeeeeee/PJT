@@ -15,6 +15,16 @@ $url_0: url(../../images/other-images/auth-layer.png);
 .authentication-main {
   .auth-innerright {
     .card-body {
+
+      // &:before {
+      //   height: 100%;
+      //   background-color: yellow;
+      // }
+      // &:after {
+      //   height: 200vh;
+      //   background-color: wheat;
+      // }
+      
       .theme-form {
         width: calc(100% - 290px);
       }
@@ -134,6 +144,8 @@ $diffRatio: ($contW - $imgW) / $contW;
 }
 
 .cont {
+  // height: 120vh;
+
   overflow: hidden;
   position: relative;
   width: $contW;
@@ -430,6 +442,12 @@ $diffRatio: ($contW - $imgW) / $contW;
     padding: 30px;
     .auth-innerright {
       .card-body {
+
+        // &:after {
+        //   height: 120vh;
+        //   overflow: auto;
+        // }
+
         .theme-form {
           margin-bottom: 280px;
           width: 100%;
@@ -456,6 +474,9 @@ $diffRatio: ($contW - $imgW) / $contW;
 @media only screen and (max-width: 575px) {
   .authentication-main {
     margin-top: 10px;
+    height: 200vh;
+    overflow: auto;
+    // background-color: red;
   }
   .img__btn {
     width: 32%;

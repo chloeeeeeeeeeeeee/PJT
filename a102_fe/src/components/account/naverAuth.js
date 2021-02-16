@@ -33,13 +33,7 @@ function NaverAuth() {
   return (
     <div>
       <div id="naverIdLogin"
-        // onClick={(event) => NaverAuthCallback(event)}
       >
-        {/* <img 
-          src={ NaverAuthButton } 
-          className="naverAuthBtn"
-          // onClick={ NaverAuthClick() }
-        /> */}
       </div>
     </div>
   );

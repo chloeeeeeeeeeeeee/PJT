@@ -28,9 +28,8 @@ function Auth(props) {
 
   const NaverAuthClick = (event) => {
     event.preventDefault();
-    alert("제발");
     document.getElementById("naverIdLogin_loginButton").click();
-    }; 
+  }; 
   
   // 로그인 파트, 마찬가지로 useState를 이용하여 자료로 받았습니다.
   // 마찬가지로 user_id, user_pwd로 잡아줍시다!
@@ -84,6 +83,20 @@ function Auth(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [checkid, setCheckid] = useState(false);
+  const [checkphone, setCheckphone] = useState(false);
+
+  function digitcheck(value) {
+    console.info("디지체크", value)
+    var digit = value.charAt(value.length-1)
+    console.log("숫자 끝자릿수 확인", digit)
+
+    const regexdigit = /^[0-9\b -]$/;
+    (regexdigit.test(digit)) ? (console.log("숫자입니다")) : (alert("숫자만 입력하세요!"))
+
+    const regex = /^[0-9\b -]{0,13}$/;
+    (regex.test(value)) ? (setCheckphone(true)) : (setCheckphone(false))
+
+  }
   
   // 이제 이걸 user_id, user_name 등으로 연결해줘야해요!
   const Signup = (event) => {
@@ -93,8 +106,9 @@ function Auth(props) {
     // } else if ( name !== "" && phone !== "" && email !== "") {
     } else if (Boolean(name) === false || Boolean(phone) === false || Boolean(email) === false) {
       alert("정보를 빠짐없이 채워주세요!")
+    } else if (checkphone !== true) {
+      alert("전화번호를 확인하세요!")
     } else { 
-      // fetch(`${process.env.PUBLIC_URL}/account/signup`, {
       fetch(`${process.env.REACT_APP_API_URL}/account/signup`, {
         method: "POST",
         headers:{
@@ -240,18 +254,9 @@ function Auth(props) {
                             <Row form className="btn-showcase">
                               <Col md="6" sm="6">
                                 <KakaoAuth />
-                                {/* <Button
-                                  color="social-btn btn-kakao"
-                                  // social-btn은 _forms.scss에서 찾을 수 있다!
-                                  // onClick={facebookAuth}
-                                >
-                                  카카오로 로그인하기
-                                </Button> */}
                               </Col>
                               <Col md="6" sm="6">
                                 <NaverAuth />
-                                {/* <div id="naverIdLogin">
-                                </div> */}
                               </Col>
                             </Row>
                           </div>
@@ -287,9 +292,6 @@ function Auth(props) {
                         <div>
                           <Form className="theme-form">
                             <h4 className="text-center">회원가입</h4>
-                            {/* <h6 className="text-center">
-                              회원가입해주세요
-                            </h6> */}
                             <Row form>
                               <Col md="9">
                                 <FormGroup>
@@ -298,8 +300,7 @@ function Auth(props) {
                                     type="text"
                                     name="id"
                                     value={id}
-                                    onChange={(e) => {setId(e.target.value); setCheckid(false);}
-                                    }
+                                    onChange={(e) => {setId(e.target.value); setCheckid(false);}}
                                     placeholder="아이디를 입력하세요"
                                     required
                                   />
@@ -334,7 +335,9 @@ function Auth(props) {
                                     type="text"
                                     name="phone"
                                     value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
+                                    // onKeyPress={(value) => (this.value = this.value.replace(/[^0-9]/g, ''))}
+                                    // onKeyPress={(value) => digitcheck(value)}
+                                    onChange={(e) => {digitcheck(e.target.value); setPhone(e.target.value); }}
                                     placeholder="전화번호를 숫자로만 입력하세요(01012341234)"
                                     required
                                   />
@@ -371,38 +374,18 @@ function Auth(props) {
                               회원가입
                               </Button>
                             </FormGroup>
-                            {/* <Row form>
-                              <Col sm="8">
-                                <div className="text-left mt-2 m-l-20">
-                                  Are you already user? 
-                                  <a
-                                    className="btn-link text-capitalize"
-                                    href="login.html"
-                                  >
-                                    Login
-                                  </a>
-                                </div>
-                              </Col>
-                            </Row> */}
                             <div className="form-divider"></div>
                             <div className="social mt-3">
                             <Row form className="btn-showcase">
                               <Col md="6" sm="6">
                                 <KakaoAuth />
-                                {/* <Button
-                                  color="social-btn btn-kakao"
-                                  // social-btn은 _forms.scss에서 찾을 수 있다!
-                                  // onClick={facebookAuth}
-                                >
-                                  카카오로 가입하기
-                                </Button> */}
                               </Col>
                               <Col md="6" sm="6">
                                 <div id="naverIdLogin">
                                   <img
-                                    // id="naverIdLogin"
                                     src={ NaverAuthButton } 
                                     className="naverAuthBtn"
+                                    onMouseOver=""
                                     onClick={(event) => NaverAuthClick(event)}
                                   />                                  
                                 </div>

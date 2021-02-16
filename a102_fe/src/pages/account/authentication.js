@@ -18,12 +18,19 @@ import {
 // 분리할 수 없었습니다! 왜인지 이유를 알아볼 것! 
 import KakaoAuth from "../../components/account/kakaoAuth";
 import NaverAuth from "../../components/account/naverAuth";
-import NaverAuth2 from "../../components/account/naverAuth";
+import NaverAuthButton from "../../assets/images/naverAuth/NaverLoginButton.png";
 
 function Auth(props) {
   const toggleform = () => {
     document.querySelector(".cont").classList.toggle("s--signup");
+    // NaverLogin();
   };
+
+  const NaverAuthClick = (event) => {
+    event.preventDefault();
+    alert("제발");
+    document.getElementById("naverIdLogin_loginButton").click();
+    }; 
   
   // 로그인 파트, 마찬가지로 useState를 이용하여 자료로 받았습니다.
   // 마찬가지로 user_id, user_pwd로 잡아줍시다!
@@ -172,11 +179,12 @@ function Auth(props) {
   };
 
   return (
+    <div className="mainAuth">
     <div className="page-wrapper">
-      <Container fluid={true} className="p-0">
+      <Container fluid={true} className="authentication-wrapper p-0">
         {/* <!-- login page start--> */}
         <div className="authentication-main">
-          <Row>
+          <Row className="authentication-body">
             <Col md="12">
               <div className="auth-innerright">
                 <div className="authentication-box">
@@ -241,12 +249,9 @@ function Auth(props) {
                                 </Button> */}
                               </Col>
                               <Col md="6" sm="6">
-                                {/* <Button
-                                  color="social-btn btn-naver"
-                                  // onClick={twitterAuth}
-                                >
-                                </Button> */}
                                 <NaverAuth />
+                                {/* <div id="naverIdLogin">
+                                </div> */}
                               </Col>
                             </Row>
                           </div>
@@ -255,15 +260,23 @@ function Auth(props) {
                       <div className="sub-cont">
                         <div className="img">
                           <div className="img__text m--up">
-                            <h2>회원가입을 하시고</h2>
+                            <h4>회원가입을 하시고</h4>
+                            <p> </p>
                             <p>
-                              아이들에게 따뜻한 한 끼를 나눠주세요
+                              아이들에게
+                            </p>
+                            <p>
+                              따뜻한 한 끼를 나눠주세요
                             </p>
                           </div>
                           <div className="img__text m--in">
-                            <h2>이미 회원이시라면</h2>
+                            <h4>이미 회원이시라면</h4>
+                            <p> </p>
                             <p>
-                              로그인 하시고 내 후원 내역을 확인하세요
+                              로그인 하시고
+                            </p>
+                            <p>
+                              내 후원 내역을 확인하세요
                             </p>
                           </div>
                           <div className="img__btn" onClick={toggleform}>
@@ -385,7 +398,14 @@ function Auth(props) {
                                 </Button> */}
                               </Col>
                               <Col md="6" sm="6">
-                                <NaverAuth2 />
+                                <div id="naverIdLogin">
+                                  <img
+                                    // id="naverIdLogin"
+                                    src={ NaverAuthButton } 
+                                    className="naverAuthBtn"
+                                    onClick={(event) => NaverAuthClick(event)}
+                                  />                                  
+                                </div>
                               </Col>
                             </Row>
                           </div>
@@ -401,6 +421,7 @@ function Auth(props) {
         </div>
         {/* <!-- login page end--> */}
       </Container>
+    </div>
     </div>
   );
 };

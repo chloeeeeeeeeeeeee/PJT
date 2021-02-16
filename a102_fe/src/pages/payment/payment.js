@@ -74,7 +74,7 @@ function Payment() {
       });
       data.totalCount = totalCount;
 
-      //   console.log(data);
+      console.log(data);
 
       axios
         .post(`${process.env.REACT_APP_API_URL}/payment/kakaopay`, data, {

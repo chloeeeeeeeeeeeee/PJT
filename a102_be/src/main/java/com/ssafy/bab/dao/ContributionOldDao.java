@@ -17,11 +17,8 @@ public interface ContributionOldDao extends JpaRepository<ContributionOld, Integ
 	@Query(value = "SELECT item_id as itemId, COUNT(item_id) as count FROM contribution_old WHERE store_id = :storeId AND :endDate >= contribution_date AND contribution_date >= :startDate group by item_id; ", nativeQuery = true)
 	ArrayList<ItemIdCount> getItemContributionCount(@Param("storeId") int storeId, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-	
 	ArrayList<ContributionOld> findByContributor_ContributorSeq(int contributorSeq);
 	
-
-
 	// 사용되지 않은 특정 메뉴 후원내역
 	ArrayList<ContributionOld> findByStoreIdAndItemIdAndContributionUseOrderByContributionDate(int storeId, int itemId, int contributionUse);
 

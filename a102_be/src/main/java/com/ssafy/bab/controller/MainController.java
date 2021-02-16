@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.AllStore;
 import com.ssafy.bab.dto.Menu;
 import com.ssafy.bab.dto.StoreDetail;
@@ -40,6 +41,9 @@ public class MainController {
 	
 	@Autowired
 	private MainService userRankService;
+	
+	@Autowired
+	private UserDao userDao;
 	
 	@ApiOperation(value = "가게 목록", notes = "주소를 받아 해당 지역(동 기준)의 가게리스트를 반환한다", response = List.class)
 	@GetMapping("/mapview/storelist/{Juso}")

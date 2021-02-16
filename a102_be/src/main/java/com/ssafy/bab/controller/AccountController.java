@@ -60,6 +60,7 @@ public class AccountController {
 	//회원가입
 	@PostMapping("/signup")
 	public ResponseEntity<User> signUp(@RequestBody User user) {
+		logger.info("signUp_AccountController - 호출");
 		User userResult = userService.signUp(user);
 		if(userResult == null)
 			return new ResponseEntity<User>(userResult, HttpStatus.BAD_REQUEST);

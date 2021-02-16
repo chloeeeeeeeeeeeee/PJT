@@ -58,10 +58,10 @@ public class AccountServiceImpl implements AccountService{
 		
 		if(userDao.findByUserId(user.getUserId()) != null)
 			return null;
-//		if(userDao.findByUserEmail(user.getUserEmail()) != null)
-//			return null;
-//		if(userDao.findByUserPhone(user.getUserPhone()) != null)
-//			return null;
+		if(userDao.findByUserEmail(user.getUserEmail()) != null && userDao.findByUserEmail(user.getUserEmail()).equals("temp"))
+			return null;
+		if(userDao.findByUserPhone(user.getUserPhone()) != null && userDao.findByUserPhone(user.getUserPhone()).equals("temp"))
+			return null;
 			
 		User userResult = user;
 		userResult.setUserPwd(passwordEncoding.encode(user.getUserPwd()));

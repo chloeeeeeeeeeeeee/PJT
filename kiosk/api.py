@@ -2,7 +2,7 @@ import requests
 import json
 import datetime
 
-serverUrl = "https://ooriggini.me:8080/app/"
+serverUrl = "https://i4a102.p.ssafy.io:8080/app/"
 
 def getStoreItem(storeID):
     res = requests.get(serverUrl + 'main/menulist/'+str(storeID))

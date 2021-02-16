@@ -80,8 +80,61 @@
             </a>
         </div>
 
-        <div class="donation-container" style="display:none">
-            <p>donation</p>
+        <div class="donation-container">
+            <div class="donation-wrapper">
+                <div class="donation-explain">
+                    <img src="assets/pic/donation_intro.png" style="width: 100%;">
+                </div>
+                <div class="donation-phone">
+                    <div style="justify-content: center; text-align: center;">
+                        <p><b>휴대폰 번호</b>를 입력하시면</p>
+                        <p><b>우리끼니 홈페이지</b>에서 <b>기부금 영수증</b>을 발급받으실 수 있습니다.</p>
+                    </div>
+                    <div style="width: 70%; margin: 10px;">
+                        <input
+                            type="text"
+                            name="phone"
+                            placeholder="(-)없이 숫자만 입력하세요";
+                        >
+                    </div>
+                </div>
+                <div class="donation-items">
+                    <div class="donation-bookmark">
+                        <div class="bookmark-photo">
+                            <div class="bookmark-image" style="background-image: url(${serverImgUrl});"></div>
+                        </div>
+                        <div class="bookmark-title"> <span>{itemName}</span></div>
+                        <div class="bookmark-badge">{badge}</div>
+                        <div class="bookmark-dividing"></div>
+                        <div class="bookmark-detail">
+                            {intro}
+                        </div>
+                        <div class="bookmark-btn1"><span>{itemPrice}원</span></div>
+                        <div class="bookmark-contribution"></div>
+                        <div class="bookmark-contribution-title"><span>이주의 후원 현황</span></div>
+                    </div>
+                    <div class="donation-bookmark">
+                        <div class="bookmark-photo">
+                            <div class="bookmark-image" style="background-image: url(${serverImgUrl});"></div>
+                        </div>
+                        <div class="bookmark-title"> <span>{itemName}</span></div>
+                        <div class="bookmark-badge">{badge}</div>
+                        <div class="bookmark-dividing"></div>
+                        <div class="bookmark-detail">
+                            {intro}
+                        </div>
+                        <div class="bookmark-btn1"><span>{itemPrice}원</span></div>
+                        <div class="bookmark-contribution"></div>
+                        <div class="bookmark-contribution-title"><span>이주의 후원 현황</span></div>
+                    </div>
+                </div>
+                <div class="donation-others">
+                    <button class="donation-button">
+                        <p class="m-0"> 다른 메뉴 </p>
+                        <p class="m-0"> 후원하기 </p>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="cart-container">

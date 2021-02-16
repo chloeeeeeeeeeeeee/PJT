@@ -266,7 +266,7 @@ function ChildSupport() {
 
   }):(<Col className="nothingToShow" xs="12"><br/><p>음식이 없습니다. 다른 가게를 둘러보시는건 어떨까요?</p></Col>);
 
-  console.log(flag)
+//   console.log(flag)
 
   return (
     <Col className="mainSupport">

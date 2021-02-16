@@ -63,7 +63,7 @@ function Payment() {
       });
       data.totalCount = totalCount;
 
-      console.log(data);
+    //   console.log(data);
 
       axios
         .post(`${process.env.REACT_APP_API_URL}/payment/kakaopay`, data, {
@@ -74,16 +74,19 @@ function Payment() {
           },
         })
         .then((res) => {
+            // console.log(res)
         //   console.log(JSON.stringify(res.request.response));
-          const popupWidth = window.innerWidth * 0.5;
-          const popupHeight = window.innerHeight * 0.5;
-          const popupLeft = (window.innerWidth - popupWidth) * 0.5;
-          const popupTop = (window.innerHeight - popupHeight) * 0.5;
-          window.open(
-            res.request.response,
-            "PopupWin",
-            `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`
-          );
+          if (JSON.stringify(res.request.response) !== `""`){
+            const popupWidth = window.innerWidth * 0.5;
+            const popupHeight = window.innerHeight * 0.5;
+            const popupLeft = (window.innerWidth - popupWidth) * 0.5;
+            const popupTop = (window.innerHeight - popupHeight) * 0.5;
+            window.open(
+              res.request.response,
+              "PopupWin",
+              `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`
+            );
+          }          
         });
     }
     // 네이버 페이

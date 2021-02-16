@@ -73,12 +73,13 @@ function KakaoAuth() {
   return (
     // <a id="custom-login-btn" href="javascript:loginWithKakao()">
     // 원래는 위와 같은 형태였는데, onclick으로 바꿔보겠습니다. 
-    <a id="custom-login-btn"
+    <a id="custom-login-btn" href="#"
       onClick={() => loginWithKakao()}
       >
       <img
         src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
         height="36px"
+        alt="kakaoLogin"
       />
     </a>
   //   Kakao.Auth.createLoginButton({

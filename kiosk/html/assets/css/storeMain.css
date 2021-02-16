@@ -50,8 +50,11 @@ li{
 
 .bookmark{
 	width: 49%;
-	height: 25%;
+	height: 24%;
+
+	margin: 3px;
 	/* background-color: #eff2f8; */
+	background-color: white;
 
 	display: grid;
 	grid-template-rows: repeat(12, 1fr);

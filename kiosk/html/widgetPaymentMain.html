@@ -6,21 +6,55 @@
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <link rel="stylesheet" href="assets/css/payment.css">
     <link rel="stylesheet" href="assets/css/animation.css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+    <style>
+        body {
+        font-family: "Noto Sans KR", sans-serif;
+        }
+    </style>
+
 </head>
 <body>
     <div id="fade" class="payment-main opazero">
-        <div>
-            <!-- 구매 내용을 표시해주세요. -->
-            <!-- 예시로 하나만 넣어두시면 추가하는 js 추가 예정입니다. -->
-        </div>
-        <div class="payment-container">
-            <div class="pay-button" onclick="clickKakaoPay()">
-                <div class="button-img kakaopayIcon"></div>
-                카카오페이
+        <div class="payment-wrapper">
+            <div class="purchase-container">
+                <div class="payment-card">
+                    <div class="payment-card-title">
+                        주문 내역 확인
+                    </div>
+                    <div class="purchase-card-body">
+                        <div class="purchase-item">
+                            <div class="purchase-item-title">{itemName}</div>
+                            <div class="purchase-item-quantity">1개</div>
+                            <div class="purchase-item-cost">{itemPrice}원</div>
+                        </div>
+                    </div>
+                    <div class="purchase-result">
+                        <div class="purchase-result-quantity">총 주문 수량 {1}개</div>
+                        <div class="purchase-result-cost">총 주문 금액 {itemPrice}원</div>
+                    </div>
+                </div>
             </div>
-            <div class="pay-button" onclick="clickCardTagging()">
-                <div class="button-img cardIcon"></div>
-                카드 태그
+            <div class="payment-step-arrow m-30">
+                <i class="fas fa-arrow-circle-right" style="font-size: 60px; color: #f5b601;"></i>
+            </div>
+            <div class="payment-container">
+                <div class="payment-card">
+                    <div class="payment-card-title">
+                        결제하기
+                    </div>
+                    <div class="payment-card-body">
+                        <div class="pay-button" onclick="clickKakaoPay()">
+                            <div class="button-img kakaopayIcon"></div>
+                            카카오페이
+                        </div>
+                        <div class="pay-button" onclick="clickCardTagging()">
+                            <div class="button-img cardIcon"></div>
+                            카드 태그
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

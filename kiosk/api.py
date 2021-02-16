@@ -2,7 +2,7 @@ import requests
 import json
 import datetime
 
-serverUrl = "https://i4a102.p.ssafy.io:8080/app/"
+serverUrl = "https://ooriggini.me:8080/app/"
 
 def getStoreItem(storeID):
     res = requests.get(serverUrl + 'main/menulist/'+str(storeID))
@@ -16,19 +16,10 @@ def getStoreInfo(storeID):
 
 def postKakaoPay(bag, totalAmount, totalCount, phoneNum):
     req = {}
-    req['itemList'] = []
     req['cid'] = 'TC0ONETIME'
     req['contributorPhone'] = phoneNum
     req['isKiosk'] = 1
-    for bagList in bag:
-        tempItemList = {"itemCount": 1,
-                        "itemId": bagList["itemId"],
-                        "itemName": bagList["itemName"],
-                        "itemPrice": bagList["itemPrice"],
-                        "msg": "맛있게 드세요!",
-                        "storeId": bagList["storeId"],
-                        "support": bagList["isSupport"]}
-        req['itemList'].append(tempItemList)
+    req['itemList'] = bag
     req['totalAmount'] = totalAmount
     req['totalCount'] = totalCount
     req['userSeq'] = 0
@@ -50,7 +41,7 @@ def sendPgToken(pgToken):
         .format(pgToken=pgToken)
     print(url)
     res = requests.get(url)
-    print(res)
+    print(res.text)
 
 def sendCreditCard(an, bag, totalAmount, totalCount, phoneNum):
     d = datetime.datetime.today()
@@ -78,17 +69,9 @@ def sendGdreamCard(an, bag, totalCount):
     d = datetime.datetime.today()
     date = d.strftime('%Y%m%d-%I%M%S')
     req = {}
-    req['itemList'] = []
+
     req['gdreamApproval'] = an
-    for bagList in bag:
-        tempItemList = {"itemCount": 1,
-                        "itemId": bagList["itemId"],
-                        "itemName": bagList["itemName"],
-                        "itemPrice": bagList["itemPrice"],
-                        "msg": "맛있게 드세요!",
-                        "storeId": bagList["storeId"],
-                        "support": bagList["isSupport"]}
-        req['itemList'].append(tempItemList)
+    req['itemList'] = bag
     req['paidAt'] = date
     req['totalCount'] = totalCount
     req['totalGDreamAmount'] = 1

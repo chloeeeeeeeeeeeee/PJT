@@ -7,10 +7,14 @@ let itemIdContainer = [];
 let donationListCnt = 0;
 let setModal = 0;
 
-let maxContriNum = 15
+let maxContriNum = 15;
+
+let phoneNumber = "010-";
+let phoneNumberNode = document.getElementById("phoneNumber");
 
 let modalContainer = document.getElementById("modal-container");
-let content = document.getElementsByClassName('content')[0];
+let modalContainer2 = document.getElementById("modal-container2");
+
 
 let modalPrice = document.getElementById("modal-price");
 let modalName = document.getElementById("modal-name");
@@ -295,7 +299,34 @@ function clickPay() {
 function clickDonation(){
     //modal.style.display = "none";
     modalContainer.setAttribute('class', 'out')
+    document.getElementById("phoneInput").value = "";
     toggleDisplay()
+}
+
+function clickPhoneNum(){
+    phoneNumber ="010-";
+    changePhoneNum()
+    let alertMessage = document.getElementById("phone-alert");
+    alertMessage.setAttribute("class", "void");
+    modalContainer2.setAttribute('class', 'two')
+}
+
+function clickEnter(){
+    if(phoneNumber.length == 13){
+        document.getElementById("phoneInput").value = phoneNumber;
+        handler.setPhoneNum(phoneNumber.replace("-", "").replace("-", ""));
+        modalContainer2.setAttribute('class', 'out');
+    }
+    else{
+        //경고메세지
+        let alertMessage = document.getElementById("phone-alert");
+        alertMessage.setAttribute("class", "unvoid");
+    }
+
+}
+
+function clickCancel(){
+    modalContainer2.setAttribute('class', 'out')
 }
 
 function clickReset() {
@@ -374,4 +405,35 @@ function addDonationItem(itemId, imgUrl, itemName, itemPrice, badge, intro, avai
     if(donationListCnt == 3){
         addPosition.removeChild(addPosition.firstChild);
     }
+}
+
+function changePhoneNum(){
+    phoneNumberNode.innerText = phoneNumber;
+}
+
+function clickPad(opt){
+    if(phoneNumber.length <= 13){
+        if(opt >= 0 && opt <= 9 && phoneNumber.length != 13){
+            phoneNumber += String(opt)
+            if(phoneNumber.length == 8){
+                phoneNumber += String("-")
+            }
+        }
+        else if(opt == -1){
+            //하나만 지우기
+            if(phoneNumber.length > 4){
+                phoneNumber = phoneNumber.slice(0, -1);
+                if(phoneNumber.length == 8){
+                    phoneNumber = phoneNumber.slice(0, -1);
+                }
+            }
+        }
+        else if(opt == -2){
+            //모두 지우기
+            phoneNumber = "010-";
+        }
+    }
+
+
+    changePhoneNum();
 }

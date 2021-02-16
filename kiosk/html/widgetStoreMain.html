@@ -59,7 +59,42 @@
         </div>
     </div>
 
-    
+    <div id="modal-container2">
+        <div class="modal-background">
+            <div class="modal">
+                <div class="phone-container">
+                    <div id="phoneNumber" class="phone-number">010-</div>
+                    <div class="number-container">
+                        <div class="number-line">
+                            <div class="num" onclick="clickPad(7)">7</div>
+                            <div class="num" onclick="clickPad(8)">8</div>
+                            <div class="num" onclick="clickPad(9)">9</div>
+                        </div>
+                        <div class="number-line">
+                            <div class="num" onclick="clickPad(4)">4</div>
+                            <div class="num" onclick="clickPad(5)">5</div>
+                            <div class="num" onclick="clickPad(6)">6</div>
+                        </div>
+                        <div class="number-line">
+                            <div class="num" onclick="clickPad(1)">1</div>
+                            <div class="num" onclick="clickPad(2)">2</div>
+                            <div class="num" onclick="clickPad(3)">3</div>
+                        </div>
+                        <div class="number-line">
+                            <div class="num" onclick="clickPad(-2)">초기화</div>
+                            <div class="num" onclick="clickPad(0)">0</div>
+                            <div class="num" onclick="clickPad(-1)">지우기</div>
+                        </div>
+                    </div>
+                    <div id="phone-alert" class="void">올바른 번호를 입력해주세요.</div>
+                    <div class="button-container" style="height: 20%;">
+                        <button class="button-reset"  onclick="clickCancel()">취소</button>
+                        <button class="button-pay"  onclick="clickEnter()">확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="fade" class="six-four opazero">
         <div class="carousel-container" style="display: flex;">
@@ -98,8 +133,10 @@
                     </div>
                     <div style="width: 70%; margin: 10px;">
                         <input
+                            id="phoneInput"
                             type="text"
                             name="phone"
+                            onclick="clickPhoneNum()"
                             placeholder="(-)없이 숫자만 입력하세요";
                         >
                     </div>

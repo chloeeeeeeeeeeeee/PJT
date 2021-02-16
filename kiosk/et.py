@@ -47,6 +47,10 @@ class CallHandler(QObject):
         # rfid 결제 검증
         w.rfidPaymentVerification(data, opt)
 
+    @pyqtSlot(QVariant)
+    def setPhoneNum(self, num):
+        w.phoneNum = num
+
 
 # QT 제어하는 메인 class
 class et(QMainWindow, Ui_mainWindow):

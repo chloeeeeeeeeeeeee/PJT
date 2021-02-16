@@ -122,6 +122,81 @@ body.modal-active {
   height: 300px;
 }
 
+/*--------------*/
+#modal-container2 {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: table;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  /* hidden 처리 */
+  transform: scale(0);
+}
+#modal-container2 .modal-background {
+  display: table-cell;
+  background: rgba(0, 0, 0, .8);
+  text-align: center;
+  vertical-align: middle;
+
+}
+#modal-container2 .modal-background .modal {
+  width: 50%;
+  height: 65%;
+  background: #fff;
+  /* padding: 50px; */
+  padding: 50px;
+  border-radius: 3px;
+  position: relative;
+
+  display: inline-block;
+  line-height: 100%;
+  vertical-align: middle;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: space-between; */
+}
+
+#modal-container2 .modal-background .modal h2 {
+  font-size: 25px;
+  line-height: 25px;
+  margin-bottom: 15px;
+  
+}
+#modal-container2 .modal-background .modal p {
+  font-size: 18px;
+  line-height: 22px;
+}
+
+#modal-container2 .modal-background .modal .modal-button {
+  height: 20%;
+}
+
+#modal-container2 .modal-background .modal .modal-QR {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+  #modal-container2 .modal-background .modal .modal-QR .QR-border {
+  /* border: solid 1px green; */
+  box-shadow: 10px 10px 30px #0008084f;
+
+  padding-bottom: 50px;
+}
+
+
+
+#modal-container2 .modal-background .modal .modal-QR p {
+  font-size: smaller;
+  line-height: 10px;
+}
+
+#modal-container2 .modal-background .modal .modal-QR img {
+  height: 300px;
+}
+
+/*----------------*/
 /*
  * ------------------------------
  * Unfolding Animation
@@ -195,14 +270,14 @@ body.modal-active {
  * Revealing Animation
  * ------------------------------
  */
-#modal-container.two {
+#modal-container2.two {
   transform: scale(1);
 }
-#modal-container.two .modal-background {
+#modal-container2.two .modal-background {
   background: transparent;
   animation: fadeIn .5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
-#modal-container.two .modal-background .modal {
+#modal-container2.two .modal-background .modal {
   /* 콘텐츠를 초기에 보여주지 않음 */
   opacity: 0;
   animation: scaleUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
@@ -211,14 +286,14 @@ body.modal-active {
   /* 콘텐츠 크기를 줄임 */
   animation: scaleBack 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
-#modal-container.two.out {
+#modal-container2.two.out {
   /* 전체 모달 컨테이너를 숨김 처리(다른 애니메이션이 모두 끝난 0.5초 후에 처리하기 위해 0.5초 지연시킴 */
   animation: quickScaleDown 0s .5s linear forwards;
 }
-#modal-container.two.out .modal-background {
+#modal-container2.two.out .modal-background {
   animation: fadeOut 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
-#modal-container.two.out .modal-background .modal {
+#modal-container2.two.out .modal-background .modal {
   animation: scaleDown 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 .content.two.out {

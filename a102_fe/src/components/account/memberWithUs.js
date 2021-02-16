@@ -82,7 +82,7 @@ function MemberInfo() {
             </div>
             <div className="withUsSubTitle">그릇</div>
           </div>
-          <div className="withUsExplain">을 함께했어요</div>
+          <div className="withUsExplain">을 함께했고</div>
         </div>
         <div className="memberInfoHeaderCard"
         >

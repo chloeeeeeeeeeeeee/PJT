@@ -137,20 +137,20 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 		params.add("total_amount", Integer.toString(paymentInfo.getTotalAmount())); 		// 상품 총 금액
 		params.add("tax_free_amount", "0"); 												// 상품 비과세 금액
 		
-//		if(paymentInfo.getIsKiosk() == 1) {
-//			params.add("approval_url", KIOSK_RETURN_URL + "/paymentCheck"); 				// 성공
-//			params.add("cancel_url", KIOSK_RETURN_URL + "/payment/kakaopayCancel"); 		// 취소
-//			params.add("fail_url", KIOSK_RETURN_URL + "/payment/kakaopayFail"); 			// 실패
-//		}else {
-//			params.add("approval_url", WEB_RETURN_URL + "/paymentCheck"); 					// 성공
-//			params.add("cancel_url", WEB_RETURN_URL + "/payment/kakaopayCancel"); 			// 취소
-//			params.add("fail_url", WEB_RETURN_URL + "/payment/kakaopayFail"); 				// 실패
-//		}
+		if(paymentInfo.getIsKiosk() == 1) {
+			params.add("approval_url", KIOSK_RETURN_URL + "/paymentCheck"); 				// 성공
+			params.add("cancel_url", KIOSK_RETURN_URL + "/payment/kakaopayCancel"); 		// 취소
+			params.add("fail_url", KIOSK_RETURN_URL + "/payment/kakaopayFail"); 			// 실패
+		}else {
+			params.add("approval_url", WEB_RETURN_URL + "/paymentCheck"); 					// 성공
+			params.add("cancel_url", WEB_RETURN_URL + "/payment/kakaopayCancel"); 			// 취소
+			params.add("fail_url", WEB_RETURN_URL + "/payment/kakaopayFail"); 				// 실패
+		}
 		
 		//test
-		params.add("approval_url", KIOSK_RETURN_URL + "/payment/kakaopaySuccess");		// 성공
-		params.add("cancel_url", KIOSK_RETURN_URL + "/payment/kakaopayCancel"); 		// 취소
-		params.add("fail_url", KIOSK_RETURN_URL + "/payment/kakaopayFail"); 			// 실패
+//		params.add("approval_url", KIOSK_RETURN_URL + "/payment/kakaopaySuccess");		// 성공
+//		params.add("cancel_url", KIOSK_RETURN_URL + "/payment/kakaopayCancel"); 		// 취소
+//		params.add("fail_url", KIOSK_RETURN_URL + "/payment/kakaopayFail"); 			// 실패
 		
 		HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<MultiValueMap<String, String>>(params, headers()); 
 		try { 
@@ -260,7 +260,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 					order.setPayment(payment);
 					
 //					!!!!!!!!!!!!orderDone 수정필요!!!!!!!!!!!!!!!!
-					order.setOrderDone(kakaoPayApproval.getApproved_at());
+//					order.setOrderDone(kakaoPayApproval.getApproved_at());
 					orderDao.save(order);
 				}
 			}

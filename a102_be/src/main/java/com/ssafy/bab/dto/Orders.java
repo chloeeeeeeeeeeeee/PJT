@@ -43,6 +43,7 @@ public class Orders {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date orderDate;
 	
+	@JoinColumn(name="order_done", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date orderDone;
 	

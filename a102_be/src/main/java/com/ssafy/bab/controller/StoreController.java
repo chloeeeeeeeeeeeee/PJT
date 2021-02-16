@@ -24,6 +24,7 @@ import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.MyStore;
 import com.ssafy.bab.dto.StoreContributionItem;
+import com.ssafy.bab.dto.StoreRank;
 import com.ssafy.bab.dto.User;
 import com.ssafy.bab.service.JwtService;
 import com.ssafy.bab.service.StoreService;
@@ -169,7 +170,7 @@ public class StoreController {
 	
 	
 	@ApiOperation(value = "가게 메뉴 삭제", notes = "itemId 입력받아 메뉴 삭제", response = String.class)
-	@PostMapping("/item/delete/{itemId}")
+	@GetMapping("/item/delete/{itemId}")
 	public ResponseEntity<String> itemDelete(@ApiParam(value = "itemId", required = true) @PathVariable int itemId, HttpServletRequest req) throws Exception {
 		logger.info("itemDelete_Store - 호출");
 		
@@ -189,5 +190,19 @@ public class StoreController {
 		
 	}
 	
+	@ApiOperation(value = "orderList 반환", notes = "order_done = null인 payment_id 및 payment_gdream_id 반환", response = List.class)
+	@GetMapping("/orderlist")
+	public ResponseEntity<List<String>> notOrderDoneList(@RequestParam("storeid") int storeId) throws Exception{
+		logger.info("notOrderDoneList_Store - 호출");
+		return new ResponseEntity<List<String>>(storeService.getNotOrderDoneList(storeId), HttpStatus.OK);
+	}
 	
+	@ApiOperation(value = "orderList 업데이트", notes = "입력받은 주문번호를 갖는 orders튜플들의 ", response = List.class)
+	@PostMapping("/orderlist")
+	public ResponseEntity<String> orderDoneUpdate(@RequestParam("storeid") int storeId, @RequestParam("orderNum") String paymentId) throws Exception{
+		logger.info("orderDoneUpdate_Store - 호출");
+		String result = storeService.orderDonUpdate(storeId, paymentId);
+		if(result == "SUCCESS") return new ResponseEntity<String>(result, HttpStatus.OK);
+		else return new ResponseEntity<String>(result, HttpStatus.BAD_REQUEST);
+	}
 }

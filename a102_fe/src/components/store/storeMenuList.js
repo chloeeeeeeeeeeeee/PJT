@@ -53,7 +53,7 @@ function StoreMenuList() {
   }, [trigger]);
 
   return (
-    <Col md="5" xs="12" className="storeMenuList">
+    <Col lg="5" xs="12" className="storeMenuList">
       <Card className="storeSupportListContainer col p-0">
         <CardHeader>
           <Row className="justify-content-between pl-3 pr-3">

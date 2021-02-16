@@ -18,6 +18,7 @@ import {
 // 분리할 수 없었습니다! 왜인지 이유를 알아볼 것! 
 import KakaoAuth from "../../components/account/kakaoAuth";
 import NaverAuth from "../../components/account/naverAuth";
+import NaverAuth2 from "../../components/account/naverAuth";
 
 function Auth(props) {
   const toggleform = () => {
@@ -59,7 +60,7 @@ function Auth(props) {
       })
       .then(res => res.json())
       .then(res =>
-        ( res.storeId !== null ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
+        (res.storeId) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
       )  
     })
     .catch(error =>
@@ -141,7 +142,7 @@ function Auth(props) {
       })
       .then(res => res.json())
       .then(res =>
-        ( res.storeId !== null ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
+        (res.storeId) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
       )  
     }
   };
@@ -320,7 +321,7 @@ function Auth(props) {
                                     name="phone"
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
-                                    placeholder="전화번호를 입력하세요"
+                                    placeholder="전화번호를 숫자로만 입력하세요(01012341234)"
                                     required
                                   />
                                 </FormGroup>
@@ -383,7 +384,7 @@ function Auth(props) {
                                 </Button> */}
                               </Col>
                               <Col md="6" sm="6">
-                                <NaverAuth />
+                                <NaverAuth2 />
                               </Col>
                             </Row>
                           </div>

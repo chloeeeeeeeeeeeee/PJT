@@ -40,8 +40,8 @@ function Header() {
       </NavbarBrand>
       {/* <NavbarToggler onClick={toggle}/>
         <Collapse isOpen={isOpen} navbar className="mainHeaderNav"> */}
-            <Nav className="mx-auto" navbar>
-              <NavItem>
+            <Nav className="row" navbar>
+              <NavItem className="ml-1 mr-1">
                 <NavLink href="/childmap"><b>지도보기</b></NavLink>
               </NavItem>
             </Nav>
@@ -70,9 +70,9 @@ function Header() {
         </NavbarBrand>
         {/* <NavbarToggler onClick={toggle}/> */}
         {/* <Collapse isOpen={isOpen} navbar className="mainHeaderNav"> */}
-            <Nav className="mx-auto" navbar>
+            <Nav className="row" navbar>
               {Boolean(localStorage.getItem("access-token")) ?
-                <NavItem>
+                <NavItem className="ml-1 mr-1">
                   <NavLink href="/storeadmin"><b>우리 가게 현황</b></NavLink>
                 </NavItem>
                 : ""
@@ -107,17 +107,17 @@ function Header() {
         </NavbarBrand>
         {/* <NavbarToggler onClick={toggle} className="mr-2"/> */}
         {/* <Collapse isOpen={isOpen} navbar className="mainHeaderNav"> */}
-            <Nav className="mx-auto" navbar>
-              <NavItem>
+            <Nav className="row justify-content-center flex-row" navbar>
+              <NavItem className="ml-1 mr-1">
                 <NavLink href="/support"> 후원하기 </NavLink>
               </NavItem>
               {Boolean(localStorage.getItem("access-token")) ?
-                <NavItem>
+                <NavItem className="ml-1 mr-1">
                   <NavLink href="/profile">마이페이지</NavLink>
                 </NavItem>
                 : ""
               }
-              <NavItem>
+              <NavItem className="ml-1 mr-1">
                 <NavLink href="/qna"> 문의하기 </NavLink>
               </NavItem>
             </Nav>

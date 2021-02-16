@@ -175,7 +175,6 @@ function StoreSupportList() {
             <Button onClick={(e) => changeDateRange(3)}>3달</Button>
             <Button onClick={(e) => changeDateRange(6)}>6달</Button>
           </ButtonGroup>
-          <div id="naverIdLogin"></div>
         </Row>
         <Form className="row mt-4 justify-content-around">
           <FormGroup>

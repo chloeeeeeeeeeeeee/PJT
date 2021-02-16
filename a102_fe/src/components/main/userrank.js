@@ -2,14 +2,16 @@ import React, { useState, useEffect } from "react";
 
 
 function Userrank(){
-    const [userRank, setUserRank] = useState([]);
+    let [userRank, setUserRank] = useState([]);
 
     useEffect(()=>{
         // fetch("http://i4a102.p.ssafy.io:8080/app/main/userrankbowl")
         fetch(`${process.env.REACT_APP_API_URL}/main/userrankbowl`)
         .then((res) => res.json())
         .then((users) => {
-            setUserRank(users);
+            if (typeof(users) === Array){
+                setUserRank(users);
+            }            
         });
     }, [])
 

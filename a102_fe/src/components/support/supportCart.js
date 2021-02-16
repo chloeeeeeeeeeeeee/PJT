@@ -181,8 +181,8 @@ function SupportCart(storeInfo) {
   });
 
   return (
-    <Col md="8" sm="12" className="row justify-content-around storeMenuDetail p-0 m-0">
-      <Col md="7" xs="8" className="storeCenterBox">
+    <Col lg="8" xs="12" className="row justify-content-around storeMenuDetail p-0 m-0">
+      <Col lg="7" md="8" xs="12" className="storeCenterBox">
         <Card>
           <CardHeader className="cardHeader">
             <h5 className="font-weight-bold mt-1">메뉴 목록</h5>
@@ -190,7 +190,7 @@ function SupportCart(storeInfo) {
           <CardBody className="storeMenuItemList">{supportCenterSide}</CardBody>
         </Card>
       </Col>
-      <Col md="5" xs="4" className="storeRightBox">
+      <Col lg="5" md="4" xs="12" className="storeRightBox">
         <Card>
         <CardHeader className="cardHeader">
           <h5 className="font-weight-bold mt-1">후원 바구니</h5>

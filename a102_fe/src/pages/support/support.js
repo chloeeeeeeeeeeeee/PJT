@@ -115,6 +115,7 @@ function Support() {
 
   // 매장 리스트 가져와서 컴포넌트화 + 마커 찍기
   function setStoreListComponent() {
+      console.log(address)
     if (address !== "") {
       fetch(
         `${

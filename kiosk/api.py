@@ -1,14 +1,15 @@
 import requests
 import json
 
+serverUrl = "https://i4a102.p.ssafy.io:8080/app/"
 
 def getStoreItem(storeID):
-    res = requests.get('http://i4a102.p.ssafy.io:8080/app/main/menulist/'+str(storeID))
+    res = requests.get(serverUrl + 'main/menulist/'+str(storeID))
     return res.json()
 
 
 def getStoreInfo(storeID):
-    res = requests.get('http://i4a102.p.ssafy.io:8080/app/main/storedetail/' + str(storeID))
+    res = requests.get(serverUrl + 'main/storedetail/' + str(storeID))
     return res.json()
 
 
@@ -27,7 +28,7 @@ def postKakaoPay(itemList, totalAmount, totalCount, phoneNum):
     data = json.dumps(req, ensure_ascii=False).encode('utf-8')
 
 
-    res = requests.post('http://i4a102.p.ssafy.io:8080/app/payment/kakaopay',
+    res = requests.post(serverUrl + 'payment/kakaopay',
                         headers=headers,
                         data=data)
 
@@ -35,7 +36,9 @@ def postKakaoPay(itemList, totalAmount, totalCount, phoneNum):
     return res.text
 
 def sendPgToken(pgToken):
-    url = "http://i4a102.p.ssafy.io:8080/app/payment/kakaopaySuccess?pg_token={pgToken}"\
+    url = serverUrl + "payment/kakaopaySuccess?pg_token={pgToken}"\
         .format(pgToken=pgToken)
+    print(url)
     res = requests.get(url)
+    print(res)
 

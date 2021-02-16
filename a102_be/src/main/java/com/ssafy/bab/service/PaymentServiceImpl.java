@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.bab.dao.ContributionDao;
+import com.ssafy.bab.dao.ContributionOldDao;
 import com.ssafy.bab.dao.ContributorDao;
 import com.ssafy.bab.dao.ItemDao;
 import com.ssafy.bab.dao.OrderDao;
@@ -22,10 +23,13 @@ import com.ssafy.bab.dao.StoreVariablesDao;
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.CPaymentInfo;
 import com.ssafy.bab.dto.Contribution;
+import com.ssafy.bab.dto.ContributionOld;
 import com.ssafy.bab.dto.Contributor;
 import com.ssafy.bab.dto.GPaymentInfo;
 import com.ssafy.bab.dto.IPaymentInfo;
 import com.ssafy.bab.dto.Item;
+import com.ssafy.bab.dto.ItemAndCount;
+import com.ssafy.bab.dto.Msg;
 import com.ssafy.bab.dto.NPaymentInfo;
 import com.ssafy.bab.dto.Orders;
 import com.ssafy.bab.dto.Payment;
@@ -46,6 +50,14 @@ public class PaymentServiceImpl implements PaymentService {
 	@Value("${coolsms.API_SECRET}")
 	private String API_SECRET;
 	
+	@Value("${coolsms.PHONE}")
+	private String PHONE;
+	
+	@Value("${Kakao.WEB_RETURN_URL}")
+	private String URL;
+	
+	PaymentGdream paymentG = null;
+	
 	@Autowired
 	PaymentDao paymentDao;
 	
@@ -54,6 +66,9 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	@Autowired
 	ContributionDao contributionDao;
+	
+	@Autowired
+	ContributionOldDao contributionOldDao;
 	
 	@Autowired
 	ItemDao itemDao;
@@ -327,7 +342,7 @@ public class PaymentServiceImpl implements PaymentService {
 				order.setPayment(payment);
 				
 //				!!!!!!!!!!!!orderDone 수정필요!!!!!!!!!!!!!!!!
-				order.setOrderDone(tradeConfirmYmdt);
+//				order.setOrderDone(tradeConfirmYmdt);
 				orderDao.save(order);
 			}
 		}
@@ -377,7 +392,7 @@ public class PaymentServiceImpl implements PaymentService {
          */
 		
 		// PaymentGdream 테이블 업데이트
-		PaymentGdream paymentG = new PaymentGdream();
+		paymentG = new PaymentGdream();
 		paymentG.setPaymentGdreamId(wdate);
 		paymentG.setPaymentGdreamDate(tradeConfirmYmdt);
 		paymentG.setPaymentGdreamAmount(paymentInfo.getTotalGDreamAmount());
@@ -386,58 +401,203 @@ public class PaymentServiceImpl implements PaymentService {
 		paymentGDao.save(paymentG);
 		
 		// 후원내역 처리
+		int totalPrice = 0;
+		int supportPrice = 0;
 		String storeName = storeDao.findByStoreId(paymentInfo.getItemList().get(0).getStoreId()).getStoreName();
 		ArrayList<Contribution> contributionList = null;
-		for (PaymentItem paymentItem : paymentInfo.getItemList()) {
-        	Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
-        	if(item == null) throw new RuntimeException();
-        	contributionList = null;
-        	contributionList = contributionDao.findByStoreIdAndItemIdAndContributionUseOrderByContributionDate(item.getStoreId(), item.getItemId(), 0);
-        	if(contributionList != null) {
-        		int size = contributionList.size();
-        		int i = 0;
-	        	for (i = 0; i < paymentItem.getItemCount() && i < size ; i++) {
-	
-					// Contribution 테이블 업데이트
-					Contribution contribution = contributionList.get(i);
-					contribution.setContributionDateUsed(tradeConfirmYmdt);
-					contribution.setContributionUse(1);
-					contribution.setPaymentGdream(paymentG);
-					contribution.setContributionAnswer(paymentItem.getMsg());
-					contributionDao.save(contribution);
-					
-					// 회원 후원일 경우 문자 전송
-					if(contribution.getUser() != null && contribution.getUser().getUserPhone() != "temp") {
-						sendMsg(contribution, item.getItemName(), storeName);
-					}
-	
-				}
-	        	
-	        	int count = Math.min(paymentItem.getItemCount(), size);
-	        	
-	        	// item 테이블 업데이트
-				item.setItemAvailable(item.getItemAvailable() - count);
-				item.setItemTotal(item.getItemTotal() - count);
-				itemDao.save(item);
+		ArrayList<ContributionOld> contributionOldList = null;
+		ArrayList<Msg> msgList = new ArrayList<>();
+		ArrayList<ItemAndCount> updateList = new ArrayList<>(); 
+		try {
+			for (PaymentItem paymentItem : paymentInfo.getItemList()) {
+				// 음식이 해당 가게에 존재하는지 확인
+				Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
+				if(item == null) throw new RuntimeException();
+				// 전체 음식 금액 계산
+				totalPrice += paymentItem.getItemCount() * item.getItemPrice();
 				
-				// storeVariables 테이블 업데이트
-				StoreVariables storeVariables = storeVariablesDao.findByStoreId(paymentItem.getStoreId());
-				storeVariables.setStoreItemAvailable(storeVariables.getStoreItemAvailable() - count);
-				storeVariablesDao.save(storeVariables);
-        	}
+				// 가게에 해당음식이 후원되었다면 후원을 받음
+				contributionList = null;
+				contributionList = contributionDao.findByStoreIdAndItemIdAndContributionUseOrderByContributionDate(item.getStoreId(), item.getItemId(), 0);
+				if(contributionList != null) {
+					int size = contributionList.size();
+					int i = 0;
+			    	for (i = 0; i < paymentItem.getItemCount() && i < size ; i++) {
 
-			Orders order = new Orders();
-			order.setItemId(paymentItem.getItemId());
-			order.setStoreId(paymentItem.getStoreId());
-			order.setOrderDate(tradeConfirmYmdt);
-			order.setOrderCount(paymentItem.getItemCount());
-			order.setPaymentGdream(paymentG);
+						// Contribution 테이블 업데이트
+						Contribution contribution = contributionList.get(i);
+						contribution.setContributionDateUsed(tradeConfirmYmdt);
+						contribution.setContributionUse(1);
+						contribution.setPaymentGdream(paymentG);
+						contribution.setContributionAnswer(paymentItem.getMsg());
+						contributionDao.save(contribution);
+						
+						// 후원받은 금액 계산
+						supportPrice += item.getSupportPrice();
+
+						// 문자 발송할 번호가 있는지 체크
+						String phone = null;
+						if(contribution.getContributor() != null && contribution.getContributor().getContributorPhone() != null) phone = contribution.getContributor().getContributorPhone();
+						else if (contribution.getUser() != null && contribution.getUser().getUserPhone() != "temp") phone = contribution.getUser().getUserPhone();
+						
+						// 문자 발송 리스트에 추가
+						if (phone != null) {
+							Msg msg = new Msg();
+							msg.setItemName(item.getItemName());
+							msg.setStoreName(storeName);
+							msg.setPhone(phone);
+							msgList.add(msg);
+						}
+
+					}
+
+			    	// Item, StoreVariables 테이블 업데이트 리스트에 추가
+			    	int count = Math.min(paymentItem.getItemCount(), size);
+			    	
+			    	ItemAndCount iac = new ItemAndCount();
+			    	iac.setCount(count);
+			    	iac.setItem(item);
+			    	
+			    	updateList.add(iac);
+				}else {
+					// 가게에 해당음식이 오래전에 후원되었다면 후원을 받음
+					contributionOldList = null;
+					contributionOldList = contributionOldDao.findByStoreIdAndItemIdAndContributionUseOrderByContributionDate(item.getStoreId(), item.getItemId(), 0);
+					if(contributionOldList != null) {
+						int size = contributionOldList.size();
+						int i = 0;
+				    	for (i = 0; i < paymentItem.getItemCount() && i < size ; i++) {
+
+							// ContributionOld 테이블 업데이트
+							ContributionOld contributionOld = contributionOldList.get(i);
+							contributionOld.setContributionDateUsed(tradeConfirmYmdt);
+							contributionOld.setContributionUse(1);
+							contributionOld.setPaymentGdream(paymentG);
+							contributionOld.setContributionAnswer(paymentItem.getMsg());
+							contributionOldDao.save(contributionOld);
+							
+							// 후원받은 금액 계산
+							supportPrice += item.getSupportPrice();
+
+							// 문자 발송할 번호가 있는지 체크
+							String phone = null;
+							if(contributionOld.getContributor() != null && contributionOld.getContributor().getContributorPhone() != null) phone = contributionOld.getContributor().getContributorPhone();
+							else if (contributionOld.getUser() != null && contributionOld.getUser().getUserPhone() != "temp") phone = contributionOld.getUser().getUserPhone();
+							
+							// 문자 발송 리스트에 추가
+							if (phone != null) {
+								Msg msg = new Msg();
+								msg.setItemName(item.getItemName());
+								msg.setStoreName(storeName);
+								msg.setPhone(phone);
+								msgList.add(msg);
+							}
+
+						}
+
+				    	// Item, StoreVariables 테이블 업데이트 리스트에 추가
+				    	int count = Math.min(paymentItem.getItemCount(), size);
+				    	
+				    	ItemAndCount iac = new ItemAndCount();
+				    	iac.setCount(count);
+				    	iac.setItem(item);
+				    	
+				    	updateList.add(iac);
+					}
+				}
+
+				Orders order = new Orders();
+				order.setItemId(paymentItem.getItemId());
+				order.setStoreId(paymentItem.getStoreId());
+				order.setOrderDate(tradeConfirmYmdt);
+				order.setOrderCount(paymentItem.getItemCount());
+				order.setPaymentGdream(paymentG);
 
 //				!!!!!!!!!!!!orderDone 수정필요!!!!!!!!!!!!!!!!
-			order.setOrderDone(tradeConfirmYmdt);
-			orderDao.save(order);
+//				order.setOrderDone(tradeConfirmYmdt);
+				orderDao.save(order);
+				
+			}
 			
+			if(totalPrice != supportPrice + paymentInfo.getTotalGDreamAmount()) {
+				System.out.println("지드림카드결제 금액 + 후원 받은 금액 != 총 주문한 음식 금액");
+				throw new Exception();
+			}
+			
+		} catch (Exception e) {
+			
+			// contribution 테이블 업데이트 취소
+			ArrayList<Contribution> deleteList = contributionDao.findByPaymentGdream_paymentGdreamId(paymentG.getPaymentGdreamId());
+			for (Contribution contribution : deleteList) {
+				contribution.setContributionDateUsed(null);
+				contribution.setContributionUse(0);
+				contribution.setPaymentGdream(null);
+				contribution.setContributionAnswer(null);
+				contributionDao.save(contribution);
+			}
+			
+			// contributionOld 테이블 업데이트 취소
+			ArrayList<ContributionOld> deleteList2 = contributionOldDao.findByPaymentGdream_paymentGdreamId(paymentG.getPaymentGdreamId());
+			for (ContributionOld contributionOld : deleteList2) {
+				contributionOld.setContributionDateUsed(null);
+				contributionOld.setContributionUse(0);
+				contributionOld.setPaymentGdream(null);
+				contributionOld.setContributionAnswer(null);
+				contributionOldDao.save(contributionOld);
+			}
+			
+			// order 테이블 업데이트 취소
+			ArrayList<Orders> deleteList3 = orderDao.findByPaymentGdream_paymentGdreamId(paymentG.getPaymentGdreamId());
+			for (Orders orders : deleteList3) {
+				orderDao.delete(orders);
+			}
+			
+			// paymengGdream 테이블 업데이트 취소
+			paymentGDao.delete(paymentG);
+			
+			return "FAIL";
 		}
+		
+		// 문자 전송
+		for (Msg msg : msgList) {
+			System.out.println(msg.getItemName() + " " + msg.getStoreName());
+//			Message coolsms = new Message(API_KEY, API_SECRET);
+//
+//	        // 4 params(to, from, type, text) are mandatory. must be filled
+//	        HashMap<String, String> params = new HashMap<String, String>();
+//	        params.put("to", msg.getPhone());    // 수신전화번호
+//	        params.put("from", PHONE);    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+////	        params.put("from", "01011111111");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+//	        params.put("type", "SMS");
+//	        params.put("text", msg.getStoreName() + "에서 후원한 메뉴 '" + msg.getItemName() + "'이 방금 사용되었습니다.\n자세한 내용은 우리끼니 홈페이지에서 확인해주세요. \n" + URL);
+//
+//	        try {
+//	            JSONObject obj = (JSONObject) coolsms.send(params);
+//            System.out.println(obj.toString());
+//	        } catch (CoolsmsException e) {
+//	            System.out.println(e.getMessage());
+//	            System.out.println(e.getCode());
+//	        }
+		}
+		
+		// item, storeVariables 테이블 업데이트
+		for (ItemAndCount itemAndCount : updateList) {
+			
+			Item item = itemAndCount.getItem();
+			int count = itemAndCount.getCount();
+			
+			// item 테이블 업데이트
+			item.setItemAvailable(item.getItemAvailable() - count);
+			itemDao.save(item);
+			
+			// storeVariables 테이블 업데이트
+			StoreVariables storeVariables = storeVariablesDao.findByStoreId(item.getStoreId());
+			storeVariables.setStoreItemAvailable(storeVariables.getStoreItemAvailable() - count);
+			storeVariablesDao.save(storeVariables);
+		}
+		
+		
+		
 		
 		return "SUCCESS";
 	}

@@ -118,6 +118,8 @@ public class AccountServiceImpl implements AccountService{
 
 	@Override
 	public int userContributionCount(int userSeq) {
+//		Integer userContributionCount = userDao.findByUserSeq(userSeq).getUserTotalContributionCount();
+//		return userContributionCount;
 		Integer userContributionCount = contributionDao.findCountByUserSeq(userSeq);
 		if(userContributionCount == null)
 			return 0;

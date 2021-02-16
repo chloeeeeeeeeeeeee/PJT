@@ -1,11 +1,14 @@
 package com.ssafy.bab.service;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
@@ -17,11 +20,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.bab.dao.ContributionDao;
 import com.ssafy.bab.dao.ContributionOldDao;
 import com.ssafy.bab.dao.ItemDao;
+import com.ssafy.bab.dao.OrderDao;
 import com.ssafy.bab.dao.StoreDao;
 import com.ssafy.bab.dao.StoreVariablesDao;
 import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.ItemIdCount;
 import com.ssafy.bab.dto.MyStore;
+import com.ssafy.bab.dto.Orders;
 import com.ssafy.bab.dto.Store;
 import com.ssafy.bab.dto.StoreContributionItem;
 import com.ssafy.bab.dto.StoreVariables;
@@ -48,6 +53,9 @@ public class StoreServiceImpl implements StoreService {
 	
 	@Autowired
 	ContributionOldDao contributionOldDao;
+	
+	@Autowired
+	OrderDao orderDao;
 	
 	@Override
 	public MyStore getMyStore(int storeId) {
@@ -105,7 +113,9 @@ public class StoreServiceImpl implements StoreService {
 		for(int i = 1; i < itemCnt; i++) {
 			if(items[i] < 1) continue;
 			
+			// 메뉴 없을경우 반환
 			Item item = itemDao.findByItemIdAndStoreId(i, storeId);
+			if(item == null) continue;
 			
 			StoreContributionItem cItem = new StoreContributionItem();
 			
@@ -285,6 +295,51 @@ public class StoreServiceImpl implements StoreService {
 		itemDao.delete(item);
 		
 		return "SUCCESS";
+	}
+
+	@Override
+	public List<String> getNotOrderDoneList(int storeId) {
+		
+		List<String> list1 = orderDao.getNotOrderDonePaymentGdreamId();
+		List<String> list2 = orderDao.getNotOrderDonePaymentId();
+		
+		List<String> result = new ArrayList<String>();
+		if(list1 != null) result.addAll(list1);
+		if(list2 != null) result.addAll(list2);
+		if(result.size() > 0) return result;
+		
+		return null;
+	}
+
+	@Override
+	public String orderDonUpdate(int storeId, String paymentId) throws ParseException {
+		
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		transFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		Date now = transFormat.parse(transFormat.format(new Date()));
+
+		// payment_id 처리
+		ArrayList<Orders> list = orderDao.findByPayment_PaymentId(paymentId);
+		if(list.size() > 0) {
+			for (Orders orders : list) {
+				System.out.println(orders);
+				orders.setOrderDone(now);
+				orderDao.save(orders);
+			}
+			return "SUCCESS";
+		}
+		
+		// payment_gdream_id 처리
+		list = orderDao.findByPaymentGdream_paymentGdreamId(paymentId);
+		if(list.size() > 0) { 
+			for (Orders orders : list) {
+				orders.setOrderDone(now);
+				orderDao.save(orders);
+			}
+			return "SUCCESS";
+		}
+		
+		return "Invalid storeId OR itemId";
 	}
 
 }

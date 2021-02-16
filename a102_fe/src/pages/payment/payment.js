@@ -1,4 +1,15 @@
-import { Col, Row, FormGroup, Label, Input, Button, Card, CardHeader, CardBody, CardFooter } from "reactstrap";
+import {
+  Col,
+  Row,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+} from "reactstrap";
 import { useState, useEffect } from "react";
 import PaymentInfo from "../../components/payment/paymentInfo";
 
@@ -63,7 +74,7 @@ function Payment() {
       });
       data.totalCount = totalCount;
 
-    //   console.log(data);
+      //   console.log(data);
 
       axios
         .post(`${process.env.REACT_APP_API_URL}/payment/kakaopay`, data, {
@@ -74,11 +85,11 @@ function Payment() {
           },
         })
         .then((res) => {
-            // console.log(res)
-        //   console.log(JSON.stringify(res.request.response));
-          if (JSON.stringify(res.request.response) !== `""`){
+          console.log(res);
+          console.log(JSON.stringify(res.request.response));
+          if (JSON.stringify(res.request.response) !== `""`) {
             const popupWidth = window.innerWidth * 0.5;
-            const popupHeight = window.innerHeight * 0.5;
+            const popupHeight = window.innerHeight * 0.8;
             const popupLeft = (window.innerWidth - popupWidth) * 0.5;
             const popupTop = (window.innerHeight - popupHeight) * 0.5;
             window.open(
@@ -86,12 +97,12 @@ function Payment() {
               "PopupWin",
               `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`
             );
-          }          
+          }
         });
     }
     // 네이버 페이
     else if (paymentOption == "naverPay") {
-    //   console.log("네이버페이");
+      //   console.log("네이버페이");
       const popupWidth = window.innerWidth * 0.8;
       const popupHeight = window.innerHeight * 0.8;
       const popupLeft = (window.innerWidth - popupWidth) * 0.5;
@@ -108,7 +119,7 @@ function Payment() {
     }
     // 신용/체크카드
     else if (paymentOption == "cardPay") {
-    //   console.log("아임포트");
+      //   console.log("아임포트");
       const { IMP } = window;
       IMP.request_pay(
         {
@@ -180,77 +191,80 @@ function Payment() {
         </Col>
       </Row>
       <Row>
-        <PaymentInfo sendDataToParent={sendDataToParent}/>
+        <PaymentInfo sendDataToParent={sendDataToParent} />
         <Col className="paymentDetailBox" md="4" xs="12">
-        <Card className="paymentAmount">
-          <CardHeader className="text-center"><b>총 후원 금액</b></CardHeader>
-          <CardBody className="text-center pt-2 pb-2">{totalPrice}원</CardBody>
-        </Card>
-        <Card className="paymentMessage mt-2" md="4" xs="12">
-          <CardHeader className="text-center"><b>후원 메세지</b></CardHeader>
-          <FormGroup tag="fieldset" className="col p-0 mb-0">
-            <FormGroup className="col mt-2 mb-2">
-              <Input
-                className="col m-0"
-                placeholder="응원의 메시지를 입력해주세요"
-                name="paymentMsg"
-                id="paymentMsg"
-              />
-            </FormGroup>
-          </FormGroup>
-        </Card>
-        <Card className="paymentMethod mt-2" md="4" xs="12">
-          <CardHeader className="text-center"><b>결제 수단 선택</b></CardHeader>
-          <CardBody className="p-2">
-            <FormGroup tag="fieldset" className="col mb-0">
-              <FormGroup className="col mb-0">
-                <Label>
-                  <Input
-                    type="radio"
-                    name="selectPayment"
-                    value="kakaoPay"
-                    id="kakaoPaySelect"
-                  />{" "}
-                  <span>카카오페이</span>
-                </Label>
-              </FormGroup>
-              <FormGroup className="col mb-0">
-                <Label>
-                  <Input
-                    type="radio"
-                    name="selectPayment"
-                    value="naverPay"
-                    id="naverPaySelect"
-                  />{" "}
-                  <span>네이버페이</span>
-                </Label>
-              </FormGroup>
-              <FormGroup className="col mb-0">
-                <Label>
-                  <Input
-                    type="radio"
-                    name="selectPayment"
-                    value="cardPay"
-                    id="cardPaySelect"
-                  />{" "}
-                  <span>신용/체크카드</span>
-                </Label>
+          <Card className="paymentAmount">
+            <CardHeader className="text-center">
+              <b>총 후원 금액</b>
+            </CardHeader>
+            <CardBody className="text-center pt-2 pb-2">
+              {totalPrice}원
+            </CardBody>
+          </Card>
+          <Card className="paymentMessage mt-2" md="4" xs="12">
+            <CardHeader className="text-center">
+              <b>후원 메세지</b>
+            </CardHeader>
+            <FormGroup tag="fieldset" className="col p-0 mb-0">
+              <FormGroup className="col mt-2 mb-2">
+                <Input
+                  className="col m-0"
+                  placeholder="응원의 메시지를 입력해주세요"
+                  name="paymentMsg"
+                  id="paymentMsg"
+                />
               </FormGroup>
             </FormGroup>
-          </CardBody>
-          <CardFooter>
-            <Button
-              className="paymentButton"
-              block
-              onClick={startPayment}
-            >
-              후원하기
-            </Button>
-          </CardFooter>
-        </Card>
-      </Col>
+          </Card>
+          <Card className="paymentMethod mt-2" md="4" xs="12">
+            <CardHeader className="text-center">
+              <b>결제 수단 선택</b>
+            </CardHeader>
+            <CardBody className="p-2">
+              <FormGroup tag="fieldset" className="col mb-0">
+                <FormGroup className="col mb-0">
+                  <Label>
+                    <Input
+                      type="radio"
+                      name="selectPayment"
+                      value="kakaoPay"
+                      id="kakaoPaySelect"
+                    />{" "}
+                    <span>카카오페이</span>
+                  </Label>
+                </FormGroup>
+                <FormGroup className="col mb-0">
+                  <Label>
+                    <Input
+                      type="radio"
+                      name="selectPayment"
+                      value="naverPay"
+                      id="naverPaySelect"
+                    />{" "}
+                    <span>네이버페이</span>
+                  </Label>
+                </FormGroup>
+                <FormGroup className="col mb-0">
+                  <Label>
+                    <Input
+                      type="radio"
+                      name="selectPayment"
+                      value="cardPay"
+                      id="cardPaySelect"
+                    />{" "}
+                    <span>신용/체크카드</span>
+                  </Label>
+                </FormGroup>
+              </FormGroup>
+            </CardBody>
+            <CardFooter>
+              <Button className="paymentButton" block onClick={startPayment}>
+                후원하기
+              </Button>
+            </CardFooter>
+          </Card>
+        </Col>
       </Row>
-      
     </Col>
   );
 }

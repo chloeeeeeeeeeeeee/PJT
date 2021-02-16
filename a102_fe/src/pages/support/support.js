@@ -8,7 +8,7 @@ import {
   InputGroup,
   InputGroupAddon,
 } from "reactstrap";
-import greenPin from "../../assets/images/greenpin.png"
+import greenPin from "../../assets/images/greenpin.png";
 import SupportMapItem from "../../components/support/supportMapItem";
 
 function Support() {
@@ -72,6 +72,47 @@ function Support() {
     );
   });
 
+  // 카테고리 리스트 컴포넌트
+  const categoryMiniListComponents = categoryList.map((category, index) => {
+    // console.log(category)
+    if (index === 0) {
+      return (
+        <Col
+          className="categoryMiniListItem selectedCategoryMiniListItem"
+          key={index}
+          onClick={(e) => {
+            setSelectedCategory(index);
+            if (!e.target.classList.contains("selectedCategoryMiniListItem")) {
+              document
+                .getElementsByClassName("selectedCategoryMiniListItem")[0]
+                .classList.remove("selectedCategoryMiniListItem");
+              e.target.classList.add("selectedCategoryMiniListItem");
+            }
+          }}
+        >
+          {category}
+        </Col>
+      );
+    }
+    return (
+      <Col
+        className="categoryMiniListItem"
+        key={index}
+        onClick={(e) => {
+          setSelectedCategory(index);
+          if (!e.target.classList.contains("selectedCategoryMiniListItem")) {
+            document
+              .getElementsByClassName("selectedCategoryMiniListItem")[0]
+              .classList.remove("selectedCategoryMiniListItem");
+            e.target.classList.add("selectedCategoryMiniListItem");
+          }
+        }}
+      >
+        {category}
+      </Col>
+    );
+  });
+
   // 매장 리스트 가져와서 컴포넌트화 + 마커 찍기
   function setStoreListComponent() {
     if (address !== "") {
@@ -101,16 +142,24 @@ function Support() {
                       map: naverMap,
                       position: new naver.maps.LatLng(result[0].y, result[0].x),
                       icon: greenPin,
-                      zIndex: 100
+                      zIndex: 100,
                     });
                     var infoWindow = new naver.maps.InfoWindow({
-                        content: '<div style="width:150px;text-align:center;padding:10px;"><b>'+ item.storeName +'</b>.</div>'
+                      content:
+                        '<div style="width:150px;text-align:center;padding:10px;"><b>' +
+                        item.storeName +
+                        "</b>.</div>",
                     });
-                    naver.maps.Event.addListener(newMarker, 'mouseover', ()=>{infoWindow.open(naverMap, newMarker)})
-                    naver.maps.Event.addListener(newMarker, 'mouseout', ()=>{infoWindow.close()})
-                    naver.maps.Event.addListener(newMarker, 'click', ()=>{window.location.href=`storedetailsupport/${item.storeId}`})
+                    naver.maps.Event.addListener(newMarker, "mouseover", () => {
+                      infoWindow.open(naverMap, newMarker);
+                    });
+                    naver.maps.Event.addListener(newMarker, "mouseout", () => {
+                      infoWindow.close();
+                    });
+                    naver.maps.Event.addListener(newMarker, "click", () => {
+                      window.location.href = `storedetailsupport/${item.storeId}`;
+                    });
                   }
-                 
                 }
               );
             });
@@ -201,10 +250,14 @@ function Support() {
             return <SupportMapItem storeInfo={storeInfo} key={index} />;
           }
         );
-      } else{
-          storeListComponents = (
-            <Col className="nothingToShow"><br/>주변 가게가 없습니다...</Col> )
-        }
+      } else {
+        storeListComponents = (
+          <Col className="nothingToShow">
+            <br />
+            주변 가게가 없습니다...
+          </Col>
+        );
+      }
     }
     setStoreListComponents(storeListComponents);
   }, [selectedCategory, storeList]);
@@ -212,34 +265,34 @@ function Support() {
   return (
     <Col className="mainSupport">
       {/* 지도 영역 타이틀 */}
-      <Row>
+      <Row className="supportTitle">
         <Col sm="12" md={{ size: 10, offset: 1 }} id="title">
           <h3>후원하기</h3>
         </Col>
       </Row>
       <Row className="supportCategory">
-        <Col sm="12" md={{ size:  3, offset: 1 }}>
-        {/* 검색 */}
-        <InputGroup>
-          <Input
-            name="addressInput"
-            id="addressInput"
-            placeholder="'서울시 OO구 OO동'으로 입력해주세요"
-            onKeyUp={enterkeyPress}
-          />
-          <InputGroupAddon addonType="append">
-            <Button
-              color="secondary"
-              id="addressButton"
-              onClick={searchLocation}
-            >
-              검색
-            </Button>
-          </InputGroupAddon>
-        </InputGroup>
+        <Col sm="12" md={{ size: 3, offset: 1 }}>
+          {/* 검색 */}
+          <InputGroup>
+            <Input
+              name="addressInput"
+              id="addressInput"
+              placeholder="'서울시 OO구 OO동'으로 입력해주세요"
+              onKeyUp={enterkeyPress}
+            />
+            <InputGroupAddon addonType="append">
+              <Button
+                color="secondary"
+                id="addressButton"
+                onClick={searchLocation}
+              >
+                검색
+              </Button>
+            </InputGroupAddon>
+          </InputGroup>
         </Col>
         {/* 카테고리 리스트 */}
-        <Col md="7" className="categoryListBox d-sm-none d-md-flex">
+        <Col md="7" className="categoryListBox d-none d-md-flex">
           {categoryListComponents}
         </Col>
       </Row>
@@ -249,13 +302,15 @@ function Support() {
           <Col id="naverMap" className="mt-2 col-12"></Col>
         </Col>
         {/* 카테고리 리스트 */}
-        <Col sm="12" className="categoryListBox d-sm-flex d-md-none">
-          {categoryListComponents}
+        <Col sm="12" className="categoryMiniListBox d-flex d-md-none">
+          {categoryMiniListComponents}
         </Col>
         <Col sm="12" md="6" className="supportBox">
           {/* 매장 리스트 */}
           <h5>가게 목록</h5>
-          <Col className="storeListBox d-flex flex-column">{storeListComponents}</Col>
+          <Col className="storeListBox d-flex flex-column">
+            {storeListComponents}
+          </Col>
         </Col>
       </Row>
     </Col>

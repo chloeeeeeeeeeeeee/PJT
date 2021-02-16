@@ -1,3 +1,4 @@
+// /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import {
   Col,
@@ -11,10 +12,6 @@ import greenPin from "../../assets/images/greenpin.png"
 import SupportMapItem from "../../components/support/supportMapItem";
 
 function Support() {
-
-  // 네이버 API 통신을 위해 필요한 HEADER 세팅
-  const axios = require("axios");
-
   // 카테고리 리스트
   const categoryList = [
     "한식",
@@ -131,7 +128,7 @@ function Support() {
   //Input 박스 안에서 엔터키 입력
   function enterkeyPress(event) {
     // 엔터키
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
       searchLocation();
     }
   }

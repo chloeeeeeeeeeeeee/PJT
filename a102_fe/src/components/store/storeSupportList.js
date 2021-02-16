@@ -162,6 +162,28 @@ function StoreSupportList() {
       </Col>
     );
     }))
+  useEffect(()=>{
+    const intervalFunction = setInterval(function(){
+        console.log("INTERVAL")
+      axios({
+          method: "POST",
+          url: `${process.env.REACT_APP_API_URL}/store/contributionlist?endDate=${endDate} ${currentTime}&startDate=${startDate} ${currentTime}`,
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+            "Access-Control-Allow-Origin": "*",
+            token: jwtToken,
+          },
+        })
+          .then((res) => {
+            // console.log(res.data);
+            setContributions(res.data);        
+          });
+    }, 3000)
+
+    return () => clearInterval(intervalFunction)
+  }, [])
+
+  
 
   return (
     <Col md="3" xs="12" className="storeMenuList">

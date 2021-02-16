@@ -96,7 +96,7 @@ function PaymentInfo({ sendDataToParent }) {
           <p className="col-12 information mt-1 mb-0">현재 {cartItem.itemAvailable}그릇 후원되었습니다.</p>
         </div>
         </Col>
-        <Col xs="4" className="paymentMenuButtons d-flex align-items-center p-0">
+        <Col xs="4" className="paymentMenuButtons d-flex justify-content-center p-0">
           <Button
             className="paymentCountButton col-2"
             onClick={(e) => minusMenu(cartItem)}

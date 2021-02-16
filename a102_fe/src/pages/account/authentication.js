@@ -58,8 +58,9 @@ function Auth(props) {
         }
       })
       .then(res => res.json())
-      .then(res =>
-        ( res.storeId !== null ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
+      .then(res =>{
+        ( res.store ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )
+      } 
       )  
     })
     .catch(error =>
@@ -141,7 +142,7 @@ function Auth(props) {
       })
       .then(res => res.json())
       .then(res =>
-        ( res.storeId !== null ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
+        ( res.store ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
       )  
     }
   };

@@ -199,10 +199,10 @@ function SupportCart(storeInfo) {
           {cartStorage.map((cart, index) => {
             return (
               <Row className="supportCartItem mb-1" key={index}>
-                <Col xs="5"  className="cartItemName">
+                <Col xs="6"  className="cartItemName">
                   <p>{cart.itemName}</p>
                 </Col>
-                <Col xs="7" className="controlbuttons" >
+                <Col xs="6" className="controlbuttons d-flex justify-content-between" >
                   {/* 왜 나오는거죠 얘네 왜 탈출..? */}
                   <Button
                     className="controlbutton"

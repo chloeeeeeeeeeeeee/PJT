@@ -39,7 +39,7 @@ function KakaoAuth() {
               })
               .then(res => res.json())
               .then(res =>
-                ( res.storeId !== null ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
+                ( res.store ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )      
               )  
               // } else {
               //   console.info("값이 없는 아이디를 보낼 경우:", res);

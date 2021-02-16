@@ -239,7 +239,7 @@ function Support() {
         </InputGroup>
         </Col>
         {/* 카테고리 리스트 */}
-        <Col sm="12" md="7" className="categoryListBox d-sm-none d-md-flex">
+        <Col md="7" className="categoryListBox d-sm-none d-md-flex">
           {categoryListComponents}
         </Col>
       </Row>
@@ -247,6 +247,10 @@ function Support() {
         <Col sm="12" md={{ size: 4, offset: 1 }} className="supportContentLeft">
           {/* 지도 영역 */}
           <Col id="naverMap" className="mt-2 col-12"></Col>
+        </Col>
+        {/* 카테고리 리스트 */}
+        <Col sm="12" className="categoryListBox d-sm-flex d-md-none">
+          {categoryListComponents}
         </Col>
         <Col sm="12" md="6" className="supportBox">
           {/* 매장 리스트 */}

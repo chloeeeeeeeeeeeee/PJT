@@ -40,7 +40,7 @@ function Header() {
       </NavbarBrand>
       {/* <NavbarToggler onClick={toggle}/>
         <Collapse isOpen={isOpen} navbar className="mainHeaderNav"> */}
-            <Nav className="row" navbar>
+            <Nav className="row justify-content-center flex-row" navbar>
               <NavItem className="ml-1 mr-1">
                 <NavLink href="/childmap"><b>지도보기</b></NavLink>
               </NavItem>
@@ -70,7 +70,7 @@ function Header() {
         </NavbarBrand>
         {/* <NavbarToggler onClick={toggle}/> */}
         {/* <Collapse isOpen={isOpen} navbar className="mainHeaderNav"> */}
-            <Nav className="row" navbar>
+            <Nav className="row justify-content-center flex-row" navbar>
               {Boolean(localStorage.getItem("access-token")) ?
                 <NavItem className="ml-1 mr-1">
                   <NavLink href="/storeadmin"><b>우리 가게 현황</b></NavLink>

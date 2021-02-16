@@ -8,7 +8,7 @@ function StoreMenuItem(storeMenu) {
   }
 
   function Delete(menuitem) {
-    console.log(menuitem);
+    // console.log(menuitem);
     if (
       window.confirm(
         "정말로 상품을 삭제하시겠습니까? \n삭제된 상품을 복구 할 수 없습니다."
@@ -25,33 +25,32 @@ function StoreMenuItem(storeMenu) {
       ).then((res) => {
         if (res.status === 200) {
           storeMenu.sendTriggerToParent();
-          alert("삭제 성공");
+          // alert("삭제 성공");
           //   window.location.href = "/storeadmin";
         } else {
-          alert(menuitem.itemId, "실패! 바보 메롱~!~!");
+          alert(menuitem.itemId, "실패하셨습니다. 다시 시도해주세요.");
         }
       });
     }
   }
 
-  console.log(storeMenu.storeMenu);
+//   console.log(storeMenu.storeMenu);
   let imgurl = `${process.env.REACT_APP_API_URL}/${storeMenu.storeMenu.itemImgUrl}`;
   return (
-    <Row className="col-12">
+    <Row className="col-12 storeMenuItem justify-content-between p-0 mr-0 ml-0">
       <img src={imgurl} className="d-inline-block col-3" />
-      <div className="col-9 menuItemInfo pt-4 pb-4 pl-0 pr-0 row justify-content-start">
+      <div className="col-7 menuItemInfo pt-4 pb-4 pl-0 pr-0 row justify-content-start">
         <h5 className="col-8">{storeMenu.storeMenu.itemName}</h5>
         <p className="col-4 text-right">
-          {/* {storeMenu.storeMenu.itemPrice > 6000
-            ? storeMenu.storeMenu.itemPrice - 6000
-            : storeMenu.storeMenu.itemPrice} */}
           {storeMenu.storeMenu.itemPrice}원
         </p>
         <p className="col information">
           현재 {storeMenu.storeMenu.itemAvailable}그릇 후원되었습니다.
         </p>
-        <Button onClick={() => Update(storeMenu.storeMenu)}>수정</Button>
-        <Button onClick={() => Delete(storeMenu.storeMenu)}>삭제</Button>
+        </div>
+        <div className="col-2 menuButtons">
+        <Button className="menuButton mb-1" onClick={() => Update(storeMenu.storeMenu)}>수정</Button>
+        <Button className="menuButton" onClick={() => Delete(storeMenu.storeMenu)}>삭제</Button>
       </div>
     </Row>
   );

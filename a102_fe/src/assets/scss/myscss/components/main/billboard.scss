@@ -45,11 +45,12 @@
   background-image: url("../../../../images/awards.png");
   height: 100%;
   width: 100%;
-  background-size: contain;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
   text-align: center;
   vertical-align: middle;
+  align-items: center;
   overflow: hidden;
   .userrankrank {
     color: $oori-gray-pinstripe;
@@ -64,16 +65,19 @@
   }
 }
 
+
 .usertotal {
   background-image: url("../../../../images/happpynew.png");
-  background-size: contain;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
   height: 100%;
   width: 100%;
   border-radius: 15px;
   //   vertical-align: middle;
+  overflow: hidden;
   padding-top: 11vh;
+  word-break: keep-all;
   .usertotaltotal {
     color: $oori-gray-pinstripe;
     text-align: center;

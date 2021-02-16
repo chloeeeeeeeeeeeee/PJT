@@ -6,11 +6,6 @@ function Payment() {
   function sendDataToParent(price) {
     setTotalPrice(price);
   }
-
-  function paymentSuccess() {
-    console.log("DONE!");
-  }
-
   let [totalPrice, setTotalPrice] = useState(
     localStorage.getItem("price")
       ? JSON.parse(localStorage.getItem("price"))
@@ -68,7 +63,7 @@ function Payment() {
       });
       data.totalCount = totalCount;
 
-      console.log(data);
+    //   console.log(data);
 
       axios
         .post(`${process.env.REACT_APP_API_URL}/payment/kakaopay`, data, {
@@ -79,21 +74,24 @@ function Payment() {
           },
         })
         .then((res) => {
-          console.log(JSON.stringify(res.request.response));
-          const popupWidth = window.innerWidth * 0.5;
-          const popupHeight = window.innerHeight * 0.5;
-          const popupLeft = (window.innerWidth - popupWidth) * 0.5;
-          const popupTop = (window.innerHeight - popupHeight) * 0.5;
-          window.open(
-            res.request.response,
-            "PopupWin",
-            `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`
-          );
+            // console.log(res)
+        //   console.log(JSON.stringify(res.request.response));
+          if (JSON.stringify(res.request.response) !== `""`){
+            const popupWidth = window.innerWidth * 0.5;
+            const popupHeight = window.innerHeight * 0.5;
+            const popupLeft = (window.innerWidth - popupWidth) * 0.5;
+            const popupTop = (window.innerHeight - popupHeight) * 0.5;
+            window.open(
+              res.request.response,
+              "PopupWin",
+              `width=${popupWidth},height=${popupHeight}, left=${popupLeft}, top=${popupTop}`
+            );
+          }          
         });
     }
     // 네이버 페이
     else if (paymentOption == "naverPay") {
-      console.log("네이버페이");
+    //   console.log("네이버페이");
       const popupWidth = window.innerWidth * 0.8;
       const popupHeight = window.innerHeight * 0.8;
       const popupLeft = (window.innerWidth - popupWidth) * 0.5;
@@ -110,7 +108,7 @@ function Payment() {
     }
     // 신용/체크카드
     else if (paymentOption == "cardPay") {
-      console.log("아임포트");
+    //   console.log("아임포트");
       const { IMP } = window;
       IMP.request_pay(
         {
@@ -148,7 +146,7 @@ function Payment() {
               data.itemList.push(oneItem);
             });
 
-            console.log(data);
+            // console.log(data);
 
             axios
               .post(`${process.env.REACT_APP_API_URL}/payment/iamport`, data, {
@@ -163,11 +161,11 @@ function Payment() {
                 localStorage.setItem("price", 0);
                 window.location.href = "/paymentSuccess";
               });
-            console.log(rsp);
+            // console.log(rsp);
           } else {
             var msg = "결제에 실패하였습니다.";
             msg += "에러내용 : " + rsp.error_msg;
-            console.log(msg);
+            // console.log(msg);
           }
         }
       );

@@ -22,6 +22,9 @@
       .storeChildListBox {
         height: 36%;
         overflow-y: auto;
+        &::-webkit-scrollbar {
+          display: none;
+        }
         // border-color: $oori-yellow;
         // border-width: 2px;
         // border-style: solid;
@@ -55,6 +58,9 @@
         height: 36%;
         overflow-y: auto;
         overflow-x: hidden;
+        &::-webkit-scrollbar {
+          display: none;
+        }
         // border-color: $oori-yellow;
         // border-width: 2px;
         // border-style: solid;

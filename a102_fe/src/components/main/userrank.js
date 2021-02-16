@@ -14,16 +14,15 @@ function Userrank(){
     }, [])
 
     return(
-        <div className="userrank carouselItem">
-            <br/><br/><br/>
+        <div className="userrank carouselItem d-flex flex-column align-items-center justify-content-center">
             { userRank.map((user, index) => {
                 if (index >= 3) {
                     return
                 }
                 return (
-                    <div>
+                    <div key={index}>
                         <h5 className="userrankrank">{index + 1}등 {user.userName}</h5>
-                        <h5 className="userrankgood">총 {user.contributionCount}그릇 후원해준 {user.userName}님 멋쟁이~!~!</h5>
+                        <h5 className="userrankgood">총 {user.userTotalContributionCount}그릇 후원해준 {user.userName}님 멋쟁이~!~!</h5>
                         <br/>
                     </div>
                 );

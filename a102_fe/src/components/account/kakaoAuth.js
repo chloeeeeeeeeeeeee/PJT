@@ -12,9 +12,9 @@ function KakaoAuth() {
         Kakao.API.request({
           url: '/v2/user/me',
           success: function (response) {
-            console.log(response.id);
-            console.log(response.kakao_account.profile.nickname);
-            console.log(process.env.REACT_APP_API_URL)
+            // console.log(response.id);
+            // console.log(response.kakao_account.profile.nickname);
+            // console.log(process.env.REACT_APP_API_URL)
             fetch(`${process.env.REACT_APP_API_URL}/account/signinkakao`, {
               method: "POST",
                 headers: {
@@ -29,8 +29,8 @@ function KakaoAuth() {
             .then(res => {
               // console.info("현재 우리가 받는 res의 형태는:", res)
               // if (Boolean(res) == true) {
-              console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res)
-              console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res.token)
+            //   console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res)
+            //   console.info("loginWithKakao 함수 성공한 경우 자동 로그인:", res.token)
               localStorage.setItem('access-token', res.token)
               fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
                 headers: {
@@ -39,7 +39,7 @@ function KakaoAuth() {
               })
               .then(res => res.json())
               .then(res =>
-                ( res.storeId !== null ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
+                ( res.store ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )      
               )  
               // } else {
               //   console.info("값이 없는 아이디를 보낼 경우:", res);
@@ -73,12 +73,13 @@ function KakaoAuth() {
   return (
     // <a id="custom-login-btn" href="javascript:loginWithKakao()">
     // 원래는 위와 같은 형태였는데, onclick으로 바꿔보겠습니다. 
-    <a id="custom-login-btn"
+    <a id="custom-login-btn" href="#"
       onClick={() => loginWithKakao()}
       >
       <img
         src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
         height="36px"
+        alt="kakaoLogin"
       />
     </a>
   //   Kakao.Auth.createLoginButton({

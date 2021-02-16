@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { Card, CardBody, CardHeader, Button } from "reactstrap";
+import { Col, Row, Card, CardBody, CardHeader, Button } from "reactstrap";
 import StoreMenuItem from "../store/storeMenuItem";
 
 function StoreMenuList() {
   let [trigger, setTrigger] = useState(true);
 
   function sendTriggerToParent() {
-      console.log("TRIGGER!!!!")
+    //   console.log("TRIGGER!!!!")
     setTrigger(!trigger);
   }
 
@@ -34,9 +34,9 @@ function StoreMenuList() {
     axios
       .get(`${process.env.REACT_APP_API_URL}/store/itemlist`, config)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data !== undefined) {
-          console.log(res.data);
+        //   console.log(res.data);
           setStoreMenuItem(
             res.data.map((item, index) => {
               return (
@@ -53,13 +53,17 @@ function StoreMenuList() {
   }, [trigger]);
 
   return (
-    <Card className="storeMenuList col-6 p-0">
-      <CardHeader>
-        <h4>메뉴 리스트</h4>
-        <Button onClick={moveToCreatePage}>메뉴 추가</Button>
-      </CardHeader>
-      <CardBody>{storeMenuItem}</CardBody>
-    </Card>
+    <Col md="5" xs="12" className="storeMenuList">
+      <Card className="storeSupportListContainer col p-0">
+        <CardHeader>
+          <Row className="justify-content-between pl-3 pr-3">
+          <h5 className="d-inline font-weight-bold mt-1">메뉴 목록</h5>
+          <Button className="d-inline menuCreateButton pr-3" onClick={moveToCreatePage}>메뉴 추가</Button>
+          </Row>
+        </CardHeader>
+        <CardBody className="storeMenuItemList">{storeMenuItem}</CardBody>
+      </Card>
+    </Col>
   );
 }
 

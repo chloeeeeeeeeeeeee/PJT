@@ -22,9 +22,9 @@ function QnaCreate() {
   
   const Create = (event) => {
     event.preventDefault();
-    console.log(title);
-    console.log(content);
-    console.log(secret);
+    // console.log(title);
+    // console.log(content);
+    // console.log(secret);
     fetch(`${process.env.REACT_APP_API_URL}/qna/create`, {
       method: "POST",
       headers: {
@@ -50,13 +50,13 @@ function QnaCreate() {
 
   const onTitleChange = event => {
     setTitle(event.target.value);
-    console.log("제목제목");
+    // console.log("제목제목");
   }
 
   const onContentChange = (event) => {
     const data = event.editor.getData();
     setContent(data);
-    console.log("너 왜 안나오니 등장해죠");
+    // console.log("너 왜 안나오니 등장해죠");
   }
 
   const onSecretChange = (event) => {
@@ -66,7 +66,7 @@ function QnaCreate() {
     else{
       setSecret(0);
     }
-    console.log('비밀', secret);
+    // console.log('비밀', secret);
   }
 
   return (

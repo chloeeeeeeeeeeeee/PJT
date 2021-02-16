@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 function KakaoPaymentCheck(props) {
   const pgToken = new URLSearchParams(props.location.search).get("pg_token");
-  console.log(pgToken);
+//   console.log(pgToken);
 
   const axios = require("axios");
   axios
@@ -12,8 +12,8 @@ function KakaoPaymentCheck(props) {
       `${process.env.REACT_APP_API_URL}/payment/kakaopaySuccess?pg_token=${pgToken}`
     )
     .then((res) => {
-      console.log(res);
-      console.log(res.status);
+    //   console.log(res);
+    //   console.log(res.status);
       if (res.status == 200) {
         localStorage.setItem("carts", []);
         localStorage.setItem("price", 0);

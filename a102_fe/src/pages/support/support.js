@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import {
   Col,
@@ -11,10 +12,6 @@ import greenPin from "../../assets/images/greenpin.png"
 import SupportMapItem from "../../components/support/supportMapItem";
 
 function Support() {
-
-  // 네이버 API 통신을 위해 필요한 HEADER 세팅
-  const axios = require("axios");
-
   // 카테고리 리스트
   const categoryList = [
     "한식",
@@ -36,7 +33,7 @@ function Support() {
 
   // 카테고리 리스트 컴포넌트
   const categoryListComponents = categoryList.map((category, index) => {
-    console.log(category)
+    // console.log(category)
     if (index === 0) {
       return (
         <Col
@@ -131,7 +128,7 @@ function Support() {
   //Input 박스 안에서 엔터키 입력
   function enterkeyPress(event) {
     // 엔터키
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
       searchLocation();
     }
   }
@@ -242,7 +239,7 @@ function Support() {
         </InputGroup>
         </Col>
         {/* 카테고리 리스트 */}
-        <Col sm="12" md="7" className="categoryListBox">
+        <Col md="7" className="categoryListBox d-sm-none d-md-flex">
           {categoryListComponents}
         </Col>
       </Row>
@@ -251,10 +248,14 @@ function Support() {
           {/* 지도 영역 */}
           <Col id="naverMap" className="mt-2 col-12"></Col>
         </Col>
+        {/* 카테고리 리스트 */}
+        <Col sm="12" className="categoryListBox d-sm-flex d-md-none">
+          {categoryListComponents}
+        </Col>
         <Col sm="12" md="6" className="supportBox">
           {/* 매장 리스트 */}
           <h5>가게 목록</h5>
-          <Row className="storeListBox">{storeListComponents}</Row>
+          <Col className="storeListBox d-flex flex-column">{storeListComponents}</Col>
         </Col>
       </Row>
     </Col>

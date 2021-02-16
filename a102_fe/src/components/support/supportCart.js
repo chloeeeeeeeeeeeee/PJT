@@ -6,6 +6,7 @@ import {
   CardBody,
   Button,
   CardFooter,
+  Row,
 } from "reactstrap";
 import { useParams } from "react-router-dom";
 import SupportMenu from "../../components/support/supportMenu";
@@ -51,7 +52,7 @@ function SupportCart(storeInfo) {
 
   // 장바구니 업데이트
   useEffect(() => {
-    console.log("CART CHANGE");
+    // console.log("CART CHANGE");
     localStorage.setItem("carts", JSON.stringify(cartStorage));
     localStorage.setItem("price", totalPrice);
   }, [trigger]);
@@ -167,7 +168,7 @@ function SupportCart(storeInfo) {
         >
           <SupportMenu supportmenu={menu} />
             <Button
-              className="cartbutton col-2 mt-3 mb-3"
+              className="cartbutton col-2 mt-4 mb-4 mr-2"
               onClick={(e) => {
                 addmenu(menu);
               }}
@@ -197,20 +198,12 @@ function SupportCart(storeInfo) {
         <CardBody className="supportCartCard">
           {cartStorage.map((cart, index) => {
             return (
-              <div className="supportCartItem" key={index}>
-                <Col sm="7">
-                  <p>{cart.itemName} : {cart.itemCount}개</p>
+              <Row className="supportCartItem mb-1" key={index}>
+                <Col xs="6"  className="cartItemName">
+                  <p>{cart.itemName}</p>
                 </Col>
-                <Col sm="5" className="controlbuttons row justify-content-end m-0 p-0">
+                <Col xs="6" className="controlbuttons d-flex justify-content-between" >
                   {/* 왜 나오는거죠 얘네 왜 탈출..? */}
-                  <Button
-                    className="controlbutton"
-                    onClick={() => {
-                      plus(cart);
-                    }}
-                  >
-                    +
-                  </Button>
                   <Button
                     className="controlbutton"
                     onClick={() => {
@@ -220,7 +213,20 @@ function SupportCart(storeInfo) {
                     -
                   </Button>
                   <Button
-                    className="controlbutton"
+                    className="countbutton"
+                  >
+                    {cart.itemCount}
+                  </Button>
+                  <Button
+                    className="controlbutton m-0"
+                    onClick={() => {
+                      plus(cart);
+                    }}
+                  >
+                    +
+                  </Button>
+                  <Button
+                    className="deletebutton offset-1"
                     onClick={() => {
                       removemenu(cart);
                     }}
@@ -228,7 +234,7 @@ function SupportCart(storeInfo) {
                     X
                   </Button>
                 </Col>
-              </div>
+              </Row>
             );
           })}
         </CardBody>

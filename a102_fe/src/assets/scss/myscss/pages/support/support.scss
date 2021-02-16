@@ -12,12 +12,14 @@
   //   padding: 0.5% 2%;
   // }
   .supportCategory {
+    align-items: center;
     Button {
       color: white;
       background-color: $oori-green;
       border: none;
     }
     .categoryListBox {
+      align-items: center;
       height: 100%;
       display: flex;
       // 카테고리 리스트 아이템 1개
@@ -62,6 +64,18 @@
       .storeListBox {
         height: 85%;
         overflow-y: auto;
+        display: flex;
+        align-items: start;
+        justify-content: flex-start;
+        // 이거하면 된다며 왜 안돼~~
+        // scrollbar-width: none;
+        // -ms-overflow-style: none;
+        // ::-webkit-scrollbar {
+        //   display: none;
+        // }
+        &::-webkit-scrollbar {
+          display: none;
+        }
         // border-color: $oori-green;
         // border-width: 0.5px;
         // border-style: solid;
@@ -78,7 +92,7 @@
             font-size: small;
           }
           Button {
-            float: right;
+            // float: right;
             font-size: small;
             background-color: $oori-green;
             border: none;
@@ -90,5 +104,32 @@
         }
       }
     }
+    .categoryListBox {
+        align-items: center;
+        display: flex;
+        // 카테고리 리스트 아이템 1개
+        // display: inline;
+        // vertical-align: middle;
+        .categoryListItem {
+          // line-height: 1.5;
+          display: inline-block;
+          vertical-align: middle;
+          width: auto;
+          text-align: center;
+          font-size: small;
+          padding-top: 10px;
+          padding-bottom: 10px;
+          white-space: pre-line;
+          &.selectedCategoryListItem {
+            color: $oori-green;
+            font-weight: bold;
+            background-color: $oori-white;
+          }
+          &:hover {
+            cursor: pointer;
+            font-weight: bold;
+          }
+        }
+      }
   }
 }

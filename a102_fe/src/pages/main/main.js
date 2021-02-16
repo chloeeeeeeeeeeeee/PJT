@@ -10,10 +10,10 @@ function Main() {
     <Fragment>
       <Container fluid={true}>
         <Row className="main">
-          <Col sm="6" md={{ size: 5, offset: 1 }}>
+          <Col md="6" lg={{ size: 5, offset: 1 }}>
             <Billboard />
           </Col>
-          <Col sm="6" md={{ size: 5 }} className="aboutus">
+          <Col md="6" lg={{ size: 5 }} className="aboutus">
             <Aboutus />
           </Col>
         </Row>

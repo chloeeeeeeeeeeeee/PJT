@@ -44,8 +44,8 @@ function MemberInfo() {
     .then(res => res.json())
     .then(res => {
       setuserInfo(res);
-      console.log("지금 받아올 내용은:", res)
-      console.log("실제로 받은 내용은:", userInfo)
+    //   console.log("지금 받아올 내용은:", res)
+    //   console.log("실제로 받은 내용은:", userInfo)
       
     })
     fetch(`${process.env.REACT_APP_API_URL}/account/userwithus`, {
@@ -56,8 +56,8 @@ function MemberInfo() {
     .then(res => res.json())
     .then(res => {
       setuserWithus(res);
-      console.log("지금 받아올 내용은:", res)
-      console.log("실제로 받은 내용은:", userWithus)
+    //   console.log("지금 받아올 내용은:", res)
+    //   console.log("실제로 받은 내용은:", userWithus)
     })
   }, [])
 

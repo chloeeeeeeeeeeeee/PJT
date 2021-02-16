@@ -65,6 +65,9 @@
       }
       height: 100%;
       overflow-y: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
       .caution {
         font-size: x-small;
       }
@@ -74,6 +77,7 @@
         }
         .findWayButton {
           margin-bottom: 5px;
+          font-size: small;
           color: white;
           background-color: $oori-green;
           border: none;
@@ -98,6 +102,9 @@
         }
         .card-body {
           overflow-y: auto;
+          &::-webkit-scrollbar {
+            display: none;
+          }
           .information {
             font-size: small;
             margin-bottom: 0;
@@ -106,9 +113,6 @@
             background-color: $oori-white;
             border: none;
             color: $oori-green;
-          }
-          .storeMenuItem {
-            // background-color: $oori-brilliant-white;
           }
         }
       }
@@ -128,14 +132,36 @@
         }
         .supportCartCard {
           overflow-y: auto;
+          font-size: medium;
           .supportCartItem {
+            // display: flex;
+            align-items: center;
+            .cartItemName {
+              // display: inline;
+            }
             p {
               display: inline;
             }
             .controlbuttons {
-              float: right;
+              // float: right;
+              // justify-content: space-between;
+              border-radius: 0;
+              // display: inline;
               .controlbutton {
+                font-size: small;
                 background-color: $oori-white;
+                border: none;
+                color: $oori-green;
+              }
+              .deletebutton {
+                font-size: small;
+                background-color: $oori-white;
+                border: none;
+                color: red;
+              }
+              .countbutton {
+                font-size: small;
+                background-color: white;
                 border: none;
                 color: $oori-green;
               }

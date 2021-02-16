@@ -68,9 +68,9 @@ function StoreDetailInfo(storeInfo) {
     <Col md={{ size: 2, offset: 1 }} sm="12" className="storeInfo">
       <Card className="storeInfoCard">
         <CardHeader className="cardHeader">
-          <h5 className="font-weight-bold mt-1">
+          <p className="font-weight-bold mt-1">
             {storeInformation.storeName}
-          </h5>
+          </p>
           <p className="font-weight-normal mb-0">
             #{storeInformation.storeCategory}
           </p>
@@ -84,10 +84,10 @@ function StoreDetailInfo(storeInfo) {
           </p>
           <p className="caution">
             아동급식카드의 1회 지원금은 6000원입니다.
-            <br />
+            {/* <br /> */}
             아동이 메뉴를 먹을 수 있게 차액을 후원해주세요.
-            <br />
-            6000원 이하의 메뉴는 보여지지 않습니다.
+            {/* <br /> */}
+            {/* 6000원 이하의 메뉴는 보여지지 않습니다. */}
             <br />* 가게의 실 메뉴와 차이가 있을 수 있습니다
           </p>
           <div className="storeMiniMap mt-4" id="storeMiniMap"></div>

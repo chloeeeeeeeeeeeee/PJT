@@ -65,7 +65,7 @@ def sendCreditCard(an, bag, totalAmount, totalCount, phoneNum):
     print(res.text)
 
 
-def sendGdreamCard(an, bag, totalCount):
+def sendGdreamCard(an, bag, totalCount, totalAmount):
     d = datetime.datetime.today()
     date = d.strftime('%Y%m%d-%I%M%S')
     req = {}
@@ -74,7 +74,7 @@ def sendGdreamCard(an, bag, totalCount):
     req['itemList'] = bag
     req['paidAt'] = date
     req['totalCount'] = totalCount
-    req['totalGDreamAmount'] = 1
+    req['totalGDreamAmount'] = totalAmount
 
     headers = {'Content-Type': 'application/json'}
     print(req)

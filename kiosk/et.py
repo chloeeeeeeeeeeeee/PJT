@@ -295,7 +295,7 @@ class et(QMainWindow, Ui_mainWindow):
 
         if opt == "gdream":
             print("gdream")
-            sendGdreamCard(data, self.bag, self.itemCnt)
+            sendGdreamCard(data, self.bag, self.itemCnt, self.totalCost)
             self.loadCompletePage()
 
         jscmd = "initPage()"

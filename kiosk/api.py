@@ -13,12 +13,21 @@ def getStoreInfo(storeID):
     return res.json()
 
 
-def postKakaoPay(itemList, totalAmount, totalCount, phoneNum):
+def postKakaoPay(bag, totalAmount, totalCount, phoneNum):
     req = {}
+    req['itemList'] = []
     req['cid'] = 'TC0ONETIME'
     req['contributorPhone'] = phoneNum
     req['isKiosk'] = 1
-    req['itemList'] = itemList
+    for bagList in bag:
+        tempItemList = {"itemCount": 1,
+                        "itemId": bagList["itemId"],
+                        "itemName": bagList["itemName"],
+                        "itemPrice": bagList["itemPrice"],
+                        "msg": "맛있게 드세요!",
+                        "storeId": bagList["storeId"],
+                        "support": bagList["isSupport"]}
+        req['itemList'].append(tempItemList)
     req['totalAmount'] = totalAmount
     req['totalCount'] = totalCount
     req['userSeq'] = 0

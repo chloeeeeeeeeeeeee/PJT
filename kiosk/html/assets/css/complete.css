@@ -1,0 +1,18 @@
+html, body{
+	position: relative;
+	width: 98%;
+	height: 98%;
+    background-color: rgba(0, 0, 0, 0.013);
+    font-family: "Source Sans Pro", sans-serif;
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.completeContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

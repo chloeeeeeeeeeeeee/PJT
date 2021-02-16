@@ -1,6 +1,8 @@
 // 카드 터치 대기 함수
 let cardId;
 let touch, sign, done;
+let waitText = document.getElementById("wait-text");
+let dotCnt = 0;
 
 function initPage(){
     touch = document.getElementById("wait-touch");
@@ -88,6 +90,24 @@ function getPosition(event){
     return {X: x, Y: y};
 }
 
+function changeDot(){
+    setTimeout(function(){
+        if(dotCnt == 0){
+            waitText.innerText = "결제 대기중";
+        }
+        else{
+            waitText.innerText += "."
+        }
+        dotCnt += 1;
+        if(dotCnt == 4){
+            dotCnt = 0;
+        }
+        changeDot();
+    }, 300)
+}
+
+changeDot();
+
 new QWebChannel(qt.webChannelTransport, function (channel) {
     window.handler = channel.objects.handler;
 });
@@ -101,4 +121,3 @@ function signComplete(){
         alert(error)
     }
 }
-

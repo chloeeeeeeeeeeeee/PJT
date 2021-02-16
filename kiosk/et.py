@@ -151,6 +151,7 @@ class et(QMainWindow, Ui_mainWindow):
 
     def loadStartPage(self):
         self.clearBagItem()
+        self.widgetList['widgetComplete.html'].page().runJavaScript("stopCnt()")
         self.widgetList["widgetStart.html"].raise_()
 
     def loadItemListPage(self):
@@ -162,7 +163,7 @@ class et(QMainWindow, Ui_mainWindow):
         self.widgetList["widgetPaymentMain.html"].raise_()
 
     def loadKakaoPayPage(self):
-        url = postKakaoPay(self.itemList, self.totalCost, self.itemCnt, self.phoneNum)
+        url = postKakaoPay(self.bag, self.totalCost, self.itemCnt, self.phoneNum)
         jscmd = "setUrl(\"{url}\")".format(url=url)
         self.widgetList["widgetKakaoPay.html"].page().runJavaScript(jscmd)
         self.widgetList["widgetKakaoPay.html"].raise_()
@@ -199,6 +200,7 @@ class et(QMainWindow, Ui_mainWindow):
 
     def addBagItem(self, itemNum):
         item = self.itemList[itemNum]
+        item["isSupport"] = 0
         self.bag.append(item)
 
         self.totalCost = self.totalCost + item["itemPrice"]

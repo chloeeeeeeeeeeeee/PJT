@@ -10,3 +10,4 @@ function clickKakaoPay(){
 function clickCardTagging(){
     handler.nextPage("rfid")
 }
+

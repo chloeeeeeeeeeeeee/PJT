@@ -275,6 +275,8 @@ li{
 	justify-content: flex-start;
 	/* 수직축-여기에서는 수평축 좌우로 stretch 처리 */
 	align-items: center;
+	/* 아이템이 목록 갯수를 넘어가면 스크롤로 처리하겠습니다! */
+	overflow: auto;
 }
 .cart-item{
 	width: 100%;

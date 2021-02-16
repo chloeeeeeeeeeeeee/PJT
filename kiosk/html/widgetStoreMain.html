@@ -25,7 +25,7 @@
         <div class="modal-background">
             <div class="modal">
                 <div style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
-                    <div style="height: 100%; display: flex; justify-content: space-around; align-item: stretch;">
+                    <div style="height: 100%; display: flex; justify-content: space-around; align-items: stretch;">
                         <div style="display: flex; flex-direction: column; justify-content: center;">
                             <p><b>아동급식카드</b>와 함께하는 <b>우리끼니</b>입니다.</p>
                             <p>
@@ -63,7 +63,9 @@
         <div class="modal-background">
             <div class="modal">
                 <div class="phone-container">
-                    <div id="phoneNumber" class="phone-number">010-</div>
+                    <div class="phone-number-wrapper">
+                       <div id="phoneNumber" class="phone-number">010-</div>
+                    </div>
                     <div class="number-container">
                         <div class="number-line">
                             <div class="num" onclick="clickPad(7)">7</div>
@@ -81,9 +83,9 @@
                             <div class="num" onclick="clickPad(3)">3</div>
                         </div>
                         <div class="number-line">
-                            <div class="num" onclick="clickPad(-2)">초기화</div>
+                            <div class="num keypad" onclick="clickPad(-2)">초기화</div>
                             <div class="num" onclick="clickPad(0)">0</div>
-                            <div class="num" onclick="clickPad(-1)">지우기</div>
+                            <div class="num keypad" onclick="clickPad(-1)">지우기</div>
                         </div>
                     </div>
                     <div id="phone-alert" class="void">올바른 번호를 입력해주세요.</div>
@@ -137,7 +139,7 @@
                             type="text"
                             name="phone"
                             onclick="clickPhoneNum()"
-                            placeholder="(-)없이 숫자만 입력하세요";
+                            placeholder="전화번호를 입력해주세요";
                         >
                     </div>
                 </div>

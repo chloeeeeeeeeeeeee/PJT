@@ -4,20 +4,11 @@ let itemCost = 0;
 let mainState = 0;
 let carouselCnt = 0;
 let itemIdContainer = [];
-let donationListCnt = 0;
-let setModal = 0;
 
-let maxContriNum = 15;
-
-let phoneNumber = "010-";
-let phoneNumberNode = document.getElementById("phoneNumber");
+let maxContriNum = 15
 
 let modalContainer = document.getElementById("modal-container");
-let modalContainer2 = document.getElementById("modal-container2");
-
-
-let modalPrice = document.getElementById("modal-price");
-let modalName = document.getElementById("modal-name");
+let content = document.getElementsByClassName('content')[0];
 
 //qt->js 함수
 let newCarouselContainer = `<div class="carousel-item">
@@ -44,7 +35,7 @@ function addStoreItem(itemId, imgUrl, itemName, itemPrice, badge, intro, availab
     }
 
     let serverImgUrl = "https://ooriggini.me:8080/app/" + imgUrl;
-    let listElement = `<div id="main-${itemId}" class="bookmark" onclick="addBagItem(${itemId}, 0)">
+    let listElement = `<div class="bookmark" onclick="addBagItem(${itemId})">
                         <div class="bookmark-photo">
                             <div class="bookmark-image" style="background-image: url(${serverImgUrl});"></div>
                         </div>
@@ -76,32 +67,10 @@ function addStoreItem(itemId, imgUrl, itemName, itemPrice, badge, intro, availab
     itemCnt = itemCnt + 1;
 }
 
-function changeItemButton(){
-    try {
-        let bookmark = document.getElementsByClassName("bookmark");
-        let bookmarkBtn = document.getElementsByClassName("bookmark-btn1");
-        let len = bookmark.length;
-        for(let i=0;i<len;i++){
-            itemId = bookmark[i].id.split('-')[1];
-            bookmark[i].setAttribute("onclick", `addBagItem(${itemId}, 1)`);
-            price = Number(String(bookmarkBtn[i].innerText).split('원')[0])
-            if(price >= 6000){
-                bookmarkBtn[i].innerText = String(price - 6000) + "원";
-            }
-        }
-        toggleDisplay();
-    } catch (error) {
-        alert(error);
-    }
-    
-}
-
 function clearStoreItem() {
     itemCnt = 0;
     carouselCnt = 0;
     itemIdContainer = [];
-    setModal = 0;
-    donationListCnt = 0;
 
     document.getElementsByClassName("carousel-inner")[0].innerHTML = `<div class="carousel-item active">
                                                                         <section class="bookmark-container">
@@ -114,16 +83,9 @@ function clearStoreItem() {
     document.getElementsByClassName("carousel-container")[0].style.display = 'flex';
     document.getElementsByClassName("donation-container")[0].style.display = 'none';
     mainState = 0;
-
-    document.getElementsByClassName("donation-items")[0].innerHTML = "";
 }
 
-function addItem(itemId, itemName, itemPrice, isDonation) {
-    officialId = itemId;
-    if(isDonation){
-        itemId = "donation-" + itemId;
-        itemName = "(후원)" + itemName;
-    }
+function addItem(itemId, itemName, itemPrice) {
     itemHtml = `<div class="cart-item" id="${itemId}">
                     <div class="cart-item-available">
                         <i class="fab fa-gratipay" style="font-size: 16px; color: rgba(255, 140, 0, 0.6)"></i>
@@ -131,27 +93,14 @@ function addItem(itemId, itemName, itemPrice, isDonation) {
                     <div class="cart-item-title">${itemName}</div>
                     <div class="cart-item-cost">${itemPrice}원</div>
                     <div class="cart-item-quantity">
-                        <div class="cart-item-quantity-btn" id="${itemId}Minus" onclick="qtRemoveItem(${officialId}, ${isDonation})"> - </div>
+                        <div class="cart-item-quantity-btn" id="${itemId}Minus" onclick="qtRemoveItem(${itemId})"> - </div>
                         <div id=${itemId}Cnt> 1 </div>
-                        <div class="cart-item-quantity-btn" id="${itemId}Plus" onclick="qtAddItem(${officialId}, ${isDonation})"> + </div>
+                        <div class="cart-item-quantity-btn" id="${itemId}Minus" onclick="qtAddItem(${itemId})"> + </div>
                     </div>
                 </div>`
 
-    if(setModal == 0){
-        let intPrice;
-        if(typeof(itemPrice) == "string") intPrice = parseInt(itemPrice); 
-        if(intPrice >= 6000){
-            setModal = 1;
-            setModalContent(intPrice - 6000, itemName);
-        }
-    }
-    
     if (!addCnt(itemId)) {
-        try {
-            document.getElementsByClassName("cart-body")[0].insertAdjacentHTML("beforeend", itemHtml);
-        } catch (error) {
-            alert(error);
-        }
+        document.getElementsByClassName("cart-body")[0].insertAdjacentHTML("beforeend", itemHtml)
     }
 }
 
@@ -166,16 +115,13 @@ function addCnt(itemId) {
     }
 }
 
-function removeCnt(itemId, isDonation) {
-    id = "";
-    if(isDonation)  id = "donation-" + String(itemId);
-    else            id = String(itemId);
-    let itemCnt = document.getElementById(id + "Cnt")
+function removeCnt(itemId) {
+    let itemCnt = document.getElementById(String(itemId) + "Cnt")
     if (itemCnt.innerText != "1") {
         itemCnt.innerText = String(parseInt(itemCnt.innerText) - 1)
     }
     else {
-        let removeElement = document.getElementById(id)
+        let removeElement = document.getElementById(String(itemId))
         removeElement.parentNode.removeChild(removeElement)
     }
 }
@@ -271,8 +217,10 @@ new QWebChannel(qt.webChannelTransport, function (channel) {
     window.handler = channel.objects.handler;
 });
 
-function addBagItem(itemId, isSupport) {
-    handler.addBagItem(itemId, isSupport)
+function addBagItem(itemId) {
+    handler.addBagItem(function (retVal) {
+        console.error(JSON.stringify(retVal));
+    }, itemId)
 }
 
 function clickPay() {
@@ -299,34 +247,7 @@ function clickPay() {
 function clickDonation(){
     //modal.style.display = "none";
     modalContainer.setAttribute('class', 'out')
-    document.getElementById("phoneInput").value = "";
     toggleDisplay()
-}
-
-function clickPhoneNum(){
-    phoneNumber ="010-";
-    changePhoneNum()
-    let alertMessage = document.getElementById("phone-alert");
-    alertMessage.setAttribute("class", "void");
-    modalContainer2.setAttribute('class', 'two')
-}
-
-function clickEnter(){
-    if(phoneNumber.length == 13){
-        document.getElementById("phoneInput").value = phoneNumber;
-        handler.setPhoneNum(phoneNumber.replace("-", "").replace("-", ""));
-        modalContainer2.setAttribute('class', 'out');
-    }
-    else{
-        //경고메세지
-        let alertMessage = document.getElementById("phone-alert");
-        alertMessage.setAttribute("class", "unvoid");
-    }
-
-}
-
-function clickCancel(){
-    modalContainer2.setAttribute('class', 'out')
 }
 
 function clickReset() {
@@ -335,12 +256,16 @@ function clickReset() {
     })
 }
 
-function qtRemoveItem(itemId, isSupport) {
-    handler.removeBagItem(itemId, isSupport)
+function qtRemoveItem(itemId) {
+    handler.removeBagItem(function (retVal) {
+        console.error(JSON.stringify(retVal));
+    }, itemId)
 }
 
-function qtAddItem(itemId, isSupport) {
-    handler.addBagItem(itemId, isSupport)
+function qtAddItem(itemId) {
+    handler.addBagItem(function (retVal) {
+        console.error(JSON.stringify(retVal));
+    }, itemId)
 }
 
 function clickModal(){
@@ -349,91 +274,4 @@ function clickModal(){
 
 function clickContainer(){
     modalContainer.setAttribute('class', 'out')
-}
-
-function setModalContent(price, name){
-    modalPrice.innerText = String(price) + "원"
-    modalName.innerText = name
-}
-
-function addDonationItem(itemId, imgUrl, itemName, itemPrice, badge, intro, availableItem, contrubutionItem) {
-    donationListCnt += 1;
-    
-    let numAvail = availableItem;
-    let numContri = contrubutionItem;
-
-    if(numAvail > maxContriNum){
-        numAvail = maxContriNum;
-        numContri = 0;
-    }
-    else{
-        if(numContri > maxContriNum){
-            numContri = maxContriNum - numAvail;
-        }
-        else{
-            numContri -= numAvail;
-        }
-    }
-    if(typeof(itemPrice) == "string") intPrice = parseInt(itemPrice);
-    itemPrice -= 6000;
-    let serverImgUrl = "https://ooriggini.me:8080/app/" + imgUrl;
-    let listElement = `<div class="donation-bookmark" onclick="addBagItem(${itemId}, 1)">
-                        <div class="bookmark-photo">
-                            <div class="bookmark-image" style="background-image: url(${serverImgUrl});"></div>
-                        </div>
-                        <div class="bookmark-title"> <span>${itemName}</span></div>
-                        <div class="bookmark-badge">${badge}</div>
-                        <div class="bookmark-dividing"></div>
-                        <div class="bookmark-detail">
-                            ${intro}
-                        </div>
-                        <div class="bookmark-btn1"><span>${itemPrice}원</span></div>
-                        <div class="bookmark-contribution">`
-    for(let i=0;i<numContri;i++){
-        listElement += `<i class="fas fa-check-circle p-1" style="font-size: 15px; color: darkslategrey;"></i>`
-    }
-    for(let i=0;i<numAvail;i++){
-        listElement += `<i class="fab fa-gratipay p-1" style="font-size: 15px; color: rgba(255, 140, 0, 0.6)"></i>`
-    }
-    listElement +=  `</div>
-                        <div class="bookmark-contribution-title"><span>이주의 후원 현황</span></div>
-                    </div>`;
-
-    let addPosition = document.getElementsByClassName("donation-items")[0];
-    addPosition.insertAdjacentHTML("beforeend", listElement);
-
-    if(donationListCnt == 3){
-        addPosition.removeChild(addPosition.firstChild);
-    }
-}
-
-function changePhoneNum(){
-    phoneNumberNode.innerText = phoneNumber;
-}
-
-function clickPad(opt){
-    if(phoneNumber.length <= 13){
-        if(opt >= 0 && opt <= 9 && phoneNumber.length != 13){
-            phoneNumber += String(opt)
-            if(phoneNumber.length == 8){
-                phoneNumber += String("-")
-            }
-        }
-        else if(opt == -1){
-            //하나만 지우기
-            if(phoneNumber.length > 4){
-                phoneNumber = phoneNumber.slice(0, -1);
-                if(phoneNumber.length == 8){
-                    phoneNumber = phoneNumber.slice(0, -1);
-                }
-            }
-        }
-        else if(opt == -2){
-            //모두 지우기
-            phoneNumber = "010-";
-        }
-    }
-
-
-    changePhoneNum();
 }

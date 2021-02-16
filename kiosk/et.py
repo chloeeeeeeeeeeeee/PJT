@@ -10,6 +10,7 @@ from kakaoSocket import *
 import sys
 
 import datetime
+import random
 
 # Global variables
 pageConnector = {}
@@ -26,15 +27,15 @@ class CallHandler(QObject):
         # start, store, payment, kakao, rfid, complete
         pageConnector[opt]()
 
-    @pyqtSlot(QVariant)
-    def addBagItem(self, itemNum):
+    @pyqtSlot(QVariant, QVariant)
+    def addBagItem(self, itemNum, isSupport):
         # item number를 받아 장바구니에 추가해주는 함수에 연결
-        w.addBagItem(itemNum)
+        w.addBagItem(itemNum, isSupport)
 
-    @pyqtSlot(QVariant)
-    def removeBagItem(self, itemNum):
+    @pyqtSlot(QVariant, QVariant)
+    def removeBagItem(self, itemNum, isSupport):
         # item number를 받아 장바구니에서 제거해주는 함수(1개)에 연결
-        w.removeBagItem(itemNum)
+        w.removeBagItem(itemNum, isSupport)
 
     @pyqtSlot()
     def clearBag(self):
@@ -62,6 +63,8 @@ class et(QMainWindow, Ui_mainWindow):
         self.itemList = {}
         self.bag = []
         self.phoneNum = "010-0000-0000"
+        self.donationCnt = 0
+        self.recentDonationList = -1
 
         # 초기 실행 함수
         self.makePage()  # 페이지 리스트 생성 및 로드
@@ -75,6 +78,8 @@ class et(QMainWindow, Ui_mainWindow):
         self.totalCost = 0
         self.bag.clear()
         self.phoneNum = ""
+        self.donationCnt = 0
+        self.recentDonationList = -1
 
     # Click 불가능한 label 등의 위젯을 클릭 가능하게 만들어주는 함수
     def clickable(self, widget):
@@ -197,44 +202,63 @@ class et(QMainWindow, Ui_mainWindow):
                             available=i["itemAvailable"], contribution=i["itemContributionAmount"])
                 widget.page().runJavaScript(jscmd)
                 idIter = idIter+1
+            while True:
+                addNum = random.randrange(0, len(self.itemList))
+                if self.itemList[addNum]["itemPrice"] >= 6000:
+                    self.addDonationList(addNum)
+                    break
 
-    def addBagItem(self, itemNum):
+    def addBagItem(self, itemNum, isSupport):
+        try:
+            print(itemNum)
+            item = self.makeItem(itemNum, isSupport)
+            self.bag.append(item)
+            self.totalCost = self.totalCost + item["itemPrice"]
+            self.itemCnt = self.itemCnt + 1
+            jscmd = "addItem(\'{itemId}\', \'{itemName}\', \'{itemPrice}\', {isSupport})" \
+                .format(itemId=itemNum, itemName=item["itemName"], itemPrice=item["itemPrice"], isSupport=isSupport)
+            self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
+            jscmd = "addCost({cost})".format(cost=item["itemPrice"])
+            self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
+            if item["itemPrice"] >= 6000 and self.donationCnt < 2 and self.recentDonationList != itemNum and isSupport == 0:
+                self.addDonationList(itemNum)
+                self.donationCnt = self.donationCnt + 1
+                self.recentDonationList = itemNum
+        except Exception as e:
+            print(e)
+
+    def makeItem(self, itemNum, isSupport):
+        refItem = self.itemList[itemNum]
+        item = {"itemName": refItem["itemName"],
+                "itemPrice": refItem["itemPrice"],
+                "msg": "맛있게 드세요!",
+                "itemCount": 1,
+                "itemId": refItem["itemId"],
+                "storeId": refItem["storeId"],
+                "support": isSupport}
+        if isSupport:
+            item["itemPrice"] -= 6000
+        return item
+
+    def addDonationList(self, itemNum):
         item = self.itemList[itemNum]
-        item["isSupport"] = 0
-        self.bag.append(item)
+        jscmd = "addDonationItem(\'{itemId}\', \'{imgUrl}\', \'{itemName}\'," \
+                " \'{itemPrice}\', \'{badge}\', \'{intro}\'" \
+                ", {available}, {contribution})" \
+            .format(itemId=itemNum, imgUrl=item["itemImgUrl"], itemName=item["itemName"],
+                    itemPrice=item["itemPrice"], badge="Hot!", intro="",
+                    available=item["itemAvailable"], contribution=item["itemContributionAmount"])
 
-        self.totalCost = self.totalCost + item["itemPrice"]
-        self.itemCnt = self.itemCnt + 1
-
-        jscmd = "addItem(\'{itemId}\', \'{itemName}\', \'{itemPrice}\')" \
-            .format(itemId=itemNum, itemName=item["itemName"], itemPrice=item["itemPrice"])
-        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
-        jscmd = "addCost({cost})".format(cost=item["itemPrice"])
         self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
 
-    def addBagSupport(self, itemNum):
-        item = self.itemList[itemNum]
-        item["isSupport"] = 1
-        item['itemPrice'] = item['itemPrice'] - 6000
-        self.bag.append(item)
-
-        self.totalCost = self.totalCost + item["itemPrice"]
-        self.itemCnt = self.itemCnt + 1
-
-        jscmd = "addItem(\'{itemId}\', \'{itemName}\', \'{itemPrice}\')" \
-            .format(itemId=itemNum, itemName=item["itemName"], itemPrice=item["itemPrice"])
-        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
-        jscmd = "addCost({cost})".format(cost=item["itemPrice"])
-        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
-
-    def removeBagItem(self, itemNum):
-        item = self.itemList[itemNum]
-        self.bag.remove(item)  # 첫번째 요소만 제거
+    def removeBagItem(self, itemNum, isSupport):
+        item = self.makeItem(itemNum, isSupport)
+        self.bag.remove(item)
 
         self.totalCost = self.totalCost - item["itemPrice"]
         self.itemCnt = self.itemCnt - 1
 
-        jscmd = "removeCnt(\'{itemId}\')".format(itemId=itemNum)
+        jscmd = "removeCnt(\'{itemId}\', {isSupport})".format(itemId=itemNum, isSupport=isSupport)
         self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
         jscmd = "removeCost({cost})".format(cost=item["itemPrice"])
         self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)

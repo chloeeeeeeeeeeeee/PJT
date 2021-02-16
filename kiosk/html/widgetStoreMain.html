@@ -28,8 +28,14 @@
                     <div style="height: 100%; display: flex; justify-content: space-around; align-item: stretch;">
                         <div style="display: flex; flex-direction: column; justify-content: center;">
                             <p><b>아동급식카드</b>와 함께하는 <b>우리끼니</b>입니다.</p>
-                            <p><b style="background-color: #84BD00">{{ 1,500 }}원</b>으로 아동에게</p>
-                            <p><b style="background-color: #84BD00">{{ 로제돈까스 }}</b>를</p>
+                            <p>
+                                <b id="modal-price" style="background-color: #84BD00"></b>
+                                으로 아동에게
+                            </p>
+                            <p>
+                                <b id="modal-name" style="background-color: #84BD00"></b>
+                                를
+                            </p>
                             <p>후원할 수 있습니다.</p>
                             <p></p>
                             <p>함께하시겠습니까?</p>
@@ -80,7 +86,7 @@
             </a>
         </div>
 
-        <div class="donation-container">
+        <div class="donation-container" style="display: none;">
             <div class="donation-wrapper">
                 <div class="donation-explain">
                     <img src="assets/pic/donation_intro.png" style="width: 100%;">
@@ -99,37 +105,10 @@
                     </div>
                 </div>
                 <div class="donation-items">
-                    <div class="donation-bookmark">
-                        <div class="bookmark-photo">
-                            <div class="bookmark-image" style="background-image: url(${serverImgUrl});"></div>
-                        </div>
-                        <div class="bookmark-title"> <span>{itemName}</span></div>
-                        <div class="bookmark-badge">{badge}</div>
-                        <div class="bookmark-dividing"></div>
-                        <div class="bookmark-detail">
-                            {intro}
-                        </div>
-                        <div class="bookmark-btn1"><span>{itemPrice}원</span></div>
-                        <div class="bookmark-contribution"></div>
-                        <div class="bookmark-contribution-title"><span>이주의 후원 현황</span></div>
-                    </div>
-                    <div class="donation-bookmark">
-                        <div class="bookmark-photo">
-                            <div class="bookmark-image" style="background-image: url(${serverImgUrl});"></div>
-                        </div>
-                        <div class="bookmark-title"> <span>{itemName}</span></div>
-                        <div class="bookmark-badge">{badge}</div>
-                        <div class="bookmark-dividing"></div>
-                        <div class="bookmark-detail">
-                            {intro}
-                        </div>
-                        <div class="bookmark-btn1"><span>{itemPrice}원</span></div>
-                        <div class="bookmark-contribution"></div>
-                        <div class="bookmark-contribution-title"><span>이주의 후원 현황</span></div>
-                    </div>
+                    
                 </div>
                 <div class="donation-others">
-                    <button class="donation-button">
+                    <button class="donation-button" onclick="changeItemButton()">
                         <p class="m-0"> 다른 메뉴 </p>
                         <p class="m-0"> 후원하기 </p>
                     </button>

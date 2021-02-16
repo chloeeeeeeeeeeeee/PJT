@@ -56,18 +56,9 @@ def sendCreditCard(an, bag, totalAmount, totalCount, phoneNum):
     d = datetime.datetime.today()
     date = d.strftime('%Y%m%d-%I%M%S')
     req = {}
-    req['itemList'] = []
     req['approvalNumber'] = an
     req['contributorPhone'] = phoneNum
-    for bagList in bag:
-        tempItemList = {"itemCount": 1,
-                        "itemId": bagList["itemId"],
-                        "itemName": bagList["itemName"],
-                        "itemPrice": bagList["itemPrice"],
-                        "msg": "맛있게 드세요!",
-                        "storeId": bagList["storeId"],
-                        "support": bagList["isSupport"]}
-        req['itemList'].append(tempItemList)
+    req['itemList'] = bag
     req['paidAt'] = date
     req['totalAmount'] = totalAmount
     req['totalCount'] = totalCount

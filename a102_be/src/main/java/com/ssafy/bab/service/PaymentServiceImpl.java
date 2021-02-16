@@ -56,6 +56,17 @@ public class PaymentServiceImpl implements PaymentService {
 	@Value("${Kakao.WEB_RETURN_URL}")
 	private String URL;
 	
+	@Value("${wldms}")
+	private String wldms;
+	@Value("${eksdnjs}")
+	private String eksdnjs;
+	@Value("${dpfls}")
+	private String dpfls;
+	@Value("${qhsgur}")
+	private String qhsgur;
+	@Value("${tjsals}")
+	private String tjsals;
+	
 	PaymentGdream paymentG = null;
 	
 	@Autowired
@@ -555,29 +566,38 @@ public class PaymentServiceImpl implements PaymentService {
 			// paymengGdream 테이블 업데이트 취소
 			paymentGDao.delete(paymentG);
 			
-			return "FAIL";
+			return "지드림카드결제 금액 + 후원 받은 금액 != 총 주문한 음식 금액";
 		}
 		
 		// 문자 전송
 		for (Msg msg : msgList) {
-			System.out.println(msg.getItemName() + " " + msg.getStoreName());
-//			Message coolsms = new Message(API_KEY, API_SECRET);
-//
-//	        // 4 params(to, from, type, text) are mandatory. must be filled
-//	        HashMap<String, String> params = new HashMap<String, String>();
-//	        params.put("to", msg.getPhone());    // 수신전화번호
-//	        params.put("from", PHONE);    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
-////	        params.put("from", "01011111111");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
-//	        params.put("type", "SMS");
-//	        params.put("text", msg.getStoreName() + "에서 후원한 메뉴 '" + msg.getItemName() + "'이 방금 사용되었습니다.\n자세한 내용은 우리끼니 홈페이지에서 확인해주세요. \n" + URL);
-//
-//	        try {
-//	            JSONObject obj = (JSONObject) coolsms.send(params);
-//            System.out.println(obj.toString());
-//	        } catch (CoolsmsException e) {
-//	            System.out.println(e.getMessage());
-//	            System.out.println(e.getCode());
-//	        }
+//			System.out.println(msg.getItemName() + " " + msg.getStoreName());
+			Message coolsms = new Message(API_KEY, API_SECRET);
+
+			if(msg.getPhone() == wldms || msg.getPhone() == eksdnjs || 
+				msg.getPhone() == dpfls || msg.getPhone() == qhsgur ||
+				msg.getPhone() == tjsals) {
+				// 4 params(to, from, type, text) are mandatory. must be filled
+				HashMap<String, String> params = new HashMap<String, String>();
+				params.put("to", msg.getPhone()); // 수신전화번호
+				params.put("from", PHONE); // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+//	        	params.put("from", "01011111111");  // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+				params.put("type", "SMS");
+				params.put("text", msg.getStoreName() + "에서 후원한 메뉴 '" + msg.getItemName()
+						+ "'이 방금 사용되었습니다.\n자세한 내용은 우리끼니 홈페이지에서 확인해주세요.\n" + URL + "\n무료수신거부번호: 080-600-5653");
+
+				try {
+					JSONObject obj = (JSONObject) coolsms.send(params);
+					System.out.println(obj.toString());
+				} catch (CoolsmsException e) {
+					System.out.println(e.getMessage());
+					System.out.println(e.getCode());
+				}
+			}else {
+				return "check user phone number";
+			}
+			
+	        
 		}
 		
 		// item, storeVariables 테이블 업데이트
@@ -595,9 +615,7 @@ public class PaymentServiceImpl implements PaymentService {
 			storeVariables.setStoreItemAvailable(storeVariables.getStoreItemAvailable() - count);
 			storeVariablesDao.save(storeVariables);
 		}
-		
-		
-		
+
 		
 		return "SUCCESS";
 	}

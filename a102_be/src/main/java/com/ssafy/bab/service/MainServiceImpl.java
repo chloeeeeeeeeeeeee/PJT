@@ -82,7 +82,6 @@ public class MainServiceImpl implements MainService {
 		
 		
 		// 구를 기준으로 locationId를 받아온뒤 locationId를 기준으로 store를 리스트로 받아온다
-		
 		Location location = locationDao.findByLocationGu(gu);
 		if(location == null) return null;
 		
@@ -106,6 +105,9 @@ public class MainServiceImpl implements MainService {
 			result.setStoreKiosk(store.getStoreKiosk());
 			if(store.getStoreKiosk() == 1) {
 				StoreVariables storeVariables = storeVariablesDao.findByStoreId(store.getStoreId());
+				if(storeVariables == null) {
+					return null;
+				}
 				result.setStoreItemAvailable(storeVariables.getStoreItemAvailable());
 			}
 			

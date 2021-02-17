@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.Table;
 
 import com.ssafy.bab.component.StringCryptoConverter;
 
@@ -20,6 +21,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name="user")
 public class User implements Serializable{
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) //AUTO는 default로, IDENTITY는 Auto-increment

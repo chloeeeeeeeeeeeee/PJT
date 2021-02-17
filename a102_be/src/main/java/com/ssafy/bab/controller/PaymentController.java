@@ -126,6 +126,23 @@ public class PaymentController {
 			return new ResponseEntity<String>(result, HttpStatus.BAD_REQUEST);
 	}
 	
+	@ApiOperation(value = "카드 정보 반환", notes = "카드 번호 전달시 카드 종류 반환 ", response = String.class)
+	@PostMapping("/cardtype")
+	public ResponseEntity<String> getRFIDCardType(@RequestParam("cardNumber") String cardNumber) throws Exception{
+		logger.info("getRFIDCardType_payment - 호출");
+		return new ResponseEntity<String>(paymentService.getRFIDCardType(cardNumber), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "카드 정보 저장", notes = "카드 번호, 종류 입력받아 저장 ", response = String.class)
+	@PostMapping("/cardcreate")
+	public ResponseEntity<String> createRFIDCard(@RequestParam("cardNumber") String cardNumber, @RequestParam("cardType") String cardType) throws Exception{
+		logger.info("createRFIDCard_payment - 호출");
+		String result = paymentService.createRfidCard(cardNumber, cardType);
+		if(result == "SUCCESS")
+			return new ResponseEntity<String>(result, HttpStatus.OK);
+		else
+			return new ResponseEntity<String>(result, HttpStatus.BAD_REQUEST);
+	}
 	
 //	@GetMapping("/kakaopayFail")
 //	public String kakaoPayFail() {

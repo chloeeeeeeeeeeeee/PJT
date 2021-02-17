@@ -115,10 +115,11 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 		// itemCount = 0 일 경우 에러처리
 		for(int i = 0; i < paymentInfo.getItemList().size(); i++) {
 			if(paymentInfo.getItemList().get(i).getItemCount() <= 0) return null;
+			if(itemDao.findByItemIdAndStoreId(paymentInfo.getItemList().get(i).getItemId(), paymentInfo.getItemList().get(i).getStoreId()) == null) return null;
 		}
 
 		// 키오스크 기부이고 익명기부가 아니면서 회원일 경우 user 정보 추가
-        if(paymentInfo.getIsKiosk() == 1 && paymentInfo.getContributorPhone() != null) {
+        if(paymentInfo.getIsKiosk() == 1 && paymentInfo.getContributorPhone() != null && !paymentInfo.getContributorPhone().equals("")) {
         	User user = userDao.findByUserPhone(paymentInfo.getContributorPhone());
         	if(user != null)
         		paymentInfo.setUserSeq(user.getUserSeq());
@@ -139,6 +140,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 		
 		if(paymentInfo.getIsKiosk() == 1) {
 			params.add("approval_url", KIOSK_RETURN_URL + "/paymentCheck"); 				// 성공
+//			params.add("approval_url", KIOSK_RETURN_URL + "/payment/kakaopaySuccess"); 
 			params.add("cancel_url", KIOSK_RETURN_URL + "/payment/kakaopayCancel"); 		// 취소
 			params.add("fail_url", KIOSK_RETURN_URL + "/payment/kakaopayFail"); 			// 실패
 		}else {
@@ -187,10 +189,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             // 현재시간으로 변경
 
             SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(kakaoPayApproval.getApproved_at());
-            cal.add(Calendar.HOUR, -9);
-            kakaoPayApproval.setApproved_at(cal.getTime());
+            kakaoPayApproval.setApproved_at(kakaoPayApproval.getApproved_at());
             
             /*
              * ******* DB 테이블 업데이트 *******
@@ -198,7 +197,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             
             // payment 테이블 업데이트
             Payment payment = new Payment();
-            payment.setPaymentId(kakaoPayInfo.getPartner_order_id());
+            payment.setPaymentId(kakaoPayInfo.getPartner_order_id()+"1");
             payment.setPaymentAmount(kakaoPayInfo.getPaymentInfo().getTotalAmount());
             payment.setPaymentDate(kakaoPayApproval.getApproved_at());
             payment.setKakaopayCid(kakaoPayInfo.getPaymentInfo().getCid());
@@ -207,10 +206,10 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             
             // 키오스크/웹 회원 기부일 경우 user에 해당 회원 정보가 들어감 (그 외의 경우는 null)
             User user = userDao.findByUserSeq(Integer.parseInt(kakaoPayInfo.getPartner_user_id()));
-			
+
             // 키오스크/웹 비회원 기부일 경우 contributor에 해당 기부자 정보가 들어감 (그 외의 경우는 null)
             Contributor contributor = null;
-            if(user == null && kakaoPayInfo.getPaymentInfo().getContributorPhone() != null) {
+            if(user == null && kakaoPayInfo.getPaymentInfo().getContributorPhone() != null && !kakaoPayInfo.getPaymentInfo().getContributorPhone().equals("")) {
             	contributor = contributorDao.findByContributorPhone(kakaoPayInfo.getPaymentInfo().getContributorPhone());
             	
             	// 핸드폰번호로 조회했을 때 일치하는 비회원정보가 없을 경우 새 contributor로 추가 
@@ -227,7 +226,6 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             // order, contribution 테이블 업데이트
             for (PaymentItem paymentItem : kakaoPayInfo.getPaymentInfo().getItemList()) {
             	Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
-            	if(item == null) throw new RuntimeException();
 				if(paymentItem.getSupport() == 1) {
 					for(int i = 0; i < paymentItem.getItemCount(); i++) {
 						// Contribution 테이블 업데이트
@@ -249,7 +247,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 					itemDao.save(item);
 					
 					// for storeVariables, user 테이블 업데이트  
-					totalSupportPrice += paymentItem.getItemPrice() * paymentItem.getItemCount();
+					totalSupportPrice += item.getSupportPrice() * paymentItem.getItemCount();
 					totalSupportItem += paymentItem.getItemCount();
 				}else {
 					Orders order = new Orders();
@@ -287,11 +285,9 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             return result;
         
             
-        } catch (RestClientException e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
+        	System.out.println("해당하는 메뉴가 없습니다.");
             e.printStackTrace();
         }
         

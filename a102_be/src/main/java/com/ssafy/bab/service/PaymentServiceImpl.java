@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.bab.dao.CardRfidDao;
 import com.ssafy.bab.dao.ContributionDao;
 import com.ssafy.bab.dao.ContributionOldDao;
 import com.ssafy.bab.dao.ContributorDao;
@@ -22,6 +23,7 @@ import com.ssafy.bab.dao.StoreDao;
 import com.ssafy.bab.dao.StoreVariablesDao;
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.CPaymentInfo;
+import com.ssafy.bab.dto.CardRfid;
 import com.ssafy.bab.dto.Contribution;
 import com.ssafy.bab.dto.ContributionOld;
 import com.ssafy.bab.dto.Contributor;
@@ -98,6 +100,9 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	@Autowired
 	OrderDao orderDao;
+	
+	@Autowired
+	CardRfidDao cardRfidDao;
 
 	@Override
 	public String checkNaverPayTransaction(NPaymentInfo paymentInfo) throws ParseException {
@@ -105,6 +110,7 @@ public class PaymentServiceImpl implements PaymentService {
 		// itemCount = 0 일 경우 에러처리
 		for (int i = 0; i < paymentInfo.getItemList().size(); i++) {
 			if (paymentInfo.getItemList().get(i).getItemCount() <= 0) return "Check ItemCount";
+			if(itemDao.findByItemIdAndStoreId(paymentInfo.getItemList().get(i).getItemId(), paymentInfo.getItemList().get(i).getStoreId()) == null) return "Check itemId or storeId";
 		}
 		
 		// String -> Date
@@ -188,6 +194,7 @@ public class PaymentServiceImpl implements PaymentService {
 		// itemCount = 0 일 경우 에러처리
 		for (int i = 0; i < paymentInfo.getItemList().size(); i++) {
 			if (paymentInfo.getItemList().get(i).getItemCount() <= 0) return "Check ItemCount";
+			if(itemDao.findByItemIdAndStoreId(paymentInfo.getItemList().get(i).getItemId(), paymentInfo.getItemList().get(i).getStoreId()) == null) return "Check itemId or storeId";
 		}
 		
 		// UNIX timestamp -> Date
@@ -220,12 +227,11 @@ public class PaymentServiceImpl implements PaymentService {
 			}
 		}
 
-		int totalSupportPrice = payment.getPaymentAmount();
-		int totalSupportItem = paymentInfo.getItemList().size();
+		int totalSupportPrice = 0;
+		int totalSupportItem = 0;
 
 		for (PaymentItem paymentItem : paymentInfo.getItemList()) {
 			Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
-			if(item == null) throw new RuntimeException();
 			for (int i = 0; i < paymentItem.getItemCount(); i++) {
 				// Contribution 테이블 업데이트
 				Contribution contribution = new Contribution();
@@ -246,6 +252,10 @@ public class PaymentServiceImpl implements PaymentService {
 			item.setItemAvailable(item.getItemAvailable() + paymentItem.getItemCount());
 			item.setItemTotal(item.getItemTotal() + paymentItem.getItemCount());
 			itemDao.save(item);
+			
+			// for storeVariables, user 테이블 업데이트  
+			totalSupportPrice += item.getSupportPrice() * paymentItem.getItemCount();
+			totalSupportItem += paymentItem.getItemCount();
 		}
 
 		// storeVariables, user 테이블 업데이트
@@ -274,26 +284,24 @@ public class PaymentServiceImpl implements PaymentService {
 		// itemCount = 0 일 경우 에러처리
 		for (int i = 0; i < paymentInfo.getItemList().size(); i++) {
 			if (paymentInfo.getItemList().get(i).getItemCount() <= 0) return "Check ItemCount";
-		}
-		
-		if(storeDao.findByStoreId(paymentInfo.getItemList().get(0).getStoreId()) == null) {
-			return "Invalid Store";
+			if(itemDao.findByItemIdAndStoreId(paymentInfo.getItemList().get(i).getItemId(), paymentInfo.getItemList().get(i).getStoreId()) == null) return "Check itemId or storeId";
+
 		}
 		
 		// 주문번호
 		SimpleDateFormat vans = new SimpleDateFormat("yyyyMMdd-HHmmss");
 		String wdate = vans.format(new Date());
-		
+
 		// 주문시각
 		Date tradeConfirmYmdt = vans.parse(paymentInfo.getPaidAt());
-		
+
 		/*
          * ******* DB 테이블 업데이트 *******
          */
 		
 		// payment 테이블 업데이트
 		Payment payment = new Payment();
-        payment.setPaymentId(wdate);
+        payment.setPaymentId(wdate+"2");
         payment.setPaymentDate(tradeConfirmYmdt);
         payment.setPaymentAmount(paymentInfo.getTotalAmount());
         payment.setCreditApprovalNumber(paymentInfo.getApprovalNumber());
@@ -304,7 +312,7 @@ public class PaymentServiceImpl implements PaymentService {
         Contributor contributor = null;
         
         // 받아온 핸드폰 번호가 있을 경우 회원/후원자 정보를 받아오거나 후원자 정보를 추가 함
-        if(paymentInfo.getContributorPhone() != null) {
+        if(paymentInfo.getContributorPhone() != null && !paymentInfo.getContributorPhone().equals("")) {
         	user = userDao.findByUserPhone(paymentInfo.getContributorPhone());
         	contributor = contributorDao.findByContributorPhone(paymentInfo.getContributorPhone());
         	if(user == null && contributor == null){
@@ -320,7 +328,6 @@ public class PaymentServiceImpl implements PaymentService {
      // order, contribution 테이블 업데이트
         for (PaymentItem paymentItem : paymentInfo.getItemList()) {
         	Item item = itemDao.findByItemIdAndStoreId(paymentItem.getItemId(), paymentItem.getStoreId());
-        	if(item == null) throw new RuntimeException();
 			if(paymentItem.getSupport() == 1) {
 				for(int i = 0; i < paymentItem.getItemCount(); i++) {
 					// Contribution 테이블 업데이트
@@ -642,6 +649,27 @@ public class PaymentServiceImpl implements PaymentService {
             System.out.println(e.getCode());
         }
 		
+	}
+
+	@Override
+	public String getRFIDCardType(String cardNumber) {
+		String result = cardRfidDao.findByCardNumber(cardNumber);
+		if(result == null) return "Invalid CardNumber";
+		return result;
+	}
+
+	@Override
+	public String createRfidCard(String cardNumber, String cardType) {
+		if(cardNumber == null || cardType == null) return "Check cardNumber and cardType";
+		if(cardRfidDao.findByCardNumber(cardNumber) != null) return "Already Registered Card";
+		if("credit".equals(cardType) || "gdream".equals(cardType)) {
+			CardRfid card = new CardRfid();
+			card.setCardNumber(cardNumber);
+			card.setCardType(cardType);
+			cardRfidDao.save(card);
+			return "SUCCESS";
+		}
+		return "Check cardType";
 	}
 
 }

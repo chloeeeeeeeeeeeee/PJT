@@ -19,6 +19,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name="contribution_old")
 public class ContributionOld implements Serializable {
 
 	@Id

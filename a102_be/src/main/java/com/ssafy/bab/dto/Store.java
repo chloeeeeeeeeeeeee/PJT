@@ -1,7 +1,6 @@
 package com.ssafy.bab.dto;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -10,25 +9,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 // jpa default 설정이 java에서 camelcase로 되어있는 변수명, 테이블명 등등등을
 // underscore로 바꾸어 mysql의 변수명과 맞춰짐 
 // storeId <-> store_id
-@Getter
-@Setter
-@ToString
+@Data
 @Entity
+@Table(name="store")
 public class Store implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

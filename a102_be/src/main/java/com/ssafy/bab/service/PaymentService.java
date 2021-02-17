@@ -14,4 +14,6 @@ public interface PaymentService {
 	public String checkCreditCardTransaction(CPaymentInfo paymentInfo) throws ParseException;
 	public String checkGDreamTransaction(GPaymentInfo paymentInfo) throws ParseException;
 	public void sendMsg(Contribution contribution, String itemName, String storeName);
+	public String getRFIDCardType(String cardNumber);
+	public String createRfidCard(String cardNumber, String cardType);
 }

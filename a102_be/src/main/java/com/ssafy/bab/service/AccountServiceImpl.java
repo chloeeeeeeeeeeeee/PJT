@@ -5,6 +5,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -55,6 +57,14 @@ public class AccountServiceImpl implements AccountService{
 	
 	
 	public User signUp(User user) {
+		
+		if(user == null) return null;
+		
+		if(user.getUserEmail() == null || !isValidEmail(user.getUserEmail())) return null;
+		if(user.getUserName() == null || user.getUserName().equals("")) return null;
+		if(user.getUserPhone() == null || user.getUserPhone().equals("")) return null;
+		if(user.getUserId() == null || user.getUserId().equals("")) return null;
+		if(user.getUserPwd() == null || user.getUserPwd().equals("")) return null;
 		
 		if(userDao.findByUserId(user.getUserId()) != null)
 			return null;
@@ -192,16 +202,16 @@ public class AccountServiceImpl implements AccountService{
 	@Override
 	public String userUpdate(User user, User newUser) {
 		
-		if(newUser.getUserEmail() != null) {
+		if(newUser.getUserEmail() != null && isValidEmail(newUser.getUserEmail())) {
 			user.setUserEmail(newUser.getUserEmail());
 		}
 		
-		if(newUser.getUserPhone() != null) {
+		if(newUser.getUserPhone() != null && !"".equals(newUser.getUserPhone()) && !"temp".equals(newUser.getUserPhone())) {
 			user.setUserPhone(newUser.getUserPhone());
 			getContributorHistory(user);
 		}
 		
-		if(newUser.getUserName() != null) {
+		if(newUser.getUserName() != null && !"".equals(newUser.getUserName()) && !"temp".equals(newUser.getUserName())) {
 			user.setUserName(newUser.getUserName());
 		}
 		
@@ -242,6 +252,16 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 
-	
+	public boolean isValidEmail(String email) { 
+		boolean err = false; 
+		String regex = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"; 
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(email); 
+		if(m.matches()) { 
+			err = true; 
+		} 
+		return err;
+	}
+
 	
 }

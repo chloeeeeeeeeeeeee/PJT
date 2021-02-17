@@ -10,12 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import lombok.Data;
 
 @Entity
 @Data
 @IdClass(ItemPK.class)
+@Table(name="item")
 public class Item implements Serializable{
 	@Id
 	@Column(name = "store_id")

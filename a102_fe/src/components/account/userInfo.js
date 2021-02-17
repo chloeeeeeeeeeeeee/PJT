@@ -36,8 +36,8 @@ function UserInfo() {
 
   const userUpdate  = (event) => {
     event.preventDefault();
-    const regex = /^[0-9\b -]{0,13}$/;
-    (regex.test(phone) ?
+    const regex = /^[0-9\b -]{10,11}$/;
+    (regex.test(phone) && phone.trim() !== "" ?
       fetch(`${process.env.REACT_APP_API_URL}/account/update`, {
         method: "POST",
         headers: {
@@ -57,7 +57,7 @@ function UserInfo() {
         }
       })
     :
-      alert("연락처는 번호만 입력해주세요!")
+      alert("연락처는 10-11자리 번호만 입력해주세요!")
     )
   };
 

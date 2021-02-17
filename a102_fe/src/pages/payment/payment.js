@@ -74,7 +74,7 @@ function Payment() {
       });
       data.totalCount = totalCount;
 
-      //   console.log(data);
+      console.log(data);
 
       axios
         .post(`${process.env.REACT_APP_API_URL}/payment/kakaopay`, data, {
@@ -220,7 +220,7 @@ function Payment() {
             <CardHeader className="text-center">
               <b>결제 수단 선택</b>
             </CardHeader>
-            <CardBody className="p-2">
+            <CardBody className="p-0 pl-2">
               <FormGroup tag="fieldset" className="col mb-0">
                 <FormGroup className="col mb-0">
                   <Label>

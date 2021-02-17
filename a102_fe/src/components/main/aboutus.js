@@ -31,7 +31,7 @@ function Aboutus() {
             <CardBody sm="12" className="aboutUsBody">
                 <div>
                 <p className='mb-0 aboutUsText'>
-                안녕하세요, 팀 '우리끼리'입니다.
+                안녕하세요, 팀 '우리끼니'입니다.
                 </p>
                 <br/>
                 <p className='mb-0 aboutUsText'>
@@ -49,7 +49,7 @@ function Aboutus() {
                 
                 <br/>
                 <p className='mb-0 aboutUsText'>
-                <b>작은 실천으로 더 따뜻한 하루를 선물하는 '우리끼리'와 함께해주세요.</b>
+                <b>작은 실천으로 더 따뜻한 하루를 선물하는 '우리끼니'와 함께해주세요.</b>
                 </p>
                 {/* <h2>프로님 그 얘기 아시잖아요,</h2>
                 <p className='mb-0 aboutUsText'>

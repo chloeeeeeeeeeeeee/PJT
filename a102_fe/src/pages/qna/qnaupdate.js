@@ -44,7 +44,6 @@ function QnaUpdate() {
       }),
     }).then((res) => {
       if (res.status === 200) {
-        // alert("200떳당");
         window.location.href = "/qna";
       } else {
         alert("글 수정에 실패하셨습니다. 다시 시도해주세요.");
@@ -54,13 +53,11 @@ function QnaUpdate() {
 
   const onTitleChange = (event) => {
     setTitle(event.target.value);
-    // console.log("제목제목", title);
   };
 
   const onContentChange = (event) => {
     const data = event.editor.getData();
     setContent(data);
-    // console.log("너 왜 안나오니 등장해죠", content);
   };
 
   const onSecretChange = (event) => {
@@ -69,7 +66,6 @@ function QnaUpdate() {
     } else {
       setSecret(0);
     }
-    // console.log("비밀", secret);
   };
 
   return (

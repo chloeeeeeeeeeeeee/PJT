@@ -48,9 +48,13 @@
     .listPostBody {
       height: 52vh;
       overflow-y: auto;
+      &::-webkit-scrollbar {
+        display: none;
+      }
       table {
         text-align: center;
         border: none;
+        table-layout: fixed;
         // height: 40vh;
         .listPostBodyThead {
           // height: 10%;

@@ -68,7 +68,7 @@ function StoreDetailInfo(storeInfo) {
   }, []);
 
   return (
-    <Col md={{ size: 2, offset: 1 }} sm="12" className="storeInfo">
+    <Col lg={{ size: 2, offset: 1 }} xs="12" className="storeInfo">
       <Card className="storeInfoCard">
         <CardHeader className="cardHeader">
           <p className="font-weight-bold mt-1">{storeInformation.storeName}</p>

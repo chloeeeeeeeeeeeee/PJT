@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   Card,
   CardHeader,
@@ -13,6 +13,26 @@ import {
   Col,
 } from "reactstrap";
 import { FcLike } from "react-icons/fc";
+
+function useInterval(callback, delay){
+    const savedCallback = useRef();
+
+    useEffect(()=>{
+        savedCallback.current = callback;
+    }, [callback])
+
+    useEffect(()=>{
+        function tick(){
+            savedCallback.current()
+        }
+        if(delay !== null){
+            const id = setInterval(tick, delay);
+            return () => {
+                clearInterval(id)
+            }
+        }
+    }, [callback, delay]);
+}
 
 function StoreSupportList() {
   const jwtToken = localStorage.getItem("access-token")
@@ -69,6 +89,24 @@ function StoreSupportList() {
   let [currentTime, setCurrentTime] = useState(todayTime);
   // 해당 기간 내 받은 후원 내역
   let [contributions, setContributions] = useState([]);
+
+  useInterval(async () => {
+    let contrib = null
+    axios({
+      method: "POST",
+      url: `${process.env.REACT_APP_API_URL}/store/contributionlist?endDate=${endDate} ${currentTime}&startDate=${startDate} ${currentTime}`,
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+        "Access-Control-Allow-Origin": "*",
+        token: jwtToken,
+      },
+    })
+      .then((res) => {
+        // console.log(res.data);
+        contrib = res.data
+        setContributions(contrib)
+      });
+}, 3000)
 
   // 시간 변경
   function changeCurrentTime() {
@@ -142,6 +180,29 @@ function StoreSupportList() {
       });
   }, [startDate, endDate]);
 
+  
+
+  
+//   setInterval(function(){
+//     console.log("INTERVAL")
+//   axios({
+//       method: "POST",
+//       url: `${process.env.REACT_APP_API_URL}/store/contributionlist?endDate=${endDate} ${currentTime}&startDate=${startDate} ${currentTime}`,
+//       headers: {
+//         "Content-Type": "application/json; charset=UTF-8",
+//         "Access-Control-Allow-Origin": "*",
+//         token: jwtToken,
+//       },
+//     })
+//       .then((res) => {
+//         // console.log(res.data);
+//         if (res.data.length  !== contributions){
+//             setContributions(res.data);        
+//         }
+        
+//       });
+// }, 3000)
+
   const contributionsDate = (contributions.map((item, index) => {
     let lst = []
     for (let idx=0; idx<item.itemAvailable; idx++){
@@ -162,31 +223,11 @@ function StoreSupportList() {
       </Col>
     );
     }))
-  useEffect(()=>{
-    const intervalFunction = setInterval(function(){
-        console.log("INTERVAL")
-      axios({
-          method: "POST",
-          url: `${process.env.REACT_APP_API_URL}/store/contributionlist?endDate=${endDate} ${currentTime}&startDate=${startDate} ${currentTime}`,
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-            "Access-Control-Allow-Origin": "*",
-            token: jwtToken,
-          },
-        })
-          .then((res) => {
-            // console.log(res.data);
-            setContributions(res.data);        
-          });
-    }, 3000)
-
-    return () => clearInterval(intervalFunction)
-  }, [])
 
   
 
   return (
-    <Col md="3" xs="12" className="storeMenuList">
+    <Col lg="3" xs="12" className="storeMenuList">
       <Card className="storeSupportListContainer col p-0">
         <CardHeader>
           <Row className="justify-content-between pl-3">

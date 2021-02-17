@@ -90,9 +90,10 @@ function Auth(props) {
     console.info("디지체크", value)
     var digit = value.charAt(value.length-1)
     console.log("숫자 끝자릿수 확인", digit)
+    console.log("숫자 빈칸 확인", !Boolean(digit))
 
     const regexdigit = /^[0-9\b -]$/;
-    (regexdigit.test(digit)) ? (console.log("숫자입니다")) : (alert("숫자만 입력하세요!"))
+    (regexdigit.test(digit) || !Boolean(digit) ) ? (console.log("숫자이거나 빈칸입니다")) : (alert("숫자만 입력하세요!"))
 
     const regexphone = /^[0-9\b -]{10,11}$/;
     (regexphone.test(value)) ? (setCheckphone(true)) : (setCheckphone(false))
@@ -103,7 +104,7 @@ function Auth(props) {
     var mail = email
     console.info("메일체크", mail)
 
-    const regexmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    const regexmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     (regexmail.test(mail)) ? (setCheckmail(true)) : (setCheckmail(false))
   
   }
@@ -111,11 +112,12 @@ function Auth(props) {
   // 이제 이걸 user_id, user_name 등으로 연결해줘야해요!
   const Signup = (event) => {
     event.preventDefault();
-    if (checkid === false) {
-      alert("중복 확인을 해주세요!")
-    // } else if ( name !== "" && phone !== "" && email !== "") {
-    } else if (Boolean(name) === false || Boolean(phone) === false || Boolean(email) === false || Boolean(password) === false) {
+    mailcheck();
+    if (Boolean(name) === false || Boolean(phone) === false || Boolean(email) === false || Boolean(password) === false) {
       alert("정보를 빠짐없이 채워주세요!")
+    // } else if ( name !== "" && phone !== "" && email !== "") {
+    } else if (checkid === false) {
+      alert("중복 확인을 해주세요!")
     } else if (checkphone !== true) {
       alert("전화번호를 확인하세요!")
     } else if (checkmail !== true) {
@@ -349,7 +351,7 @@ function Auth(props) {
                                     value={phone}
                                     // onKeyPress={(value) => (this.value = this.value.replace(/[^0-9]/g, ''))}
                                     // onKeyPress={(value) => digitcheck(value)}
-                                    onChange={(e) => {digitcheck(e.target.value); setPhone(e.target.value); }}
+                                    onChange={(e) => {setPhone(e.target.value); digitcheck(e.target.value); }}
                                     placeholder="전화번호를 숫자로만 입력하세요(01012341234)"
                                     required
                                   />

@@ -5,7 +5,7 @@ new QWebChannel(qt.webChannelTransport, function (channel) {
 
 let stopFlag = 0;
 let cnt = document.getElementById("count");
-let orderNumElement = document.getElementById("order=num");
+let orderNumElement = document.getElementById("order-num");
 
 function completeTimeout(sec){
     

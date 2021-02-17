@@ -1,14 +1,16 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from ui.main_ui2 import Ui_mainWindow
-
 from api import *
 from utils import *
 from WebEnginePage import *
-
 from kakaoSocket import *
-import sys
+from arduinoSerial import *
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
+from PyQt5.QtWebChannel import QWebChannel
+from PyQt5.QtCore import *
 
+import sys
 import datetime
 import random
 
@@ -18,10 +20,9 @@ pageConnector = {}
 
 # js로 부터의 function call을 handling 하는 class
 class CallHandler(QObject):
-    # 기능
     @pyqtSlot(QVariant)
     def nextPage(self, opt):
-        print(opt)
+        print("Move to : ", opt)
         # opt에 해당하는 페이지로 이동시키는 함수에 연결
         # 사용가능목록(opt)
         # start, store, payment, kakao, rfid, complete
@@ -42,13 +43,9 @@ class CallHandler(QObject):
         # 장바구니를 비워주는 함수에 연결
         w.clearBagItem()
 
-    @pyqtSlot(QVariant, QVariant)
-    def verifyPay(self, data, opt):
-        # rfid 결제 검증
-        w.rfidPaymentVerification(data, opt)
-
     @pyqtSlot(QVariant)
     def setPhoneNum(self, num):
+        # 휴대폰 번호를 받아와 저장
         w.phoneNum = num
 
 
@@ -69,11 +66,15 @@ class et(QMainWindow, Ui_mainWindow):
         self.phoneNum = "010-0000-0000"
         self.donationCnt = 0
         self.recentDonationList = -1
+        self.orderNum = ""
 
-        # 초기 실행 함수
-        self.makePage()  # 페이지 리스트 생성 및 로드
-        self.widgetList["widgetStoreMain.html"].page().loadFinished.connect(self.makeStoreItem)  # loadFinidhed 설정 -> html/js가 로딩 되기 전에 js function call을 방지
+        # 페이지 리스트 생성 및 로드
+        self.makePage()
+        # loadFinidhed 설정 -> html/js가 로딩 되기 전에 js function call을 방지
+        self.widgetList["widgetStoreMain.html"].page().loadFinished.connect(self.makeStoreItem)
+        # kiosk 상단 icon, title, time 설정
         self.setTopBar()
+        # 시작페이지 로딩
         self.loadStartPage()
 
     # 메인 변수 초기화
@@ -86,6 +87,8 @@ class et(QMainWindow, Ui_mainWindow):
         self.recentDonationList = -1
 
     # Click 불가능한 label 등의 위젯을 클릭 가능하게 만들어주는 함수
+    # 사용법 -> self.clickable(위젯이름).connect(실행할 함수)
+    # ex) self.clickable(self.ui.labelHome).connect(self.loadStartPage)
     def clickable(self, widget):
         class Filter(QObject):
             clicked = pyqtSignal()
@@ -103,7 +106,6 @@ class et(QMainWindow, Ui_mainWindow):
     # 상단 바 설정
     def setTopBar(self):
         # 홈 버튼 아이콘 설정
-        # TODO: 프로젝트 메인 아이콘으로 변경
         self.ui.labelHome.setPixmap(QPixmap("./ui/res/home.png").scaledToWidth(60))
         self.clickable(self.ui.labelHome).connect(self.loadStartPage)
 
@@ -158,46 +160,78 @@ class et(QMainWindow, Ui_mainWindow):
             self.widgetList[path.split('/')[2]] = widget
 
     def loadStartPage(self):
+        # Load start page
+        # 장바구니 비움 및 변수 초기화 함수 실행
         self.clearBagItem()
+        # complete 화면에서 count가 진행되고 있다면 종료
         self.widgetList['widgetComplete.html'].page().runJavaScript("stopCnt()")
         self.widgetList["widgetStart.html"].raise_()
 
     def loadItemListPage(self):
+        # Load store main page
+        # menu list에 아이템 설정
         self.makeStoreItem(True)
         self.widgetList["widgetStoreMain.html"].page().runJavaScript("fadein()")
         self.widgetList["widgetStoreMain.html"].raise_()
 
     def loadPaymentMethodPage(self):
+        # Load payment selection page
         self.setPaymentBag()
         self.widgetList["widgetPaymentMain.html"].page().runJavaScript("fadein()")
         self.widgetList["widgetPaymentMain.html"].raise_()
 
     def loadKakaoPayPage(self):
+        # Load kakao pay page
+        # 장바구니 바탕으로 결제 요청 page url 받아옴
         url = postKakaoPay(self.bag, self.totalCost, self.itemCnt, self.phoneNum)
+        # iframe의 url을 설정
         jscmd = "setUrl(\"{url}\")".format(url=url)
         self.widgetList["widgetKakaoPay.html"].page().runJavaScript(jscmd)
         self.widgetList["widgetKakaoPay.html"].raise_()
 
+        # pg Token을 socket을 통해 받기 위한 thread 실행
         th = getPg(self)
+        # thread의 signal에 함수 연결
         th.notifyProgress.connect(self.getPgToken)
         th.start()
 
     def loadRfidPage(self):
+        # Load rfid page
+        # rfid 센서로부터 card id를 받기 위한 thread 실행
+        th = getSerial(self)
+        # thread의 signal에 함수 연결
+        th.notifyProgress.connect(self.rfidPaymentVerification)
+        th.start()
         self.widgetList["widgetRfid.html"].raise_()
 
     def loadCompletePage(self):
+        # Load complete page
         self.widgetList["widgetComplete.html"].raise_()
+
+        # complete 페이지의 number count 실행
         jscmd = "completeTimeout(10)"
         self.widgetList["widgetComplete.html"].page().runJavaScript(jscmd)
 
-    # html controll functions
+        # 주문번호를 표시하기 위해 getOrderList를 통해 해당하는 order number를 받아옴
+        # complete page의 주문번호 변경
+        orderNum = getOrderList(self.storeid, self.orderNum)
+        jscmd = "setOrderNum({orderNum})".format(orderNum=orderNum)
+        self.widgetList["widgetComplete.html"].page().runJavaScript(jscmd)
+
+    # html control functions
     def makeStoreItem(self, ok):
         if ok:
             widget = self.widgetList["widgetStoreMain.html"]
+
+            # 설정 된 아이템 초기화
             jscmd = "clearStoreItem()"
             widget.page().runJavaScript(jscmd)
+
+            # menu list를 받아옴
             self.itemList = getStoreItem(self.storeid)
+
             idIter = 0
+            # itemList 내의 menu들을 하나씩 세팅해주는 js function call 내용 작성 및 실행
             for i in self.itemList:
                 jscmd = "addStoreItem(\'{itemId}\', \'{imgUrl}\', \'{itemName}\'," \
                         " \'{itemPrice}\', \'{badge}\', \'{intro}\'" \
@@ -207,6 +241,8 @@ class et(QMainWindow, Ui_mainWindow):
                             available=i["itemAvailable"], contribution=i["itemContributionAmount"])
                 widget.page().runJavaScript(jscmd)
                 idIter = idIter+1
+
+            # 6000원 이상의 메뉴에 한해서, 랜덤으로 후원 추천 목록에 추가
             while True:
                 addNum = random.randrange(0, len(self.itemList))
                 if self.itemList[addNum]["itemPrice"] >= 6000:
@@ -214,26 +250,71 @@ class et(QMainWindow, Ui_mainWindow):
                     break
 
     def addBagItem(self, itemNum, isSupport):
+        # store main의 장바구니에 아이템 추가하는 함수
         try:
+            # item number와 support 여부에 맞는 item을 만듬
             item = self.makeItem(itemNum, isSupport)
+
+            # 장바구니에 추가
             self.bag.append(item)
 
-
+            # 전체주문가격과 수량을 추가
             self.totalCost = self.totalCost + item["itemPrice"]
             self.itemCnt = self.itemCnt + 1
+
+            # store main의 장바구니 section에 item 표시
             jscmd = "addItem(\'{itemId}\', \'{itemName}\', \'{itemPrice}\', {isSupport})" \
                 .format(itemId=itemNum, itemName=item["itemName"], itemPrice=item["itemPrice"], isSupport=isSupport)
             self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
+
+            # store main의 장바구니 section에 수량 및 가격 추가
             jscmd = "addCost({cost})".format(cost=item["itemPrice"])
             self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
-            if item["itemPrice"] >= 6000 and self.donationCnt < 2 and self.recentDonationList != itemNum and isSupport == 0:
+
+            # 후원 추천 리스트가 가득 차지 않았다면(max=2) 장바구니에 추가와 동시에 추천 리스트에 추가
+            if item["itemPrice"] >= 6000 and self.donationCnt < 2 and \
+                    self.recentDonationList != itemNum and isSupport == 0:
                 self.addDonationList(itemNum)
                 self.donationCnt = self.donationCnt + 1
                 self.recentDonationList = itemNum
+
         except Exception as e:
             print(e)
 
+    def removeBagItem(self, itemNum, isSupport):
+        # item number와 support 여부에 맞는 item을 만듬
+        item = self.makeItem(itemNum, isSupport)
+
+        # 장바구이네서 제거
+        self.bag.remove(item)
+
+        # 전체주문가격과 수량을 제거
+        self.totalCost = self.totalCost - item["itemPrice"]
+        self.itemCnt = self.itemCnt - 1
+
+        # store main의 장바구니 section에 item 제거
+        jscmd = "removeCnt(\'{itemId}\', {isSupport})".format(itemId=itemNum, isSupport=isSupport)
+        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
+
+        # store main의 장바구니 section에 수량 및 가격 제거
+        jscmd = "removeCost({cost})".format(cost=item["itemPrice"])
+        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
+
+    def clearBagItem(self):
+        # 장바구니 비우는 함수
+        # 메인 변수 초기화
+        self.initVals()
+
+        # 장바구니 아이템 초기화 js function call
+        jscmd = "clearBag()"
+        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
+
+        # 장바구니 총액 및 총량 초기화 js function call
+        jscmd = "clearCost()"
+        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
+
     def makeItem(self, itemNum, isSupport):
+        # 옵션에 맞는 아이템을 만들어 반환
         refItem = self.itemList[itemNum]
         item = {"itemName": refItem["itemName"],
                 "itemPrice": refItem["itemPrice"],
@@ -247,6 +328,7 @@ class et(QMainWindow, Ui_mainWindow):
         return item
 
     def addDonationList(self, itemNum):
+        # donation div에 후원 추천 목록 아이템 추가
         item = self.itemList[itemNum]
         jscmd = "addDonationItem(\'{itemId}\', \'{imgUrl}\', \'{itemName}\'," \
                 " \'{itemPrice}\', \'{badge}\', \'{intro}\'" \
@@ -254,58 +336,49 @@ class et(QMainWindow, Ui_mainWindow):
             .format(itemId=itemNum, imgUrl=item["itemImgUrl"], itemName=item["itemName"],
                     itemPrice=item["itemPrice"], badge="Hot!", intro="",
                     available=item["itemAvailable"], contribution=item["itemContributionAmount"])
-
-        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
-
-    def removeBagItem(self, itemNum, isSupport):
-        item = self.makeItem(itemNum, isSupport)
-        self.bag.remove(item)
-
-        self.totalCost = self.totalCost - item["itemPrice"]
-        self.itemCnt = self.itemCnt - 1
-
-        jscmd = "removeCnt(\'{itemId}\', {isSupport})".format(itemId=itemNum, isSupport=isSupport)
-        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
-        jscmd = "removeCost({cost})".format(cost=item["itemPrice"])
-        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
-
-    def clearBagItem(self):
-        self.initVals()
-        jscmd = "clearBag()"
-        self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
-        jscmd = "clearCost()"
         self.widgetList["widgetStoreMain.html"].page().runJavaScript(jscmd)
 
     def makePageConnector(self):
+        # page name(str)과 load function 연결
         pc = {"start": self.loadStartPage, "store": self.loadItemListPage,
-                         "payment": self.loadPaymentMethodPage, "kakao": self.loadKakaoPayPage,
-                         "rfid": self.loadRfidPage, "complete": self.loadCompletePage}
+              "payment": self.loadPaymentMethodPage, "kakao": self.loadKakaoPayPage,
+              "rfid": self.loadRfidPage, "complete": self.loadCompletePage}
         return pc
 
     def getPgToken(self, pgToken):
-        sendPgToken(pgToken)
+        # pg token 서버에 전송
+        self.orderNum = sendPgToken(pgToken)
         self.loadCompletePage()
 
-    def rfidPaymentVerification(self, data, opt):
-        # TODO: 서버로부터 결제 검증
+    def rfidPaymentVerification(self, data):
+        # 결제대기 페이지 이동
+        jscmd = "togglePage(done)"
+        self.widgetList["widgetRfid.html"].page().runJavaScript(jscmd)
+
+        # data에 맞게 opt 변경
+        opt = getCardType(data)
         if opt == "credit":
-            print("credit")
-            sendCreditCard(data, self.bag, self.totalCost, self.itemCnt, self.phoneNum)
+            self.orderNum = sendCreditCard(data, self.bag, self.totalCost, self.itemCnt, self.phoneNum)
             self.loadCompletePage()
 
         if opt == "gdream":
-            print("gdream")
-            sendGdreamCard(data, self.bag, self.itemCnt, self.totalCost)
+            self.orderNum = sendGdreamCard(data, self.bag, self.itemCnt, self.totalCost)
             self.loadCompletePage()
 
+        # 페이지 초기화
         jscmd = "initPage()"
         self.widgetList["widgetRfid.html"].page().runJavaScript(jscmd)
 
     def setPaymentBag(self):
+        # payment page의 주문 목록 생성 함수
         try:
+            # 주문 목록 초기화
             jscmd = "clear()"
             self.widgetList["widgetPaymentMain.html"].page().runJavaScript(jscmd)
+
+            # bag의 아이템 하나씩 추가
             for b in self.bag:
+                # support 조건에 따라 내용 변경 후 아이템 추가
                 id = b["itemId"]
                 name = b["itemName"]
                 if b["support"] == 1:
@@ -316,8 +389,10 @@ class et(QMainWindow, Ui_mainWindow):
                             itemPrice=b["itemPrice"], itemCnt=b["itemCount"])
                 self.widgetList["widgetPaymentMain.html"].page().runJavaScript(jscmd)
 
+            # 주문 총액 및 총량 추가
             jscmd = "addResult({totalCnt}, {totalPrice})".format(totalCnt=self.itemCnt, totalPrice=self.totalCost)
             self.widgetList["widgetPaymentMain.html"].page().runJavaScript(jscmd)
+
         except Exception as e:
             print(e)
 

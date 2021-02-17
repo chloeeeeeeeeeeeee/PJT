@@ -3,7 +3,7 @@ import {
   VerticalTimeline,
   // VerticalTimelineElement,
 } from "react-vertical-timeline-component";
-import 'react-vertical-timeline-component/style.min.css';
+import "react-vertical-timeline-component/style.min.css";
 // import { Edit, Video, Image, Activity } from "react-feather";
 import TimelineItem from "./timelineItem";
 // import Contribution from "../support/contribution";
@@ -21,18 +21,18 @@ function Timeline() {
         // 키값을 "token"으로 설정할 것인가? 확인해보고 authentication.js 의 fetch도 함께 수정하자
         // 왜 어떤 사람들은 이를 'access_token'으로 쓰지? 로컬 스토리지는 '-'를 쓰는데.
         // 해당 fetch 함수 내용 확인한 다음 memberInfo, memberQnA 병행하여 확인해야하는걸 잊지말자!
-        token: localStorage.getItem('access-token')
-      }
+        token: localStorage.getItem("access-token"),
+      },
     })
-    .then(res => res.json())
-    .then(res => {
-      setContributions(res);
-    //   console.log("지금 받아올 내용은:", res)
-    //   console.log("실제로 받은 내용은:", contributions)
-    //   console.log("어떻게 파싱할까요?:", contributions[0])
-    });
+      .then((res) => res.json())
+      .then((res) => {
+        setContributions(res);
+        //   console.log("지금 받아올 내용은:", res)
+        //   console.log("실제로 받은 내용은:", contributions)
+        //   console.log("어떻게 파싱할까요?:", contributions[0])
+      });
   }, []);
-  
+
   // return (
   //   <div></div>
   // );
@@ -40,21 +40,19 @@ function Timeline() {
     // console.log("이게 0일 경우인데요:", contributions)
     return (
       <Fragment>
-        <VerticalTimeline
-          layout={"1-colum-right"}
-        >
-          {contributions.map((contributionItem, index) => 
-            <TimelineItem
-              contribution = {contributionItem}
-            />
-          )}
+        <VerticalTimeline layout={"1-column-right"}>
+          {contributions.map((contributionItem, index) => (
+            <TimelineItem key={index} contribution={contributionItem} />
+          ))}
         </VerticalTimeline>
       </Fragment>
     );
   } else {
     return (
-      <div className="ProfileInfo" >
-        <p className="font-weight-bold">테스트 결제를 하시고 후원 랭킹에 참여해보세요!</p>
+      <div className="ProfileInfo">
+        <p className="font-weight-bold">
+          테스트 결제를 하시고 후원 랭킹에 참여해보세요!
+        </p>
         <p>0. 회원가입 및 로그인해주세요</p>
         <p>1. '후원하기'에서 서울시 종로구 창신동을 검색해주세요</p>
         <p>2. 국수나무 창신점 선택해주세요</p>
@@ -64,6 +62,6 @@ function Timeline() {
       </div>
     );
   }
-};
+}
 
 export default Timeline;

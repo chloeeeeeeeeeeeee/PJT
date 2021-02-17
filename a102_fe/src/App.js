@@ -33,16 +33,14 @@ function App() {
         <Row className="mainBody">
           <Switch>
             {/* 아동 View */}
-            <Route path="/childmain" component={ChildMain} />
-            <Route path="/childmap" component={ChildSupport} />
+            <Route path="/main" component={ChildMain} />
+            <Route path="/map" component={ChildSupport} />
             {/* 후원자 View */}
             <Route exact path="/" component={Main} />
             <Route path="/auth" component={Authentication} />
             <Route path="/naver" component={NaverAuthCallback} />
             <Route path="/signout" component={Signout} />
             <Route path="/support" component={Support} />
-            {/* <Route path="/map" component={Support} /> */}
-            {/* <Route path="/storedetail/:storeId" component={StoreDetail} /> */}
             <Route
               path="/storedetailsupport/:storeId"
               component={StoreDetail}

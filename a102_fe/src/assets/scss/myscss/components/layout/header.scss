@@ -1,3 +1,22 @@
+#tempNav {
+  z-index: 100;
+  position: fixed;
+  Button {
+    font-size: small;
+    border: none;
+    // display: block;
+  }
+  .child {
+    background-color: $oori-yellow;
+  }
+  .supporter {
+    background-color: $oori-green;
+  }
+  .store {
+    background-color: $oori-gray;
+  }
+}
+
 // 상단 Navbar
 .mainHeader {
   height: 22%;

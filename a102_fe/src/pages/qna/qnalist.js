@@ -75,7 +75,6 @@ function QnaList() {
       <PaginationItem 
       key ={idx-1}>
         <PaginationLink
-          // key ={idx-1}
           className={nowPage === idx - 1 ? "active" : ""}
           href="#javascript"
           onClick={(e) => Page(idx - 1)}

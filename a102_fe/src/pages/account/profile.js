@@ -21,25 +21,28 @@ function Profile() {
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
       headers: {
-        token: localStorage.getItem('access-token')
-      }
+        token: localStorage.getItem("access-token"),
+      },
     })
-    .then(res => res.json())
-    .then(res => {
-      setuserInfo(res);
-    })
-  }, [])
+      .then((res) => res.json())
+      .then((res) => {
+        setuserInfo(res);
+      });
+  }, []);
 
   return (
     <Col className="mainProfile">
-    {/* 프로필 영역 타이틀 */}
+      {/* 프로필 영역 타이틀 */}
       <Row>
         <Col sm="12" md={{ size: 10, offset: 1 }} id="title">
-          <h3 className="col-8 d-inline p-0"> { userInfo.userName }님의 따뜻한 마음</h3>
+          <h3 className="col-8 d-inline p-0">
+            {" "}
+            {userInfo.userName}님의 따뜻한 마음
+          </h3>
           <div className="col-4 d-inline">
-            <Button 
+            <Button
               className="profileHeaderButton"
-              onClick={() => (alert("실명 인증을 준비중입니다"))}
+              onClick={() => alert("실명 인증을 준비중입니다")}
             >
               기부영수증 발급
             </Button>
@@ -47,7 +50,7 @@ function Profile() {
         </Col>
       </Row>
       <Row className="profileHeader">
-        <Col sm="12" md={{ size:  10, offset: 1 }}>
+        <Col sm="12" md={{ size: 10, offset: 1 }}>
           <MemberWithUs />
         </Col>
       </Row>

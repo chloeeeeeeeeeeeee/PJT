@@ -16,39 +16,27 @@ import { FcLock } from "react-icons/fc";
 
 function QnaList() {
   let [qnaList, setQnaList] = useState([]);
-  let [userStatus, setUserStatus] = useState([]);
+  let [userStatus, setUserStatus] = useState(Boolean(localStorage.getItem("access-token")));
   let [user, setUser] = useState([]);
   let [totalPages, setTotalPages] = useState(0);
   let [nowPage, setNowPage] = useState(0);
-
+  
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
-      headers: {
-        token: localStorage.getItem("access-token"),
-      },
-    })
+    if(userStatus) {
+      fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
+        headers: {
+          token: localStorage.getItem("access-token"),
+        },
+      })
       .then((res) => res.json())
       .then((res) => {
         setUser(res);
-        // console.log(user);
-      });
+        console.log(res)
+      })
+    }
   }, []);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
-      headers: {
-        token: localStorage.getItem("access-token"),
-      },
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        setUserStatus(Boolean(res.userSeq));
-        // console.log(Boolean(res.userSeq));
-      });
-  }, []);
-
-  useEffect(() => {
-    // fetch(`http://i4a102.p.ssafy.io:8080/app/qna/0`)
     fetch(`${process.env.REACT_APP_API_URL}/qna/0`)
       .then((res) => res.json())
       .then((res) => {
@@ -58,8 +46,6 @@ function QnaList() {
   }, []);
 
   const Detail = (qna) => {
-    // console.log(qna);
-    // fetch(`http://i4a102.p.ssafy.io:8080/app/qna/read`, {
     fetch(`${process.env.REACT_APP_API_URL}/qna/read`, {
       method: "POST",
       headers: {
@@ -75,7 +61,6 @@ function QnaList() {
         alert("타인이 작성한 비밀글은 볼 수 없어요.");
       } else {
         res.json().then((res) => {
-          // alert("공개글이니까 혹은 내가 쓴 거니까 볼 수 있지");
           window.history.pushState(res, "please", "/qnadetail");
           window.location.href = "/qnadetail";
         });
@@ -87,8 +72,10 @@ function QnaList() {
 
   for (let idx = 1; idx <= totalPages; idx++) {
     paginations.push(
-      <PaginationItem>
+      <PaginationItem 
+      key ={idx-1}>
         <PaginationLink
+          // key ={idx-1}
           className={nowPage === idx - 1 ? "active" : ""}
           href="#javascript"
           onClick={(e) => Page(idx - 1)}
@@ -100,7 +87,6 @@ function QnaList() {
   }
 
   const Page = (idx) => {
-    // fetch(`http://i4a102.p.ssafy.io:8080/app/qna/${idx}`)
     fetch(`${process.env.REACT_APP_API_URL}/qna/${idx}`)
       .then((res) => res.json())
       .then((res) => {
@@ -129,14 +115,6 @@ function QnaList() {
           </Col>
           <Col sm="12" md={{ size: 10, offset: 1 }}>
             <Card className="listPostContent">
-              {/* <CardHeader className="listPostHeader">
-                            <h5>문의 내역</h5>
-                            {userStatus?
-                                <a href="/qnacreate"><Button className="listPostHeaderButton">문의하기</Button></a>
-                                :
-                                <div className="listPostHeaderCaution">회원만 문의가 가능합니다</div>
-                            }
-                        </CardHeader> */}
               <div className="listPostBody">
                 <Table hover>
                   <thead className="listPostBodyThead">
@@ -161,6 +139,7 @@ function QnaList() {
                   <tbody className="listPostBodyTbody">
                     {qnaList.map((qna, index) => (
                       <tr
+                        key={index}
                         className={
                           user.userId === qna.user.userId ? "myQna" : ""
                         }

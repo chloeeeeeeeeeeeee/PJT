@@ -9,17 +9,20 @@ function QnaDetail() {
     let [qnaDate, setQnaDate] = useState("");
     let [qnauser, setQnaUser] = useState("");
     let [user, setUser] = useState([]);
+    let [userStatus, setUserStatus] = useState(Boolean(localStorage.getItem("access-token")));
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
-            headers: {
-                token: localStorage.getItem('access-token')
-            }
-        })
-        .then(res => res.json())
-        .then(res => {
-            setUser(res);
-        })
+        if(userStatus) {
+            fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
+                headers: {
+                    token: localStorage.getItem('access-token')
+                }
+            })
+            .then(res => res.json())
+            .then(res => {
+                setUser(res);
+            })
+        }
     }, [])
 
     useEffect(() => {

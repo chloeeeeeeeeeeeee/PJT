@@ -23,13 +23,18 @@
           background-color: white;
           color: $oori-green;
           font-weight: bold;
-        }
-        .userInfoBody {
           Button {
             font-size: small;
             background-color: $oori-white;
             border: none;
             color: $oori-green;
+            float: right;
+          }
+        }
+        .userInfoBody {
+          .userInfoInput {
+            width: 90%;
+            font-size: small;
             float: right;
           }
         }

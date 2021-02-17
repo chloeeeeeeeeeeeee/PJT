@@ -37,28 +37,30 @@ function UserInfo() {
   const userUpdate  = (event) => {
     event.preventDefault();
     const regex = /^[0-9\b -]{10,11}$/;
-    (regex.test(phone) && phone.trim() !== "" ?
-      fetch(`${process.env.REACT_APP_API_URL}/account/update`, {
-        method: "POST",
-        headers: {
-          token: localStorage.getItem("access-token"),
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userPhone: phone,
-          userEmail: email,
-        }),
-      }).then((res) => {
-        if (res.status === 200) {
-          setButtton(!button)
-          // window.location.href = "/profile";
-        } else {
-          alert("회원정보 수정에 실패하셨습니다. 다시 시도해주세요.");
-        }
-      })
-    :
+    const regexmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+    (!(regex.test(phone)) || phone.trim() === "") ?
       alert("연락처는 10-11자리 번호만 입력해주세요!")
-    )
+    :
+    (!(regexmail.test(email)) || email.trim() === "") ?
+      alert("이메일 형식을 확인해주세요!")
+    :
+    fetch(`${process.env.REACT_APP_API_URL}/account/update`, {
+      method: "POST",
+      headers: {
+        token: localStorage.getItem("access-token"),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userPhone: phone,
+        userEmail: email,
+      }),
+    }).then((res) => {
+      if (res.status === 200) {
+        setButtton(!button)
+      } else {
+        alert("회원정보 수정에 실패하셨습니다. 다시 시도해주세요.");
+      }
+    })
   };
 
   const userButton = (event) => {

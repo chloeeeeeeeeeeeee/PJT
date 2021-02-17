@@ -57,10 +57,12 @@
               display: none;
             }
             p {
+              align-items: center;
+              vertical-align: middle;
               font-size: small;
             }
             Button {
-              font-size: small;
+              font-size: x-small;
               background-color: $oori-white;
               border: none;
               color: $oori-green;

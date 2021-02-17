@@ -60,7 +60,7 @@ function MemberQnA() {
           <CardBody className="qnaInfoBody p-0 pt-2">
             {qnaList.map((qna, index) => (
               <p key={index} className="d-flex col-12 row m-0 pt-2">
-                <p className="memberQnaTitle col-8 text-truncate">
+                <p className="memberQnaTitle col-9 text-truncate mb-0">
                   {qna.qnaTitle
                     .replace(/<br\/>/gi, "\n")
                     .replace(
@@ -70,7 +70,7 @@ function MemberQnA() {
                     .replace(/(<([^>]+)>)/gi, "")
                     .replace(/&nbsp;/gi, "")}
                 </p>
-                <Button className="col-4" onClick={(e) => Detail(qna)}>
+                <Button className="col-3" onClick={(e) => Detail(qna)}>
                   글 보기
                 </Button>
               </p>

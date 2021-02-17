@@ -1,7 +1,7 @@
 import { Row, Col } from "reactstrap";
 
 function SupportMenu(supportmenu) {
-  let imgurl = `${process.env.REACT_APP_API_URL}/menus/1/${supportmenu.supportmenu.itemName}.jpg`;
+  let imgurl = `${process.env.REACT_APP_API_URL}/${supportmenu.supportmenu.itemImgUrl}`;
   return (
     <Row className="col-10">
       <img src={imgurl} className="d-inline-block col-4" />

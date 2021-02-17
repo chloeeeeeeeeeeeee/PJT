@@ -53,7 +53,7 @@
     padding: 1% 0%;
     // 좌측 지도
     .supportContentLeft {
-      height: 95%;
+      height: 98%;
       #naverMap {
         height: 100%;
       }
@@ -88,10 +88,10 @@
     }
     // 우측 가게목록
     .supportBox {
-      height: 95%;
+      height: 92%;
       color: $oori-gray-pinstripe;
       .storeListBox {
-        height: 95%;
+        height: 100%;
         overflow-y: auto;
         display: flex;
         align-items: start;

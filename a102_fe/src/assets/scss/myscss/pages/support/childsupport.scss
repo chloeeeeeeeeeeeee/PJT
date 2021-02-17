@@ -20,7 +20,7 @@
   .supportContent {
     .supportBox {
       .storeChildListBox {
-        height: 36%;
+        height: 42%;
         overflow-y: auto;
         &::-webkit-scrollbar {
           display: none;
@@ -55,7 +55,7 @@
         }
       }
       .storeChildSupportBox {
-        height: 36%;
+        height: 42%;
         overflow-y: auto;
         overflow-x: hidden;
         &::-webkit-scrollbar {

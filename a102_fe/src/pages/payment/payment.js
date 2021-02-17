@@ -220,7 +220,7 @@ function Payment() {
             <CardHeader className="text-center">
               <b>결제 수단 선택</b>
             </CardHeader>
-            <CardBody className="p-2">
+            <CardBody className="p-0 pl-2">
               <FormGroup tag="fieldset" className="col mb-0">
                 <FormGroup className="col mb-0">
                   <Label>

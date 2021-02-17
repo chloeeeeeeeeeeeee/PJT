@@ -4,6 +4,9 @@ import {
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import { Activity } from "react-feather";
+import {
+  Button,
+} from "reactstrap";
 // import { Edit, Video, Image, Activity } from "react-feather";
 // import { ShoppingBag, MessageCircle, MinusCircle, Tag } from "react-feather";
 // import {
@@ -35,24 +38,23 @@ function TimelineItem (contribution) {
       icon={<Activity />}
     >
       <div className="timelinItem-grid">
-        <div className="timelineItem-title">
-          {/* { contribution.contribution.item.itemName }을 후원했어요! */}
+        {/* <div className="timelineItem-title">
           { contribution.contribution.itemName }을 후원했어요!
-        </div>
-        <div className="timelineItem-subtitle">
+        </div> */}
+        <div className="timelineItem-title">
           {/* { contribution.contribution.item.store.storeName }에 방문했어요! */}
-          { contribution.contribution.storeName }에 방문했어요!
+          { contribution.contribution.storeName }에 방문해서  { contribution.contribution.itemName }을 후원했어요!
         </div>
         <div className="timelineItem-time">
           { contribDate }월 { contribDay }일
         </div>
         <div className="timelineItem-btn">
-          <button 
+          <Button 
               className="timelinItem-toggle" onClick = {() =>
                 {setshowDetail(!showDetail);}
-              } class="btn btn-warning btn-sm">
+              }>
               {!showDetail? '메시지보기':'메시지닫기'} 
-            </button>
+            </Button>
         </div>
         <div className="timelineItem-message">
           {showDetail && <div>{ contribution.contribution.contributionMessage }</div>}

@@ -16,7 +16,7 @@ function NaverAuth() {
   function NaverLogin() {
     const naverLogin = new naver.LoginWithNaverId({
       clientId: "xndTfTxd5lBs6cntAlPE",
-      callbackUrl: "http://localhost:3000/naver",
+      callbackUrl: "https://ooriggini.me/naver",
       isPopup: false /* 팝업을 통한 연동처리 여부 */,
       loginButton: {
         color: "green",

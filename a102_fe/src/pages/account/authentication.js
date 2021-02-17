@@ -84,6 +84,7 @@ function Auth(props) {
   const [password, setPassword] = useState("");
   const [checkid, setCheckid] = useState(false);
   const [checkphone, setCheckphone] = useState(false);
+  const [checkmail, setCheckmail] = useState(false);
 
   function digitcheck(value) {
     console.info("디지체크", value)
@@ -93,9 +94,18 @@ function Auth(props) {
     const regexdigit = /^[0-9\b -]$/;
     (regexdigit.test(digit)) ? (console.log("숫자입니다")) : (alert("숫자만 입력하세요!"))
 
-    const regex = /^[0-9\b -]{0,13}$/;
-    (regex.test(value)) ? (setCheckphone(true)) : (setCheckphone(false))
+    const regexphone = /^[0-9\b -]{10,11}$/;
+    (regexphone.test(value)) ? (setCheckphone(true)) : (setCheckphone(false))
 
+  }
+
+  function mailcheck() {
+    var mail = email
+    console.info("메일체크", mail)
+
+    const regexmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    (regexmail.test(mail)) ? (setCheckmail(true)) : (setCheckmail(false))
+  
   }
   
   // 이제 이걸 user_id, user_name 등으로 연결해줘야해요!
@@ -104,10 +114,12 @@ function Auth(props) {
     if (checkid === false) {
       alert("중복 확인을 해주세요!")
     // } else if ( name !== "" && phone !== "" && email !== "") {
-    } else if (Boolean(name) === false || Boolean(phone) === false || Boolean(email) === false) {
+    } else if (Boolean(name) === false || Boolean(phone) === false || Boolean(email) === false || Boolean(password) === false) {
       alert("정보를 빠짐없이 채워주세요!")
     } else if (checkphone !== true) {
       alert("전화번호를 확인하세요!")
+    } else if (checkmail !== true) {
+      alert("이메일 주소를 확인하세요!")
     } else { 
       fetch(`${process.env.REACT_APP_API_URL}/account/signup`, {
         method: "POST",

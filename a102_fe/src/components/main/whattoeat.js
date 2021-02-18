@@ -22,7 +22,7 @@ function Whattoeat() {
     // };
 
     // 현재 위치 가져오기
-    let address = useState("서울 종로구 창신동");
+    let [address, setAddress] = useState("서울 종로구 창신동");
 
     // function successPosition(pos) {
     //     console.log(pos);
@@ -45,15 +45,32 @@ function Whattoeat() {
     //     .catch((error) => console.log(error));
     // }
 
+    
+
     useEffect(() => {
+        console.log("KAKAO")
+        const {kakao} = window;
         // navigator.geolocation.getCurrentPosition(successPosition);
-        setStoreListComponent();
+        navigator.geolocation.getCurrentPosition(function(pos){
+            const geocoder = new kakao.maps.services.Geocoder();
+            geocoder.coord2RegionCode(pos.coords.longitude,
+                pos.coords.latitude,
+                function (result, status) {
+                  if (status === kakao.maps.services.Status.OK) {
+                      address = result[0].address_name
+                    setAddress(address);
+                    setStoreListComponent();
+                  }
+                })
+        }, setAddress("서울 종로구 창신동"))
+        
     }, []);
 
     // 전체 매장 리스트
     let [storeList, setStoreList] = useState([]);
 
     function setStoreListComponent() {
+        console.log(address)
         if (address !== "") {
         fetch(
             `${process.env.REACT_APP_API_URL}/main/mapview/storelist/${encodeURIComponent(

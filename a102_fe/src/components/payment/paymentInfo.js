@@ -84,7 +84,6 @@ function PaymentInfo({ sendDataToParent }) {
   }
 
   const cartItemList = cartStorage.map((cartItem, index) => {
-    // let imgurl = `${process.env.REACT_APP_API_URL}/menus/1/${cartItem.itemName}.jpg`;
     let imgurl = `${process.env.REACT_APP_API_URL}/${cartItem.itemImgUrl}`;
     return (
       <Row className="paymentInfoItem justify-content-between" key={index}>
@@ -106,9 +105,7 @@ function PaymentInfo({ sendDataToParent }) {
             -
           </Button>
           <Button className="paymentCount col-2 m-0 text-center">
-          {/* <p className="paymentMenuCount col-2 m-0 text-center"> */}
             {cartItem.itemCount}
-          {/* </p> */}
           </Button>
           <Button
             className="paymentCountButton col-2"

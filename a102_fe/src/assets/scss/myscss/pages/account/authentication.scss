@@ -148,9 +148,28 @@
   }
 }
 
-
 .naverAuthBtn {
   height: 36px;
   cursor: pointer;
 }
 
+.checkPopup {
+  .modal-header {
+    align-items: center;
+    p {
+      text-align: center;
+    }
+  }
+  .modal-body {
+  }
+  .modal-footer {
+    .AgreeButton {
+      background-color: $oori-green;
+      font-size: small;
+    }
+    .NoButton {
+      background-color: $oori-gray-pinstripe;
+      font-size: x-small !important;
+    }
+  }
+}

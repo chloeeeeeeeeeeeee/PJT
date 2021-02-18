@@ -67,6 +67,8 @@ class et(QMainWindow, Ui_mainWindow):
         self.donationCnt = 0
         self.recentDonationList = -1
         self.orderNum = ""
+        self.thRfidFlag = 0
+        self.thKakaoPayFlag = 0
 
         # 페이지 리스트 생성 및 로드
         self.makePage()
@@ -83,8 +85,6 @@ class et(QMainWindow, Ui_mainWindow):
         self.totalCost = 0
         self.bag.clear()
         self.phoneNum = ""
-        self.donationCnt = 0
-        self.recentDonationList = -1
 
     # Click 불가능한 label 등의 위젯을 클릭 가능하게 만들어주는 함수
     # 사용법 -> self.clickable(위젯이름).connect(실행할 함수)
@@ -163,6 +163,13 @@ class et(QMainWindow, Ui_mainWindow):
         # Load start page
         # 장바구니 비움 및 변수 초기화 함수 실행
         self.clearBagItem()
+        # 실행되고있는 thread 종료
+        if self.thRfidFlag == 1:
+            self.thRfid.stop()
+        if self.thKakaoPayFlag == 1:
+            print("exit kakao pay thread")
+            self.thKakaoPay.stop()
+
         # complete 화면에서 count가 진행되고 있다면 종료
         self.widgetList['widgetComplete.html'].page().runJavaScript("stopCnt()")
         self.widgetList["widgetStart.html"].raise_()
@@ -190,23 +197,30 @@ class et(QMainWindow, Ui_mainWindow):
         self.widgetList["widgetKakaoPay.html"].raise_()
 
         # pg Token을 socket을 통해 받기 위한 thread 실행
-        th = getPg(self)
+        self.thKakaoPay = getPg(self)
         # thread의 signal에 함수 연결
-        th.notifyProgress.connect(self.getPgToken)
-        th.start()
+        self.thKakaoPay.notifyProgress.connect(self.getPgToken)
+        self.thKakaoPay.start()
+        self.thKakaoPayFlag = 1
 
     def loadRfidPage(self):
         # Load rfid page
         # rfid 센서로부터 card id를 받기 위한 thread 실행
-        th = getSerial(self)
+
+        self.thRfid = getSerial(self)
         # thread의 signal에 함수 연결
-        th.notifyProgress.connect(self.rfidPaymentVerification)
-        th.start()
+        self.thRfid.notifyProgress.connect(self.rfidPaymentVerification)
+        self.thRfid.start()
+        self.thRfidFlag = 1
         self.widgetList["widgetRfid.html"].raise_()
 
     def loadCompletePage(self):
         # Load complete page
         self.widgetList["widgetComplete.html"].raise_()
+
+        # Thread 종료 flag 설정
+        self.thRfidFlag = 0
+        self.thKakaoPayFlag = 0
 
         # complete 페이지의 number count 실행
         jscmd = "completeTimeout(10)"
@@ -226,6 +240,8 @@ class et(QMainWindow, Ui_mainWindow):
             # 설정 된 아이템 초기화
             jscmd = "clearStoreItem()"
             widget.page().runJavaScript(jscmd)
+            self.donationCnt = 0
+            self.recentDonationList = -1
 
             # menu list를 받아옴
             self.itemList = getStoreItem(self.storeid)

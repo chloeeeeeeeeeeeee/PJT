@@ -6,20 +6,15 @@ let carouselCnt = 0;
 let itemIdContainer = [];
 let donationListCnt = 0;
 let setModal = 0;
-
 let maxContriNum = 15;
-
 let phoneNumber = "010-";
-let phoneNumberNode = document.getElementById("phoneNumber");
 
+let phoneNumberNode = document.getElementById("phoneNumber");
 let modalContainer = document.getElementById("modal-container");
 let modalContainer2 = document.getElementById("modal-container2");
-
-
 let modalPrice = document.getElementById("modal-price");
 let modalName = document.getElementById("modal-name");
 
-//qt->js 함수
 let newCarouselContainer = `<div class="carousel-item">
                                 <section class="bookmark-container">
                                 </section>

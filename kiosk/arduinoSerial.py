@@ -25,23 +25,37 @@ class getSerial(QThread):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.exitFlag = 0
+        self.line = 0
 
     def run(self):
         try:
-            if arduinoConnection.readable():
+            while True:
                 # rfid 센서를 통해 card id를 받아옴
                 # 형식(bytes) -> b'0x00000000H\r\n'
-                line = arduinoConnection.readline()
+                self.line = arduinoConnection.readline()
+                if len(self.line) > 0:
+                    break
+                if self.exitFlag == 1:
+                    break
+
+            if self.exitFlag == 0:
                 # bytes -> str 형 변환
-                line = str(line)
+                self.line = str(self.line)
+
                 # str 파싱
                 # "b'0x00000000H\\r\\n'" -> "0x00000000"
-                line = line.split("\'")[1].split("H")[0]
+                self.line = self.line.split("\'")[1].split("H")[0]
 
                 # rfid를 통해 받아 온 card id를 전송
-                self.notifyProgress.emit(line)
+                self.notifyProgress.emit(self.line)
+
 
         except Exception as e:
             # testmode인 경우 사전에 설정 된 카드 id 전송
             self.notifyProgress.emit(testmode)
 
+    def stop(self):
+        self.exitFlag = 1
+        self.quit()
+        self.wait(1000)

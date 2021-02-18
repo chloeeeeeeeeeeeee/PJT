@@ -34,6 +34,7 @@ def postKakaoPay(bag, totalAmount, totalCount, phoneNum):
     res = requests.post(serverUrl + 'payment/kakaopay',
                         headers=headers,
                         data=data)
+
     return res.text
 
 def sendPgToken(pgToken):
@@ -46,7 +47,7 @@ def sendPgToken(pgToken):
         .format(pgToken=pgToken)
     res = requests.get(url)
 
-    return date
+    return res.json()["paymentId"]
 
 def sendCreditCard(an, bag, totalAmount, totalCount, phoneNum):
     # date(형식 -> 20210217-163100)를 제작
@@ -69,7 +70,7 @@ def sendCreditCard(an, bag, totalAmount, totalCount, phoneNum):
                         headers=headers,
                         data=data)
 
-    return date
+    return res.text
 
 def sendGdreamCard(an, bag, totalCount, totalAmount):
     # date(형식 -> 20210217-163100)를 제작
@@ -91,7 +92,7 @@ def sendGdreamCard(an, bag, totalCount, totalAmount):
                         headers=headers,
                         data=data)
 
-    return date
+    return res.text
 
 def getCardType(cardId):
     # 카드 id를 통해 카드 종류를 받아옴
@@ -111,6 +112,9 @@ def getOrderList(storeId, payId):
 
     # default 주문번호 = 0
     orderNum = "0"
+
+    print(payId)
+    print(res.json())
 
     # res.json()에서 paymentId가 payId랑 동일한 element를 찾은 후, 그 element의 orderId를 반환
     for id in res.json():

@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -12,6 +13,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name="payment")
 public class Payment {
 	@Id
 	private String paymentId;
@@ -36,4 +38,10 @@ public class Payment {
 	
 	@JoinColumn(name="imp_merchant_id", nullable = true)
 	private String impMerchantId;
+	
+	@JoinColumn(name="credit_approval_number", nullable = true)
+	private String creditApprovalNumber;
+	
+	@JoinColumn(name="credit_store_id", nullable = true)
+	private Integer creditStoreId;
 }

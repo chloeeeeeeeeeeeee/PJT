@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.AllStore;
 import com.ssafy.bab.dto.Menu;
 import com.ssafy.bab.dto.StoreDetail;
@@ -40,6 +41,9 @@ public class MainController {
 	
 	@Autowired
 	private MainService userRankService;
+	
+	@Autowired
+	private UserDao userDao;
 	
 	@ApiOperation(value = "가게 목록", notes = "주소를 받아 해당 지역(동 기준)의 가게리스트를 반환한다", response = List.class)
 	@GetMapping("/mapview/storelist/{Juso}")
@@ -86,7 +90,10 @@ public class MainController {
 		System.out.println("In controller"+userTotalRankList);
 		return new ResponseEntity<List<User>>(userTotalRankList, HttpStatus.OK);
 	}
-//유저 후원 총 금액
+	
+	
+	
+	//유저 후원 총 금액
 	@GetMapping("/usertotal")
 	public ResponseEntity<Integer> userTotal(){
 		int userTotal = userRankService.userTotal();
@@ -94,6 +101,7 @@ public class MainController {
 	}
 	
 	//유저 그릇 랭킹
+	@ApiOperation(value = "유저 그릇 랭킹", notes = "유저별 후원 그릇 수 랭킹 확인", response = List.class)
 	@GetMapping("/userrankbowl")
 	public ResponseEntity<List<UserRank>> userRankBowl(){
 		List<UserRank> userRankBowl = mainService.userBowlRank();

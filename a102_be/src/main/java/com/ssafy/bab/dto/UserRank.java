@@ -31,13 +31,13 @@ import lombok.ToString;
 @ToString
 public class UserRank implements Serializable{
 	
-	private int userSeq;
-	
-	private String userId;	
+//	private int userSeq;
+//	
+//	private String userId;	
 	private String userName;
-	private String userEmail;
-	private String userPhone;
-	private int userTotalContributionAmount;
+//	private String userEmail;
+//	private String userPhone;
+//	private int userTotalContributionAmount;
 	
-	private int contributionCount;
+	private int userTotalContributionCount;
 }

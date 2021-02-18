@@ -1,6 +1,7 @@
 package com.ssafy.bab.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.bab.dto.CPaymentInfo;
+import com.ssafy.bab.dto.GPaymentInfo;
+import com.ssafy.bab.dto.GdreamResult;
 import com.ssafy.bab.dto.IPaymentInfo;
 import com.ssafy.bab.dto.KPaymentInfo;
 import com.ssafy.bab.dto.KakaoPaySuccessData;
@@ -52,9 +56,7 @@ public class PaymentController {
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
-        // 테스트
-//        paymentInfo.setUserSeq(74);
-        // 프론트
+
         paymentInfo.setUserSeq(userSeq);
         paymentInfo.setCid("TC0ONETIME");
         
@@ -77,9 +79,7 @@ public class PaymentController {
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
-        // 테스트
-//        paymentInfo.setUserSeq(74);
-        // 프론트
+
         paymentInfo.setUserSeq(userSeq);
         
         return new ResponseEntity<String>(paymentService.checkNaverPayTransaction(paymentInfo), HttpStatus.OK);
@@ -93,15 +93,60 @@ public class PaymentController {
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
-        // 테스트
-//        paymentInfo.setUserSeq(74);
-        // 프론트
+
         paymentInfo.setUserSeq(userSeq);
         
         return new ResponseEntity<String>(paymentService.checkIamPortTransaction(paymentInfo), HttpStatus.OK);
     	
 	}
 	
+	@ApiOperation(value = "키오스크 일반 신용카드 결제 처리결과 저장", notes = "결제 내역을 받아와 DB에 저장", response = List.class)
+	@PostMapping("/creditcard")
+	public ResponseEntity<String> creditCard(@ApiParam(value = "아이템 목록과 총 개수, 처리 결과", required = true) @RequestBody CPaymentInfo paymentInfo) throws Exception {
+		logger.info("creditCard_payment - 호출");
+		
+		String result = paymentService.checkCreditCardTransaction(paymentInfo);
+		if(result == "SUCCESS")
+			return new ResponseEntity<String>(result, HttpStatus.OK);
+		else
+			return new ResponseEntity<String>(result, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ApiOperation(value = "지드림카드 사용", notes = "지드림카드 사용 내역을 받아와 DB에 저장, 후원처리", response = List.class)
+	@PostMapping("/gdream")
+	public ResponseEntity<GdreamResult> gDream(@ApiParam(value = "아이템 목록과 총 개수, 처리 결과", required = true) @RequestBody GPaymentInfo paymentInfo) throws Exception {
+		logger.info("gDream_payment - 호출");
+		GdreamResult result = paymentService.checkGDreamTransaction(paymentInfo);
+		if(result != null)
+			return new ResponseEntity<GdreamResult>(result, HttpStatus.OK);
+		else
+			return new ResponseEntity<GdreamResult>(result, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ApiOperation(value = "카드 정보 반환", notes = "카드 번호 전달시 카드 종류 반환 ", response = String.class)
+	@PostMapping("/cardtype")
+	public ResponseEntity<String> getRFIDCardType(@RequestParam("cardNumber") String cardNumber) throws Exception{
+		logger.info("getRFIDCardType_payment - 호출");
+		return new ResponseEntity<String>(paymentService.getRFIDCardType(cardNumber), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "카드 정보 저장", notes = "카드 번호, 종류 입력받아 저장 ", response = String.class)
+	@PostMapping("/cardcreate")
+	public ResponseEntity<String> createRFIDCard(@RequestParam("cardNumber") String cardNumber, @RequestParam("cardType") String cardType) throws Exception{
+		logger.info("createRFIDCard_payment - 호출");
+		String result = paymentService.createRfidCard(cardNumber, cardType);
+		if(result == "SUCCESS")
+			return new ResponseEntity<String>(result, HttpStatus.OK);
+		else
+			return new ResponseEntity<String>(result, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ApiOperation(value = "문자 전송", notes = "유저별 최신 후원기록을 받아와서 문자전송", response = String.class)
+	@GetMapping("/sendmsg")
+	public ResponseEntity<String> sendMsg() throws Exception{
+		logger.info("notOrderDoneList_Store - 호출");
+		return new ResponseEntity<String>(paymentService.sendMsg(), HttpStatus.OK);
+	}
 	
 //	@GetMapping("/kakaopayFail")
 //	public String kakaoPayFail() {

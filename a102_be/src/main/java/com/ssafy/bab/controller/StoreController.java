@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.MyStore;
+import com.ssafy.bab.dto.OrderIdAndPaymentId;
 import com.ssafy.bab.dto.StoreContributionItem;
 import com.ssafy.bab.dto.User;
 import com.ssafy.bab.service.JwtService;
@@ -73,7 +74,7 @@ public class StoreController {
 	@ApiOperation(value = "가게 후원 내역 ", notes = "startDate와 endDate를 받아와 해당 기간의 후원 내역을 반환한다.", response = String.class)
 	@PostMapping("contributionlist")
 	public ResponseEntity<List<StoreContributionItem>> contributionItemList(@RequestParam(required = true) String startDate, @RequestParam(required = true) String endDate, HttpServletRequest req) throws Exception {
-		logger.info("contributionItemList_Store - 호출");
+//		logger.info("contributionItemList_Store - 호출");
 		
 		ArrayList<StoreContributionItem> result = null;
 		
@@ -87,7 +88,6 @@ public class StoreController {
 		}
 		
 		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		transFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		result = (ArrayList<StoreContributionItem>) storeService.getContributionItemList(user.getStore().getStoreId(), transFormat.parse(startDate), transFormat.parse(endDate));
 		
 		return new ResponseEntity<List<StoreContributionItem>>(result, HttpStatus.OK);
@@ -123,7 +123,7 @@ public class StoreController {
 	@ApiOperation(value = "가게 메뉴 리스트 가져오기", notes = "메뉴 리스트 가져오기", response = String.class)
 	@GetMapping("/itemlist")
 	public ResponseEntity<List<Item>> itemList(HttpServletRequest req) throws Exception {
-		logger.info("itemCreate_Store - 호출");
+//		logger.info("itemList_Store - 호출");
 		
 		ArrayList<Item> result = null;
 		
@@ -167,9 +167,13 @@ public class StoreController {
 		
 	}
 	
+	@PostMapping("/item/delete/{itemId}")
+	public ResponseEntity<String> itemDeletePost(@ApiParam(value = "itemId", required = true) @PathVariable int itemId, HttpServletRequest req) throws Exception {
+		return itemDelete(itemId, req);
+	}
 	
 	@ApiOperation(value = "가게 메뉴 삭제", notes = "itemId 입력받아 메뉴 삭제", response = String.class)
-	@PostMapping("/item/delete/{itemId}")
+	@GetMapping("/item/delete/{itemId}")
 	public ResponseEntity<String> itemDelete(@ApiParam(value = "itemId", required = true) @PathVariable int itemId, HttpServletRequest req) throws Exception {
 		logger.info("itemDelete_Store - 호출");
 		
@@ -185,9 +189,24 @@ public class StoreController {
 		}
      
         result = storeService.itemDelete(itemId, user.getStore().getStoreId());
+        System.out.println(result);
         return new ResponseEntity<String>(result, HttpStatus.OK);
 		
 	}
 	
+	@ApiOperation(value = "orderList 반환", notes = "order_done = null인 payment_id 및 payment_gdream_id 반환", response = List.class)
+	@GetMapping("/orderlist")
+	public ResponseEntity<List<OrderIdAndPaymentId>> notOrderDoneList(@RequestParam("storeid") int storeId) throws Exception{
+		logger.info("notOrderDoneList_Store - 호출");
+		return new ResponseEntity<List<OrderIdAndPaymentId>>(storeService.getNotOrderDoneList(storeId), HttpStatus.OK);
+	}
 	
+	@ApiOperation(value = "orderList 업데이트", notes = "입력받은 주문번호를 갖는 orders튜플들의 ", response = List.class)
+	@PostMapping("/orderlist")
+	public ResponseEntity<String> orderDoneUpdate(@RequestParam("storeid") int storeId, @RequestParam("orderNum") String paymentId) throws Exception{
+		logger.info("orderDoneUpdate_Store - 호출");
+		String result = storeService.orderDonUpdate(storeId, paymentId);
+		if(result == "SUCCESS") return new ResponseEntity<String>(result, HttpStatus.OK);
+		else return new ResponseEntity<String>(result, HttpStatus.BAD_REQUEST);
+	}
 }

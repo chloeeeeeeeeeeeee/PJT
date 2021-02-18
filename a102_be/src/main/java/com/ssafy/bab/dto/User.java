@@ -2,12 +2,10 @@ package com.ssafy.bab.dto;
 
 
 import java.io.Serializable;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,21 +13,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.Table;
 
-import org.hibernate.annotations.ColumnDefault;
+import com.ssafy.bab.component.StringCryptoConverter;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-@Getter
-@Setter
-@ToString
+@Data
 @Entity
+@Table(name="user")
 public class User implements Serializable{
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) //AUTO는 default로, IDENTITY는 Auto-increment
@@ -37,10 +29,14 @@ public class User implements Serializable{
 	
 	private String userId;	
 	private String userName;
+	
 	private String userPwd;
+	
+	@Convert(converter = StringCryptoConverter.class)
 	private String userEmail;
 	
-	@JoinColumn(name="user_phone", nullable = true)
+	@Convert(converter = StringCryptoConverter.class)
+	@Column(name="user_phone", nullable = true)
 	private String userPhone;
 	
 	private LocalDateTime userDate = LocalDateTime.now();
@@ -50,7 +46,8 @@ public class User implements Serializable{
 		this.userDate = LocalDateTime.now();
     }
 	
-	private int userTotalContributionAmount = 0;
+	private int userTotalContributionAmount;
+	private int userTotalContributionCount;
 
 	@ManyToOne
 	@JoinColumn(name="store_id", nullable = true)

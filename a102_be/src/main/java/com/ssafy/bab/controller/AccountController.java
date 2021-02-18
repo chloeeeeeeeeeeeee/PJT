@@ -6,6 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +20,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.ContributionResult;
+import com.ssafy.bab.dto.Qna;
 import com.ssafy.bab.dto.User;
 import com.ssafy.bab.dto.UserContribution;
 import com.ssafy.bab.service.AccountService;
 import com.ssafy.bab.service.AuthService;
 import com.ssafy.bab.service.JwtService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping("/account")
 public class AccountController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 	
 	@Autowired
 	private AccountService userService;
@@ -52,42 +60,12 @@ public class AccountController {
 	//회원가입
 	@PostMapping("/signup")
 	public ResponseEntity<User> signUp(@RequestBody User user) {
+		logger.info("signUp_AccountController - 호출");
 		User userResult = userService.signUp(user);
 		if(userResult == null)
 			return new ResponseEntity<User>(userResult, HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<User>(userResult, HttpStatus.OK);
-	}
-	
-//	//회원가입카카오
-//	@PostMapping("/signupkakao")
-//	public ResponseEntity<JwtService.TokenRes> signUpKakao(@RequestBody User user) {
-//		String pwd = user.getUserId();
-//		user.setUserPwd(user.getUserId());
-//		user.setUserId("Kakao@"+user.getUserId());
-//		user.setUserName("Guest");
-//		user.setUserEmail(user.getUserId());
-//		user.setUserPhone(user.getUserId());
-//		
-//		User userResult = userService.signUp(user);
-//		if(userResult != null) {
-//			User userKakao = userService.userInfoById(user.getUserId());
-//			if (userKakao != null) {
-//				JwtService.TokenRes signInJwt = authService.signIn(user.getUserId(), pwd);
-//
-//				if(signInJwt == null) {
-//					return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-//				}
-//				return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
-//			}
-//			else {
-//				JwtService.TokenRes signInJwt = null;
-//				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-//			}
-//		}
-//		JwtService.TokenRes signInJwt = null;
-//		return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-//	}
-	
+	}	
 
 	//로그인(임시)
 	@PostMapping("/signin")
@@ -115,6 +93,7 @@ public class AccountController {
 	//로그인카카오
 	@PostMapping("/signinkakao")
 	public ResponseEntity<JwtService.TokenRes> signInKakao(@RequestBody User user, HttpServletResponse res){
+		logger.info("signinkakao_AccountController - 호출");
 		String userId = user.getUserId();
 		user.setUserPwd(user.getUserId());
 		User userKakao = userService.userInfoById("Kakao@"+userId);
@@ -138,6 +117,7 @@ public class AccountController {
 			user.setUserPhone("temp");
 			
 			User userResult = userService.signUp(user);
+		
 			if(userResult != null) {
 				userKakao = userService.userInfoById(user.getUserId());
 				if (userKakao != null) {
@@ -254,7 +234,7 @@ public class AccountController {
 		return new ResponseEntity<List<ContributionResult>>(userContribution, HttpStatus.OK);
 	}
 	
-	// 
+	// 비밀번호 확인
 	@PostMapping("/pwdcheck")
 	public ResponseEntity<String> pwdCheck(@RequestBody String pwd, HttpServletRequest req){
 		
@@ -268,6 +248,25 @@ public class AccountController {
 		
 		return new ResponseEntity<String>(userService.userPwdChk(user, pwd), HttpStatus.OK);
 			
+	}
+	
+	@ApiOperation(value = "회원정보 변경", notes = "회원 이름, 핸드폰 번호, 이메일 주소 변경 가능", response = List.class)
+	@PostMapping("/update")
+	public ResponseEntity<String> userUpdate(@ApiParam(value = "변경 원하는 값 ", required = true) @RequestBody User newUser, HttpServletRequest req) throws Exception {
+		logger.info("userUpdate_AccountController - 호출");
+		
+		String jwt = req.getHeader("token");
+        int userSeq = jwtService.decode(jwt);
+		
+		User user = userDao.findByUserSeq(userSeq);
+		System.out.println(newUser);
+        if(user == null || (newUser.getUserEmail() == null && newUser.getUserPhone() == null && newUser.getUserName() == null)) return new ResponseEntity<String>("FAIL", HttpStatus.BAD_REQUEST);
+		
+        
+        String result= userService.userUpdate(user, newUser);
+        System.out.println(result);
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+
 	}
 	
 }

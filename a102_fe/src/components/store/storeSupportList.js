@@ -207,24 +207,26 @@ const jwtToken = `${process.env.REACT_APP_STORE_TOKEN}`
 // }, 3000)
 
   const contributionsDate = (contributions.map((item, index) => {
-    let lst = []
-    for (let idx=0; idx<item.itemAvailable; idx++){
-      if (idx > 12){
-        lst.push("...");
-        break;
-      }
-      else{
-        lst.push(<FcLike key={idx}/>);
-      }
-    }
-
-    return (
-      <Col xs="12" className="row contribution mr-0 ml-0 p-0 mb-3" key={index}>
-        <p className="col-5 contributionName mb-0">{item.itemName}</p>
-        <p className="col-5 contributionAvailable mb-0">{lst}</p>
-        <p className="col-2 contributionCount mb-0 p-1">{item.itemAvailable}</p>
-      </Col>
-    );
+      if(item.itemAvailable > 0){
+        let lst = []
+        for (let idx=0; idx<item.itemAvailable; idx++){
+          if (idx > 12){
+            lst.push("...");
+            break;
+          }
+          else{
+            lst.push(<FcLike key={idx}/>);
+          }
+        }
+    
+        return (
+          <Col xs="12" className="row contribution mr-0 ml-0 p-0 mb-3" key={index}>
+            <p className="col-5 contributionName mb-0">{item.itemName}</p>
+            <p className="col-5 contributionAvailable mb-0">{lst}</p>
+            <p className="col-2 contributionCount mb-0 p-1">{item.itemAvailable}</p>
+          </Col>
+        );
+      }    
     }))
 
   

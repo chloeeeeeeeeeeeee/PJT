@@ -20,7 +20,7 @@ function StoreMenuItem(storeMenu) {
           headers: {
             // token: localStorage.getItem("access-token"),
             token:
-              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2MzEzODE2LCJ1c2VyU2VxIjoyOX0.-jAjo8HyoN_vACvhHT6STtpQIZcwsB7gqfSZvXGqMZ4",
+            `${process.env.REACT_APP_STORE_TOKEN}`,
           },
         }
       ).then((res) => {

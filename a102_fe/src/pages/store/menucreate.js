@@ -36,9 +36,9 @@ function MenuCreate() {
       method: "POST",
       headers: {
         // token: localStorage.getItem('access-token'),
-        "Content-Type": "multipart/form-data",
+        // "Content-Type": "multipart/form-data",
         token:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2MzEzODE2LCJ1c2VyU2VxIjoyOX0.-jAjo8HyoN_vACvhHT6STtpQIZcwsB7gqfSZvXGqMZ4",
+        `${process.env.REACT_APP_STORE_TOKEN}`,
       },
       body: formData,
     }).then((res) => {
@@ -49,7 +49,7 @@ function MenuCreate() {
       } else {
         alert("메뉴 생성에 실패하셨습니다. 다시 시도해주세요.");
       }
-    });
+    }).catch((err)=>alert(err));
   };
 
   const onNameChange = (event) => {
@@ -63,6 +63,7 @@ function MenuCreate() {
   };
 
   const onImgChange = (event) => {
+      console.log(event.target.files[0])
     setImage(event.target.files[0]);
     // console.log(event.target.files[0]);
   };
@@ -80,7 +81,7 @@ function MenuCreate() {
                 <h5>메뉴 추가하기</h5>
               </CardHeader> */}
               <CardBody className="createPostBody">
-                <Form className="row">
+                <Form className="row" enctype="multipart/form-data">
                   <Col sm="12">
                     <FormGroup>
                       <Label for="menuName">상품명</Label>

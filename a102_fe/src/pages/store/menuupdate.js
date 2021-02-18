@@ -21,13 +21,16 @@ function MenuUpdate() {
 
   const Update = (event) => {
     event.preventDefault();
+    console.log(menu[0])
 
     const formData = new FormData();
-    formData.append("itemId", menu.itemId);
+    formData.append("itemId", menu[0].itemId);
     formData.append("itemName", name);
     formData.append("itemPrice", price);
     formData.append("file", img);
     formData.append("itemImgUrl", imgUrl);
+
+    console.log(menu[0].itemId)
 
     // for (let key of formData.keys()) {
     //   console.log(key);
@@ -36,24 +39,24 @@ function MenuUpdate() {
     //   console.log(value);
     // }
 
-    fetch(`${process.env.REACT_APP_API_URL}/store/item/update`, {
-      method: "POST",
-      headers: {
-        // token: localStorage.getItem('access-token'),
-        "Content-Type": "multipart/form-data",
-        token:
-          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2MzEzODE2LCJ1c2VyU2VxIjoyOX0.-jAjo8HyoN_vACvhHT6STtpQIZcwsB7gqfSZvXGqMZ4",
-      },
-      body: formData,
-    }).then((res) => {
-      //   console.log(res);
-      if (res.status === 200) {
-        // alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
-        window.location.href = "/storeadmin";
-      } else {
-        alert("메뉴 수정에 실패하셨습니다. 다시 시도해주세요.");
-      }
-    });
+    // fetch(`${process.env.REACT_APP_API_URL}/store/item/update`, {
+    //   method: "POST",
+    //   headers: {
+    //     // token: localStorage.getItem('access-token'),
+    //     // "Content-Type": "multipart/form-data",
+    //     token:
+    //     `${process.env.REACT_APP_STORE_TOKEN}`,
+    //   },
+    //   body: formData,
+    // }).then((res) => {
+    //   //   console.log(res);
+    //   if (res.status === 200) {
+    //     // alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
+    //     window.location.href = "/storeadmin";
+    //   } else {
+    //     alert("메뉴 수정에 실패하셨습니다. 다시 시도해주세요.");
+    //   }
+    // });
   };
 
   const onNameChange = (event) => {
@@ -88,7 +91,7 @@ function MenuUpdate() {
                 <h5>메뉴 수정하기</h5>
               </CardHeader> */}
               <CardBody className="createPostBody">
-                <Form className="row">
+                <Form className="row" enctype="multipart/form-data">
                   <Col sm="12">
                     <FormGroup>
                       <Label for="menuName">상품명</Label>

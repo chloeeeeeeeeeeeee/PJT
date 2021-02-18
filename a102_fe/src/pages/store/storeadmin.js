@@ -15,7 +15,7 @@ function StoreAdmin() {
 //     window.location.href = "/auth";
 //   }
 
-  const jwtToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2MzEzODE2LCJ1c2VyU2VxIjoyOX0.-jAjo8HyoN_vACvhHT6STtpQIZcwsB7gqfSZvXGqMZ4"
+  const jwtToken = `${process.env.REACT_APP_STORE_TOKEN}`
 
   let [storeDetailComponent, setStoreDetailComponent] = useState("");
 

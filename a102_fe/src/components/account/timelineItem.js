@@ -4,17 +4,8 @@ import {
 } from "react-vertical-timeline-component";
 import { Activity } from "react-feather";
 import { Button } from "reactstrap";
-// import { Edit, Video, Image, Activity } from "react-feather";
-// import { ShoppingBag, MessageCircle, MinusCircle, Tag } from "react-feather";
-// import {
-//   Container,
-//   Row,
-//   Col,
-//   Card,
-//   CardHeader,
-//   CardBody,
-//   Media,
-// } from "reactstrap";
+import { AiOutlineMessage } from "react-icons/ai";
+import { AiFillMessage } from "react-icons/ai";
 
 function TimelineItem(contribution) {
   const [showDetail, setshowDetail] = useState(false);
@@ -59,40 +50,15 @@ function TimelineItem(contribution) {
         {showDetail ? (
           <div className="timelineItem-message">
             {showDetail && (
-              <div>{contribution.contribution.contributionMessage}</div>
+              <div><AiOutlineMessage/>{contribution.contribution.contributionMessage}</div>
             )}
             {showDetail && (
-              <div>{contribution.contribution.contributionAnswer}</div>
+              <div><AiFillMessage/>{contribution.contribution.contributionAnswer? contribution.contribution.contributionAnswer : "아동이 후원된 음식을 먹게 되면, 메세지가 전송됩니다."} </div>
             )}
           </div>
         ) : (
-          <div className="timelineItem-message d-none">
-            {showDetail && (
-              <div>{contribution.contribution.contributionMessage}</div>
-            )}
-            {showDetail && (
-              <div>{contribution.contribution.contributionAnswer}</div>
-            )}
-          </div>
+          ""
         )}
-        {/* <h4 className="vertical-timeline-element-subtitle">
-          { contribution.contribution.store_id }
-          <span>
-            <div className="timelineItem-time">{contribution.contribution.contribution_date}</div>
-          </span>
-        </h4>
-        <p>
-          { contribution.contribution.item_id }을/를 후원했어요.
-        </p>
-        <span class="pull-right">
-          <button 
-            className="plus" onClick = {() =>
-              {setshowDetail(!showDetail);}
-            } class="btn btn-warning btn-sm">
-            {!showDetail? '메시지보기':'메시지닫기'} 
-          </button>
-          {showDetail && <div>{ contribution.contribution.contribution_message }</div>}
-        </span> */}
       </div>
     </VerticalTimelineElement>
   );

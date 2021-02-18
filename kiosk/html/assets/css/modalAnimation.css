@@ -111,8 +111,6 @@ body.modal-active {
   padding-bottom: 50px;
 }
 
-
-
 #modal-container .modal-background .modal .modal-QR p {
   font-size: smaller;
   line-height: 10px;
@@ -121,6 +119,16 @@ body.modal-active {
 #modal-container .modal-background .modal .modal-QR img {
   height: 300px;
 }
+
+#modal-container .modal-background .modal .modal-button .button-reset {
+  background-color: #f5b601;
+}
+
+#modal-container .modal-background .modal .modal-button .button-pay {
+  background-color: #84BD00;
+}
+
+
 
 /*--------------*/
 #modal-container2 {

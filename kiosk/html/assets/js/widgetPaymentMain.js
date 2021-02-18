@@ -37,7 +37,7 @@ let pResult = document.getElementsByClassName("purchase-result")[0];
 function addItem(itemId, itemName, itemPrice, itemCnt){
     pItem = `<div class="purchase-item">
                 <div class="purchase-item-title">${itemName}</div>
-                <div id="${itemId}Cnt" class="purchase-item-quantity">${itemCnt}</div>
+                <div id="${itemId}Cnt" class="purchase-item-quantity">${itemCnt}개</div>
                 <div class="purchase-item-cost">${itemPrice}원</div>
             </div>`;
 

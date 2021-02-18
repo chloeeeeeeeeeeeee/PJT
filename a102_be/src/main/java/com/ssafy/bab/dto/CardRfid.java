@@ -1,7 +1,5 @@
 package com.ssafy.bab.dto;
 
-import java.io.Serializable;
-
 import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,12 +13,16 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name="contributor")
-public class Contributor implements Serializable {
+@Table(name="card_rfid")
+public class CardRfid {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int contributorSeq;
+	private int cardSeq;
 	
 	@Convert(converter = StringCryptoConverter.class)
-	private String contributorPhone;
+	private String cardNumber;
+	
+	private String cardType;
+	
 }

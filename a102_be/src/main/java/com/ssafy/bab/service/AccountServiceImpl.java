@@ -5,6 +5,8 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -17,11 +19,15 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.ssafy.bab.dao.ContributionDao;
+import com.ssafy.bab.dao.ContributionOldDao;
+import com.ssafy.bab.dao.ContributorDao;
 import com.ssafy.bab.dao.ItemDao;
 import com.ssafy.bab.dao.StoreDao;
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.Contribution;
+import com.ssafy.bab.dto.ContributionOld;
 import com.ssafy.bab.dto.ContributionResult;
+import com.ssafy.bab.dto.Contributor;
 import com.ssafy.bab.dto.NaverProfile;
 import com.ssafy.bab.dto.User;
 
@@ -38,24 +44,65 @@ public class AccountServiceImpl implements AccountService{
 	StoreDao storeDao;
 	
 	@Autowired
-	PasswordEncodingService passwordEncoding;
+	ContributorDao contributorDao;
 	
 	@Autowired
 	ContributionDao contributionDao;
 	
+	@Autowired
+	ContributionOldDao contributionOldDao;
+	
+	@Autowired
+	PasswordEncodingService passwordEncoding;
+	
+	
 	public User signUp(User user) {
+		
+		if(user == null) return null;
+		
+		if(user.getUserEmail() == null || (!"temp".equals(user.getUserEmail()) && !isValidEmail(user.getUserEmail()))) {
+			System.out.println("이메일");
+			return null;
+		}
+		if(user.getUserName() == null || user.getUserName().equals("")) {
+			System.out.println("유저네임");
+			return null;
+		}
+		if(user.getUserPhone() == null || (!"temp".equals(user.getUserPhone()) && !isValidPhone(user.getUserPhone()))) {
+			System.out.println("핸드폰");
+			return null;
+		}
+		if(user.getUserId() == null || user.getUserId().equals("")) {
+			System.out.println("id");
+			return null;
+		}
+		if(user.getUserPwd() == null || user.getUserPwd().equals("")) {
+			System.out.println("pwd");
+			return null;
+		}
 		
 		if(userDao.findByUserId(user.getUserId()) != null)
 			return null;
-//		if(userDao.findByUserEmail(user.getUserEmail()) != null)
-//			return null;
-//		if(userDao.findByUserPhone(user.getUserPhone()) != null)
-//			return null;
+		if(user.getUserEmail() != "temp" && userDao.findByUserEmail(user.getUserEmail()) != null) {
+			System.out.println("dlapdlf tlqkf");
+			return null;
+		}
+			
+		if(user.getUserPhone() != "temp" && userDao.findByUserPhone(user.getUserPhone()) != null) {
+			System.out.println("dhldksgepdfdsfdfsdfasdf");
+			return null;
+		}
+			
 			
 		User userResult = user;
 		userResult.setUserPwd(passwordEncoding.encode(user.getUserPwd()));
 		userDao.save(userResult);
+		
+		
+		getContributorHistory(userResult);
+		
 		//userResult.setUserPwd(null);
+		System.out.println(userResult);
 		return userResult;
 	}
 
@@ -118,6 +165,8 @@ public class AccountServiceImpl implements AccountService{
 
 	@Override
 	public int userContributionCount(int userSeq) {
+//		Integer userContributionCount = userDao.findByUserSeq(userSeq).getUserTotalContributionCount();
+//		return userContributionCount;
 		Integer userContributionCount = contributionDao.findCountByUserSeq(userSeq);
 		if(userContributionCount == null)
 			return 0;
@@ -173,7 +222,81 @@ public class AccountServiceImpl implements AccountService{
 		return "FAIL";
 	}
 
+	@Override
+	public String userUpdate(User user, User newUser) {
+		
+		if(newUser.getUserEmail() != null && !user.getUserEmail().equals(newUser.getUserEmail()) && !"temp".equals(newUser.getUserEmail()) && !"".equals(newUser.getUserEmail())) {
+			if(!isValidEmail(newUser.getUserEmail())) return "Invalid Email Address";
+			if(userDao.findByUserEmail(newUser.getUserEmail()) != null) return "Duplicated Email Address";
+			user.setUserEmail(newUser.getUserEmail());
+		}
 
+		if(newUser.getUserPhone() != null && !user.getUserPhone().equals(newUser.getUserPhone())  && !"temp".equals(newUser.getUserPhone()) && !"".equals(newUser.getUserPhone())) {
+			if(!isValidPhone(newUser.getUserPhone())) return "Invalid Phone Number";
+			if(userDao.findByUserPhone(newUser.getUserPhone()) != null) return "Duplicated Phone Number";
+			user.setUserPhone(newUser.getUserPhone());
+			getContributorHistory(user);
+		}
+		
+		userDao.save(user);
+		
+		return "SUCCESS";
+	}
+
+	@Override
+	public void getContributorHistory(User user) {
+		
+		Contributor contributor = contributorDao.findByContributorPhone(user.getUserPhone());
+		if(contributor == null) return;
+		
+		ArrayList<Contribution> list = contributionDao.findByContributor_ContributorSeq(contributor.getContributorSeq());
+		for (Contribution contribution : list) {
+			contribution.setContributor(null);
+			contribution.setUser(user);
+			contributionDao.save(contribution);
+			
+			user.setUserTotalContributionCount(user.getUserTotalContributionCount() + 1);
+			user.setUserTotalContributionAmount(user.getUserTotalContributionAmount() + itemDao.findByItemIdAndStoreId(contribution.getItemId(), contribution.getStoreId()).getSupportPrice());
+		}
+		
+		ArrayList<ContributionOld> listOld = contributionOldDao.findByContributor_ContributorSeq(contributor.getContributorSeq());
+		for (ContributionOld contributionOld : listOld) {
+			contributionOld.setContributor(null);
+			contributionOld.setUser(user);
+			contributionOldDao.save(contributionOld);
+			
+			user.setUserTotalContributionCount(user.getUserTotalContributionCount() + 1);
+			user.setUserTotalContributionAmount(user.getUserTotalContributionAmount() + itemDao.findByItemIdAndStoreId(contributionOld.getItemId(), contributionOld.getStoreId()).getSupportPrice());
+		}
+		
+		contributorDao.delete(contributor);
+		userDao.save(user);
+		
+	}
+
+	public boolean isValidPhone(String phone) { 
+//		boolean err = false; 
+//		String regex = "^01(?:0|1|[6-9])(\\d{7}|\\d{8})$"; 
+//		Pattern p = Pattern.compile(regex);
+//		Matcher m = p.matcher(phone); 
+//		if(m.matches()) { 
+//			err = true; 
+//		} 
+//		return err;
+		return true;
+	}
 	
+	public boolean isValidEmail(String email) { 
+//		boolean err = false; 
+//		String regex = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"; 
+//		Pattern p = Pattern.compile(regex);
+//		Matcher m = p.matcher(email); 
+//		if(m.matches()) { 
+//			err = true; 
+//		} 
+//		return err;
+		return true;
+	}
+
 	
 }

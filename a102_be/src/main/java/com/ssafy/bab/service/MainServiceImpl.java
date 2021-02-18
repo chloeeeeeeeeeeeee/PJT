@@ -36,7 +36,6 @@ import com.ssafy.bab.dto.Store;
 import com.ssafy.bab.dto.StoreRank;
 import com.ssafy.bab.dto.StoreVariables;
 import com.ssafy.bab.dto.User;
-import com.ssafy.bab.dto.UserCount;
 import com.ssafy.bab.dto.UserRank;
 
 @Service
@@ -83,7 +82,6 @@ public class MainServiceImpl implements MainService {
 		
 		
 		// 구를 기준으로 locationId를 받아온뒤 locationId를 기준으로 store를 리스트로 받아온다
-		
 		Location location = locationDao.findByLocationGu(gu);
 		if(location == null) return null;
 		
@@ -107,6 +105,9 @@ public class MainServiceImpl implements MainService {
 			result.setStoreKiosk(store.getStoreKiosk());
 			if(store.getStoreKiosk() == 1) {
 				StoreVariables storeVariables = storeVariablesDao.findByStoreId(store.getStoreId());
+				if(storeVariables == null) {
+					return null;
+				}
 				result.setStoreItemAvailable(storeVariables.getStoreItemAvailable());
 			}
 			
@@ -262,29 +263,22 @@ public class MainServiceImpl implements MainService {
 	}
 	@Override
 	public Integer userTotal() {
-		int userTotal = userRankDao.selectSumUserTotalContributionAmountFromUser();
+//		int userTotal = userRankDao.selectSumUserTotalContributionAmountFromUser();
+		int userTotal = storeVariablesDao.selectSumTotalContributionAmount();
 		return userTotal;
 	}
 
 
 	@Override
 	public List<UserRank> userBowlRank() {
-		List<UserRank> userBowlRank = new ArrayList<>();
-		List<UserCount> userCount = userRankDao.selectCountFromContributionGroupByUserSeqOrderByCountDesc();
-		for(int i=0;i<userCount.size();i++) {
+		List<UserRank> result = new ArrayList<UserRank>(); 
+		List<User> userList = userRankDao.findByUserTotalContributionCountGreaterThanOrderByUserTotalContributionCountDesc(0);
+		for(int i = 0; i < 10 && i < userList.size(); i++) {
 			UserRank userRank = new UserRank();
-			userRank.setUserSeq(userCount.get(i).getUserSeq());
-			userRank.setContributionCount(userCount.get(i).getCount());
-			
-			User user = userDao.findByUserSeq(userRank.getUserSeq());
-			userRank.setUserEmail(user.getUserEmail());
-			userRank.setUserId(user.getUserId());
-			userRank.setUserName(user.getUserName());
-			userRank.setUserPhone(user.getUserPhone());
-			userRank.setUserTotalContributionAmount(user.getUserTotalContributionAmount());	
-			
-			userBowlRank.add(userRank);
+			userRank.setUserTotalContributionCount(userList.get(i).getUserTotalContributionCount());
+			userRank.setUserName(userList.get(i).getUserName());
+			result.add(userRank);
 		}
-		return userBowlRank;
+		return result;
 	}
 }

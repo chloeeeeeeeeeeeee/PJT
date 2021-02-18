@@ -1,11 +1,14 @@
 package com.ssafy.bab.service;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import org.apache.commons.io.FilenameUtils;
@@ -17,11 +20,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.bab.dao.ContributionDao;
 import com.ssafy.bab.dao.ContributionOldDao;
 import com.ssafy.bab.dao.ItemDao;
+import com.ssafy.bab.dao.OrderDao;
 import com.ssafy.bab.dao.StoreDao;
 import com.ssafy.bab.dao.StoreVariablesDao;
 import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.ItemIdCount;
 import com.ssafy.bab.dto.MyStore;
+import com.ssafy.bab.dto.OrderIdAndPaymentId;
+import com.ssafy.bab.dto.Orders;
 import com.ssafy.bab.dto.Store;
 import com.ssafy.bab.dto.StoreContributionItem;
 import com.ssafy.bab.dto.StoreVariables;
@@ -48,6 +54,9 @@ public class StoreServiceImpl implements StoreService {
 	
 	@Autowired
 	ContributionOldDao contributionOldDao;
+	
+	@Autowired
+	OrderDao orderDao;
 	
 	@Override
 	public MyStore getMyStore(int storeId) {
@@ -89,6 +98,7 @@ public class StoreServiceImpl implements StoreService {
 		if(endDate.after(cal.getTime())) {
 			ArrayList<ItemIdCount> list = contributionDao.getItemContributionCount(storeId, startDate, endDate);
 			for (ItemIdCount itemIdCount : list) {
+//				System.out.println(itemIdCount.getItemId() + " " + itemIdCount.getCount());
 				items[itemIdCount.getItemId()] += itemIdCount.getCount();
 			}
 		}
@@ -105,7 +115,9 @@ public class StoreServiceImpl implements StoreService {
 		for(int i = 1; i < itemCnt; i++) {
 			if(items[i] < 1) continue;
 			
+			// 메뉴 없을경우 반환
 			Item item = itemDao.findByItemIdAndStoreId(i, storeId);
+			if(item == null) continue;
 			
 			StoreContributionItem cItem = new StoreContributionItem();
 			
@@ -115,7 +127,6 @@ public class StoreServiceImpl implements StoreService {
 			cItem.setSupportPrice(item.getSupportPrice());
 			cItem.setItemAvailable(item.getItemAvailable());
 			cItem.setItemImgUrl(item.getItemImgUrl());
-			
 			result.add(cItem);
 			
 		}
@@ -128,7 +139,6 @@ public class StoreServiceImpl implements StoreService {
 	public String itemCreate(Item item, MultipartFile uploadFile) {
 		
 		try {
-			
 			String savingFileName = null;
 			
 			// 업로드한 사진이 있을 경우
@@ -153,12 +163,11 @@ public class StoreServiceImpl implements StoreService {
 			else {
 				savingFileName = "logo.jpg";
 			}
-			
+
 			// Table Insert
 			Integer itemId = itemDao.getMaxItemId(item.getStoreId());
 			if(itemId == null) item.setItemId(1);
 			else item.setItemId(itemDao.getMaxItemId(item.getStoreId()));
-			
 			item.setItemImgUrl("menus/" + savingFileName);
 			
 			int supportPrice = item.getItemPrice() - SUPPORT_AMOUNT;
@@ -185,7 +194,9 @@ public class StoreServiceImpl implements StoreService {
 	public String itemUpdate(Item item, MultipartFile uploadFile) {
 		
 		Item updatedItem = itemDao.findByItemIdAndStoreId(item.getItemId(), item.getStoreId());
-
+		if(updatedItem == null) return "INVALID itemId";
+		if(updatedItem.getItemAvailable() > 0 ) return "CAN'T UPDATE";
+		
 		try {
 
 			String savingFileName = null;
@@ -252,7 +263,8 @@ public class StoreServiceImpl implements StoreService {
 			
 			int supportPrice = item.getItemPrice() - SUPPORT_AMOUNT;
 			if(supportPrice > 0) updatedItem.setSupportPrice(supportPrice);
-
+			else updatedItem.setSupportPrice(0);
+					
 			itemDao.save(updatedItem);
 
 		} catch (Exception e) {
@@ -266,9 +278,10 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public String itemDelete(int itemId, int storeId) {
-		
+		System.out.println("dhl,,,,,,,,dksep...???");
 		Item item = itemDao.findByItemIdAndStoreId(itemId, storeId);
 		if(item == null) return "INVALID itemId";
+		if(item.getItemAvailable() > 0 ) return "CAN'T DELETE";
 		
 		// 기존 메뉴사진이 기본 이미지가 아닐 경우 기존 사진 제거
 		if(!item.getItemImgUrl().equals("menus/logo.jpg")) {
@@ -285,6 +298,51 @@ public class StoreServiceImpl implements StoreService {
 		itemDao.delete(item);
 		
 		return "SUCCESS";
+	}
+
+	@Override
+	public List<OrderIdAndPaymentId> getNotOrderDoneList(int storeId) {
+		
+		List<OrderIdAndPaymentId> list1 = orderDao.getNotOrderDonePaymentGdreamId();
+		List<OrderIdAndPaymentId> list2 = orderDao.getNotOrderDonePaymentId();
+
+		List<OrderIdAndPaymentId> result = new ArrayList<OrderIdAndPaymentId>();
+		if(list1 != null) result.addAll(list1);
+		if(list2 != null) result.addAll(list2);
+		if(result.size() > 0) return result;
+		
+		return null;
+	}
+
+	@Override
+	public String orderDonUpdate(int storeId, String paymentId) throws ParseException {
+		
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		transFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+		Date now = transFormat.parse(transFormat.format(new Date()));
+
+		// payment_id 처리
+		ArrayList<Orders> list = orderDao.findByPayment_PaymentId(paymentId);
+		if(list.size() > 0) {
+			for (Orders orders : list) {
+				System.out.println(orders);
+				orders.setOrderDone(now);
+				orderDao.save(orders);
+			}
+			return "SUCCESS";
+		}
+		
+		// payment_gdream_id 처리
+		list = orderDao.findByPaymentGdream_paymentGdreamId(paymentId);
+		if(list.size() > 0) { 
+			for (Orders orders : list) {
+				orders.setOrderDone(now);
+				orderDao.save(orders);
+			}
+			return "SUCCESS";
+		}
+		
+		return "Invalid storeId OR itemId";
 	}
 
 }

@@ -8,14 +8,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+@Data
 @Entity
+@Table(name="location")
 public class Location implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

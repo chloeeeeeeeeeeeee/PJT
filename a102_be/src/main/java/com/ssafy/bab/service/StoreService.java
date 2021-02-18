@@ -1,5 +1,6 @@
 package com.ssafy.bab.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.MyStore;
+import com.ssafy.bab.dto.OrderIdAndPaymentId;
 import com.ssafy.bab.dto.StoreContributionItem;
 
 public interface StoreService {
@@ -29,4 +31,10 @@ public interface StoreService {
 
 	// 메뉴 삭제
 	public String itemDelete(int itemId, int storeId);
+	
+	// 주문완료되지 않은 paymentId 리스트
+	public List<OrderIdAndPaymentId> getNotOrderDoneList(int storeId);
+	
+	// 주문완료된 orders 튜플 업데이트
+	public String orderDonUpdate(int storeId, String paymentId) throws ParseException;
 }

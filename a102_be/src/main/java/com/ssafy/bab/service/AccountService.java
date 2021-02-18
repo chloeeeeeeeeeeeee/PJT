@@ -22,6 +22,12 @@ public interface AccountService {
 	
 	public String userPwdChk(User user, String pwd);
 	
+	// 유저 정보 업데이트
+	public String userUpdate(User user, User newUser);
+	
+	// 비회원 후원내역 연동
+	public void getContributorHistory(User user);
+	
 	//프로필
 	public ArrayList<ContributionResult> userContribution(int userSeq);
 	

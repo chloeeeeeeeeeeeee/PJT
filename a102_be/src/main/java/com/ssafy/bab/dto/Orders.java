@@ -11,6 +11,7 @@ import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -19,6 +20,7 @@ import lombok.Data;
 @Data
 @Entity
 @IdClass(OrdersPK.class)
+@Table(name="orders")
 public class Orders {
 
 	@Id
@@ -43,6 +45,7 @@ public class Orders {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date orderDate;
 	
+	@JoinColumn(name="order_done", nullable = true)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date orderDone;
 	

@@ -23,11 +23,11 @@ function MenuUpdate() {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('itemId', menu.itemId);
-    formData.append('itemName', name);
-    formData.append('itemPrice', price);
-    formData.append('file', img);
-    formData.append('itemImgUrl', imgUrl);
+    formData.append("itemId", menu.itemId);
+    formData.append("itemName", name);
+    formData.append("itemPrice", price);
+    formData.append("file", img);
+    formData.append("itemImgUrl", imgUrl);
 
     // for (let key of formData.keys()) {
     //   console.log(key);
@@ -36,52 +36,51 @@ function MenuUpdate() {
     //   console.log(value);
     // }
 
-
-
     fetch(`${process.env.REACT_APP_API_URL}/store/item/update`, {
-        method: "POST",
-        headers: {
-            // token: localStorage.getItem('access-token'),
-            token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2MzEzODE2LCJ1c2VyU2VxIjoyOX0.-jAjo8HyoN_vACvhHT6STtpQIZcwsB7gqfSZvXGqMZ4"
-        },
-        body: formData,
-    })
-    .then(res => {
-    //   console.log(res);
-      if (res.status === 200){
+      method: "POST",
+      headers: {
+        // token: localStorage.getItem('access-token'),
+        "Content-Type": "multipart/form-data",
+        token:
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2MzEzODE2LCJ1c2VyU2VxIjoyOX0.-jAjo8HyoN_vACvhHT6STtpQIZcwsB7gqfSZvXGqMZ4",
+      },
+      body: formData,
+    }).then((res) => {
+      //   console.log(res);
+      if (res.status === 200) {
         // alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
-        window.location.href = '/storeadmin';
-      }
-      else{
+        window.location.href = "/storeadmin";
+      } else {
+        console.log(res);
         alert("오류");
       }
-    })
-  }
+    });
+  };
 
-  const onNameChange = event => {
+  const onNameChange = (event) => {
     setName(event.target.value);
     // console.log(event.target.value);
-  }
+  };
 
   const onPriceChange = (event) => {
     setPrice(event.target.value);
     // console.log(event.target.value);
-  }
+  };
 
   const onImgChange = (event) => {
     setImage(event.target.files[0]);
     // console.log(event.target.files[0]);
-  }
+  };
 
   const DeleteImg = (event) => {
     setImgUrl("noImage");
-  }
+  };
 
   return (
     <Fragment>
       <Container fluid={true} className="createPost">
         <Row>
-        <Col sm="12" md={{ size: 10, offset: 1 }} id="storetitle">
+          <Col sm="12" md={{ size: 10, offset: 1 }} id="storetitle">
             <h3 className="col-8 d-inline">메뉴 수정하기</h3>
           </Col>
           <Col sm="12" md={{ size: 10, offset: 1 }}>
@@ -114,17 +113,24 @@ function MenuUpdate() {
                     </FormGroup>
                     <FormGroup>
                       <Label for="menuImg">사진 {imgUrl}</Label>
-                      <Button className="deletePhotoButton" onClick={DeleteImg}>삭제</Button>
+                      <Button className="deletePhotoButton" onClick={DeleteImg}>
+                        삭제
+                      </Button>
                       <Input
                         className="createTitle"
                         type="file"
-                        accept='image/jpg,impge/png,image/jpeg,image/gif' 
+                        accept="image/jpg,impge/png,image/jpeg,image/gif"
                         name="file"
-                        onChange={onImgChange} />
+                        onChange={onImgChange}
+                      />
                     </FormGroup>
                   </Col>
                 </Form>
-                <Button className="createMenuButton" type="submit" onClick={Update}>
+                <Button
+                  className="createMenuButton"
+                  type="submit"
+                  onClick={Update}
+                >
                   수정
                 </Button>
               </CardBody>
@@ -135,5 +141,5 @@ function MenuUpdate() {
     </Fragment>
   );
 }
-  
+
 export default MenuUpdate;

@@ -16,10 +16,11 @@ function StoreMenuItem(storeMenu) {
       fetch(
         `${process.env.REACT_APP_API_URL}/store/item/delete/${menuitem.itemId}`,
         {
-          method: "POST",
+          method: "GET",
           headers: {
             // token: localStorage.getItem("access-token"),
-            token:"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2MzEzODE2LCJ1c2VyU2VxIjoyOX0.-jAjo8HyoN_vACvhHT6STtpQIZcwsB7gqfSZvXGqMZ4"
+            token:
+              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2MzEzODE2LCJ1c2VyU2VxIjoyOX0.-jAjo8HyoN_vACvhHT6STtpQIZcwsB7gqfSZvXGqMZ4",
           },
         }
       ).then((res) => {
@@ -34,24 +35,36 @@ function StoreMenuItem(storeMenu) {
     }
   }
 
-//   console.log(storeMenu.storeMenu);
+  //   console.log(storeMenu.storeMenu);
   let imgurl = `${process.env.REACT_APP_API_URL}/${storeMenu.storeMenu.itemImgUrl}`;
   return (
     <Row className="col-12 storeMenuItem justify-content-between p-0 mr-0 ml-0">
-      <img src={imgurl} className="d-inline-block col-3" alt="
-      menuImg"/>
+      <img
+        src={imgurl}
+        className="d-inline-block col-3"
+        alt="
+      menuImg"
+      />
       <div className="col-7 menuItemInfo pt-4 pb-4 pl-0 pr-0 row justify-content-start">
         <h5 className="col-8">{storeMenu.storeMenu.itemName}</h5>
-        <p className="col-4 text-right">
-          {storeMenu.storeMenu.itemPrice}원
-        </p>
+        <p className="col-4 text-right">{storeMenu.storeMenu.itemPrice}원</p>
         <p className="col information">
           현재 {storeMenu.storeMenu.itemAvailable}그릇 후원되었습니다.
         </p>
-        </div>
-        <div className="col-2 menuButtons">
-        <Button className="menuButton mb-1" onClick={() => Update(storeMenu.storeMenu)}>수정</Button>
-        <Button className="menuButton" onClick={() => Delete(storeMenu.storeMenu)}>삭제</Button>
+      </div>
+      <div className="col-2 menuButtons">
+        <Button
+          className="menuButton mb-1"
+          onClick={() => Update(storeMenu.storeMenu)}
+        >
+          수정
+        </Button>
+        <Button
+          className="menuButton"
+          onClick={() => Delete(storeMenu.storeMenu)}
+        >
+          삭제
+        </Button>
       </div>
     </Row>
   );

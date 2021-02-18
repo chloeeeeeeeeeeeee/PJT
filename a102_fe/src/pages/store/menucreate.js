@@ -21,9 +21,9 @@ function MenuCreate() {
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('itemName', name);
-    formData.append('itemPrice', price);
-    formData.append('file', img);
+    formData.append("itemName", name);
+    formData.append("itemPrice", price);
+    formData.append("file", img);
 
     // for (let key of formData.keys()) {
     //   console.log(key);
@@ -33,39 +33,39 @@ function MenuCreate() {
     // }
 
     fetch(`${process.env.REACT_APP_API_URL}/store/item/create`, {
-        method: "POST",
-        headers: {
-            // token: localStorage.getItem('access-token'),
-            token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2MzEzODE2LCJ1c2VyU2VxIjoyOX0.-jAjo8HyoN_vACvhHT6STtpQIZcwsB7gqfSZvXGqMZ4"
-        },
-        body: formData,
-    })
-    .then(res => {
-    //   console.log(res);
-      if (res.status === 200){
+      method: "POST",
+      headers: {
+        // token: localStorage.getItem('access-token'),
+        "Content-Type": "multipart/form-data",
+        token:
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2MzEzODE2LCJ1c2VyU2VxIjoyOX0.-jAjo8HyoN_vACvhHT6STtpQIZcwsB7gqfSZvXGqMZ4",
+      },
+      body: formData,
+    }).then((res) => {
+      //   console.log(res);
+      if (res.status === 200) {
         // alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
-        window.location.href = '/storeadmin';
-      }
-      else{
+        window.location.href = "/storeadmin";
+      } else {
         alert("메뉴 생성에 실패하셨습니다. 다시 시도해주세요.");
       }
-    })
-  }
+    });
+  };
 
-  const onNameChange = event => {
+  const onNameChange = (event) => {
     setName(event.target.value);
     // console.log(event.target.value);
-  }
+  };
 
   const onPriceChange = (event) => {
     setPrice(event.target.value);
     // console.log(event.target.value);
-  }
+  };
 
   const onImgChange = (event) => {
     setImage(event.target.files[0]);
     // console.log(event.target.files[0]);
-  }
+  };
 
   return (
     <Fragment>
@@ -107,13 +107,18 @@ function MenuCreate() {
                       <Input
                         className="createTitle"
                         type="file"
-                        accept='image/jpg,impge/png,image/jpeg,image/gif' 
+                        accept="image/jpg,impge/png,image/jpeg,image/gif"
                         name="file"
-                        onChange={onImgChange} />
+                        onChange={onImgChange}
+                      />
                     </FormGroup>
                   </Col>
                 </Form>
-                <Button className="createMenuButton" type="submit" onClick={Create}>
+                <Button
+                  className="createMenuButton"
+                  type="submit"
+                  onClick={Create}
+                >
                   추가
                 </Button>
               </CardBody>

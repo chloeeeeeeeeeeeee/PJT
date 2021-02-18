@@ -36,7 +36,8 @@ function MenuCreate() {
     fetch(`${process.env.REACT_APP_API_URL}/store/item/create`, {
         method: "POST",
         headers: {
-            token: localStorage.getItem('access-token'),
+            // token: localStorage.getItem('access-token'),
+            token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2Mjg3NzY0LCJ1c2VyU2VxIjo1fQ.YqOZgS7grU8NH7zAZ4G6T046nKVs7N9PvcoAuhFbEIA"
         },
         body: formData,
     })

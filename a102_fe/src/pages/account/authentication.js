@@ -174,26 +174,28 @@ function Auth(props) {
           // console.info("Signup 함수 성공한 경우 자동 로그인:", res)
           localStorage.setItem('access-token', res.token)
         })
+        .then(() => {
+          // 회원가입 후 바로 로그인을 실행했다면? 
+          if (Boolean(localStorage.getItem('access-token')) == true && localStorage.getItem('access-token') != "undefined") {
+
+            //storeId일 경우에는?
+            fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
+              headers: {
+                token: localStorage.getItem('access-token')
+              }
+            })
+            .then(res => res.json())
+            .then(res =>
+              ( res.store ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
+            )  
+          }
+        })
       } else {
         // 회원가입이 실패한 경우인데, 어떤 경우가 있을까요? 같이 에러처리 합시다
         console.error("회원가입이 실패한 경우:", res)
       }
-    })
-
-    // 회원가입 후 바로 로그인을 실행했다면? 
-    if (Boolean(localStorage.getItem('access-token')) == true && localStorage.getItem('access-token') != "undefined") {
-
-      //storeId일 경우에는?
-      fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
-        headers: {
-          token: localStorage.getItem('access-token')
-        }
-      })
-      .then(res => res.json())
-      .then(res =>
-        ( res.store ) ? ( window.location.href = '/storeadmin' ) : ( window.location.href = '/profile' )        
-      )  
     }
+    )
   }
 
   const Checkid = () => {

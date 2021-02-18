@@ -24,7 +24,7 @@ function Aboutus() {
             </Button></a>
         </CardHeader> */}
             <CardBody sm="12" className="aboutUsBody">
-                <div>
+                {/* <div>
                 <p className='mb-0 aboutUsText'>
                 안녕하세요, 팀 '우리끼니'입니다.
                 </p>
@@ -45,7 +45,7 @@ function Aboutus() {
                 <br/>
                 <p className='mb-0 aboutUsText'>
                 <b>작은 실천으로 더 따뜻한 하루를 선물하는 '우리끼니'와 함께해주세요.</b>
-                </p>
+                </p> */}
                 {/* <h2>프로님 그 얘기 아시잖아요,</h2>
                 <p className='mb-0 aboutUsText'>
                     예전에 우리 커피나... 그런거 먹으러갈때~~ 뒷사람을 위해서 한 잔을 사두면 그 다음사람이 와서 계산하려고 봤는데 이미 계산돼서 그냥 들고 가시면 됩니다, 라고 말을 들었을 때 거기에 대해서 서로 지구공동체니... 지구촌 한가족 흔한 커피 한잔이지만, 내 선행으로 인해 다음 사람이 하루종일 행복하게 만들어질 수 있는 삶의 원동력이 된다 같은 얘기를 하면서 마음 따듯해지는 카페가 한 곳 있었어요. 
@@ -60,7 +60,7 @@ function Aboutus() {
                 </p>
                 <h4 className="font-weight-bold">결식아동들을 위한 키오스크를 만들어보려고 한다.</h4>
                 <p className="text-right aboutUsText">A102 팀장 <span className="font-weight-bold">천석희</span> 님</p> */}
-                </div>
+                {/* </div> */}
             </CardBody>
         </Card>
     );

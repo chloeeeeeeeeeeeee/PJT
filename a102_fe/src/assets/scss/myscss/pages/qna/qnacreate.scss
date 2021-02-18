@@ -1,14 +1,9 @@
 .createPost {
   height: 100%;
-  // margin: 10px;
-  .card {
-    // border-color: $eat-key-color;
-    // border-width: 2px;
-    border: none;
 
-    // .createPostHeader {
-    //   background-color: $eat-key-color;
-    // }
+  .card {
+    border: none;
+    // height: 97%;
 
     .createPostBody {
       // height: 60%;
@@ -29,7 +24,7 @@
           }
         }
         .cke_reset {
-          height: 33vh;
+          height: 31vh;
           overflow: auto;
           #cke_1_contents {
             height: 19.4vh !important;

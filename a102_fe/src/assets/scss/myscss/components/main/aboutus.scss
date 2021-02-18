@@ -1,28 +1,26 @@
-
 // // Small devices (landscape phones, 576px and up)
 // @media (min-width: 576px) { }
 
 // // Medium devices (tablets, 768px and up)
-// @media (min-width: 768px) { 
+// @media (min-width: 768px) {
 //     .aboutus{
 //         margin-top:5%;
 //     }
 //  }
 
 // // Large devices (desktops, 992px and up)
-// @media (min-width: 992px) { 
+// @media (min-width: 992px) {
 //     .aboutus{
 //         margin-top:0;
 //     }
 //  }
 
 // // Extra large devices (large desktops, 1200px and up)
-// @media (min-width: 1200px) { 
+// @media (min-width: 1200px) {
 //     .aboutus{
 //         margin-top:0;
 //     }
 //  }
-
 
 .aboutus {
   max-width: 100%;
@@ -30,14 +28,19 @@
   height: 60vh;
   width: 100vh;
   .card {
-    // border: none;
-    height: 60vh;
-    border-radius: 15px;
-    background-color: $oori-white;
-    overflow-y: scroll;
-    &::-webkit-scrollbar {
-      display: none;
-    }
+    background-color: $oori-bright-white !important;
+    background-image: url("../../../../images/oorimain.png");
+    height: 100%;
+    width: 100%;
+    background-size: 100% 100%;
+    border: none;
+    // height: 60vh;
+    // border-radius: 15px;
+    // background-color: $oori-white;
+    // overflow-y: scroll;
+    // &::-webkit-scrollbar {
+    //   display: none;
+    // }
     margin-bottom: 0;
     .aboutUsBody {
       div {

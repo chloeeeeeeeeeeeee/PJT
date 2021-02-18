@@ -53,7 +53,7 @@ function MenuUpdate() {
         window.location.href = '/storeadmin';
       }
       else{
-        alert("오류");
+        alert("메뉴 수정에 실패하셨습니다. 다시 시도해주세요.");
       }
     })
   }

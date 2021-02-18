@@ -221,6 +221,3 @@ $RECYCLE.BIN/
 Servers/
 .metadata/
 application.properties
-
-# production
-/build

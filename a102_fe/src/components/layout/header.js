@@ -8,6 +8,7 @@ import {
   Button,
 } from "reactstrap";
 import oori from "../../assets/images/ooriname.png"
+import { BiMapAlt } from "react-icons/bi";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,7 +44,7 @@ function Header() {
       </NavbarBrand>
       <Nav className="row justify-content-center flex-row" navbar>
         <NavItem className="ml-1 mr-1">
-          <NavLink href="/map"><b>지도보기</b></NavLink>
+          <NavLink href="/map"><b className="bigMapButton"><BiMapAlt/> 지도보기</b></NavLink>
         </NavItem>
       </Nav>
       </div>

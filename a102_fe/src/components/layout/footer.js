@@ -17,13 +17,13 @@ function Footer() {
     <Row className="mainFooter p-2 pl-4" id={childcheck? "childColor": ( storecheck? "storeColor" : "" )}>
       <Col md="8" className="footer-copyright">
         <p className="mb-0">
-          Copyright © ssafy:a102. 후원문의·상담 02-8282-7979.
+          Copyright © SSAFY A102. 후원문의·상담 82-0190-6527-5118
         </p>
       </Col>
       <Col md="4">
         <p className="text-right mb-0">
           <i className="fa fa-heart">
-            <a id={storecheck?"storeIFooter":""} href="http://www.naver.com"> 후원사 바로가기 </a>
+            <a id={storecheck?"storeIFooter":""} href="musicshareroom.tk"> 후원사 바로가기 </a>
           </i>
         </p>
       </Col>

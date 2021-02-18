@@ -14,7 +14,7 @@ function ChildMain() {
         >
           <Card>
             <CardBody sm="12" className="childimg">
-              <img src={oori} alt="childimg"/>
+              <a href="/map"><img src={oori} alt="childimg"/></a>
             </CardBody>
           </Card>
         </Col>

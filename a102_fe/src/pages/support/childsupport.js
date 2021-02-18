@@ -320,15 +320,17 @@ function ChildSupport() {
             {storeListComponents}
           </Row>
           {/* 후원 음식 리스트 */}
-          <h5>음식 목록</h5>
-            <Row className="storeChildSupportBox mb-2 row justify-content-between">
+          <div className="pb-1">          
+          <h5 className="d-inline">음식 목록</h5> <font size="0.6em" className="float-right">지금 바로 먹을 수 있는 음식과 갯수입니다.</font>
+          </div>
+          <Row className="storeChildSupportBox mb-2 row justify-content-between">
+            {supportMenuList}
+            {/* {flag?
               {supportMenuList}
-              {/* {flag?
-                {supportMenuList}
-              :
-                <Col className="nothingToShow" xs="12"><br/><p>음식이 없습니다. 다른 가게를 둘러보시는건 어떨까요?</p></Col>
-              } */}
-            </Row>
+            :
+              <Col className="nothingToShow" xs="12"><br/><p>음식이 없습니다. 다른 가게를 둘러보시는건 어떨까요?</p></Col>
+            } */}
+          </Row>
         </Col>
       </Row>
     </Col>

@@ -60,6 +60,8 @@ function QnaDetail() {
             })
         }
     }
+    
+    let qnadate = new Date(qna.qnaDate);
 
     return (
         <Fragment>
@@ -90,7 +92,7 @@ function QnaDetail() {
                             <CardHeader className="detailPostQHeader">
                                 <h5>{qna.qnaTitle}</h5>
                                 < FaceIcon /> {qnauser.userName}
-                                <span>{qnaDate}</span>
+                                <span>{qnadate.getFullYear() + "-" + (qnadate.getMonth()+1) + "-" + qnadate.getDate()}</span>
                             </CardHeader>
                             <CardBody className="detailPostQBody">
                                 <p>

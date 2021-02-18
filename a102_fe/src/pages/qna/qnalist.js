@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 import { FcLock } from "react-icons/fc";
 
+
 function QnaList() {
   let [qnaList, setQnaList] = useState([]);
   let [userStatus, setUserStatus] = useState(Boolean(localStorage.getItem("access-token")));
@@ -44,6 +45,35 @@ function QnaList() {
         setTotalPages(res.totalPages);
       });
   }, []);
+
+  const qnas = (
+    qnaList.map((qna, index) => {
+      let qnadate = new Date(qna.qnaDate);
+      // qnadate.setHours(qnadate.getHours()+9)
+      // console.log(qnadate)
+      return(
+        <tr
+          key={index}
+          className={
+            user.userId === qna.user.userId ? "myQna" : ""
+          }
+        >
+          <th scope="row">
+            {qna.qnaSeq} {qna.qnaSecret ? <FcLock /> : ""}
+          </th>
+          <td
+            onClick={(e) => Detail(qna)}
+            style={{ cursor: "pointer" }}
+          >
+            {qna.qnaTitle}
+          </td>
+          <td>{qna.user.userName}</td>
+          <td>{qnadate.getFullYear() + "-" + (qnadate.getMonth()+1) + "-" + qnadate.getDate()}</td>
+          <td>{qna.qnaReply == null ? "X" : "O"}</td>
+        </tr>
+      );
+    })
+  )
 
   const Detail = (qna) => {
     fetch(`${process.env.REACT_APP_API_URL}/qna/read`, {
@@ -136,7 +166,8 @@ function QnaList() {
                     </tr>
                   </thead>
                   <tbody className="listPostBodyTbody">
-                    {qnaList.map((qna, index) => (
+                    {qnas}
+                    {/* {qnaList.map((qna, index) => (
                       <tr
                         key={index}
                         className={
@@ -156,7 +187,7 @@ function QnaList() {
                         <td>{qna.qnaDate.slice(0, 10)}</td>
                         <td>{qna.qnaReply == null ? "X" : "O"}</td>
                       </tr>
-                    ))}
+                    ))} */}
                   </tbody>
                 </Table>
               </div>

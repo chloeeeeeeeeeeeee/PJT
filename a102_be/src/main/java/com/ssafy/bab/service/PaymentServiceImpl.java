@@ -3,8 +3,10 @@ package com.ssafy.bab.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,17 +59,6 @@ public class PaymentServiceImpl implements PaymentService {
 	
 	@Value("${Kakao.WEB_RETURN_URL}")
 	private String URL;
-	
-	@Value("${wldms}")
-	private String wldms;
-	@Value("${eksdnjs}")
-	private String eksdnjs;
-	@Value("${dpfls}")
-	private String dpfls;
-	@Value("${qhsgur}")
-	private String qhsgur;
-	@Value("${tjsals}")
-	private String tjsals;
 	
 	PaymentGdream paymentG = null;
 	
@@ -290,18 +281,24 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		// 주문번호
 		SimpleDateFormat vans = new SimpleDateFormat("yyyyMMdd-HHmmss");
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.HOUR, 9);
 		String wdate = vans.format(new Date());
 
 		// 주문시각
 		Date tradeConfirmYmdt = vans.parse(paymentInfo.getPaidAt());
-
+		cal.setTime(tradeConfirmYmdt);
+		cal.add(Calendar.HOUR, -9);
+		tradeConfirmYmdt = cal.getTime();
+		
 		/*
          * ******* DB 테이블 업데이트 *******
          */
 		
 		// payment 테이블 업데이트
 		Payment payment = new Payment();
-        payment.setPaymentId(wdate+"2");
+        payment.setPaymentId(wdate);
         payment.setPaymentDate(tradeConfirmYmdt);
         payment.setPaymentAmount(paymentInfo.getTotalAmount());
         payment.setCreditApprovalNumber(paymentInfo.getApprovalNumber());
@@ -382,7 +379,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
         
         
-		return "SUCCESS";
+		return payment.getPaymentId();
 	}
 
 	@Override
@@ -397,12 +394,25 @@ public class PaymentServiceImpl implements PaymentService {
 			return "Invalid Store";
 		}
 
+//		// 주문번호
+//		SimpleDateFormat vans = new SimpleDateFormat("yyyyMMdd-HHmmss");
+//		String wdate = vans.format(new Date());
+//
+//		// 주문시각
+//		Date tradeConfirmYmdt = vans.parse(paymentInfo.getPaidAt());
+		
 		// 주문번호
 		SimpleDateFormat vans = new SimpleDateFormat("yyyyMMdd-HHmmss");
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.HOUR, 9);
 		String wdate = vans.format(new Date());
-
+		
 		// 주문시각
 		Date tradeConfirmYmdt = vans.parse(paymentInfo.getPaidAt());
+		cal.setTime(tradeConfirmYmdt);
+		cal.add(Calendar.HOUR, -9);
+		tradeConfirmYmdt = cal.getTime();
 		
 		
 		/*
@@ -581,28 +591,24 @@ public class PaymentServiceImpl implements PaymentService {
 //			System.out.println(msg.getItemName() + " " + msg.getStoreName());
 			Message coolsms = new Message(API_KEY, API_SECRET);
 
-			if(msg.getPhone() == wldms || msg.getPhone() == eksdnjs || 
-				msg.getPhone() == dpfls || msg.getPhone() == qhsgur ||
-				msg.getPhone() == tjsals) {
-				// 4 params(to, from, type, text) are mandatory. must be filled
-				HashMap<String, String> params = new HashMap<String, String>();
-				params.put("to", msg.getPhone()); // 수신전화번호
-				params.put("from", PHONE); // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+			// 4 params(to, from, type, text) are mandatory. must be filled
+			HashMap<String, String> params = new HashMap<String, String>();
+			params.put("to", msg.getPhone()); // 수신전화번호
+			params.put("from", PHONE); // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
 //	        	params.put("from", "01011111111");  // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
-				params.put("type", "SMS");
-				params.put("text", msg.getStoreName() + "에서 후원한 메뉴 '" + msg.getItemName()
-						+ "'이 방금 사용되었습니다.\n자세한 내용은 우리끼니 홈페이지에서 확인해주세요.\n" + URL + "\n무료수신거부번호: 080-600-5653");
+			params.put("type", "LMS"); // SMS, LMS
+			params.put("text", "'국수나무'에서 후원한 메뉴 '" + msg.getItemName() + "'이(가) 방금 사용되었습니다.\n"
+					+ "따뜻한 마음으로 우리와 함께해주셔서 감사합니다.\n "
+					+ "자세한 내용은 우리끼니 홈페이지에서 확인해주세요.\n" + URL + "\n\n무료수신거부번호: 080-600-5653");
 
-				try {
-					JSONObject obj = (JSONObject) coolsms.send(params);
-					System.out.println(obj.toString());
-				} catch (CoolsmsException e) {
-					System.out.println(e.getMessage());
-					System.out.println(e.getCode());
-				}
-			}else {
-				return "check user phone number";
+			try {
+				JSONObject obj = (JSONObject) coolsms.send(params);
+				System.out.println(obj.toString());
+			} catch (CoolsmsException e) {
+				System.out.println(e.getMessage());
+				System.out.println(e.getCode());
 			}
+
 			
 	        
 		}
@@ -624,38 +630,105 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 
 		
-		return "SUCCESS";
+		return paymentG.getPaymentGdreamId();
 	}
 
 	@Override
-	public void sendMsg(Contribution contribution, String itemName, String storeName) {
+	public String sendMsg() {
 		String api_key = API_KEY;
         String api_secret = API_SECRET;
         Message coolsms = new Message(api_key, api_secret);
+        List<Integer> contributionList = contributionDao.getMaxContributionId();
+        System.out.println(PHONE);
+        for (Integer contributionId : contributionList) {
+        	
+			Contribution contribution = contributionDao.findByContributionId(contributionId);
+			if (contribution.getUser() == null || contribution.getUser().getUserPhone() == "temp") continue;
+			
+			Item item = itemDao.findByItemIdAndStoreId(contribution.getItemId(), contribution.getStoreId());
+			
+			// 주문번호
+			SimpleDateFormat vans = new SimpleDateFormat("yyyyMMdd-HHmmss");
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(new Date());
+			cal.add(Calendar.HOUR, 9);
+			String wdate = vans.format(cal.getTime());
 
-        // 4 params(to, from, type, text) are mandatory. must be filled
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("to", contribution.getUser().getUserPhone());    // 수신전화번호
-        params.put("from", "01011111111");    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
-        params.put("type", "SMS");
-        params.put("text", storeName + "에서 후원한 메뉴 '" + itemName + "'이 방금 사용되었습니다.\n 자세한 내용은 우리끼니 홈페이지에서 확인해주세요.");
-//        params.put("app_version", "test app 1.2"); // application name and version
+			// 주문시각
+			cal.add(Calendar.SECOND, -10);
+			Date tradeConfirmYmdt = cal.getTime();
+			
+			// PaymentGdream 테이블 업데이트
+			paymentG = new PaymentGdream();
+			paymentG.setPaymentGdreamId(wdate);
+			paymentG.setPaymentGdreamDate(tradeConfirmYmdt);
+			paymentG.setPaymentGdreamAmount(item.getItemPrice() - item.getSupportPrice());
+			paymentG.setPaymentGdreamApproval("gdream_" + wdate);
+			paymentG.setPaymentGdreamStoreId(item.getStoreId());
+			paymentGDao.save(paymentG);
+			
+			// Contribution 테이블 업데이트
+			contribution.setContributionDateUsed(tradeConfirmYmdt);
+			contribution.setContributionUse(1);
+			contribution.setPaymentGdream(paymentG);
+			contribution.setContributionAnswer("맛있게 잘 먹겠습니다 (´▽`ʃ♡ƪ)");
+			contributionDao.save(contribution);
+			
+			// Item 테이블 업데이트
+			item.setItemAvailable(item.getItemAvailable() - 1);
+			itemDao.save(item);
+			
+			// storeVariables 테이블 업데이트
+			StoreVariables storeVariables = storeVariablesDao.findByStoreId(item.getStoreId());
+			storeVariables.setStoreItemAvailable(storeVariables.getStoreItemAvailable() - 1);
+			storeVariablesDao.save(storeVariables);
+			
+			Orders order = new Orders();
+			order.setItemId(item.getItemId());
+			order.setStoreId(item.getStoreId());
+			order.setOrderDate(tradeConfirmYmdt);
+			order.setOrderCount(1);
+			order.setPaymentGdream(paymentG);
+			
+			// 4 params(to, from, type, text) are mandatory. must be filled
+	        HashMap<String, String> params = new HashMap<String, String>();
+	        params.put("to", contribution.getUser().getUserPhone());    // 수신전화번호
+	        params.put("from", PHONE);    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
+	        params.put("type", "LMS");
+	        params.put("text", "'우리끼니'에서 후원한 메뉴 '" + item.getItemName() + "'이(가) 방금 사용되었습니다.\n"
+	    					+ "따뜻한 마음으로 우리와 함께해주셔서 감사합니다.\n "
+	    					+ "자세한 내용은 우리끼니 홈페이지에서 확인해주세요.\n" + URL + "\n\n무료수신거부번호: 080-600-5653");
 
-        try {
-            JSONObject obj = (JSONObject) coolsms.send(params);
-            System.out.println(obj.toString());
-        } catch (CoolsmsException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getCode());
-        }
-		
+	        System.out.println("================================");
+	        System.out.println(contributionId);
+	        System.out.println(params.get("to"));
+	        System.out.println(params.get("text"));
+	        
+	        try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	        
+	        try {
+	            JSONObject obj = (JSONObject) coolsms.send(params);
+	            System.out.println(obj.toString());
+//	            return "SUCCESS";
+	        } catch (CoolsmsException e) {
+	            System.out.println(e.getMessage());
+	            System.out.println(e.getCode());
+	        }
+			
+		}
+        
+        return "SUCCESS";
 	}
 
 	@Override
 	public String getRFIDCardType(String cardNumber) {
-		String result = cardRfidDao.findByCardNumber(cardNumber);
+		CardRfid result = cardRfidDao.findByCardNumber(cardNumber);
 		if(result == null) return "Invalid CardNumber";
-		return result;
+		return result.getCardType();
 	}
 
 	@Override

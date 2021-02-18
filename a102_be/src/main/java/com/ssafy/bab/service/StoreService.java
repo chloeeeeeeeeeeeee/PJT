@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.MyStore;
+import com.ssafy.bab.dto.OrderIdAndPaymentId;
 import com.ssafy.bab.dto.StoreContributionItem;
 
 public interface StoreService {
@@ -32,7 +33,7 @@ public interface StoreService {
 	public String itemDelete(int itemId, int storeId);
 	
 	// 주문완료되지 않은 paymentId 리스트
-	public List<String> getNotOrderDoneList(int storeId);
+	public List<OrderIdAndPaymentId> getNotOrderDoneList(int storeId);
 	
 	// 주문완료된 orders 튜플 업데이트
 	public String orderDonUpdate(int storeId, String paymentId) throws ParseException;

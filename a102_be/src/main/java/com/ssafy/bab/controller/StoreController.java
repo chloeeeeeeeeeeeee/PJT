@@ -23,8 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.bab.dao.UserDao;
 import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.MyStore;
+import com.ssafy.bab.dto.OrderIdAndPaymentId;
 import com.ssafy.bab.dto.StoreContributionItem;
-import com.ssafy.bab.dto.StoreRank;
 import com.ssafy.bab.dto.User;
 import com.ssafy.bab.service.JwtService;
 import com.ssafy.bab.service.StoreService;
@@ -88,7 +88,6 @@ public class StoreController {
 		}
 		
 		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		transFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 		result = (ArrayList<StoreContributionItem>) storeService.getContributionItemList(user.getStore().getStoreId(), transFormat.parse(startDate), transFormat.parse(endDate));
 		
 		return new ResponseEntity<List<StoreContributionItem>>(result, HttpStatus.OK);
@@ -192,9 +191,9 @@ public class StoreController {
 	
 	@ApiOperation(value = "orderList 반환", notes = "order_done = null인 payment_id 및 payment_gdream_id 반환", response = List.class)
 	@GetMapping("/orderlist")
-	public ResponseEntity<List<String>> notOrderDoneList(@RequestParam("storeid") int storeId) throws Exception{
+	public ResponseEntity<List<OrderIdAndPaymentId>> notOrderDoneList(@RequestParam("storeid") int storeId) throws Exception{
 		logger.info("notOrderDoneList_Store - 호출");
-		return new ResponseEntity<List<String>>(storeService.getNotOrderDoneList(storeId), HttpStatus.OK);
+		return new ResponseEntity<List<OrderIdAndPaymentId>>(storeService.getNotOrderDoneList(storeId), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "orderList 업데이트", notes = "입력받은 주문번호를 갖는 orders튜플들의 ", response = List.class)

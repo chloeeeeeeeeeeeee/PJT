@@ -263,7 +263,8 @@ public class MainServiceImpl implements MainService {
 	}
 	@Override
 	public Integer userTotal() {
-		int userTotal = userRankDao.selectSumUserTotalContributionAmountFromUser();
+//		int userTotal = userRankDao.selectSumUserTotalContributionAmountFromUser();
+		int userTotal = storeVariablesDao.selectSumTotalContributionAmount();
 		return userTotal;
 	}
 

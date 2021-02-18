@@ -49,5 +49,10 @@ public interface ContributionDao extends JpaRepository<Contribution, Integer> {
 	
 	// 동일한 paymentGdreamId를 갖는 후원내역 가져오기
 	ArrayList<Contribution> findByPaymentGdream_paymentGdreamId(String paymentGdreamId);
+	
+	Contribution findByContributionId(int contributionId);
+	
+	@Query(value = "SELECT max(contribution_id) as maxContributionId FROM sys.contribution WHERE user_seq IS NOT NULL AND contribution_use = 0 GROUP BY user_seq", nativeQuery = true)
+	ArrayList<Integer> getMaxContributionId();
 
 }

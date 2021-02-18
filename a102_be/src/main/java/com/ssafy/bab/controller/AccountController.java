@@ -65,38 +65,7 @@ public class AccountController {
 		if(userResult == null)
 			return new ResponseEntity<User>(userResult, HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<User>(userResult, HttpStatus.OK);
-	}
-	
-//	//회원가입카카오
-//	@PostMapping("/signupkakao")
-//	public ResponseEntity<JwtService.TokenRes> signUpKakao(@RequestBody User user) {
-//		String pwd = user.getUserId();
-//		user.setUserPwd(user.getUserId());
-//		user.setUserId("Kakao@"+user.getUserId());
-//		user.setUserName("Guest");
-//		user.setUserEmail(user.getUserId());
-//		user.setUserPhone(user.getUserId());
-//		
-//		User userResult = userService.signUp(user);
-//		if(userResult != null) {
-//			User userKakao = userService.userInfoById(user.getUserId());
-//			if (userKakao != null) {
-//				JwtService.TokenRes signInJwt = authService.signIn(user.getUserId(), pwd);
-//
-//				if(signInJwt == null) {
-//					return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-//				}
-//				return new ResponseEntity<JwtService.TokenRes>(signInJwt,HttpStatus.OK);
-//			}
-//			else {
-//				JwtService.TokenRes signInJwt = null;
-//				return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-//			}
-//		}
-//		JwtService.TokenRes signInJwt = null;
-//		return new ResponseEntity<JwtService.TokenRes>(signInJwt, HttpStatus.BAD_REQUEST);
-//	}
-	
+	}	
 
 	//로그인(임시)
 	@PostMapping("/signin")
@@ -124,6 +93,7 @@ public class AccountController {
 	//로그인카카오
 	@PostMapping("/signinkakao")
 	public ResponseEntity<JwtService.TokenRes> signInKakao(@RequestBody User user, HttpServletResponse res){
+		logger.info("signinkakao_AccountController - 호출");
 		String userId = user.getUserId();
 		user.setUserPwd(user.getUserId());
 		User userKakao = userService.userInfoById("Kakao@"+userId);
@@ -147,6 +117,7 @@ public class AccountController {
 			user.setUserPhone("temp");
 			
 			User userResult = userService.signUp(user);
+		
 			if(userResult != null) {
 				userKakao = userService.userInfoById(user.getUserId());
 				if (userKakao != null) {
@@ -287,18 +258,15 @@ public class AccountController {
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
 		
-        //테스트
-//		User user = userDao.findByUserSeq(1);
-		//프론트
 		User user = userDao.findByUserSeq(userSeq);
+		System.out.println(newUser);
         if(user == null || (newUser.getUserEmail() == null && newUser.getUserPhone() == null && newUser.getUserName() == null)) return new ResponseEntity<String>("FAIL", HttpStatus.BAD_REQUEST);
 		
         
-        
-		if("SUCCESS" == userService.userUpdate(user, newUser))
-			return new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
-		else
-			return new ResponseEntity<String>("FAIL", HttpStatus.INTERNAL_SERVER_ERROR);
+        String result= userService.userUpdate(user, newUser);
+        System.out.println(result);
+		return new ResponseEntity<String>(result, HttpStatus.OK);
+
 	}
 	
 }

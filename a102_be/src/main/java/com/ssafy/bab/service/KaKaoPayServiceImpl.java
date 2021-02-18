@@ -4,8 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-import javax.transaction.Transactional;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -101,9 +100,11 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
 		kakaoPayInfo.setPaymentInfo(paymentInfo);
 		
 		// 주문번호
-		java.util.Date now = new java.util.Date();
 		SimpleDateFormat vans = new SimpleDateFormat("yyyyMMdd-HHmmss");
-		String wdate = vans.format(now);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.HOUR, 9);
+		String wdate = vans.format(cal.getTime());
 		kakaoPayInfo.setPartner_order_id(wdate);
 		
 		// 상품명 설정
@@ -189,7 +190,12 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             // 현재시간으로 변경
 
             SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            kakaoPayApproval.setApproved_at(kakaoPayApproval.getApproved_at());
+            
+            Calendar cal = Calendar.getInstance();
+    		cal.setTime(kakaoPayApproval.getApproved_at());
+    		cal.add(Calendar.HOUR, -9);
+            
+            kakaoPayApproval.setApproved_at(cal.getTime());
             
             /*
              * ******* DB 테이블 업데이트 *******
@@ -197,7 +203,7 @@ public class KaKaoPayServiceImpl implements KakaoPayService {
             
             // payment 테이블 업데이트
             Payment payment = new Payment();
-            payment.setPaymentId(kakaoPayInfo.getPartner_order_id()+"1");
+            payment.setPaymentId(kakaoPayInfo.getPartner_order_id());
             payment.setPaymentAmount(kakaoPayInfo.getPaymentInfo().getTotalAmount());
             payment.setPaymentDate(kakaoPayApproval.getApproved_at());
             payment.setKakaopayCid(kakaoPayInfo.getPaymentInfo().getCid());

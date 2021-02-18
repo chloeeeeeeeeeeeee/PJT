@@ -26,6 +26,7 @@ import com.ssafy.bab.dao.StoreVariablesDao;
 import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.ItemIdCount;
 import com.ssafy.bab.dto.MyStore;
+import com.ssafy.bab.dto.OrderIdAndPaymentId;
 import com.ssafy.bab.dto.Orders;
 import com.ssafy.bab.dto.Store;
 import com.ssafy.bab.dto.StoreContributionItem;
@@ -143,6 +144,7 @@ public class StoreServiceImpl implements StoreService {
 			
 			// 업로드한 사진이 있을 경우
 			if(uploadFile != null && !uploadFile.isEmpty()) {
+				System.out.println("dhodlTDj,,?");
 				File uploadDir = new File(uploadPath);
 				if(!uploadDir.exists()) uploadDir.mkdir();
 				
@@ -166,9 +168,10 @@ public class StoreServiceImpl implements StoreService {
 			
 			// Table Insert
 			Integer itemId = itemDao.getMaxItemId(item.getStoreId());
+			System.out.println("11111111111");
 			if(itemId == null) item.setItemId(1);
 			else item.setItemId(itemDao.getMaxItemId(item.getStoreId()));
-			
+			System.out.println("2222222222222");
 			item.setItemImgUrl("menus/" + savingFileName);
 			
 			int supportPrice = item.getItemPrice() - SUPPORT_AMOUNT;
@@ -298,12 +301,12 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public List<String> getNotOrderDoneList(int storeId) {
+	public List<OrderIdAndPaymentId> getNotOrderDoneList(int storeId) {
 		
-		List<String> list1 = orderDao.getNotOrderDonePaymentGdreamId();
-		List<String> list2 = orderDao.getNotOrderDonePaymentId();
-		
-		List<String> result = new ArrayList<String>();
+		List<OrderIdAndPaymentId> list1 = orderDao.getNotOrderDonePaymentGdreamId();
+		List<OrderIdAndPaymentId> list2 = orderDao.getNotOrderDonePaymentId();
+
+		List<OrderIdAndPaymentId> result = new ArrayList<OrderIdAndPaymentId>();
 		if(list1 != null) result.addAll(list1);
 		if(list2 != null) result.addAll(list2);
 		if(result.size() > 0) return result;

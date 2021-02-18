@@ -1,5 +1,8 @@
 package com.ssafy.bab.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +25,7 @@ import com.ssafy.bab.dto.IPaymentInfo;
 import com.ssafy.bab.dto.KPaymentInfo;
 import com.ssafy.bab.dto.KakaoPaySuccessData;
 import com.ssafy.bab.dto.NPaymentInfo;
+import com.ssafy.bab.dto.OrderIdAndPaymentId;
 import com.ssafy.bab.service.JwtService;
 import com.ssafy.bab.service.KakaoPayService;
 import com.ssafy.bab.service.PaymentService;
@@ -54,9 +58,7 @@ public class PaymentController {
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
-        // 테스트
-//        paymentInfo.setUserSeq(74);
-        // 프론트
+
         paymentInfo.setUserSeq(userSeq);
         paymentInfo.setCid("TC0ONETIME");
         
@@ -79,9 +81,7 @@ public class PaymentController {
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
-        // 테스트
-//        paymentInfo.setUserSeq(74);
-        // 프론트
+
         paymentInfo.setUserSeq(userSeq);
         
         return new ResponseEntity<String>(paymentService.checkNaverPayTransaction(paymentInfo), HttpStatus.OK);
@@ -95,9 +95,7 @@ public class PaymentController {
 		
 		String jwt = req.getHeader("token");
         int userSeq = jwtService.decode(jwt);
-        // 테스트
-//        paymentInfo.setUserSeq(74);
-        // 프론트
+
         paymentInfo.setUserSeq(userSeq);
         
         return new ResponseEntity<String>(paymentService.checkIamPortTransaction(paymentInfo), HttpStatus.OK);
@@ -108,6 +106,7 @@ public class PaymentController {
 	@PostMapping("/creditcard")
 	public ResponseEntity<String> creditCard(@ApiParam(value = "아이템 목록과 총 개수, 처리 결과", required = true) @RequestBody CPaymentInfo paymentInfo) throws Exception {
 		logger.info("creditCard_payment - 호출");
+		
 		String result = paymentService.checkCreditCardTransaction(paymentInfo);
 		if(result == "SUCCESS")
 			return new ResponseEntity<String>(result, HttpStatus.OK);
@@ -142,6 +141,13 @@ public class PaymentController {
 			return new ResponseEntity<String>(result, HttpStatus.OK);
 		else
 			return new ResponseEntity<String>(result, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ApiOperation(value = "문자 전송", notes = "유저별 최신 후원기록을 받아와서 문자전송", response = String.class)
+	@GetMapping("/sendmsg")
+	public ResponseEntity<String> sendMsg() throws Exception{
+		logger.info("notOrderDoneList_Store - 호출");
+		return new ResponseEntity<String>(paymentService.sendMsg(), HttpStatus.OK);
 	}
 	
 //	@GetMapping("/kakaopayFail")

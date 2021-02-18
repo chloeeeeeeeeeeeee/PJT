@@ -60,26 +60,49 @@ public class AccountServiceImpl implements AccountService{
 		
 		if(user == null) return null;
 		
-		if(user.getUserEmail() == null || !isValidEmail(user.getUserEmail())) return null;
-		if(user.getUserName() == null || user.getUserName().equals("")) return null;
-		if(user.getUserPhone() == null || user.getUserPhone().equals("")) return null;
-		if(user.getUserId() == null || user.getUserId().equals("")) return null;
-		if(user.getUserPwd() == null || user.getUserPwd().equals("")) return null;
+		if(user.getUserEmail() == null || (!"temp".equals(user.getUserEmail()) && !isValidEmail(user.getUserEmail()))) {
+			System.out.println("이메일");
+			return null;
+		}
+		if(user.getUserName() == null || user.getUserName().equals("")) {
+			System.out.println("유저네임");
+			return null;
+		}
+		if(user.getUserPhone() == null || (!"temp".equals(user.getUserPhone()) && !isValidPhone(user.getUserPhone()))) {
+			System.out.println("핸드폰");
+			return null;
+		}
+		if(user.getUserId() == null || user.getUserId().equals("")) {
+			System.out.println("id");
+			return null;
+		}
+		if(user.getUserPwd() == null || user.getUserPwd().equals("")) {
+			System.out.println("pwd");
+			return null;
+		}
 		
 		if(userDao.findByUserId(user.getUserId()) != null)
 			return null;
-		if(userDao.findByUserEmail(user.getUserEmail()) != null && userDao.findByUserEmail(user.getUserEmail()).equals("temp"))
+		if(user.getUserEmail() != "temp" && userDao.findByUserEmail(user.getUserEmail()) != null) {
+			System.out.println("dlapdlf tlqkf");
 			return null;
-		if(userDao.findByUserPhone(user.getUserPhone()) != null && userDao.findByUserPhone(user.getUserPhone()).equals("temp"))
+		}
+			
+		if(user.getUserPhone() != "temp" && userDao.findByUserPhone(user.getUserPhone()) != null) {
+			System.out.println("dhldksgepdfdsfdfsdfasdf");
 			return null;
+		}
+			
 			
 		User userResult = user;
 		userResult.setUserPwd(passwordEncoding.encode(user.getUserPwd()));
 		userDao.save(userResult);
 		
+		
 		getContributorHistory(userResult);
 		
 		//userResult.setUserPwd(null);
+		System.out.println(userResult);
 		return userResult;
 	}
 
@@ -202,17 +225,17 @@ public class AccountServiceImpl implements AccountService{
 	@Override
 	public String userUpdate(User user, User newUser) {
 		
-		if(newUser.getUserEmail() != null && isValidEmail(newUser.getUserEmail())) {
+		if(newUser.getUserEmail() != null && !user.getUserEmail().equals(newUser.getUserEmail()) && !"temp".equals(newUser.getUserEmail()) && !"".equals(newUser.getUserEmail())) {
+			if(!isValidEmail(newUser.getUserEmail())) return "Invalid Email Address";
+			if(userDao.findByUserEmail(newUser.getUserEmail()) != null) return "Duplicated Email Address";
 			user.setUserEmail(newUser.getUserEmail());
 		}
-		
-		if(newUser.getUserPhone() != null && !"".equals(newUser.getUserPhone()) && !"temp".equals(newUser.getUserPhone())) {
+
+		if(newUser.getUserPhone() != null && !user.getUserPhone().equals(newUser.getUserPhone())  && !"temp".equals(newUser.getUserPhone()) && !"".equals(newUser.getUserPhone())) {
+			if(!isValidPhone(newUser.getUserPhone())) return "Invalid Phone Number";
+			if(userDao.findByUserPhone(newUser.getUserPhone()) != null) return "Duplicated Phone Number";
 			user.setUserPhone(newUser.getUserPhone());
 			getContributorHistory(user);
-		}
-		
-		if(newUser.getUserName() != null && !"".equals(newUser.getUserName()) && !"temp".equals(newUser.getUserName())) {
-			user.setUserName(newUser.getUserName());
 		}
 		
 		userDao.save(user);
@@ -251,7 +274,17 @@ public class AccountServiceImpl implements AccountService{
 		
 	}
 
-
+	public boolean isValidPhone(String phone) { 
+		boolean err = false; 
+		String regex = "^01(?:0|1|[6-9])(\\d{7}|\\d{8})$"; 
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(phone); 
+		if(m.matches()) { 
+			err = true; 
+		} 
+		return err;
+	}
+	
 	public boolean isValidEmail(String email) { 
 		boolean err = false; 
 		String regex = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"; 

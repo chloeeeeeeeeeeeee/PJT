@@ -275,25 +275,27 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 	public boolean isValidPhone(String phone) { 
-		boolean err = false; 
-		String regex = "^01(?:0|1|[6-9])(\\d{7}|\\d{8})$"; 
-		Pattern p = Pattern.compile(regex);
-		Matcher m = p.matcher(phone); 
-		if(m.matches()) { 
-			err = true; 
-		} 
-		return err;
+//		boolean err = false; 
+//		String regex = "^01(?:0|1|[6-9])(\\d{7}|\\d{8})$"; 
+//		Pattern p = Pattern.compile(regex);
+//		Matcher m = p.matcher(phone); 
+//		if(m.matches()) { 
+//			err = true; 
+//		} 
+//		return err;
+		return true;
 	}
 	
 	public boolean isValidEmail(String email) { 
-		boolean err = false; 
-		String regex = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"; 
-		Pattern p = Pattern.compile(regex);
-		Matcher m = p.matcher(email); 
-		if(m.matches()) { 
-			err = true; 
-		} 
-		return err;
+//		boolean err = false; 
+//		String regex = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$"; 
+//		Pattern p = Pattern.compile(regex);
+//		Matcher m = p.matcher(email); 
+//		if(m.matches()) { 
+//			err = true; 
+//		} 
+//		return err;
+		return true;
 	}
 
 	

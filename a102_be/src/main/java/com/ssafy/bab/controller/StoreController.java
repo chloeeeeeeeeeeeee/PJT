@@ -74,7 +74,7 @@ public class StoreController {
 	@ApiOperation(value = "가게 후원 내역 ", notes = "startDate와 endDate를 받아와 해당 기간의 후원 내역을 반환한다.", response = String.class)
 	@PostMapping("contributionlist")
 	public ResponseEntity<List<StoreContributionItem>> contributionItemList(@RequestParam(required = true) String startDate, @RequestParam(required = true) String endDate, HttpServletRequest req) throws Exception {
-		logger.info("contributionItemList_Store - 호출");
+//		logger.info("contributionItemList_Store - 호출");
 		
 		ArrayList<StoreContributionItem> result = null;
 		
@@ -123,7 +123,7 @@ public class StoreController {
 	@ApiOperation(value = "가게 메뉴 리스트 가져오기", notes = "메뉴 리스트 가져오기", response = String.class)
 	@GetMapping("/itemlist")
 	public ResponseEntity<List<Item>> itemList(HttpServletRequest req) throws Exception {
-		logger.info("itemCreate_Store - 호출");
+//		logger.info("itemList_Store - 호출");
 		
 		ArrayList<Item> result = null;
 		
@@ -167,6 +167,10 @@ public class StoreController {
 		
 	}
 	
+	@PostMapping("/item/delete/{itemId}")
+	public ResponseEntity<String> itemDeletePost(@ApiParam(value = "itemId", required = true) @PathVariable int itemId, HttpServletRequest req) throws Exception {
+		return itemDelete(itemId, req);
+	}
 	
 	@ApiOperation(value = "가게 메뉴 삭제", notes = "itemId 입력받아 메뉴 삭제", response = String.class)
 	@GetMapping("/item/delete/{itemId}")
@@ -185,6 +189,7 @@ public class StoreController {
 		}
      
         result = storeService.itemDelete(itemId, user.getStore().getStoreId());
+        System.out.println(result);
         return new ResponseEntity<String>(result, HttpStatus.OK);
 		
 	}

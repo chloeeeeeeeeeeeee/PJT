@@ -1,9 +1,7 @@
 package com.ssafy.bab.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.bab.dto.CPaymentInfo;
 import com.ssafy.bab.dto.GPaymentInfo;
+import com.ssafy.bab.dto.GdreamResult;
 import com.ssafy.bab.dto.IPaymentInfo;
 import com.ssafy.bab.dto.KPaymentInfo;
 import com.ssafy.bab.dto.KakaoPaySuccessData;
 import com.ssafy.bab.dto.NPaymentInfo;
-import com.ssafy.bab.dto.OrderIdAndPaymentId;
 import com.ssafy.bab.service.JwtService;
 import com.ssafy.bab.service.KakaoPayService;
 import com.ssafy.bab.service.PaymentService;
@@ -116,13 +114,13 @@ public class PaymentController {
 	
 	@ApiOperation(value = "지드림카드 사용", notes = "지드림카드 사용 내역을 받아와 DB에 저장, 후원처리", response = List.class)
 	@PostMapping("/gdream")
-	public ResponseEntity<String> gDream(@ApiParam(value = "아이템 목록과 총 개수, 처리 결과", required = true) @RequestBody GPaymentInfo paymentInfo) throws Exception {
+	public ResponseEntity<GdreamResult> gDream(@ApiParam(value = "아이템 목록과 총 개수, 처리 결과", required = true) @RequestBody GPaymentInfo paymentInfo) throws Exception {
 		logger.info("gDream_payment - 호출");
-		String result = paymentService.checkGDreamTransaction(paymentInfo);
-		if(result == "SUCCESS")
-			return new ResponseEntity<String>(result, HttpStatus.OK);
+		GdreamResult result = paymentService.checkGDreamTransaction(paymentInfo);
+		if(result != null)
+			return new ResponseEntity<GdreamResult>(result, HttpStatus.OK);
 		else
-			return new ResponseEntity<String>(result, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<GdreamResult>(result, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ApiOperation(value = "카드 정보 반환", notes = "카드 번호 전달시 카드 종류 반환 ", response = String.class)

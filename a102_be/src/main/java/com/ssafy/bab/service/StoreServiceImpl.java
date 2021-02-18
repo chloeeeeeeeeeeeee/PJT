@@ -98,6 +98,7 @@ public class StoreServiceImpl implements StoreService {
 		if(endDate.after(cal.getTime())) {
 			ArrayList<ItemIdCount> list = contributionDao.getItemContributionCount(storeId, startDate, endDate);
 			for (ItemIdCount itemIdCount : list) {
+//				System.out.println(itemIdCount.getItemId() + " " + itemIdCount.getCount());
 				items[itemIdCount.getItemId()] += itemIdCount.getCount();
 			}
 		}
@@ -126,7 +127,6 @@ public class StoreServiceImpl implements StoreService {
 			cItem.setSupportPrice(item.getSupportPrice());
 			cItem.setItemAvailable(item.getItemAvailable());
 			cItem.setItemImgUrl(item.getItemImgUrl());
-			
 			result.add(cItem);
 			
 		}
@@ -139,12 +139,10 @@ public class StoreServiceImpl implements StoreService {
 	public String itemCreate(Item item, MultipartFile uploadFile) {
 		
 		try {
-			
 			String savingFileName = null;
 			
 			// 업로드한 사진이 있을 경우
 			if(uploadFile != null && !uploadFile.isEmpty()) {
-				System.out.println("dhodlTDj,,?");
 				File uploadDir = new File(uploadPath);
 				if(!uploadDir.exists()) uploadDir.mkdir();
 				
@@ -165,13 +163,11 @@ public class StoreServiceImpl implements StoreService {
 			else {
 				savingFileName = "logo.jpg";
 			}
-			
+
 			// Table Insert
 			Integer itemId = itemDao.getMaxItemId(item.getStoreId());
-			System.out.println("11111111111");
 			if(itemId == null) item.setItemId(1);
 			else item.setItemId(itemDao.getMaxItemId(item.getStoreId()));
-			System.out.println("2222222222222");
 			item.setItemImgUrl("menus/" + savingFileName);
 			
 			int supportPrice = item.getItemPrice() - SUPPORT_AMOUNT;
@@ -198,7 +194,9 @@ public class StoreServiceImpl implements StoreService {
 	public String itemUpdate(Item item, MultipartFile uploadFile) {
 		
 		Item updatedItem = itemDao.findByItemIdAndStoreId(item.getItemId(), item.getStoreId());
-
+		if(updatedItem == null) return "INVALID itemId";
+		if(updatedItem.getItemAvailable() > 0 ) return "CAN'T UPDATE";
+		
 		try {
 
 			String savingFileName = null;
@@ -265,7 +263,8 @@ public class StoreServiceImpl implements StoreService {
 			
 			int supportPrice = item.getItemPrice() - SUPPORT_AMOUNT;
 			if(supportPrice > 0) updatedItem.setSupportPrice(supportPrice);
-
+			else updatedItem.setSupportPrice(0);
+					
 			itemDao.save(updatedItem);
 
 		} catch (Exception e) {
@@ -279,9 +278,10 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public String itemDelete(int itemId, int storeId) {
-		
+		System.out.println("dhl,,,,,,,,dksep...???");
 		Item item = itemDao.findByItemIdAndStoreId(itemId, storeId);
 		if(item == null) return "INVALID itemId";
+		if(item.getItemAvailable() > 0 ) return "CAN'T DELETE";
 		
 		// 기존 메뉴사진이 기본 이미지가 아닐 경우 기존 사진 제거
 		if(!item.getItemImgUrl().equals("menus/logo.jpg")) {

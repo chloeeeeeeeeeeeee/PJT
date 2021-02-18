@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import com.ssafy.bab.dto.Contribution;
 import com.ssafy.bab.dto.ContributionOld;
 import com.ssafy.bab.dto.Contributor;
 import com.ssafy.bab.dto.GPaymentInfo;
+import com.ssafy.bab.dto.GdreamResult;
 import com.ssafy.bab.dto.IPaymentInfo;
 import com.ssafy.bab.dto.Item;
 import com.ssafy.bab.dto.ItemAndCount;
@@ -383,17 +385,23 @@ public class PaymentServiceImpl implements PaymentService {
 	}
 
 	@Override
-	public String checkGDreamTransaction(GPaymentInfo paymentInfo) throws ParseException {
+	public GdreamResult checkGDreamTransaction(GPaymentInfo paymentInfo) throws ParseException {
 		
 		// itemCount = 0 일 경우 에러처리
 		for (int i = 0; i < paymentInfo.getItemList().size(); i++) {
-			if (paymentInfo.getItemList().get(i).getItemCount() <= 0) return "Check ItemCount";
+			if (paymentInfo.getItemList().get(i).getItemCount() <= 0) {
+				System.out.println("Check ItemCount");
+				return null;
+			}
 		}
 		
 		if(storeDao.findByStoreId(paymentInfo.getItemList().get(0).getStoreId()) == null) {
-			return "Invalid Store";
+			System.out.println("Invalid Store");
+			return null;
 		}
 
+		GdreamResult result = new GdreamResult();
+		
 //		// 주문번호
 //		SimpleDateFormat vans = new SimpleDateFormat("yyyyMMdd-HHmmss");
 //		String wdate = vans.format(new Date());
@@ -459,6 +467,8 @@ public class PaymentServiceImpl implements PaymentService {
 						contribution.setPaymentGdream(paymentG);
 						contribution.setContributionAnswer(paymentItem.getMsg());
 						contributionDao.save(contribution);
+						
+						result.setContributionMsg(contribution.getContributionMessage());
 						
 						// 후원받은 금액 계산
 						supportPrice += item.getSupportPrice();
@@ -583,7 +593,7 @@ public class PaymentServiceImpl implements PaymentService {
 			// paymengGdream 테이블 업데이트 취소
 			paymentGDao.delete(paymentG);
 			
-			return "지드림카드결제 금액 + 후원 받은 금액 != 총 주문한 음식 금액";
+			return null;
 		}
 		
 		// 문자 전송
@@ -597,8 +607,8 @@ public class PaymentServiceImpl implements PaymentService {
 			params.put("from", PHONE); // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
 //	        	params.put("from", "01011111111");  // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
 			params.put("type", "LMS"); // SMS, LMS
-			params.put("text", "'국수나무'에서 후원한 메뉴 '" + msg.getItemName() + "'이(가) 방금 사용되었습니다.\n"
-					+ "따뜻한 마음으로 우리와 함께해주셔서 감사합니다.\n "
+			params.put("text", "'국수나무'에서 후원한 메뉴 '" + msg.getItemName() + "'이(가) 방금 사용되었습니다. "
+					+ "따뜻한 마음으로 우리와 함께해주셔서 감사합니다.\n\n"
 					+ "자세한 내용은 우리끼니 홈페이지에서 확인해주세요.\n" + URL + "\n\n무료수신거부번호: 080-600-5653");
 
 			try {
@@ -630,7 +640,8 @@ public class PaymentServiceImpl implements PaymentService {
 		}
 
 		
-		return paymentG.getPaymentGdreamId();
+		result.setPaymentId(paymentG.getPaymentGdreamId());
+		return result;
 	}
 
 	@Override
@@ -643,7 +654,7 @@ public class PaymentServiceImpl implements PaymentService {
         for (Integer contributionId : contributionList) {
         	
 			Contribution contribution = contributionDao.findByContributionId(contributionId);
-			if (contribution.getUser() == null || contribution.getUser().getUserPhone() == "temp") continue;
+			if (contribution.getUser() == null || contribution.getUser().getUserPhone() == "temp" || contribution.getUser().getUserSeq() != 3) continue;
 			
 			Item item = itemDao.findByItemIdAndStoreId(contribution.getItemId(), contribution.getStoreId());
 			
@@ -695,8 +706,8 @@ public class PaymentServiceImpl implements PaymentService {
 	        params.put("to", contribution.getUser().getUserPhone());    // 수신전화번호
 	        params.put("from", PHONE);    // 발신전화번호. 테스트시에는 발신,수신 둘다 본인 번호로 하면 됨
 	        params.put("type", "LMS");
-	        params.put("text", "'우리끼니'에서 후원한 메뉴 '" + item.getItemName() + "'이(가) 방금 사용되었습니다.\n"
-	    					+ "따뜻한 마음으로 우리와 함께해주셔서 감사합니다.\n "
+	        params.put("text", "'우리끼니'에서 후원한 메뉴 '" + item.getItemName() + "'이(가) 방금 사용되었습니다. "
+	    					+ "따뜻한 마음으로 우리와 함께해주셔서 감사합니다.\n\n"
 	    					+ "자세한 내용은 우리끼니 홈페이지에서 확인해주세요.\n" + URL + "\n\n무료수신거부번호: 080-600-5653");
 
 	        System.out.println("================================");

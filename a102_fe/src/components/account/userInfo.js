@@ -49,6 +49,12 @@ function UserInfo() {
 
   const userUpdate  = (event) => {
     console.log("update");
+    if (phone === userInfo.userPhone){
+      phone = null;
+    }
+    if (email === userInfo.userEmail){
+      email = null;
+    }
     fetch(`${process.env.REACT_APP_API_URL}/account/update`, {
       method: "POST",
       headers: {
@@ -61,7 +67,16 @@ function UserInfo() {
       }),
     }).then((res) => {
       if (res.status === 200) {
-        setButtton(!button)
+        setButtton(!button);
+        fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
+          headers: {
+            token: localStorage.getItem('access-token')
+          }
+        })
+        .then(res => res.json())
+        .then(res => {
+          setuserInfo(res);
+        })
       } else {
         alert("회원정보 수정에 실패하셨습니다. 다시 시도해주세요.");
       }
@@ -103,7 +118,7 @@ function UserInfo() {
           </ModalBody>
           <ModalFooter>
             <Button color="primary" onClick={(e) => {popupToggle(); userUpdate();}}>동의합니다.</Button>
-            <Button color="secondary" onClick={(e) => {popupToggle(); userButton(); }}>다음에 수정할게요.</Button>
+            <Button color="secondary" onClick={(e) => {popupToggle(); userButton();}}>다음에 수정할게요.</Button>
           </ModalFooter>
         </Modal>
       </div>
@@ -121,8 +136,8 @@ function UserInfo() {
               </h5>
             </CardHeader>
             <CardBody className="userInfoBody">
-                <p><AiFillPhone />  { phone==="temp"? "번호를 입력해주세요." : phone } </p>
-                <p className="mb-0"><AiOutlineMail />  { email==="temp"? "이메일을 입력해주세요." : email} </p>
+                <p><AiFillPhone />  { userInfo.userPhone==="temp"? "번호를 입력해주세요." : userInfo.userPhone } </p>
+                <p className="mb-0"><AiOutlineMail />  { userInfo.userEmail==="temp"? "이메일을 입력해주세요." : userInfo.userEmail} </p>
             </CardBody>
           </Card>
         </Col>

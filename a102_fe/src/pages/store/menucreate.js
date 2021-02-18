@@ -43,11 +43,11 @@ function MenuCreate() {
     .then(res => {
     //   console.log(res);
       if (res.status === 200){
-        alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
+        // alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
         window.location.href = '/storeadmin';
       }
       else{
-        alert("오류");
+        alert("메뉴 생성에 실패하셨습니다. 다시 시도해주세요.");
       }
     })
   }

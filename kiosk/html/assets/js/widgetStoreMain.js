@@ -43,7 +43,7 @@ function addStoreItem(itemId, imgUrl, itemName, itemPrice, badge, intro, availab
                         <div class="bookmark-photo">
                             <div class="bookmark-image" style="background-image: url(${serverImgUrl});"></div>
                         </div>
-                        <div class="bookmark-title"> <span>${itemName}</span></div>
+                        <div class="bookmark-title">${itemName}</div>
                         <div class="bookmark-badge">${badge}</div>
                         <div class="bookmark-dividing"></div>
                         <div class="bookmark-detail">
@@ -74,6 +74,7 @@ function addStoreItem(itemId, imgUrl, itemName, itemPrice, badge, intro, availab
 function changeItemButton(){
     try {
         let bookmark = document.getElementsByClassName("bookmark");
+        let bookmarkTitle = document.getElementsByClassName("bookmark-title");
         let bookmarkBtn = document.getElementsByClassName("bookmark-btn1");
         let len = bookmark.length;
         for(let i=0;i<len;i++){
@@ -82,6 +83,12 @@ function changeItemButton(){
             price = Number(String(bookmarkBtn[i].innerText).split('원')[0])
             if(price >= 6000){
                 bookmarkBtn[i].innerText = String(price - 6000) + "원";
+            }
+            bookmarkBtn[i].style = "background-color: #84BD00 !important;";
+
+            bookmarkTitle[i].innerText = "(후원)" + bookmarkTitle[i].innerText;
+            if(bookmarkTitle[i].innerText.length >= 12){
+                bookmarkTitle[i].setAttribute("class", "bookmark-title bookmark-title-small");
             }
         }
         toggleDisplay();

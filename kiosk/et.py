@@ -69,6 +69,7 @@ class et(QMainWindow, Ui_mainWindow):
         self.orderNum = ""
         self.thRfidFlag = 0
         self.thKakaoPayFlag = 0
+        self.msg = "방문해주셔서<br>감사합니다,<br>맛있게 드세요!"
 
         # 페이지 리스트 생성 및 로드
         self.makePage()
@@ -85,6 +86,7 @@ class et(QMainWindow, Ui_mainWindow):
         self.totalCost = 0
         self.bag.clear()
         self.phoneNum = ""
+        self.msg = "방문해주셔서<br>감사합니다,<br>맛있게 드세요!"
 
     # Click 불가능한 label 등의 위젯을 클릭 가능하게 만들어주는 함수
     # 사용법 -> self.clickable(위젯이름).connect(실행할 함수)
@@ -216,8 +218,6 @@ class et(QMainWindow, Ui_mainWindow):
 
     def loadCompletePage(self):
         # Load complete page
-        self.widgetList["widgetComplete.html"].raise_()
-
         # Thread 종료 flag 설정
         self.thRfidFlag = 0
         self.thKakaoPayFlag = 0
@@ -231,6 +231,13 @@ class et(QMainWindow, Ui_mainWindow):
         orderNum = getOrderList(self.storeid, self.orderNum)
         jscmd = "setOrderNum({orderNum})".format(orderNum=orderNum)
         self.widgetList["widgetComplete.html"].page().runJavaScript(jscmd)
+
+        # 후원메세지 받아와서 js에 전달
+        jscmd = "setMsg(\'{msg}\')".format(msg=self.msg)
+        self.widgetList["widgetComplete.html"].page().runJavaScript(jscmd)
+
+        self.widgetList["widgetComplete.html"].raise_()
+
 
     # html control functions
     def makeStoreItem(self, ok):
@@ -378,7 +385,9 @@ class et(QMainWindow, Ui_mainWindow):
             self.loadCompletePage()
 
         if opt == "gdream":
-            self.orderNum = sendGdreamCard(data, self.bag, self.itemCnt, self.totalCost)
+            res = sendGdreamCard(data, self.bag, self.itemCnt, self.totalCost)
+            self.orderNum = res["paymentId"]
+            self.msg = res["contributionMsg"]
             self.loadCompletePage()
 
         # 페이지 초기화

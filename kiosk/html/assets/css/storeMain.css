@@ -768,6 +768,12 @@ li{
 	font-weight: 700;
 	color: #000000;
 }
+
+.bookmark-title-small{
+	font-size: 20px !important;
+	font-weight: 700;
+}
+
 .bookmark-badge{
 	grid-row: 1 / 4;
 	grid-column: 11 / 13;

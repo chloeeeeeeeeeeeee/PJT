@@ -5,6 +5,7 @@ import datetime
 # backend server의 URL
 serverUrl = "https://ooriggini.me:8080/app/"
 
+
 def getStoreItem(storeID):
     # storeID를 통해 해당 store의 menu list를 받아옴
     res = requests.get(serverUrl + 'main/menulist/'+str(storeID))
@@ -37,6 +38,7 @@ def postKakaoPay(bag, totalAmount, totalCount, phoneNum):
 
     return res.text
 
+
 def sendPgToken(pgToken):
     # date(형식 -> 20210217-163100)를 제작
     d = datetime.datetime.today()
@@ -48,6 +50,7 @@ def sendPgToken(pgToken):
     res = requests.get(url)
 
     return res.json()["paymentId"]
+
 
 def sendCreditCard(an, bag, totalAmount, totalCount, phoneNum):
     # date(형식 -> 20210217-163100)를 제작
@@ -72,6 +75,7 @@ def sendCreditCard(an, bag, totalAmount, totalCount, phoneNum):
 
     return res.text
 
+
 def sendGdreamCard(an, bag, totalCount, totalAmount):
     # date(형식 -> 20210217-163100)를 제작
     d = datetime.datetime.today()
@@ -88,11 +92,12 @@ def sendGdreamCard(an, bag, totalCount, totalAmount):
     data = json.dumps(req, ensure_ascii=False).encode('utf-8')
 
     # 지드림 카드 결제 요청 전송
-    res = requests.post(serverUrl + 'payment/creditcard',
+    res = requests.post(serverUrl + 'payment/gdream',
                         headers=headers,
                         data=data)
 
-    return res.text
+    return res.json()
+
 
 def getCardType(cardId):
     # 카드 id를 통해 카드 종류를 받아옴

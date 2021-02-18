@@ -6,6 +6,7 @@ new QWebChannel(qt.webChannelTransport, function (channel) {
 let stopFlag = 0;
 let cnt = document.getElementById("count");
 let orderNumElement = document.getElementById("order-num");
+let msgElement = document.getElementById("msg");
 
 function completeTimeout(sec){
     
@@ -32,4 +33,8 @@ function stopCnt(){
 
 function setOrderNum(orderNum){
     orderNumElement.innerText = String(orderNum);
+}
+
+function setMsg(msg){
+    msgElement.innerHTML=msg;
 }

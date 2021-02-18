@@ -7,7 +7,7 @@ testGdreamCardId = "0x00000001"
 
 # testCreditCardId <- 신용카드 결제
 # testGdreamCardId <- 지드림카드 결제
-testmode = testCreditCardId
+testmode = testGdreamCardId
 # testmode를 변경하여 rfid 없이 테스트 가능
 
 # rfid가 연결 된 USB 포트 이름을 넣어주세요

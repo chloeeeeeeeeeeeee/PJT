@@ -42,7 +42,7 @@ function MenuUpdate() {
         method: "POST",
         headers: {
             // token: localStorage.getItem('access-token'),
-            token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2Mjg3NzY0LCJ1c2VyU2VxIjo1fQ.YqOZgS7grU8NH7zAZ4G6T046nKVs7N9PvcoAuhFbEIA"
+            token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2MzEzODE2LCJ1c2VyU2VxIjoyOX0.-jAjo8HyoN_vACvhHT6STtpQIZcwsB7gqfSZvXGqMZ4"
         },
         body: formData,
     })

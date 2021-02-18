@@ -73,7 +73,7 @@ function SupportCart(storeInfo) {
   // 메뉴 더하기
   function addmenu(menu) {
     if (
-      (cartStorage.length > 0 && cartStorage[0].storeId === storeId) ||
+      (cartStorage.length > 0 && cartStorage[0].storeId == storeId) ||
       cartStorage.length === 0
     ) {
       let sameItem = false;

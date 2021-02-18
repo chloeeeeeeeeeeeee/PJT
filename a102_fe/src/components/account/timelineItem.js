@@ -1,22 +1,13 @@
 import React, { useState } from "react";
 import {
-  VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import { Activity } from "react-feather";
-// import { Edit, Video, Image, Activity } from "react-feather";
-// import { ShoppingBag, MessageCircle, MinusCircle, Tag } from "react-feather";
-// import {
-//   Container,
-//   Row,
-//   Col,
-//   Card,
-//   CardHeader,
-//   CardBody,
-//   Media,
-// } from "reactstrap";
+import { Button } from "reactstrap";
+import { AiOutlineMessage } from "react-icons/ai";
+import { AiFillMessage } from "react-icons/ai";
 
-function TimelineItem (contribution) {
+function TimelineItem(contribution) {
   const [showDetail, setshowDetail] = useState(false);
 
   // 콘스트로 선언할 때는 바로 변수를 못 받나요? 아 {} 없이 바로 보내줘도 되는거였습니다!
@@ -30,52 +21,47 @@ function TimelineItem (contribution) {
       className="vertical-timeline-element--work"
       animate={true}
       // date={contribution.contribution.contributionDate}
-      // icon={<i 
+      // icon={<i
       //   class="fas fa-heartbeat contribution-icon"></i>}
       icon={<Activity />}
     >
       <div className="timelinItem-grid">
+        {/* <div className="timelineItem-title">
+          { contribution.contribution.itemName }을 후원했어요!
+        </div> */}
         <div className="timelineItem-title">
-          { contribution.contribution.item.itemName }을 후원했어요!
-        </div>
-        <div className="timelineItem-subtitle">
-          { contribution.contribution.item.store.storeName }에 방문했어요!
+          {/* { contribution.contribution.item.store.storeName }에 방문했어요! */}
+          {contribution.contribution.storeName}에 방문해서{" "}
+          {contribution.contribution.itemName}을 후원했어요!
         </div>
         <div className="timelineItem-time">
-          { contribDate }월 { contribDay }일
+          {contribDate}월 {contribDay}일
         </div>
-        <div className="timelineItem-btn">
-          <button 
-              className="timelinItem-toggle" onClick = {() =>
-                {setshowDetail(!showDetail);}
-              } class="btn btn-warning btn-sm">
-              {!showDetail? '메시지보기':'메시지닫기'} 
-            </button>
+        <div className="timelineItem-btn col-12 row justify-content-end m-0">
+          <Button
+            className="timelineItem-toggle"
+            onClick={() => {
+              setshowDetail(!showDetail);
+            }}
+          >
+            {!showDetail ? "메시지보기" : "메시지닫기"}
+          </Button>
         </div>
-        <div className="timelineItem-message">
-          {showDetail && <div>{ contribution.contribution.contributionMessage }</div>}
-          {showDetail && <div>{ contribution.contribution.contributionAnswer }</div>}
-        </div>
-        {/* <h4 className="vertical-timeline-element-subtitle">
-          { contribution.contribution.store_id }
-          <span>
-            <div className="timelineItem-time">{contribution.contribution.contribution_date}</div>
-          </span>
-        </h4>
-        <p>
-          { contribution.contribution.item_id }을/를 후원했어요.
-        </p>
-        <span class="pull-right">
-          <button 
-            className="plus" onClick = {() =>
-              {setshowDetail(!showDetail);}
-            } class="btn btn-warning btn-sm">
-            {!showDetail? '메시지보기':'메시지닫기'} 
-          </button>
-          {showDetail && <div>{ contribution.contribution.contribution_message }</div>}
-        </span> */}
+        {showDetail ? (
+          <div className="timelineItem-message">
+            {showDetail && (
+              <div><AiOutlineMessage/>{contribution.contribution.contributionMessage}</div>
+            )}
+            {showDetail && (
+              <div><AiFillMessage/>{contribution.contribution.contributionAnswer? contribution.contribution.contributionAnswer : "아동이 후원된 음식을 먹게 되면, 메세지가 전송됩니다."} </div>
+            )}
+          </div>
+        ) : (
+          ""
+        )}
       </div>
-    </VerticalTimelineElement>  );
+    </VerticalTimelineElement>
+  );
 }
 // export default detailClick;
 export default TimelineItem;

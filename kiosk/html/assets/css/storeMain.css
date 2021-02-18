@@ -496,6 +496,17 @@ li{
     justify-content: space-between;
     align-items: flex-end;
 }
+.cart-body{
+	/* 전체 장바구니 구역에서 이 div가 차지하는 공간입니다. */
+	grid-row: 2 / 3;
+	grid-column: 2 / 3;
+
+	border-color: rgba(47, 79, 79, 0.6);
+	border-top-style: solid;
+	border-top-width: 1px;
+
+	padding: 3% 0%;
+}
 
 .donation-bookmark{
     /* 전체 카루젤 대비 이전 화면의 각 메뉴 크기에 거의 근접하도록 맞춰 설정했습니다 */

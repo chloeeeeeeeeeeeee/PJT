@@ -1,22 +1,34 @@
-import { Container, Row, Col } from "reactstrap";
+import { Row, Col } from "reactstrap";
+
 
 function Footer() {
-    return (
-        <footer className="footer">
-            <Container fluid={true}>
-                <Row>
-                    <Col md="6" className="footer-copyright">
-                        <p className="mb-0">Copyright © a102. All Rights Reserved. 후원문의·상담 0000-0000</p>
-                    </Col>
-                    <Col md="6">
-                        <p className="pull-right mb-0">
-                            <i className="fa fa-heart"><a href="http://www.naver.com"> Let's Go 후원사</a></i>
-                        </p>
-                    </Col>
-                </Row>
-            </Container>
-        </footer>
-    );
-};
+
+  let childcheck = false;
+  if (window.location.href.slice(-9) === "childmain" || window.location.href.slice(-8) === "childmap"){
+    childcheck = true;
+  }
+  
+  let storecheck= false;
+  if (window.location.href.slice(-10) === "storeadmin" || window.location.href.slice(-10) === "menucreate"|| window.location.href.slice(-10) === "menuupdate"){
+    storecheck = true;
+  }
+
+  return (
+    <Row className="mainFooter p-2 pl-4" id={childcheck? "childColor": ( storecheck? "storeColor" : "" )}>
+      <Col md="8" className="footer-copyright">
+        <p className="mb-0">
+          Copyright © SSAFY A102. 후원문의·상담 82-0190-6527-5118
+        </p>
+      </Col>
+      <Col md="4">
+        <p className="text-right mb-0">
+          <i className="fa fa-heart">
+            <a id={storecheck?"storeIFooter":""} href="musicshareroom.tk"> 후원사 바로가기 </a>
+          </i>
+        </p>
+      </Col>
+    </Row>
+  );
+}
 
 export default Footer;

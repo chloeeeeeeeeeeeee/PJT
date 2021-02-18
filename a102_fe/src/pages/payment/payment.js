@@ -38,18 +38,18 @@ function Payment() {
     : "";
 
   function startPayment() {
-    if (jwtToken == "") {
+    if (jwtToken === "") {
       alert("로그인 후 이용해주세요.");
       return;
     }
     let paymentOption = document.querySelector("input[type='radio']:checked")
       .value;
     let paymentMessage = document.querySelector("#paymentMsg").value.trim();
-    if (paymentMessage == "") {
+    if (paymentMessage === "") {
       paymentMessage = "든든하게 먹고다녀요";
     }
     // 카카오
-    if (paymentOption == "kakaoPay") {
+    if (paymentOption === "kakaoPay") {
       let data = {
         cid: "TC0ONETIME",
         itemList: [],
@@ -101,7 +101,7 @@ function Payment() {
         });
     }
     // 네이버 페이
-    else if (paymentOption == "naverPay") {
+    else if (paymentOption === "naverPay") {
       //   console.log("네이버페이");
       const popupWidth = window.innerWidth * 0.8;
       const popupHeight = window.innerHeight * 0.8;
@@ -118,7 +118,7 @@ function Payment() {
       }, 3000);
     }
     // 신용/체크카드
-    else if (paymentOption == "cardPay") {
+    else if (paymentOption === "cardPay") {
       //   console.log("아임포트");
       const { IMP } = window;
       IMP.request_pay(
@@ -168,14 +168,14 @@ function Payment() {
                 },
               })
               .then(() => {
+                  setCartStorage([])
                 localStorage.setItem("carts", []);
                 localStorage.setItem("price", 0);
                 window.location.href = "/paymentSuccess";
               });
             // console.log(rsp);
           } else {
-            var msg = "결제에 실패하였습니다.";
-            msg += "에러내용 : " + rsp.error_msg;
+              alert("결제에 실패했습니다. 다시 시도해주세요.")
             // console.log(msg);
           }
         }

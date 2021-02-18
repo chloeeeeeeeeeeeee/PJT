@@ -1,11 +1,4 @@
 import React, { useState, useEffect } from "react";
-import {
-  Carousel,
-  CarouselItem,
-  CarouselControl,
-  CarouselIndicators,
-  CarouselCaption,
-} from "reactstrap";
 // import happynew from "../../assets/images/happynew.png"
 
 

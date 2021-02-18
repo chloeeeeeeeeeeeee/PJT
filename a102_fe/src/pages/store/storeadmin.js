@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { Col, Row } from "reactstrap";
 import StoreDetailInfo from "../../components/support/storeDetailInfo";
@@ -7,12 +8,14 @@ import StoreSupportList from "../../components/store/storeSupportList";
 function StoreAdmin() {
   
 
-  const jwtToken = localStorage.getItem("access-token")
-    ? localStorage.getItem("access-token")
-    : "";
-  if (jwtToken === "") {
-    window.location.href = "/auth";
-  }
+//   const jwtToken = localStorage.getItem("access-token")
+    // // ? localStorage.getItem("access-token")
+//     : "";
+//   if (jwtToken === "") {
+//     window.location.href = "/auth";
+//   }
+
+    const jwtToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2Mjg3NzY0LCJ1c2VyU2VxIjo1fQ.YqOZgS7grU8NH7zAZ4G6T046nKVs7N9PvcoAuhFbEIA"
 
   let [storeDetailComponent, setStoreDetailComponent] = useState("");
 

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import {
   Col,
@@ -12,7 +13,7 @@ import { FcLike } from "react-icons/fc";
 
 function ChildSupport() {
   // 네이버 API 통신을 위해 필요한 HEADER 세팅
-  const axios = require("axios");
+//   const axios = require("axios");
 
   // 카테고리
   const categoryList = [
@@ -136,7 +137,7 @@ function ChildSupport() {
 
   // Enter키
   function enterkeyPress(event) {
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
       searchLocation();
     }
   }
@@ -182,7 +183,7 @@ function ChildSupport() {
             pos.coords.longitude,
             pos.coords.latitude,
             function (result, status) {
-              if (status == kakao.maps.services.Status.OK) {
+              if (status === kakao.maps.services.Status.OK) {
                 setAddress(result[0].address_name);
               }
             }
@@ -261,6 +262,7 @@ function ChildSupport() {
       );
     }
     else{
+      // eslint-disable-next-line array-callback-return
       return
     }
 

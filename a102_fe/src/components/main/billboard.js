@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Carousel,
   CarouselItem,
   CarouselControl,
-  CarouselIndicators,
-  CarouselCaption,
-  Col,
 } from "reactstrap";
 import Usertotal from "./usertotal";
 import Userrank from "./userrank";

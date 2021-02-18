@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  VerticalTimeline,
   VerticalTimelineElement,
 } from "react-vertical-timeline-component";
 import { Activity } from "react-feather";

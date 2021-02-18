@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import {
   Col,
@@ -8,7 +9,7 @@ import {
   CardFooter,
   Row,
 } from "reactstrap";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import SupportMenu from "../../components/support/supportMenu";
 
 function SupportCart(storeInfo) {
@@ -26,7 +27,7 @@ function SupportCart(storeInfo) {
   );
   let [menuList, setMenuList] = useState([]);
   let [trigger, setTrigger] = useState(false);
-  const params = useParams();
+//   const params = useParams();
   // 후원페이지인지 그냥 상세보기인지 확인용 변수
   // let supportCheck = false;
   // if (window.location.href.indexOf("storedetailsupport") > -1) {
@@ -72,8 +73,8 @@ function SupportCart(storeInfo) {
   // 메뉴 더하기
   function addmenu(menu) {
     if (
-      (cartStorage.length > 0 && cartStorage[0].storeId == storeId) ||
-      cartStorage.length == 0
+      (cartStorage.length > 0 && cartStorage[0].storeId === storeId) ||
+      cartStorage.length === 0
     ) {
       let sameItem = false;
       if (menu.itemPrice > 6000) {
@@ -83,11 +84,11 @@ function SupportCart(storeInfo) {
       }
       setTotalPrice(totalPrice);
       cartStorage.some((cartItem, index) => {
-        if (cartItem.itemId == menu.itemId) {
+        if (cartItem.itemId === menu.itemId) {
           cartItem.itemCount += 1;
           sameItem = true;
         }
-        return cartItem.itemId == menu.itemId;
+        return cartItem.itemId === menu.itemId;
       });
       if (sameItem) {
         setCartStorage(cartStorage);
@@ -109,10 +110,10 @@ function SupportCart(storeInfo) {
 
   function plus(menu) {
     cartStorage.some((cartItem) => {
-      if (cartItem.itemId == menu.itemId) {
+      if (cartItem.itemId === menu.itemId) {
         cartItem.itemCount += 1;
       }
-      return cartItem.itemId == menu.itemId;
+      return cartItem.itemId === menu.itemId;
     });
     setCartStorage(cartStorage);
     calculateTotal();
@@ -121,15 +122,15 @@ function SupportCart(storeInfo) {
 
   function minus(menu) {
     cartStorage.some((cartItem) => {
-      if (cartItem.itemId == menu.itemId) {
+      if (cartItem.itemId === menu.itemId) {
         cartItem.itemCount -= 1;
         if (cartItem.itemCount <= 0) {
           cartStorage = cartStorage.filter((ele) => {
-            return ele != cartItem;
+            return ele !== cartItem;
           });
         }
       }
-      return cartItem.itemId == menu.itemId;
+      return cartItem.itemId === menu.itemId;
     });
     setCartStorage(cartStorage);
     calculateTotal();
@@ -138,7 +139,7 @@ function SupportCart(storeInfo) {
 
   function removemenu(menu) {
     cartStorage = cartStorage.filter((ele) => {
-      return ele != menu;
+      return ele !== menu;
     });
     setCartStorage(cartStorage);
     calculateTotal();
@@ -151,14 +152,11 @@ function SupportCart(storeInfo) {
     setTrigger(!trigger);
   }
 
-  function moveToSupportPage() {
-    window.location.href = `/storedetailsupport/${storeId}`;
-  }
-
   function moveToPayment() {
     window.location.href = `/payment`;
   }
 
+  // eslint-disable-next-line array-callback-return
   const supportCenterSide = menuList.map((menu, index) => {
     if (menu.itemPrice > 6000) {
       return (

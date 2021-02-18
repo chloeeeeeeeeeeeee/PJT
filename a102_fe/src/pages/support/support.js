@@ -225,7 +225,7 @@ function Support() {
             pos.coords.longitude,
             pos.coords.latitude,
             function (result, status) {
-              if (status == kakao.maps.services.Status.OK) {
+              if (status === kakao.maps.services.Status.OK) {
                 setAddress(result[0].address_name);
               }
             }

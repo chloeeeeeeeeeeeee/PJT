@@ -1,8 +1,6 @@
-import React, { useState, useEffect, Fragment } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import {
-  Container,
-  Row,
-  Col,
   Card,
   CardBody,
   Button,
@@ -24,7 +22,7 @@ function Whattoeat() {
     // };
 
     // 현재 위치 가져오기
-    let [address, setAddress] = useState("서울 종로구 창신동");
+    let address = useState("서울 종로구 창신동");
 
     // function successPosition(pos) {
     //     console.log(pos);
@@ -101,7 +99,7 @@ function Whattoeat() {
             <CardBody sm="12" className="childwte p-0">
                 <h1>오늘은 뭐 먹을까?</h1>
                 {/* <p>현재 위치 사용에 동의해주셔야, 근처에 있는 음식점을 추천드려요! 동의하지 않으실 경우, 랜덤으로 추천 음식들을 보여드립니다.</p> */}
-                <Button className="choosemenubutton" onClick={ChooseMenu}><img src={que}/></Button>
+                <Button className="choosemenubutton" onClick={ChooseMenu}><img src={que} alt="que"/></Button>
                 <h2>같이</h2>
                 <h2>{store}에서</h2>
                 <h2>{menu}먹자!</h2>

@@ -4,7 +4,6 @@ import {
   Row,
   Col,
   Card,
-  CardHeader,
   CardBody,
   Form,
   FormGroup,
@@ -14,7 +13,7 @@ import {
 } from "reactstrap";
 
 function MenuUpdate() {
-  let [menu, setMenu] = useState(window.history.state);
+  let menu = useState(window.history.state);
   let [name, setName] = useState(window.history.state.itemName);
   let [price, setPrice] = useState(window.history.state.itemPrice);
   let [img, setImage] = useState(window.history.state.files);
@@ -37,17 +36,20 @@ function MenuUpdate() {
     //   console.log(value);
     // }
 
+
+
     fetch(`${process.env.REACT_APP_API_URL}/store/item/update`, {
         method: "POST",
         headers: {
-            token: localStorage.getItem('access-token'),
+            // token: localStorage.getItem('access-token'),
+            token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJURVNUIiwiZXhwIjoxNjE2Mjg3NzY0LCJ1c2VyU2VxIjo1fQ.YqOZgS7grU8NH7zAZ4G6T046nKVs7N9PvcoAuhFbEIA"
         },
         body: formData,
     })
     .then(res => {
     //   console.log(res);
       if (res.status === 200){
-        alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
+        // alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
         window.location.href = '/storeadmin';
       }
       else{

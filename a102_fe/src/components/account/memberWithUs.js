@@ -27,7 +27,7 @@ import React, { Fragment, useState, useEffect } from "react";
 function MemberInfo() {
   // 이하 내역을 보여주기 위해 withus 영역을 정의하고 토글할 계획입니다.
   // 우선 useState로 해당 영역과 관련된 함수를 정의해줍시다!
-  const [withus, setwithus] = useState(true);
+//   const [withus, setwithus] = useState(true);
 
   const [userInfo, setuserInfo] = useState({});
   const [userWithus, setuserWithus] = useState({});

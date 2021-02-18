@@ -14,26 +14,25 @@ import {
 } from "reactstrap";
 import { FcLock } from "react-icons/fc";
 
-
 function QnaList() {
   let [qnaList, setQnaList] = useState([]);
   let userStatus = useState(Boolean(localStorage.getItem("access-token")));
   let [user, setUser] = useState([]);
   let [totalPages, setTotalPages] = useState(0);
   let [nowPage, setNowPage] = useState(0);
-  
+
   useEffect(() => {
-    if(userStatus) {
+    if (userStatus) {
       fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
         headers: {
           token: localStorage.getItem("access-token"),
         },
       })
-      .then((res) => res.json())
-      .then((res) => {
-        setUser(res);
-        console.log(res)
-      })
+        .then((res) => res.json())
+        .then((res) => {
+          setUser(res);
+          console.log(res);
+        });
     }
   }, []);
 
@@ -46,34 +45,38 @@ function QnaList() {
       });
   }, []);
 
-  const qnas = (
-    qnaList.map((qna, index) => {
-      let qnadate = new Date(qna.qnaDate);
-      // qnadate.setHours(qnadate.getHours()+9)
-      // console.log(qnadate)
-      return(
-        <tr
-          key={index}
-          className={
-            user.userId === qna.user.userId ? "myQna" : ""
-          }
+  const qnas = qnaList.map((qna, index) => {
+    let qnadate = new Date(qna.qnaDate);
+    // qnadate.setHours(qnadate.getHours()+9)
+    // console.log(qnadate)
+    return (
+      <tr
+        key={index}
+        className={user.userId === qna.user.userId ? "myQna" : ""}
+      >
+        <th scope="row" width="10%">
+          {qna.qnaSeq} {qna.qnaSecret ? <FcLock /> : ""}
+        </th>
+        <td
+          width="40%"
+          onClick={(e) => Detail(qna)}
+          style={{ cursor: "pointer" }}
+          className="text-truncate"
         >
-          <th scope="row">
-            {qna.qnaSeq} {qna.qnaSecret ? <FcLock /> : ""}
-          </th>
-          <td
-            onClick={(e) => Detail(qna)}
-            style={{ cursor: "pointer" }}
-          >
-            {qna.qnaTitle}
-          </td>
-          <td>{qna.user.userName}</td>
-          <td>{qnadate.getFullYear() + "-" + (qnadate.getMonth()+1) + "-" + qnadate.getDate()}</td>
-          <td>{qna.qnaReply == null ? "X" : "O"}</td>
-        </tr>
-      );
-    })
-  )
+          {qna.qnaTitle}
+        </td>
+        <td width="20%">{qna.user.userName}</td>
+        <td width="20%">
+          {qnadate.getFullYear() +
+            "-" +
+            (qnadate.getMonth() + 1) +
+            "-" +
+            qnadate.getDate()}
+        </td>
+        <td width="10%">{qna.qnaReply == null ? "X" : "O"}</td>
+      </tr>
+    );
+  });
 
   const Detail = (qna) => {
     fetch(`${process.env.REACT_APP_API_URL}/qna/read`, {
@@ -102,8 +105,7 @@ function QnaList() {
 
   for (let idx = 1; idx <= totalPages; idx++) {
     paginations.push(
-      <PaginationItem 
-      key ={idx-1}>
+      <PaginationItem key={idx - 1}>
         <PaginationLink
           className={nowPage === idx - 1 ? "active" : ""}
           href="#javascript"
@@ -151,7 +153,7 @@ function QnaList() {
                       <th scope="col" width="10%">
                         번호
                       </th>
-                      <th scope="col" width="30%">
+                      <th scope="col" width="40%">
                         제목
                       </th>
                       <th scope="col" width="20%">

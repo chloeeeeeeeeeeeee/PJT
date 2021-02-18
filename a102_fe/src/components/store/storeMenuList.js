@@ -1,6 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Col, Row, Card, CardBody, CardHeader, Button } from "reactstrap";
 import StoreMenuItem from "../store/storeMenuItem";
+
+function useInterval(callback, delay){
+    const savedCallback = useRef();
+
+    useEffect(()=>{
+        savedCallback.current = callback;
+    }, [callback])
+
+    useEffect(()=>{
+        function tick(){
+            savedCallback.current()
+        }
+        if(delay !== null){
+            const id = setInterval(tick, delay);
+            return () => {
+                clearInterval(id)
+            }
+        }
+    }, [callback, delay]);
+}
 
 function StoreMenuList() {
   let [trigger, setTrigger] = useState(true);
@@ -30,6 +50,29 @@ function StoreMenuList() {
       token: jwtToken,
     },
   };
+
+  useInterval(async () => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/store/itemlist`, config)
+      .then((res) => {
+        // console.log(res);
+        if (res.data !== undefined) {
+        //   console.log(res.data);
+          setStoreMenuItem(
+            res.data.map((item, index) => {
+              return (
+                <StoreMenuItem
+                  storeMenu={item}
+                  key={index}
+                  sendTriggerToParent={sendTriggerToParent}
+                ></StoreMenuItem>
+              );
+            })
+          );
+        }
+      });
+}, 3000)
+
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/store/itemlist`, config)

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useRef } from "react";
 import { Col, Row, Card, CardBody, CardHeader, Button } from "reactstrap";
 import StoreMenuItem from "../store/storeMenuItem";

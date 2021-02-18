@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Col, Row, Button, CardBody, Card, CardHeader } from "reactstrap";
 import { useState, useEffect } from "react";
 
@@ -41,15 +42,15 @@ function PaymentInfo({ sendDataToParent }) {
 
     setTotalPrice(totalPrice);
     cartStorage.some((cartItem) => {
-      if (cartItem.itemId == menu.itemId) {
+      if (cartItem.itemId === menu.itemId) {
         cartItem.itemCount -= 1;
         if (cartItem.itemCount <= 0) {
           cartStorage = cartStorage.filter((ele) => {
-            return ele != cartItem;
+            return ele !== cartItem;
           });
         }
       }
-      return cartItem.itemId == menu.itemId;
+      return cartItem.itemId === menu.itemId;
     });
     setCartStorage(cartStorage);
     setTrigger(!trigger);
@@ -64,10 +65,10 @@ function PaymentInfo({ sendDataToParent }) {
 
     setTotalPrice(totalPrice);
     cartStorage.some((cartItem) => {
-      if (cartItem.itemId == menu.itemId) {
+      if (cartItem.itemId === menu.itemId) {
         cartItem.itemCount += 1;
       }
-      return cartItem.itemId == menu.itemId;
+      return cartItem.itemId === menu.itemId;
     });
     setCartStorage(cartStorage);
     setTrigger(!trigger);
@@ -75,7 +76,7 @@ function PaymentInfo({ sendDataToParent }) {
 
   function deleteMenu(menu) {
     cartStorage = cartStorage.filter((ele) => {
-      return ele != menu;
+      return ele !== menu;
     });
     setCartStorage(cartStorage);
     calculateTotal();
@@ -87,7 +88,7 @@ function PaymentInfo({ sendDataToParent }) {
     return (
       <Row className="paymentInfoItem justify-content-between" key={index}>
         <Col xs="2" className="paymentMenuInfo">
-          <img src={imgurl} className="d-inline-block p-0" />
+          <img src={imgurl} className="d-inline-block p-0" alt="menuImg"/>
         </Col>
         <Col xs="6" className="menuItemInfo">
         <div className="p-0 row">

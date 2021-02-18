@@ -12,12 +12,11 @@ import { AiOutlineMail } from "react-icons/ai";
 
 
 function UserInfo() {
-  const [userInfo, setuserInfo] = useState({});
+//   const [userInfo, setuserInfo] = useState({});
   // let [name, setName] = useState("");
   let [email, setEmail] = useState("");
   let [phone, setPhone] = useState("");
   let [button, setButtton] = useState(true);  
-  const [checkphone, setCheckphone] = useState(false);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/account/userinfo`, {
@@ -27,7 +26,7 @@ function UserInfo() {
     })
     .then(res => res.json())
     .then(res => {
-      setuserInfo(res);
+    //   setuserInfo(res);
       // setName(res.userName);
       setEmail(res.userEmail);
       setPhone(res.userPhone);

@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { Col, Row, Card, CardHeader, CardBody, Button } from "reactstrap";
+import { Col, Card, CardHeader, CardBody, Button } from "reactstrap";
 import { AiFillPhone } from "react-icons/ai";
 import { BiMapAlt } from "react-icons/bi";
 

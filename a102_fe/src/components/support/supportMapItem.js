@@ -1,5 +1,4 @@
 import { Row, Col, Button } from "reactstrap";
-import { HiCursorClick } from "react-icons/hi";
 
 function SupportMapItem(storeInfo) {
   function moveToStoreDetail() {

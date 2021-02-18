@@ -1,14 +1,10 @@
 import React, { useState } from "react";
 import {
-  Collapse,
   Navbar,
-  NavbarToggler,
   NavbarBrand,
   Nav,
   NavItem,
   NavLink,
-  Col,
-  Row,
   Button,
 } from "reactstrap";
 import oori from "../../assets/images/ooriname.png"
@@ -43,7 +39,7 @@ function Header() {
       <div className="d-flex flex-column col-10 offset-1">
       {tempnav}
       <NavbarBrand className="mainHeaderLogo">
-        <a href="/main"><img src={oori} className="logoImage d-inline-block align-top"/></a>
+        <a href="/main"><img src={oori} className="logoImage d-inline-block align-top" alt="logo"/></a>
       </NavbarBrand>
       <Nav className="row justify-content-center flex-row" navbar>
         <NavItem className="ml-1 mr-1">
@@ -60,7 +56,7 @@ function Header() {
         {tempnav}
         <Nav className="ml-auto" navbar>
           <NavItem>
-            {Boolean(localStorage.getItem("access-token")) == true && (localStorage.getItem("access-token") != "undefined") ?
+            {Boolean(localStorage.getItem("access-token")) === true && (localStorage.getItem("access-token") !== "undefined") ?
               <NavLink href="/signout">다음에 또 만나요 <b>로그아웃</b></NavLink>
               :
               <NavLink href="/auth">따뜻한 마음으로 우리와 <b>함께하기</b></NavLink>
@@ -68,7 +64,7 @@ function Header() {
           </NavItem>
         </Nav>
         <NavbarBrand className="mainHeaderLogo">
-          <a href="/storeadmin"><img src={oori} className="logoImage d-inline-block align-top"/></a>
+          <a href="/storeadmin"><img src={oori} className="logoImage d-inline-block align-top" alt="logo"/></a>
         </NavbarBrand>
         <Nav className="row justify-content-center flex-row" navbar>
           {Boolean(localStorage.getItem("access-token")) ?
@@ -86,7 +82,7 @@ function Header() {
         {tempnav}
         <Nav className="ml-auto" navbar>
           <NavItem>
-            {Boolean(localStorage.getItem("access-token")) == true && (localStorage.getItem("access-token") != "undefined") ?
+            {Boolean(localStorage.getItem("access-token")) === true && (localStorage.getItem("access-token") !== "undefined") ?
               <NavLink href="/signout">다음에 또 만나요 <b>로그아웃</b></NavLink>
               :
               <NavLink href="/auth">따뜻한 마음으로 우리와 <b>함께하기</b></NavLink>
@@ -94,7 +90,7 @@ function Header() {
           </NavItem>
         </Nav>
         <NavbarBrand className="mainHeaderLogo">
-        <a href="/"><img src={oori} className="logoImage d-inline-block align-top"/></a>
+        <a href="/"><img src={oori} className="logoImage d-inline-block align-top" alt="logo"/></a>
         </NavbarBrand>
         <Nav className="row justify-content-center flex-row" navbar>
           <NavItem className="ml-1 mr-1">

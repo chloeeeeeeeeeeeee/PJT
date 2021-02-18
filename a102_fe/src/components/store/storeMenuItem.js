@@ -1,4 +1,3 @@
-import { AiOutlineReload } from "react-icons/ai";
 import { Row, Button } from "reactstrap";
 
 function StoreMenuItem(storeMenu) {
@@ -39,7 +38,8 @@ function StoreMenuItem(storeMenu) {
   let imgurl = `${process.env.REACT_APP_API_URL}/${storeMenu.storeMenu.itemImgUrl}`;
   return (
     <Row className="col-12 storeMenuItem justify-content-between p-0 mr-0 ml-0">
-      <img src={imgurl} className="d-inline-block col-3" />
+      <img src={imgurl} className="d-inline-block col-3" alt="
+      menuImg"/>
       <div className="col-7 menuItemInfo pt-4 pb-4 pl-0 pr-0 row justify-content-start">
         <h5 className="col-8">{storeMenu.storeMenu.itemName}</h5>
         <p className="col-4 text-right">

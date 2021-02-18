@@ -39,24 +39,24 @@ function MenuUpdate() {
     //   console.log(value);
     // }
 
-    // fetch(`${process.env.REACT_APP_API_URL}/store/item/update`, {
-    //   method: "POST",
-    //   headers: {
-    //     // token: localStorage.getItem('access-token'),
-    //     // "Content-Type": "multipart/form-data",
-    //     token:
-    //     `${process.env.REACT_APP_STORE_TOKEN}`,
-    //   },
-    //   body: formData,
-    // }).then((res) => {
-    //   //   console.log(res);
-    //   if (res.status === 200) {
-    //     // alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
-    //     window.location.href = "/storeadmin";
-    //   } else {
-    //     alert("메뉴 수정에 실패하셨습니다. 다시 시도해주세요.");
-    //   }
-    // });
+    fetch(`${process.env.REACT_APP_API_URL}/store/item/update`, {
+      method: "POST",
+      headers: {
+        // token: localStorage.getItem('access-token'),
+        // "Content-Type": "multipart/form-data",
+        token:
+        `${process.env.REACT_APP_STORE_TOKEN}`,
+      },
+      body: formData,
+    }).then((res) => {
+      //   console.log(res);
+      if (res.status === 200) {
+        // alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
+        window.location.href = "/storeadmin";
+      } else {
+        alert("메뉴 수정에 실패하셨습니다. 다시 시도해주세요.");
+      }
+    });
   };
 
   const onNameChange = (event) => {

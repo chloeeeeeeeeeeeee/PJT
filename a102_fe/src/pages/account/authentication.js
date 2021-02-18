@@ -140,6 +140,7 @@ function Auth(props) {
 
   const Signup = (event) => {
     // event.preventDefault();
+    console.log("넌");
     fetch(`${process.env.REACT_APP_API_URL}/account/signup`, {
       method: "POST",
       headers:{
@@ -154,6 +155,7 @@ function Auth(props) {
       })
     })
     .then(res => {
+      console.log("어디", res);
       // 받아진 응답을 확인합시다! 이 응답은 httpOK이거나 아닐 예정입니다. 이 안에서 if로 분기를 나눠볼게요! 
       // console.log("Signup의 응답은:", res)
       // res가 NULL이거나 badrequest 인 경우 에러메시지 출력 대비
@@ -176,6 +178,7 @@ function Auth(props) {
           localStorage.setItem('access-token', res.token)
         })
         .then(() => {
+          console.log("까지");
           // 회원가입 후 바로 로그인을 실행했다면? 
           if (Boolean(localStorage.getItem('access-token')) == true && localStorage.getItem('access-token') != "undefined") {
 
@@ -193,7 +196,8 @@ function Auth(props) {
         })
       } else {
         // 회원가입이 실패한 경우인데, 어떤 경우가 있을까요? 같이 에러처리 합시다
-        console.error("회원가입이 실패한 경우:", res)
+        alert("회원가입에 실패하셨습니다. 이메일과 핸드폰번호를 다시 확인해주세요.")
+        // console.error("회원가입이 실패한 경우:", res)
       }
     }
     )

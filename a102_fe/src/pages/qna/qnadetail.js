@@ -71,7 +71,7 @@ function QnaDetail() {
                         <h3 className="col-8 d-inline">문의 내역</h3>
                         <div className="col-4 d-inline detailPostButton">
                         {/* <Button className="detailPostUpdateButton ml-1" onClick={(e) => Update(e)}>수정하기</Button> */}
-                               {qnauser.userId === user.userId && qna.qnaReply!=null?
+                                {qnauser.userId === user.userId && qna.qnaReply!=null?
                                 <span>
                                 <Button className="detailPostDeleteButton ml-1" onClick={(e) => Delete(e)}>삭제하기</Button>
                                 </span>

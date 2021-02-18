@@ -133,7 +133,7 @@ function Auth(props) {
     } else if (checkmail !== true) {
       alert("이메일 주소를 확인하세요!")
     } else { 
-      setPopupModal(true);
+      popupToggle();
     }
   }
 

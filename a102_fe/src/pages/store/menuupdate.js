@@ -4,7 +4,6 @@ import {
   Row,
   Col,
   Card,
-  CardHeader,
   CardBody,
   Form,
   FormGroup,
@@ -14,7 +13,7 @@ import {
 } from "reactstrap";
 
 function MenuUpdate() {
-  let [menu, setMenu] = useState(window.history.state);
+  let menu = useState(window.history.state);
   let [name, setName] = useState(window.history.state.itemName);
   let [price, setPrice] = useState(window.history.state.itemPrice);
   let [img, setImage] = useState(window.history.state.files);
@@ -50,7 +49,7 @@ function MenuUpdate() {
     .then(res => {
     //   console.log(res);
       if (res.status === 200){
-        alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
+        // alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
         window.location.href = '/storeadmin';
       }
       else{

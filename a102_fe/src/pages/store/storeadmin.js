@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { Col, Row } from "reactstrap";
 import StoreDetailInfo from "../../components/support/storeDetailInfo";

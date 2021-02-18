@@ -1,11 +1,10 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState } from "react";
 import CKEditor from "ckeditor4-react";
 import {
   Container,
   Row,
   Col,
   Card,
-  CardHeader,
   CardBody,
   Form,
   FormGroup,
@@ -15,7 +14,7 @@ import {
 } from "reactstrap";
 
 function QnaUpdate() {
-  let [qna, setQna] = useState(window.history.state);
+  let qna = useState(window.history.state);
   let [title, setTitle] = useState(window.history.state.qnaTitle);
   let [content, setContent] = useState(window.history.state.qnaContent);
   let [secret, setSecret] = useState(0);

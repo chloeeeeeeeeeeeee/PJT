@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Container, Row, Col, Card, CardBody } from "reactstrap";
+import { Row, Col, Card, CardBody } from "reactstrap";
 import Whattoeat from "../../components/main/whattoeat.js";
 import oori from "../../assets/images/oori.png";
 
@@ -14,7 +14,7 @@ function ChildMain() {
         >
           <Card>
             <CardBody sm="12" className="childimg">
-              <img src={oori} />
+              <img src={oori} alt="childimg"/>
             </CardBody>
           </Card>
         </Col>

@@ -1,15 +1,3 @@
-import React from "react";
-import {
-  Container,
-  Row,
-} from "reactstrap";
-import {
-  Route,
-  BrowserRouter,
-  Switch,
-  Redirect,
-} from "react-router-dom";
-
 const { Kakao } = window; 
 
 function Signout() {

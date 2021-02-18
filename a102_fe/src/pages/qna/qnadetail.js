@@ -1,15 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useState, useEffect } from "react";
-import { Container, Row, Col, Card, CardHeader, CardBody, CardFooter, Button } from "reactstrap";
+import { Container, Row, Col, Card, CardHeader, CardBody, Button } from "reactstrap";
 import FaceIcon from '@material-ui/icons/Face';
 import ReactHtmlParser from 'react-html-parser';
 
 
 function QnaDetail() {
     let [qna, setQna] = useState([]);
-    let [qnaDate, setQnaDate] = useState("");
+    // let [qnaDate, setQnaDate] = useState("");
     let [qnauser, setQnaUser] = useState("");
     let [user, setUser] = useState([]);
-    let [userStatus, setUserStatus] = useState(Boolean(localStorage.getItem("access-token")));
+    let userStatus = useState(Boolean(localStorage.getItem("access-token")));
 
     useEffect(() => {
         if(userStatus) {
@@ -27,7 +28,7 @@ function QnaDetail() {
 
     useEffect(() => {
         setQna(window.history.state);
-        setQnaDate(window.history.state.qnaDate.slice(0,10));
+        // setQnaDate(window.history.state.qnaDate.slice(0,10));
         setQnaUser(window.history.state.user);
     }, [])
 

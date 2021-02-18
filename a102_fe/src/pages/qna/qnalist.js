@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useState, useEffect } from "react";
 import {
   Container,
   Row,
   Col,
   Card,
-  CardHeader,
   CardFooter,
   Table,
   Button,
@@ -17,7 +17,7 @@ import { FcLock } from "react-icons/fc";
 
 function QnaList() {
   let [qnaList, setQnaList] = useState([]);
-  let [userStatus, setUserStatus] = useState(Boolean(localStorage.getItem("access-token")));
+  let userStatus = useState(Boolean(localStorage.getItem("access-token")));
   let [user, setUser] = useState([]);
   let [totalPages, setTotalPages] = useState(0);
   let [nowPage, setNowPage] = useState(0);

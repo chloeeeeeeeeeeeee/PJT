@@ -155,21 +155,27 @@
 
 .checkPopup {
   .modal-header {
-    align-items: center;
-    p {
-      text-align: center;
+    img {
+      height: 70px;
+      width: 70px;
     }
+    justify-content: center;
   }
   .modal-body {
+    font-size: small;
+    // text-align: center;
   }
   .modal-footer {
+    justify-content: center;
     .AgreeButton {
+      border: none;
       background-color: $oori-green;
       font-size: small;
     }
     .NoButton {
+      border: none;
       background-color: $oori-gray-pinstripe;
-      font-size: x-small !important;
+      font-size: small;
     }
   }
 }

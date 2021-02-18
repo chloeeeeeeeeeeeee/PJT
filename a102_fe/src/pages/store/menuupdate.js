@@ -51,8 +51,7 @@ function MenuUpdate() {
         // alert("9ㅜㄷ 9ril~ 관리자 뷰로 보내줘 나를!!");
         window.location.href = "/storeadmin";
       } else {
-        console.log(res);
-        alert("오류");
+        alert("메뉴 수정에 실패하셨습니다. 다시 시도해주세요.");
       }
     });
   };

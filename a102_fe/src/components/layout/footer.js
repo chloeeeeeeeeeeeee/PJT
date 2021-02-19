@@ -23,7 +23,7 @@ function Footer() {
       <Col md="4">
         <p className="text-right mb-0">
           <i className="fa fa-heart">
-            <a id={storecheck?"storeIFooter":""} href="musicshareroom.tk"> 후원사 바로가기 </a>
+            <a id={storecheck?"storeIFooter":""} href="https://musicshareroom.tk/"> 후원사 바로가기 </a>
           </i>
         </p>
       </Col>
